@@ -29,6 +29,7 @@ io.on('connection', function (socket) {
       GameRooms.push(room);
       socket.room = room;
       socket.join(room.title);
+      socket.emit("game joined", room);
       socket.broadcast.to("lobby").emit("gameroom created", room);
     }
     else {
@@ -39,9 +40,14 @@ io.on('connection', function (socket) {
   socket.on("join gameroom", function (roomTitle){
     // Add user to socket room
     if(io.sockets.adapter.rooms[roomTitle].length < 2) {
-      var room = GameRooms[roomTitle];
+      var room = GameRooms.find(function(gameroom) {
+        return gameroom.title === roomTitle;
+      });
       room.addPlayer(socket.username);
       socket.join(room.title);
+      socket.broadcast.to("lobby").emit("gameroom full", room);
+      socket.emit("game joined", room);
+      socket.broadcast.to(room.title).emit("game started", room);
     }
     else {
       // TODO gtfo
@@ -63,17 +69,6 @@ io.on('connection', function (socket) {
     });
   });
 
-  // when the user disconnects.. perform this
-  // socket.on('disconnect', function () {
-  //   if (addedUser) {
-
-  //     // echo globally that this client has left
-  //     socket.broadcast.to(socket.room).emit('user left', {
-  //       username: socket.username,
-  //       numUsers: numUsers
-  //     });
-  //   }
-  // });
   let board = new Board(socket);
 });
 

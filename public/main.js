@@ -13,16 +13,15 @@ $(function() {
   var $loginPage = $('.login.page'); // The login page
   var $usernameInput = $loginPage.find(".usernameInput"); // Input for username
 
-  // Page selection variables
+  // Lobby variables
   var $roomPage = $(".room.page"); // The room selection page
   var $newRoomInput = $roomPage.find("#newRoomInput"); // Next page focus
 
+  // Game variables
+  var $gamePage = $(".game.page");
+
   // Shared variables
   var $currentInput = $usernameInput.focus(); // Keydown event binding to follow currentInput
-
-  var $gamePage = $(".game.page");
-  var $chatPage = $('.chat.page'); // The chatroom page
-  
 
   // Prompt for setting a username
   var username;
@@ -31,18 +30,6 @@ $(function() {
   var lastTypingTime;
   
   var socket = io();
-
-  $(window).keydown(function (event) {
-    // Auto-focus the current input when a key is typed
-    if (!(event.ctrlKey || event.metaKey || event.altKey)) {
-      $currentInput.focus();
-    }
-  });
-
-  function renderRoom(gameroom) {
-    var rooms = $("#roomList");
-    rooms.append($("<div>").text(gameroom.title));
-  }
 
 /* LOGIN PAGE MAGIC */
   $usernameInput.keydown(function(event){
@@ -67,7 +54,7 @@ $(function() {
     $("#roomWelcome").text("Hello " + data.username + "! Welcome to Majavashakki. Please, join existing game or create a new one.");
     
     $.each(data.rooms, function(i, val){
-      renderRoom(val);
+      showRoomInList(val);
     });
 
     $loginPage.fadeOut();
@@ -88,131 +75,57 @@ $(function() {
     }
   });
 
-  socket.on("gameroom created", function(gameroom){
-    renderRoom(gameroom);
-  })
-
-  // Log a message
-  function log (message, options) {
-    var $el = $('<li>').addClass('log').text(message);
-    addMessageElement($el, options);
-  }
-
-  // Adds the visual chat message to the message list
-  function addChatMessage (data, options) {
-    // Don't fade the message in if there is an 'X was typing'
-    var $typingMessages = getTypingMessages(data);
-    options = options || {};
-    if ($typingMessages.length !== 0) {
-      options.fade = false;
-      $typingMessages.remove();
-    }
-
-    var $usernameDiv = $('<span class="username"/>')
-      .text(data.username)
-      .css('color', getUsernameColor(data.username));
-    var $messageBodyDiv = $('<span class="messageBody">')
-      .text(data.message);
-
-    var typingClass = data.typing ? 'typing' : '';
-    var $messageDiv = $('<li class="message"/>')
-      .data('username', data.username)
-      .addClass(typingClass)
-      .append($usernameDiv, $messageBodyDiv);
-
-    addMessageElement($messageDiv, options);
-  }
-
-  // Adds the visual chat typing message
-  function addChatTyping (data) {
-    data.typing = true;
-    data.message = 'is typing';
-    addChatMessage(data);
-  }
-
-  // Removes the visual chat typing message
-  function removeChatTyping (data) {
-    getTypingMessages(data).fadeOut(function () {
-      $(this).remove();
+  // Add new room to UI and attach join event
+  function showRoomInList(gameroom) {
+    var rooms = $("#roomList");
+    var newRoom = $("<div id='"+gameroom.title+"'>").text(gameroom.title);
+    newRoom.click(function(){
+      socket.emit("join gameroom", gameroom.title);
     });
+    rooms.append(newRoom);
   }
 
-  // Adds a message element to the messages and scrolls to the bottom
-  // el - The element to add as a message
-  // options.fade - If the element should fade-in (default = true)
-  // options.prepend - If the element should prepend
-  //   all other messages (default = false)
-  function addMessageElement (el, options) {
-    var $el = $(el);
+  // Don't show full gamerooms in list
+  function hideRoomInList(gameroom) {
+    $("#roomList div#"+gameroom.title).hide();
+  };
 
-    // Setup default options
-    if (!options) {
-      options = {};
-    }
-    if (typeof options.fade === 'undefined') {
-      options.fade = true;
-    }
-    if (typeof options.prepend === 'undefined') {
-      options.prepend = false;
-    }
+  socket.on("gameroom created", function(gameroom){
+    showRoomInList(gameroom);
+  });
 
-    // Apply options
-    if (options.fade) {
-      $el.hide().fadeIn(FADE_TIME);
+  // Lobby socket event
+  socket.on("gameroom full", function(gameroom) {
+    hideRoomInList(gameroom);
+  });
+
+  // Gameroom socket event - 2 player joined and game starts
+  socket.on("game started", function(gameroom) {   
+    console.log("derp");
+  });
+
+  socket.on("game joined", function(gameroom) {
+    $currentInput = null;
+    $roomPage.fadeOut();
+    $gamePage.show();
+  });
+
+/* GENERIC MAGIC */
+  $(window).keydown(function (event) {
+    // Auto-focus the current input when a key is typed
+    if ($currentInput != null && !(event.ctrlKey || event.metaKey || event.altKey)) {
+      $currentInput.focus();
     }
-    if (options.prepend) {
-      $messages.prepend($el);
-    } else {
-      $messages.append($el);
-    }
-    $messages[0].scrollTop = $messages[0].scrollHeight;
-  }
+  });
 
   // Prevents input from having injected markup
   function cleanInput (input) {
     return $('<div/>').text(input).text();
   }
 
-  // Updates the typing event
-  function updateTyping () {
-    if (connected) {
-      if (!typing) {
-        typing = true;
-        socket.emit('typing');
-      }
-      lastTypingTime = (new Date()).getTime();
-
-      setTimeout(function () {
-        var typingTimer = (new Date()).getTime();
-        var timeDiff = typingTimer - lastTypingTime;
-        if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-          socket.emit('stop typing');
-          typing = false;
-        }
-      }, TYPING_TIMER_LENGTH);
-    }
-  }
-
-  // Gets the 'X is typing' messages of a user
-  function getTypingMessages (data) {
-    return $('.typing.message').filter(function (i) {
-      return $(this).data('username') === data.username;
-    });
-  }
-
-  // Gets the color of a username through our hash function
-  function getUsernameColor (username) {
-    // Compute hash code
-    var hash = 7;
-    for (var i = 0; i < username.length; i++) {
-       hash = username.charCodeAt(i) + (hash << 5) - hash;
-    }
-    // Calculate color
-    var index = Math.abs(hash % COLORS.length);
-    return COLORS[index];
-  }
-
 });
+
+  
 
 class GameView extends React.Component {
   constructor(props) {
