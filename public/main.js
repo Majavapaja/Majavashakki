@@ -1,3 +1,40 @@
+const INITIAL_STATE = {
+  board: [
+    {
+      type: 'pawn',
+      color: 'white',
+      position: {
+        row: 'b',
+        col: '3'
+      }
+    },
+    {
+      type: 'rook',
+      color: 'black',
+      position: {
+        row: 'b',
+        col: '1'
+      }
+    },
+    {
+      type: 'king',
+      color: 'black',
+      position: {
+        row: 'b',
+        col: '2'
+      }
+    },
+    {
+      type: 'pawn',
+      color: 'white',
+      position: {
+        row: 'b',
+        col: '4'
+      }
+    }
+  ],
+}
+
 $(function() {
   var FADE_TIME = 150; // ms
   var TYPING_TIMER_LENGTH = 400; // ms
@@ -212,21 +249,31 @@ $(function() {
     return COLORS[index];
   }
 
+  //document.querySelector('.login.page').style.display = 'none'
+  //document.querySelector('.game.page').style.display = 'block'
+  ReactDOM.render(
+    React.createElement(GameView, {state: INITIAL_STATE, socket: socket}, null),
+    document.querySelector('.game.page')
+  )
 });
 
 class GameView extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props)
-    this.state = props.state
-    this.setState(props.state)
+  }
+
+  componentWillMount() {
+    this.setState(this.props.state)
   }
 
   render() {
     const stateDebug = React.createElement('pre', null, JSON.stringify(this.state, null, 2))
 
     return React.createElement('div', null,
-      React.createElement(Board, {board: this.state.board}),
+      React.createElement(Board, {
+        board: this.state.board,
+        socket: this.props.socket
+      }),
       stateDebug
     )
   }
@@ -242,84 +289,67 @@ class Board extends React.Component {
       return map
     }, {})
   }
+  
+  componentWillMount() {
+    this.setState(this.props)
+  }
 
   cellName(x, y) {
     return "ABCDEFGH"[x] + y
   }
 
   makeCells() {
-    console.log(this.pieceMap)
     const elements = []
     for (var y = 8; y > 0; y--) {
       for (var x = 0; x < 8; x++) {
-        const name = this.cellName(x, y)
-        const piece = this.pieceMap[name.toLowerCase()]
+        const pos = this.cellName(x, y)
+        const piece = this.pieceMap[pos.toLowerCase()]
+        const isSelected = this.state.selectedPiece == pos ? 'selected' : ''
 
         let pieceImage = null
         if (piece) {
-          const className = `piece ${piece.color} ${piece.type}`
-          pieceImage = React.createElement('div', {className: className})
+          const className = `piece ${piece.color} ${piece.type} `
+          pieceImage = React.createElement('div', {
+            className: className,
+          })
         }
 
-        elements.push(React.createElement('div', {className: 'cell'}, pieceImage))
+        elements.push(React.createElement('div', {
+          className: `cell ${isSelected}`,
+          onClick: () => this.selectCell(pos),
+        }, pieceImage))
       }
     }
     return elements
   }
 
-  render() {
-    const board = this.props.board
+  posToJson(pos) {
+    return {
+      row: pos.charAt(1),
+      col: pos.charAt(0),
+    }
+  }
 
+  selectCell(pos) {
+    if (this.state.selectedPiece) {
+      this.props.socket.emit('move', {
+        from: this.posToJson(this.state.selectedPiece),
+        to: this.posToJson(pos),
+      })
+
+      // TODO Mark move done so we don't send multiples
+
+      this.setState({selectedPiece: undefined})
+    } else {
+      console.log(`selected piece at ${pos}`)
+      this.setState({selectedPiece: pos})
+    }
+  }
+
+  render() {
     return React.createElement('div', {className: 'board'},
       this.makeCells(),
       React.createElement('pre', null, JSON.stringify(this.pieceMap, null, 2))
     )
   }
 }
-
-const INITIAL_STATE = {
-  board: [
-    {
-      type: 'pawn',
-      color: 'white',
-      position: {
-        row: 'b',
-        col: '3'
-      }
-    },
-    {
-      type: 'rook',
-      color: 'black',
-      position: {
-        row: 'b',
-        col: '1'
-      }
-    },
-    {
-      type: 'king',
-      color: 'black',
-      position: {
-        row: 'b',
-        col: '2'
-      }
-    },
-    {
-      type: 'pawn',
-      color: 'white',
-      position: {
-        row: 'b',
-        col: '4'
-      }
-    }
-  ],
-}
-
-window.onload = () => {
-  //document.querySelector('.login.page').style.display = 'none'
-  //document.querySelector('.game.page').style.display = 'block'
-  ReactDOM.render(
-    React.createElement(GameView, {state: INITIAL_STATE}, null),
-    document.querySelector('.game.page')
-  )
-}
-
