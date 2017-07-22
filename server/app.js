@@ -7,6 +7,8 @@ io.attach(server);
 
 var path = require('path');
 
+const Board = require('./logic/board');
+
 var port = process.env.PORT || 3000;
 
 server.listen(port, function () {
@@ -80,4 +82,6 @@ io.on('connection', function (socket) {
       });
     }
   });
+
+  let board = new Board(socket);
 });
