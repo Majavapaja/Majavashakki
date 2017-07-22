@@ -304,18 +304,28 @@ class GameView extends React.Component {
 class Board extends React.Component {
   constructor(props) {
     super(props)
+
+    this.pieceMap = props.board.reduce((map, piece) => {
+      const pos = piece.position.row + piece.position.col
+      map[pos] = piece
+      return map
+    }, {})
   }
 
   cellName(x, y) {
-    return "ABCDEFGH"[x] + (y + 1)
+    return "ABCDEFGH"[x] + y
   }
 
   makeCells() {
+    console.log(this.pieceMap)
     const elements = []
-    for (var y = 0; y < 8; y++) {
+    for (var y = 8; y > 0; y--) {
       for (var x = 0; x < 8; x++) {
+        const name = this.cellName(x, y)
+        const piece = this.pieceMap[name.toLowerCase()]
+        const pieceStr = piece ? `${piece.color} ${piece.type}` : 'empty'
         elements.push(
-          React.createElement('div', {className: 'cell'}, this.cellName(x, y)),
+          React.createElement('div', {className: 'cell'}, `${name} (${pieceStr})`),
         )
       }
     }
@@ -325,17 +335,9 @@ class Board extends React.Component {
   render() {
     const board = this.props.board
 
-    const pieceMap = board.reduce((map, piece) => {
-      const pos = piece.position.row + piece.position.col
-      map[pos] = piece
-      return map
-    }, {})
-
-    var i = 1
-    console.log(pieceMap)
     return React.createElement('div', {className: 'board'},
       this.makeCells(),
-      React.createElement('pre', null, JSON.stringify(pieceMap, null, 2))
+      React.createElement('pre', null, JSON.stringify(this.pieceMap, null, 2))
     )
   }
 }
