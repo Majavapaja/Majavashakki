@@ -165,16 +165,18 @@ ul {
 .board {
   display: flex;
   flex-flow: row wrap;
-  width: 60vw;
+  width: 60vmin;
 }
 
 .board .cell {
   flex: 1 1 0px;
-  flex-basis: calc(60vw / 8);
-  height: calc(60vw / 8);
+  flex-basis: calc(60vmin / 8);
+  height: calc(60vmin / 8);
   text-align: center;
   justify-content: center;
+}
 
+.board .cell {
   background-color: #eee;
   color: #333;
 }
@@ -191,3 +193,30 @@ ul {
   background-color: #333;
   color: #eee;
 }
+
+.board .cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board .cell .piece {
+  background: url(/sprites.png);
+  position: absolute;
+  width: 32px;
+  height: 32px;
+
+}
+
+.board .cell .piece.white.king { background-position: calc(0 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.king { background-position: calc(0 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.queen { background-position: calc(1 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.queen { background-position: calc(1 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.rook { background-position: calc(2 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.rook { background-position: calc(2 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.bishop { background-position: calc(3 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.bishop { background-position: calc(3 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.knight { background-position: calc(4 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.knight { background-position: calc(4 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.pawn { background-position: calc(5 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.pawn { background-position: calc(5 * -32px) calc(1 * -32px); }

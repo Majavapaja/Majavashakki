@@ -7,6 +7,7 @@ io.attach(server);
 
 var path = require('path');
 var GameRoom = require("./GameRoom");
+const Board = require('./logic/board');
 var port = process.env.PORT || 3000;
 
 // ################ Routing ################
@@ -73,6 +74,7 @@ io.on('connection', function (socket) {
   //     });
   //   }
   // });
+  let board = new Board(socket);
 });
 
 module.exports = () => {

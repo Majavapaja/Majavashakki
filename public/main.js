@@ -254,10 +254,14 @@ class Board extends React.Component {
       for (var x = 0; x < 8; x++) {
         const name = this.cellName(x, y)
         const piece = this.pieceMap[name.toLowerCase()]
-        const pieceStr = piece ? `${piece.color} ${piece.type}` : 'empty'
-        elements.push(
-          React.createElement('div', {className: 'cell'}, `${name} (${pieceStr})`),
-        )
+
+        let pieceImage = null
+        if (piece) {
+          const className = `piece ${piece.color} ${piece.type}`
+          pieceImage = React.createElement('div', {className: className})
+        }
+
+        elements.push(React.createElement('div', {className: 'cell'}, pieceImage))
       }
     }
     return elements
@@ -284,16 +288,16 @@ const INITIAL_STATE = {
       }
     },
     {
-      type: 'pawn',
-      color: 'white',
+      type: 'rook',
+      color: 'black',
       position: {
         row: 'b',
         col: '1'
       }
     },
     {
-      type: 'pawn',
-      color: 'white',
+      type: 'king',
+      color: 'black',
       position: {
         row: 'b',
         col: '2'
