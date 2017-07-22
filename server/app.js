@@ -6,7 +6,7 @@ var io = require('socket.io')({ transports: ['websocket'] });
 io.attach(server);
 
 var path = require('path');
-
+var GameRoom = require("./GameRoom");
 var port = process.env.PORT || 3000;
 
 // ################ Routing ################
@@ -17,6 +17,7 @@ const GameRooms = [];
 
 io.on('connection', function (socket) {
   var addedUser = false;
+  socket.join("lobby");
 
   // when the client emits 'create gameroom', this listens and executes
   socket.on("create gameroom", function (roomTitle) {
@@ -27,7 +28,7 @@ io.on('connection', function (socket) {
       GameRooms[room.title] = room;
       socket.room = room;
       socket.join(room.title);
-      socket.boardcast.to(room.title).emit("gameroom created", room);
+      socket.broadcast.to("lobby").emit("gameroom created", room);
     }
     else {
       // TODO näytä keskaria - huone on jo olemassa.

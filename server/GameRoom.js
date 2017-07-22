@@ -12,3 +12,4 @@ GameRoom.prototype.addPlayer = function (playername) {
         return true;
     }
 }
+module.exports = GameRoom;

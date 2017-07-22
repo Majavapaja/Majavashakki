@@ -7,65 +7,90 @@ $(function() {
     '#3b88eb', '#3824aa', '#a700ff', '#d300e7'
   ];
 
-  // Initialize variables
-  var $window = $(window);
-  var $usernameInput = $('.usernameInput'); // Input for username
-  var $rooms = $("roomSelection");
-  var $messages = $('.messages'); // Messages area
-  var $inputMessage = $('.inputMessage'); // Input message input box
-  var $newRoomInput = $("#newRoomInput");
+/* GENERAL VARIABLES */
 
+  // Login variables
   var $loginPage = $('.login.page'); // The login page
+  var $usernameInput = $loginPage.find(".usernameInput"); // Input for username
+
+  // Page selection variables
+  var $roomPage = $(".room.page"); // The room selection page
+  var $newRoomInput = $roomPage.find("#newRoomInput"); // Next page focus
+
+  // Shared variables
+  var $currentInput = $usernameInput.focus(); // Keydown event binding to follow currentInput
+
   var $gamePage = $(".game.page");
   var $chatPage = $('.chat.page'); // The chatroom page
-  var $roomPage = $(".room.page"); // The room selection page
+  
 
   // Prompt for setting a username
   var username;
   var connected = false;
   var typing = false;
   var lastTypingTime;
-  var $currentInput = $usernameInput.focus();
-
+  
   var socket = io();
 
-  function addParticipantsMessage (data) {
-    var message = '';
-    if (data.numUsers === 1) {
-      message += "there's 1 participant";
-    } else {
-      message += "there are " + data.numUsers + " participants";
+  $(window).keydown(function (event) {
+    // Auto-focus the current input when a key is typed
+    if (!(event.ctrlKey || event.metaKey || event.altKey)) {
+      $currentInput.focus();
     }
-    log(message);
+  });
+
+  function renderRoom(gameroom) {
+    var rooms = $("#roomList");
+    rooms.append($("<div>").text(gameroom.title));
   }
 
-  // Sets the client's username
-  function setUsername () {
-    username = cleanInput($usernameInput.val().trim());
-
-    // If the username is valid
-    if (username) {
-      // Tell the server your username
-      socket.emit('new user', username);
+/* LOGIN PAGE MAGIC */
+  $usernameInput.keydown(function(event){
+    // Submit on ENTER
+    if(event.which === 13) {
+      var username = cleanInput($usernameInput.val().trim());
+      if (username) {
+        socket.emit('new user', username);
+      }
     }
-  }
+  });
 
-  // Sends a chat message
-  function sendMessage () {
-    var message = $inputMessage.val();
-    // Prevent markup from being injected into the message
-    message = cleanInput(message);
-    // if there is a non-empty message and a socket connection
-    if (message && connected) {
-      $inputMessage.val('');
-      addChatMessage({
-        username: username,
-        message: message
-      });
-      // tell server to execute 'new message' and send along one parameter
-      socket.emit('new message', message);
+  // Focus input when clicking anywhere on login page
+  $loginPage.click(function () {
+    $currentInput.focus();
+  });
+
+  // User has logged in. Switch the page to room selection.
+  socket.on('login', function (data) {
+    connected = true;
+    // Render welcome and room selection data
+    $("#roomWelcome").text("Hello " + data.username + "! Welcome to Majavashakki. Please, join existing game or create a new one.");
+    
+    $.each(data.rooms, function(i, val){
+      renderRoom(val);
+    });
+
+    $loginPage.fadeOut();
+    $loginPage.off('click');
+    $currentInput = $newRoomInput.focus();
+
+    $roomPage.show(); 
+  });
+
+/* ROOM SELECTION PAGE MAGIC */
+  $newRoomInput.keydown(function(event) {
+    // Submit on ENTER
+    if(event.which === 13) {
+      var room = cleanInput($newRoomInput.val().trim());
+      if(room) {
+        socket.emit("create gameroom", room);
+      }
     }
-  }
+  });
+
+  socket.on("gameroom created", function(gameroom){
+    renderRoom(gameroom);
+  })
 
   // Log a message
   function log (message, options) {
@@ -186,96 +211,6 @@ $(function() {
     var index = Math.abs(hash % COLORS.length);
     return COLORS[index];
   }
-
-  // Keyboard events
-
-  $window.keydown(function (event) {
-    // Auto-focus the current input when a key is typed
-    if (!(event.ctrlKey || event.metaKey || event.altKey)) {
-      $currentInput.focus();
-    }
-    // When the client hits ENTER on their keyboard
-    if (event.which === 13) {
-      if (username) {
-        sendMessage();
-        socket.emit('stop typing');
-        typing = false;
-      } else {
-        setUsername();
-      }
-    }
-  });
-
-  $inputMessage.on('input', function() {
-    updateTyping();
-  });
-
-  // Click events
-
-  // Focus input when clicking anywhere on login page
-  $loginPage.click(function () {
-    $currentInput.focus();
-  });
-
-  // Focus input when clicking on the message input's border
-  $inputMessage.click(function () {
-    $inputMessage.focus();
-  });
-
-  // Socket events
-
-  // Whenever the server emits 'login', log the login message
-  socket.on('login', function (data) {
-    connected = true;
-    // Display the welcome message
-    $("#roomWelcome").text("Hello " + data.username + "! Welcome to Majavashakki. Please, join existing game or create a new one.");
-    $loginPage.fadeOut();
-    $roomPage.show();
-    $loginPage.off('click');
-  });
-
-  // Whenever the server emits 'new message', update the chat body
-  socket.on('new message', function (data) {
-    addChatMessage(data);
-  });
-
-  // Whenever the server emits 'user joined', log it in the chat body
-  socket.on('user joined', function (data) {
-    log(data.username + ' joined');
-    addParticipantsMessage(data);
-  });
-
-  // Whenever the server emits 'user left', log it in the chat body
-  socket.on('user left', function (data) {
-    log(data.username + ' left');
-    addParticipantsMessage(data);
-    removeChatTyping(data);
-  });
-
-  // Whenever the server emits 'typing', show the typing message
-  socket.on('typing', function (data) {
-    addChatTyping(data);
-  });
-
-  // Whenever the server emits 'stop typing', kill the typing message
-  socket.on('stop typing', function (data) {
-    removeChatTyping(data);
-  });
-
-  socket.on('disconnect', function () {
-    log('you have been disconnected');
-  });
-
-  socket.on('reconnect', function () {
-    log('you have been reconnected');
-    if (username) {
-      socket.emit('add user', username);
-    }
-  });
-
-  socket.on('reconnect_error', function () {
-    log('attempt to reconnect has failed');
-  });
 
 });
 
