@@ -9,10 +9,6 @@ var path = require('path');
 
 var port = process.env.PORT || 3000;
 
-server.listen(port, function () {
-  console.log('Server listening at port %d', port);
-});
-
 // ################ Routing ################
 app.use(express.static(path.resolve('public')));
 
@@ -77,3 +73,9 @@ io.on('connection', function (socket) {
   //   }
   // });
 });
+
+module.exports = () => {
+  server.listen(port, function () {
+    console.log('Server listening at port %d', port);
+  });
+}
