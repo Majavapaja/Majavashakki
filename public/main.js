@@ -13,9 +13,12 @@ $(function() {
   var $rooms = $("roomSelection");
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
+  var $newRoomInput = $("#newRoomInput");
 
   var $loginPage = $('.login.page'); // The login page
+  var $gamePage = $(".game.page");
   var $chatPage = $('.chat.page'); // The chatroom page
+  var $roomPage = $(".room.page"); // The room selection page
 
   // Prompt for setting a username
   var username;
@@ -38,18 +41,12 @@ $(function() {
 
   // Sets the client's username
   function setUsername () {
-    console.log("User picked room: " + jQuery("#roomSelection input[type='radio']:checked").val());
     username = cleanInput($usernameInput.val().trim());
 
     // If the username is valid
     if (username) {
-      $loginPage.fadeOut();
-      $chatPage.show();
-      $loginPage.off('click');
-      $currentInput = $inputMessage.focus();
-
       // Tell the server your username
-      socket.emit('add user', username, jQuery("#roomSelection input[type='radio']:checked").val());
+      socket.emit('new user', username);
     }
   }
 
@@ -231,11 +228,10 @@ $(function() {
   socket.on('login', function (data) {
     connected = true;
     // Display the welcome message
-    var message = "Welcome to Socket.IO Chat – " + data.roomName;
-    log(message, {
-      prepend: true
-    });
-    addParticipantsMessage(data);
+    $("#roomWelcome").text("Hello " + data.username + "! Welcome to Majavashakki. Please, join existing game or create a new one.");
+    $loginPage.fadeOut();
+    $roomPage.show();
+    $loginPage.off('click');
   });
 
   // Whenever the server emits 'new message', update the chat body
@@ -282,3 +278,109 @@ $(function() {
   });
 
 });
+
+class GameView extends React.Component {
+  constructor(props) {
+    super(props)
+    console.log(props)
+    this.state = props.state
+    this.setState(props.state)
+  }
+
+  render() {
+    const stateDebug = React.createElement('pre', null, JSON.stringify(this.state, null, 2))
+
+    return React.createElement('div', null,
+      React.createElement(Board, {board: this.state.board}),
+      stateDebug
+    )
+  }
+}
+
+class Board extends React.Component {
+  constructor(props) {
+    super(props)
+
+    this.pieceMap = props.board.reduce((map, piece) => {
+      const pos = piece.position.row + piece.position.col
+      map[pos] = piece
+      return map
+    }, {})
+  }
+
+  cellName(x, y) {
+    return "ABCDEFGH"[x] + y
+  }
+
+  makeCells() {
+    console.log(this.pieceMap)
+    const elements = []
+    for (var y = 8; y > 0; y--) {
+      for (var x = 0; x < 8; x++) {
+        const name = this.cellName(x, y)
+        const piece = this.pieceMap[name.toLowerCase()]
+        const pieceStr = piece ? `${piece.color} ${piece.type}` : 'empty'
+        elements.push(
+          React.createElement('div', {className: 'cell'}, `${name} (${pieceStr})`),
+        )
+      }
+    }
+    return elements
+  }
+
+  render() {
+    const board = this.props.board
+
+    return React.createElement('div', {className: 'board'},
+      this.makeCells(),
+      React.createElement('pre', null, JSON.stringify(this.pieceMap, null, 2))
+    )
+  }
+}
+
+const INITIAL_STATE = {
+  board: [
+    {
+      type: 'pawn',
+      color: 'white',
+      position: {
+        row: 'b',
+        col: '3'
+      }
+    },
+    {
+      type: 'pawn',
+      color: 'white',
+      position: {
+        row: 'b',
+        col: '1'
+      }
+    },
+    {
+      type: 'pawn',
+      color: 'white',
+      position: {
+        row: 'b',
+        col: '2'
+      }
+    },
+    {
+      type: 'pawn',
+      color: 'white',
+      position: {
+        row: 'b',
+        col: '4'
+      }
+    }
+  ],
+}
+
+window.onload = () => {
+  //document.querySelector('.login.page').style.display = 'none'
+  //document.querySelector('.game.page').style.display = 'block'
+  ReactDOM.render(
+    React.createElement(GameView, {state: INITIAL_STATE}, null),
+    document.querySelector('.game.page')
+  )
+}
+

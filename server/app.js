@@ -6,82 +6,79 @@ var io = require('socket.io')({ transports: ['websocket'] });
 io.attach(server);
 
 var path = require('path');
-
 const Board = require('./logic/board');
 
 var port = process.env.PORT || 3000;
 
-server.listen(port, function () {
-  console.log('Server listening at port %d', port);
-});
-
 // ################ Routing ################
 app.use(express.static(path.resolve('public')));
 
-// Chatroom
-var numUsers = 0;
+// Gameroom
+const GameRooms = [];
 
 io.on('connection', function (socket) {
   var addedUser = false;
 
-  // when the client emits 'new message', this listens and executes
-  socket.on('new message', function (data) {
-    // we tell the client to execute 'new message'
-    socket.broadcast.to(socket.room).emit('new message', {
-      username: socket.username,
-      message: data
-    });
+  // when the client emits 'create gameroom', this listens and executes
+  socket.on("create gameroom", function (roomTitle) {
+    // Create new gameroom to global list.
+    // Add user to proper socket room
+    if(!io.sockets.adapter.rooms[roomTitle]) {
+      var room = new GameRoom(roomTitle, socket.username);
+      GameRooms[room.title] = room;
+      socket.room = room;
+      socket.join(room.title);
+      socket.boardcast.to(room.title).emit("gameroom created", room);
+    }
+    else {
+      // TODO näytä keskaria - huone on jo olemassa.
+    }
+  });
+
+  socket.on("join gameroom", function (roomTitle){
+    // Add user to socket room
+    if(io.sockets.adapter.rooms[roomTitle].length < 2) {
+      var room = GameRooms[roomTitle];
+      room.addPlayer(socket.username);
+      socket.join(room.title);
+    }
+    else {
+      // TODO gtfo
+    }
   });
 
   // when the client emits 'add user', this listens and executes
-  socket.on('add user', function (username, room) {
+  socket.on("new user", function (username) {
     if (addedUser) return;
 
-    // Add user to socket room
-    socket.join(room);
-
     // we store the username in the socket session for this client
-    socket.room = room;
     socket.username = username;
-    ++numUsers;
+
     addedUser = true;
+    // Ditch login page and render hello msg + list of available game rooms
     socket.emit('login', {
-      numUsers: numUsers,
-      roomName: socket.room
-    });
-    // echo globally (all clients) that a person has connected
-    socket.broadcast.to(socket.room).emit('user joined', {
-      username: socket.username,
-      numUsers: numUsers
-    });
-  });
-
-  // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', function () {
-    socket.broadcast.to(socket.room).emit('typing', {
-      username: socket.username
-    });
-  });
-
-  // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', function () {
-    socket.broadcast.to(socket.room).emit('stop typing', {
-      username: socket.username
+      username: username,
+      rooms: GameRooms
     });
   });
 
   // when the user disconnects.. perform this
-  socket.on('disconnect', function () {
-    if (addedUser) {
-      --numUsers;
+  // socket.on('disconnect', function () {
+  //   if (addedUser) {
 
-      // echo globally that this client has left
-      socket.broadcast.to(socket.room).emit('user left', {
-        username: socket.username,
-        numUsers: numUsers
-      });
-    }
-  });
-
+  //     // echo globally that this client has left
+  //     socket.broadcast.to(socket.room).emit('user left', {
+  //       username: socket.username,
+  //       numUsers: numUsers
+  //     });
+  //   }
+  // });
+  
   let board = new Board(socket);
 });
+
+module.exports = () => {
+  server.listen(port, function () {
+    console.log('Server listening at port %d', port);
+  });
+}
