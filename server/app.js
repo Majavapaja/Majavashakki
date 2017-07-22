@@ -26,7 +26,7 @@ io.on('connection', function (socket) {
     // Add user to proper socket room
     if(!io.sockets.adapter.rooms[roomTitle]) {
       var room = new GameRoom(roomTitle, socket.username);
-      GameRooms[room.title] = room;
+      GameRooms.push(room);
       socket.room = room;
       socket.join(room.title);
       socket.broadcast.to("lobby").emit("gameroom created", room);
