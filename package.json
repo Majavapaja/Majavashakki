@@ -2,7 +2,7 @@
   "name": "hellonodesockets",
   "version": "0.0.1",
   "description": "My first nodejs app.",
-  "author": "Alex Engblom",
+  "author": "Majavapaja",
   "main": "app.js",
   "dependencies": {
     "body-parser": "^1.17.2",
