@@ -44,6 +44,7 @@ io.on('connection', function (socket) {
         return gameroom.title === roomTitle;
       });
       room.addPlayer(socket.username);
+      socket.room = room;
       socket.join(room.title);
       socket.broadcast.to("lobby").emit("gameroom full", room);
       socket.emit("game joined", room);

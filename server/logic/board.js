@@ -2,11 +2,6 @@ var initialBoardState = require('./start-setup.json');
 
 class Board {
     constructor(socket) {
-        // Temporary test data
-        socket.room = socket.room || {};
-        socket.room.gameState = socket.room.gameState || {};
-        socket.room.gameState.board = initialBoardState.board;
-
         socket.on('move', (data) => {
             this.move(data.from, data.dest, socket);
         });
@@ -35,11 +30,13 @@ class Board {
         if(destCell === null)  {
             startCell.position = dest;
             socket.emit('move_result', socket.room);
+            socket.broadcast.to(socket.room.title).emit('move_result', socket.room);
             console.log('Start moved to dest!');
         } else if (destCell.color !== startCell.color) {
             socket.room.gameState.board.splice(socket.room.gameState.board.indexOf(destCell));
             startCell.position = dest;
-            socket.emit('moveResult', socket.room);
+            socket.emit('move_result', socket.room);
+            socket.broadcast.to(socket.room.title).emit('move_Result', socket.room);
             console.log('Start eated dest!');
         } else {
             console.log('Invalid move! Hacker alert!');
