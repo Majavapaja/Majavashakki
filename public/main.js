@@ -16,6 +16,7 @@ $(function() {
   var $newRoomInput = $("#newRoomInput");
 
   var $loginPage = $('.login.page'); // The login page
+  var $gamePage = $(".game.page");
   var $chatPage = $('.chat.page'); // The chatroom page
   var $roomPage = $(".room.page"); // The room selection page
 
