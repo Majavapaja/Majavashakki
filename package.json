@@ -1,36 +1,16 @@
 {
-  "name": "hellonodesockets",
-  "version": "0.0.1",
-  "description": "My first nodejs app.",
-  "author": "Majavapaja",
+  "name": "socket.io-chat",
+  "version": "0.0.0",
+  "description": "A simple chat client using socket.io",
   "main": "app.js",
+  "author": "Grant Timmerman",
+  "private": true,
+  "license": "BSD",
   "dependencies": {
-    "body-parser": "^1.17.2",
-    "cookie-parser": "^1.4.3",
-    "errorhandler": "^1.5.0",
-    "express": "^4.15.3",
-    "method-override": "^2.3.9",
-    "morgan": "^1.8.2",
-    "pug": "^2.0.0-rc.2"
+    "express": "4.13.4",
+    "socket.io": "^2.0.3"
   },
   "scripts": {
-    "dev": "SET NODE_ENV=development && nodemon ./bin/app",
-    "grunt": "grunt",
-    "start": "node ./bin/app"
-  },
-  "devDependencies": {
-    "@types/body-parser": "^1.16.4",
-    "@types/cookie-parser": "^1.3.30",
-    "@types/errorhandler": "0.0.30",
-    "@types/method-override": "0.0.29",
-    "@types/morgan": "^1.7.32",
-    "grunt": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-ts": "^6.0.0-beta.16",
-    "nodemon": "^1.11.0",
-    "typescript": "^2.4.2"
-  },
-  "keywords": [],
-  "license": "ISC"
+    "start": "node app.js"
+  }
 }
