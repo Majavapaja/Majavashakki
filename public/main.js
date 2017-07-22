@@ -1,3 +1,238 @@
+const INITIAL_STATE = 
+ {
+     "board": [
+        {
+            "type": "pawn",
+            "color": "white",
+            "position": {
+                "row": "7",
+                "col": "a"
+            }
+        }, {
+            "type": "pawn",
+            "color": "white",
+            "position": {
+                "row": "7",
+                "col": "b"
+            }
+        }, {
+            "type": "pawn",
+            "color": "white",
+            "position": {
+                "row": "7",
+                "col": "c"
+            }
+        }, {
+            "type": "pawn",
+            "color": "white",
+            "position": {
+                "row": "7",
+                "col": "d"
+            }
+        }, {
+            "type": "pawn",
+            "color": "white",
+            "position": {
+                "row": "7",
+                "col": "e"
+            }
+        }, {
+            "type": "pawn",
+            "color": "white",
+            "position": {
+                "row": "7",
+                "col": "f"
+            }
+        }, {
+            "type": "pawn",
+            "color": "white",
+            "position": {
+                "row": "7",
+                "col": "g"
+            }
+        }, {
+            "type": "pawn",
+            "color": "white",
+            "position": {
+                "row": "7",
+                "col": "h"
+            }
+        }, {
+            "type": "rook",
+            "color": "white",
+            "position": {
+                "row": "8",
+                "col": "a"
+            }
+        }, {
+            "type": "knight",
+            "color": "white",
+            "position": {
+                "row": "8",
+                "col": "b"
+            }
+        }, {
+            "type": "bishop",
+            "color": "white",
+            "position": {
+                "row": "8",
+                "col": "c"
+            }
+        }, {
+            "type": "queen",
+            "color": "white",
+            "position": {
+                "row": "8",
+                "col": "d"
+            }
+        }, {
+            "type": "king",
+            "color": "white",
+            "position": {
+                "row": "8",
+                "col": "e"
+            }
+        }, {
+            "type": "bishop",
+            "color": "white",
+            "position": {
+                "row": "8",
+                "col": "f"
+            }
+        }, {
+            "type": "bishop",
+            "color": "white",
+            "position": {
+                "row": "8",
+                "col": "g"
+            }
+        }, {
+            "type": "rook",
+            "color": "white",
+            "position": {
+                "row": "8",
+                "col": "h"
+            }
+        },
+
+
+        {
+            "type": "pawn",
+            "color": "black",
+            "position": {
+                "row": "2",
+                "col": "a"
+            }
+        }, {
+            "type": "pawn",
+            "color": "black",
+            "position": {
+                "row": "2",
+                "col": "b"
+            }
+        }, {
+            "type": "pawn",
+            "color": "black",
+            "position": {
+                "row": "2",
+                "col": "c"
+            }
+        }, {
+            "type": "pawn",
+            "color": "black",
+            "position": {
+                "row": "2",
+                "col": "d"
+            }
+        }, {
+            "type": "pawn",
+            "color": "black",
+            "position": {
+                "row": "2",
+                "col": "e"
+            }
+        }, {
+            "type": "pawn",
+            "color": "black",
+            "position": {
+                "row": "2",
+                "col": "f"
+            }
+        }, {
+            "type": "pawn",
+            "color": "black",
+            "position": {
+                "row": "2",
+                "col": "g"
+            }
+        }, {
+            "type": "pawn",
+            "color": "black",
+            "position": {
+                "row": "2",
+                "col": "h"
+            }
+        }, {
+            "type": "rook",
+            "color": "black",
+            "position": {
+                "row": "1",
+                "col": "a"
+            }
+        }, {
+            "type": "knight",
+            "color": "black",
+            "position": {
+                "row": "1",
+                "col": "b"
+            }
+        }, {
+            "type": "bishop",
+            "color": "black",
+            "position": {
+                "row": "1",
+                "col": "c"
+            }
+        }, {
+            "type": "queen",
+            "color": "black",
+            "position": {
+                "row": "1",
+                "col": "d"
+            }
+        }, {
+            "type": "king",
+            "color": "black",
+            "position": {
+                "row": "1",
+                "col": "e"
+            }
+        }, {
+            "type": "bishop",
+            "color": "black",
+            "position": {
+                "row": "1",
+                "col": "f"
+            }
+        }, {
+            "type": "bishop",
+            "color": "black",
+            "position": {
+                "row": "1",
+                "col": "g"
+            }
+        }, {
+            "type": "rook",
+            "color": "black",
+            "position": {
+                "row": "1",
+                "col": "h"
+            }
+        }
+    ]
+ }
+
+
 $(function() {
   var FADE_TIME = 150; // ms
   var TYPING_TIMER_LENGTH = 400; // ms
@@ -49,6 +284,7 @@ $(function() {
 
   // User has logged in. Switch the page to room selection.
   socket.on('login', function (data) {
+    console.log(data)
     connected = true;
     // Render welcome and room selection data
     $("#roomWelcome").text("Hello " + data.username + "! Welcome to Majavashakki. Please, join existing game or create a new one.");
@@ -123,23 +359,41 @@ $(function() {
     return $('<div/>').text(input).text();
   }
 
+  //document.querySelector('.login.page').style.display = 'none'
+  //document.querySelector('.game.page').style.display = 'block'
+  ReactDOM.render(
+    React.createElement(GameView, {pieces: INITIAL_STATE.board, socket: socket}, null),
+    document.querySelector('.game.page')
+  )
+
 });
 
-  
 
 class GameView extends React.Component {
   constructor(props) {
     super(props)
-    console.log(props)
-    this.state = props.state
-    this.setState(props.state)
+  }
+
+  componentWillMount() {
+    this.setState({pieces: this.props.pieces})
+    this.props.socket.on('move_result', room => this.onMoveResult(room))
+  }
+
+  onMoveResult(room) {
+    console.log('onMoveResult', room.gameState.board)
+    this.setState({pieces: room.gameState.board})
   }
 
   render() {
+    console.log('GameView.render')
     const stateDebug = React.createElement('pre', null, JSON.stringify(this.state, null, 2))
 
+    console.log('pieces given to Board', this.state.pieces)
     return React.createElement('div', null,
-      React.createElement(Board, {board: this.state.board}),
+      React.createElement(Board, {
+        pieces: this.state.pieces,
+        socket: this.props.socket,
+      }),
       stateDebug
     )
   }
@@ -148,91 +402,81 @@ class GameView extends React.Component {
 class Board extends React.Component {
   constructor(props) {
     super(props)
+    this.state = {
+      selectedCell: undefined
+    }
+  }
 
-    this.pieceMap = props.board.reduce((map, piece) => {
-      const pos = piece.position.row + piece.position.col
+  getInitialState() {
+  }
+
+  cellName(x, y) {
+    return "abcdefgh"[x] + String(y)
+  }
+
+  makePieceMap() {
+    return this.props.pieces.reduce((map, piece) => {
+      const pos = piece.position.col + piece.position.row
       map[pos] = piece
       return map
     }, {})
   }
-
-  cellName(x, y) {
-    return "ABCDEFGH"[x] + y
-  }
-
+  
   makeCells() {
-    console.log(this.pieceMap)
+    const pieceMap = this.makePieceMap()
     const elements = []
     for (var y = 8; y > 0; y--) {
       for (var x = 0; x < 8; x++) {
-        const name = this.cellName(x, y)
-        const piece = this.pieceMap[name.toLowerCase()]
+        const pos = this.cellName(x, y)
+        const piece = pieceMap[pos.toLowerCase()]
+        const isSelected = this.state.selectedCell == pos ? 'selected' : ''
 
         let pieceImage = null
         if (piece) {
-          const className = `piece ${piece.color} ${piece.type}`
-          pieceImage = React.createElement('div', {className: className})
+          const className = `piece ${piece.color} ${piece.type} `
+          pieceImage = React.createElement('div', {
+            className: className,
+          })
         }
 
-        elements.push(React.createElement('div', {className: 'cell'}, pieceImage))
+        elements.push(React.createElement('div', {
+          className: `cell ${isSelected}`,
+          onClick: () => this.selectCell(pos),
+        }, pieceImage))
       }
     }
     return elements
   }
 
-  render() {
-    const board = this.props.board
+  posToJson(pos) {
+    return {
+      col: pos.charAt(0),
+      row: pos.charAt(1),
+    }
+  }
 
+  selectCell(pos) {
+    if (this.state.selectedCell) {
+      const movement = {
+        from: this.posToJson(this.state.selectedCell),
+        dest: this.posToJson(pos),
+      }
+      this.props.socket.emit('move', movement)
+
+      // TODO Mark move done so we don't send multiples
+
+      this.setState({selectedCell: undefined})
+    } else {
+      console.log(`selected piece at ${pos}`)
+      this.setState({selectedCell: pos})
+    }
+  }
+
+  render() {
+    console.log('Board.render', this.props)
     return React.createElement('div', {className: 'board'},
       this.makeCells(),
       React.createElement('pre', null, JSON.stringify(this.pieceMap, null, 2))
     )
   }
 }
-
-const INITIAL_STATE = {
-  board: [
-    {
-      type: 'pawn',
-      color: 'white',
-      position: {
-        row: 'b',
-        col: '3'
-      }
-    },
-    {
-      type: 'rook',
-      color: 'black',
-      position: {
-        row: 'b',
-        col: '1'
-      }
-    },
-    {
-      type: 'king',
-      color: 'black',
-      position: {
-        row: 'b',
-        col: '2'
-      }
-    },
-    {
-      type: 'pawn',
-      color: 'white',
-      position: {
-        row: 'b',
-        col: '4'
-      }
-    }
-  ],
-}
-
-window.onload = () => {
-  //document.querySelector('.login.page').style.display = 'none'
-  //document.querySelector('.game.page').style.display = 'block'
-  ReactDOM.render(
-    React.createElement(GameView, {state: INITIAL_STATE}, null),
-    document.querySelector('.game.page')
-  )
-}
-
