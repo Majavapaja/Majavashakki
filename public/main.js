@@ -13,9 +13,11 @@ $(function() {
   var $rooms = $("roomSelection");
   var $messages = $('.messages'); // Messages area
   var $inputMessage = $('.inputMessage'); // Input message input box
+  var $newRoomInput = $("#newRoomInput");
 
   var $loginPage = $('.login.page'); // The login page
   var $chatPage = $('.chat.page'); // The chatroom page
+  var $roomPage = $(".room.page"); // The room selection page
 
   // Prompt for setting a username
   var username;
@@ -38,18 +40,12 @@ $(function() {
 
   // Sets the client's username
   function setUsername () {
-    console.log("User picked room: " + jQuery("#roomSelection input[type='radio']:checked").val());
     username = cleanInput($usernameInput.val().trim());
 
     // If the username is valid
     if (username) {
-      $loginPage.fadeOut();
-      $chatPage.show();
-      $loginPage.off('click');
-      $currentInput = $inputMessage.focus();
-
       // Tell the server your username
-      socket.emit('add user', username, jQuery("#roomSelection input[type='radio']:checked").val());
+      socket.emit('new user', username);
     }
   }
 
@@ -231,11 +227,10 @@ $(function() {
   socket.on('login', function (data) {
     connected = true;
     // Display the welcome message
-    var message = "Welcome to Socket.IO Chat – " + data.roomName;
-    log(message, {
-      prepend: true
-    });
-    addParticipantsMessage(data);
+    $("#roomWelcome").text("Hello " + data.username + "! Welcome to Majavashakki. Please, join existing game or create a new one.");
+    $loginPage.fadeOut();
+    $roomPage.show();
+    $loginPage.off('click');
   });
 
   // Whenever the server emits 'new message', update the chat body
