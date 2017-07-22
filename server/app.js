@@ -5,6 +5,8 @@ var server = require('http').createServer(app);
 var io = require('socket.io')({ transports: ['websocket'] });
 io.attach(server);
 
+var path = require('path');
+
 var port = process.env.PORT || 3000;
 
 server.listen(port, function () {
@@ -12,7 +14,7 @@ server.listen(port, function () {
 });
 
 // ################ Routing ################
-app.use(express.static("..\public"));
+app.use(express.static(path.resolve('public')));
 
 // Gameroom
 const GameRooms = [];

@@ -11,6 +11,10 @@
     "socket.io": "^2.0.3"
   },
   "scripts": {
+    "dev": "nodemon server/app",
     "start": "node server/app.js"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0"
   }
 }

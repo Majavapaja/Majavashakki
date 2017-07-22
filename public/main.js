@@ -277,3 +277,107 @@ $(function() {
   });
 
 });
+
+class GameView extends React.Component {
+  constructor(props) {
+    super(props)
+    console.log(props)
+    this.state = props.state
+    this.setState(props.state)
+  }
+
+  render() {
+    const stateDebug = React.createElement('pre', null, JSON.stringify(this.state, null, 2))
+
+    return React.createElement('div', null,
+      React.createElement(Board, {board: this.state.board}),
+      stateDebug
+    )
+  }
+}
+
+class Board extends React.Component {
+  constructor(props) {
+    super(props)
+  }
+
+  cellName(x, y) {
+    return "ABCDEFGH"[x] + (y + 1)
+  }
+
+  makeCells() {
+    const elements = []
+    for (var y = 0; y < 8; y++) {
+      for (var x = 0; x < 8; x++) {
+        elements.push(
+          React.createElement('div', {className: 'cell'}, this.cellName(x, y)),
+        )
+      }
+    }
+    return elements
+  }
+
+  render() {
+    const board = this.props.board
+
+    const pieceMap = board.reduce((map, piece) => {
+      const pos = piece.position.row + piece.position.col
+      map[pos] = piece
+      return map
+    }, {})
+
+    var i = 1
+    console.log(pieceMap)
+    return React.createElement('div', {className: 'board'},
+      this.makeCells(),
+      React.createElement('pre', null, JSON.stringify(pieceMap, null, 2))
+    )
+  }
+}
+
+const INITIAL_STATE = {
+  board: [
+    {
+      type: 'pawn',
+      color: 'white',
+      position: {
+        row: 'b',
+        col: '3'
+      }
+    },
+    {
+      type: 'pawn',
+      color: 'white',
+      position: {
+        row: 'b',
+        col: '1'
+      }
+    },
+    {
+      type: 'pawn',
+      color: 'white',
+      position: {
+        row: 'b',
+        col: '2'
+      }
+    },
+    {
+      type: 'pawn',
+      color: 'white',
+      position: {
+        row: 'b',
+        col: '4'
+      }
+    }
+  ],
+}
+
+window.onload = () => {
+  //document.querySelector('.login.page').style.display = 'none'
+  //document.querySelector('.game.page').style.display = 'block'
+  ReactDOM.render(
+    React.createElement(GameView, {state: INITIAL_STATE}, null),
+    document.querySelector('.game.page')
+  )
+}
+
