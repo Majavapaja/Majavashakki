@@ -152,3 +152,33 @@ ul {
   right: 0;
   width: 100%;
 }
+
+.board {
+  display: flex;
+  flex-flow: row wrap;
+  width: 60vw;
+}
+
+.board .cell {
+  flex: 1 1 0px;
+  flex-basis: calc(60vw / 8);
+  height: calc(60vw / 8);
+  text-align: center;
+  justify-content: center;
+
+  background-color: #eee;
+  color: #333;
+}
+
+.board .cell:nth-child(16n+2),
+.board .cell:nth-child(16n+4),
+.board .cell:nth-child(16n+6),
+.board .cell:nth-child(16n+8),
+.board .cell:nth-child(16n+9),
+.board .cell:nth-child(16n+11),
+.board .cell:nth-child(16n+13),
+.board .cell:nth-child(16n+15)
+{
+  background-color: #333;
+  color: #eee;
+}
