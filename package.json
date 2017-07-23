@@ -7,41 +7,12 @@
   "private": true,
   "license": "BSD",
   "dependencies": {
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.25.0",
-    "babel-preset-es2015": "^6.24.1",
-    "babel-preset-react": "^6.24.1",
-    "babelify": "^7.3.0",
     "express": "4.13.4",
-    "jquery": "^3.2.1",
-    "npm-run-all": "^4.0.2",
-    "react": "^15.6.1",
-    "react-dom": "^15.6.1",
-    "socket.io": "^2.0.3",
-    "socket.io-client": "^2.0.3",
-    "watchify": "^3.9.0"
-  },
-  "babel": {
-    "presets": [
-      "react",
-      "es2015"
-    ]
-  },
-  "browserify": {
-    "transform": [
-      "babelify"
-    ]
+    "socket.io": "^2.0.3"
   },
   "scripts": {
-    "dev": "npm-run-all --parallel watch:client watch:server",
-    "start": "node app.js",
-    "postinstall": "npm-run-all --parallel build:client build:server",
-    "build:client": "browserify --entry public/main.js -o dist/public/bundle.js",
-    "build:server": "babel server -d dist/server",
-    "watch:server": "npm-run-all --parallel watch:server:*",
-    "watch:server:build": "babel server -d dist/server --watch",
-    "watch:server:run": "nodemon app.js",
-    "watch:client": "watchify public/main.js --debug -o dist/public/bundle.js -v"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"

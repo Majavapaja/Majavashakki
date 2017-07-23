@@ -1,4 +1,4 @@
-export const INITIAL_STATE = {
+ {
      "board": [
         {
             "type": "pawn",
@@ -230,4 +230,3 @@ export const INITIAL_STATE = {
         }
     ]
  }
-
