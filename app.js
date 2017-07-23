@@ -1,3 +1,3 @@
-const serverApp = require('./server/app')
+const serverApp = require('./dist/server/app')
 
 serverApp()

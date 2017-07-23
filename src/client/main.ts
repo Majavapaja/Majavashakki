@@ -232,8 +232,10 @@ const INITIAL_STATE =
     ]
  }
 
+import * as React from "React";
+import * as ReactDOM from "React-DOM";
 
-$(function() {
+(function() {
   var FADE_TIME = 150; // ms
   var TYPING_TIMER_LENGTH = 400; // ms
   var COLORS = [
@@ -245,18 +247,19 @@ $(function() {
 /* GENERAL VARIABLES */
 
   // Login variables
-  var $loginPage = $('.login.page'); // The login page
-  var $usernameInput = $loginPage.find(".usernameInput"); // Input for username
+  var loginPage = document.querySelector('.login.page') as HTMLElement; // The login page
+  var usernameInput = document.querySelector(".login.page .usernameInput") as HTMLInputElement; // Input for username
 
   // Lobby variables
-  var $roomPage = $(".room.page"); // The room selection page
-  var $newRoomInput = $roomPage.find("#newRoomInput"); // Next page focus
+  var roomPage = document.querySelector(".room.page") as HTMLElement; // The room selection page
+  var newRoomInput = document.querySelector(".room.page #newRoomInput") as HTMLInputElement; // Next page focus
 
   // Game variables
-  var $gamePage = $(".game.page");
+  var gamePage = document.querySelector(".game.page") as HTMLElement;
 
   // Shared variables
-  var $currentInput = $usernameInput.focus(); // Keydown event binding to follow currentInput
+  var currentInput = usernameInput; // Keydown event binding to follow currentInput
+  currentInput.focus();
 
   // Prompt for setting a username
   var username;
@@ -267,44 +270,44 @@ $(function() {
   var socket = io();
 
 /* LOGIN PAGE MAGIC */
-  $usernameInput.keydown(function(event){
-    // Submit on ENTER
+  usernameInput.addEventListener("keydown", function(event){
+// Submit on ENTER
     if(event.which === 13) {
-      var username = cleanInput($usernameInput.val().trim());
+      var username = cleanInput(usernameInput.value.trim());
       if (username) {
         socket.emit('new user', username);
       }
     }
   });
 
-  // Focus input when clicking anywhere on login page
-  $loginPage.click(function () {
-    $currentInput.focus();
-  });
+  // Focus input when clicking anywhere on login page // TODO do we need this shit?
+  function focusInput(event){currentInput.focus();}
+  loginPage.addEventListener("click", focusInput);
 
   // User has logged in. Switch the page to room selection.
   socket.on('login', function (data) {
     console.log(data)
     connected = true;
     // Render welcome and room selection data
-    $("#roomWelcome").text("Hello " + data.username + "! Welcome to Majavashakki. Please, join existing game or create a new one.");
+    var lobbyTitle = <HTMLElement>document.querySelector("#roomWelcome");
+    lobbyTitle.innerHTML = "Hello " + data.username + "! Welcome to Majavashakki. Please, join existing game or create a new one.";
     
-    $.each(data.rooms, function(i, val){
-      showRoomInList(val);
-    });
+    for(var i=0; i < data.rooms.length; i++){
+        showRoomInList(data.rooms[i]);
+    }
 
-    $loginPage.fadeOut();
-    $loginPage.off('click');
-    $currentInput = $newRoomInput.focus();
-
-    $roomPage.show(); 
+    loginPage.style.display = "none"; // TODO FADE TO MAKE IT PRETTY (CSS OR REACT?)
+    loginPage.removeEventListener('click',focusInput);
+    currentInput = newRoomInput;
+    currentInput.focus();
+    roomPage.style.display = "block"; 
   });
 
 /* ROOM SELECTION PAGE MAGIC */
-  $newRoomInput.keydown(function(event) {
+  newRoomInput.addEventListener("keydown", function(event) {
     // Submit on ENTER
     if(event.which === 13) {
-      var room = cleanInput($newRoomInput.val().trim());
+      var room = cleanInput(newRoomInput.value.trim());
       if(room) {
         socket.emit("create gameroom", room);
       }
@@ -313,17 +316,20 @@ $(function() {
 
   // Add new room to UI and attach join event
   function showRoomInList(gameroom) {
-    var rooms = $("#roomList");
-    var newRoom = $("<div id='"+gameroom.title+"'>").text(gameroom.title);
-    newRoom.click(function(){
-      socket.emit("join gameroom", gameroom.title);
+    var rooms = document.querySelector("#roomList");
+    var newRoom = document.createElement("div");
+    newRoom.id = gameroom.title;
+    newRoom.innerText = gameroom.title;
+    newRoom.addEventListener("click",function(event){
+        socket.emit("join gameroom", gameroom.title);
     });
-    rooms.append(newRoom);
+    rooms.appendChild(newRoom);
   }
 
   // Don't show full gamerooms in list
   function hideRoomInList(gameroom) {
-    $("#roomList div#"+gameroom.title).hide();
+    var roomList = document.querySelector("#roomList div#"+gameroom.title) as HTMLElement;
+    roomList.style.display = "none";
   };
 
   socket.on("gameroom created", function(gameroom){
@@ -341,22 +347,23 @@ $(function() {
   });
 
   socket.on("game joined", function(gameroom) {
-    $currentInput = null;
-    $roomPage.fadeOut();
-    $gamePage.show();
+    currentInput = null;
+    roomPage.style.display = "none"; //TODO FADE TO MAKE IT PRETTY PLZ (CSS or React?)
+    gamePage.style.display = "block";
   });
 
 /* GENERIC MAGIC */
-  $(window).keydown(function (event) {
+  window.addEventListener("keydown", function (event) {
     // Auto-focus the current input when a key is typed
-    if ($currentInput != null && !(event.ctrlKey || event.metaKey || event.altKey)) {
-      $currentInput.focus();
+    if (currentInput != null && !(event.ctrlKey || event.metaKey || event.altKey)) {
+      currentInput.focus();
     }
   });
 
-  // Prevents input from having injected markup
+  // Prevents input from having injected markup - xD mikä tän tunkun pointti on? TODO poistetaan tämmöset turhakkeet?
   function cleanInput (input) {
-    return $('<div/>').text(input).text();
+    var el = document.querySelector('<div/>');
+    return el.textContent.replace("<","").replace(">","");
   }
 
   //document.querySelector('.login.page').style.display = 'none'
@@ -366,10 +373,10 @@ $(function() {
     document.querySelector('.game.page')
   )
 
-});
+})();
 
 
-class GameView extends React.Component {
+class GameView extends React.Component<any,any> {
   constructor(props) {
     super(props)
   }
@@ -399,7 +406,7 @@ class GameView extends React.Component {
   }
 }
 
-class Board extends React.Component {
+class Board extends React.Component<any,any> {
   constructor(props) {
     super(props)
     this.state = {
@@ -475,8 +482,7 @@ class Board extends React.Component {
   render() {
     console.log('Board.render', this.props)
     return React.createElement('div', {className: 'board'},
-      this.makeCells(),
-      React.createElement('pre', null, JSON.stringify(this.pieceMap, null, 2))
+      this.makeCells()
     )
   }
 }

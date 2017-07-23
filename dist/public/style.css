@@ -1,0 +1,227 @@
+/* Fix user-agent */
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+html, input {
+  font-family:
+    "HelveticaNeue-Light",
+    "Helvetica Neue Light",
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    "Lucida Grande",
+    sans-serif;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+ul {
+  list-style: none;
+  word-wrap: break-word;
+}
+
+/* Pages */
+
+.pages {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.page {
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+
+/* Login Page */
+
+.login.page {
+  background-color: #000;
+}
+
+.login.page .form {
+  height: 100px;
+  margin-top: -100px;
+  position: absolute;
+
+  text-align: center;
+  top: 50%;
+  width: 100%;
+}
+
+.login.page .form .usernameInput {
+  background-color: transparent;
+  border: none;
+  border-bottom: 2px solid #fff;
+  outline: none;
+  padding-bottom: 15px;
+  text-align: center;
+  width: 400px;
+}
+
+.login.page .title {
+  font-size: 200%;
+}
+
+.login.page #roomSelection {
+  color:#fff;
+  font-size: 100%;
+}
+
+.login.page .usernameInput {
+  font-size: 200%;
+  letter-spacing: 3px;
+}
+
+.login.page .title, .login.page .usernameInput {
+  color: #fff;
+  font-weight: 100;
+}
+
+/* Chat page */
+
+.chat.page {
+  display: none;
+}
+
+/* Room page */
+.room.page {
+  display:none;
+}
+/* Game page */
+.game.page {
+  display: none;
+}
+
+/* Font */
+
+.messages {
+  font-size: 150%;
+}
+
+.inputMessage {
+  font-size: 100%;
+}
+
+.log {
+  color: gray;
+  font-size: 70%;
+  margin: 5px;
+  text-align: center;
+}
+
+/* Messages */
+
+.chatArea {
+  height: 100%;
+  padding-bottom: 60px;
+}
+
+.messages {
+  height: 100%;
+  margin: 0;
+  overflow-y: scroll;
+  padding: 10px 20px 10px 20px;
+}
+
+.message.typing .messageBody {
+  color: gray;
+}
+
+.username {
+  font-weight: 700;
+  overflow: hidden;
+  padding-right: 15px;
+  text-align: right;
+}
+
+/* Input */
+
+.inputMessage {
+  border: 10px solid #000;
+  bottom: 0;
+  height: 60px;
+  left: 0;
+  outline: none;
+  padding-left: 10px;
+  position: absolute;
+  right: 0;
+  width: 100%;
+}
+
+.board {
+  display: flex;
+  flex-flow: row wrap;
+  width: 60vmin;
+}
+
+.board .cell {
+  flex: 1 1 0px;
+  flex-basis: calc(60vmin / 8);
+  height: calc(60vmin / 8);
+  text-align: center;
+  justify-content: center;
+}
+
+.board .cell {
+  background-color: #eee;
+  color: #333;
+}
+
+.board .cell:nth-child(16n+2),
+.board .cell:nth-child(16n+4),
+.board .cell:nth-child(16n+6),
+.board .cell:nth-child(16n+8),
+.board .cell:nth-child(16n+9),
+.board .cell:nth-child(16n+11),
+.board .cell:nth-child(16n+13),
+.board .cell:nth-child(16n+15)
+{
+  background-color: #333;
+  color: #eee;
+}
+
+.board .cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.board .cell .piece {
+  background: url(/sprites.png);
+  position: absolute;
+  width: 32px;
+  height: 32px;
+
+}
+
+.board .cell .piece.white.king { background-position: calc(0 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.king { background-position: calc(0 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.queen { background-position: calc(1 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.queen { background-position: calc(1 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.rook { background-position: calc(2 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.rook { background-position: calc(2 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.bishop { background-position: calc(3 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.bishop { background-position: calc(3 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.knight { background-position: calc(4 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.knight { background-position: calc(4 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.pawn { background-position: calc(5 * -32px) calc(0 * -32px); }
+.board .cell .piece.black.pawn { background-position: calc(5 * -32px) calc(1 * -32px); }
+
+.board .cell.selected {
+  background: #0f0 !important;
+}
+
