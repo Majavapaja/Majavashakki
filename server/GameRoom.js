@@ -1,4 +1,4 @@
-var initialBoardState = require('./logic/start-setup.json');
+var initialBoardState = require('./logic/start-setup');
 
 function GameRoom(title, hostplayername) {
   this.title = title;

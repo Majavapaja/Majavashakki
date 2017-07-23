@@ -1,4 +1,4 @@
-var initialBoardState = require('./start-setup.json');
+var initialBoardState = require('./start-setup');
 
 class Board {
     constructor(socket) {

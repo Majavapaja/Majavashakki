@@ -1,3 +1,8 @@
+const React = require('react')
+const ReactDOM = require('react-dom')
+const io = require('socket.io-client')
+const $ = require('jquery')
+
 const INITIAL_STATE = 
  {
      "board": [
@@ -359,10 +364,8 @@ $(function() {
     return $('<div/>').text(input).text();
   }
 
-  //document.querySelector('.login.page').style.display = 'none'
-  //document.querySelector('.game.page').style.display = 'block'
   ReactDOM.render(
-    React.createElement(GameView, {pieces: INITIAL_STATE.board, socket: socket}, null),
+    <GameView pieces={INITIAL_STATE.board} socket={socket}/>,
     document.querySelector('.game.page')
   )
 
@@ -386,15 +389,15 @@ class GameView extends React.Component {
 
   render() {
     console.log('GameView.render')
-    const stateDebug = React.createElement('pre', null, JSON.stringify(this.state, null, 2))
+    const stateDebug = <pre>{JSON.stringify(this.state, null, 2)}</pre>
 
     console.log('pieces given to Board', this.state.pieces)
-    return React.createElement('div', null,
-      React.createElement(Board, {
-        pieces: this.state.pieces,
-        socket: this.props.socket,
-      }),
-      stateDebug
+    return (
+      <div>
+        <Board pieces={this.state.pieces}
+               socket={this.props.socket}/>
+        {stateDebug}
+      </div>
     )
   }
 }
@@ -433,16 +436,16 @@ class Board extends React.Component {
 
         let pieceImage = null
         if (piece) {
-          const className = `piece ${piece.color} ${piece.type} `
-          pieceImage = React.createElement('div', {
-            className: className,
-          })
+          pieceImage = <div className={`piece ${piece.color} ${piece.type}`}></div>
         }
 
-        elements.push(React.createElement('div', {
-          className: `cell ${isSelected}`,
-          onClick: () => this.selectCell(pos),
-        }, pieceImage))
+        elements.push(
+          <div className={`cell ${isSelected}`}
+               onClick={() => this.selectCell(pos)}
+               key={pos}>
+            {pieceImage}
+          </div>
+        )
       }
     }
     return elements
@@ -474,9 +477,11 @@ class Board extends React.Component {
 
   render() {
     console.log('Board.render', this.props)
-    return React.createElement('div', {className: 'board'},
-      this.makeCells(),
-      React.createElement('pre', null, JSON.stringify(this.pieceMap, null, 2))
+    return (
+      <div className='board'>
+        {this.makeCells()}
+        <pre>{JSON.stringify(this.pieceMap, null, 2)}</pre>
+      </div>
     )
   }
 }

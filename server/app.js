@@ -11,7 +11,8 @@ const Board = require('./logic/board');
 var port = process.env.PORT || 3000;
 
 // ################ Routing ################
-app.use(express.static(path.resolve('public')));
+app.use(express.static(path.resolve(__dirname, '../public')));
+app.use(express.static(path.resolve(__dirname, '../../public/assets')));
 
 // Gameroom
 const GameRooms = [];
