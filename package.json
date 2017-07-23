@@ -36,12 +36,12 @@
     "dev": "npm-run-all --parallel watch:client watch:server",
     "start": "node app.js",
     "postinstall": "npm-run-all --parallel build:client build:server",
-    "build:client": "browserify --entry public/main.jsx -o dist/public/bundle.js",
+    "build:client": "browserify --entry public/main.js -o dist/public/bundle.js",
     "build:server": "babel server -d dist/server",
     "watch:server": "npm-run-all --parallel watch:server:*",
     "watch:server:build": "babel server -d dist/server --watch",
     "watch:server:run": "nodemon app.js",
-    "watch:client": "watchify public/main.jsx --debug -o dist/public/bundle.js -v"
+    "watch:client": "watchify public/main.js --debug -o dist/public/bundle.js -v"
   },
   "devDependencies": {
     "nodemon": "^1.11.0"
