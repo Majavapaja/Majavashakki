@@ -24,12 +24,12 @@ module.exports = function(grunt) {
       app: {
         files: [
             {
-                src: ["src/\server/\*\*/\*.ts"],
+                src: ["src/\server/\*\*/\*.ts", "!src/.baseDir.ts"],
                 dest: "./dist"
             },
             {
-                src: ["src/\client/*.ts", "!src/.baseDir.ts"],
-                dest: "./dist/public"
+                src: ["src/\client/\*\*/\*.ts", "!src/.baseDir.ts"],
+                dest: "./dist"
             }
         ],
         options: {
@@ -40,6 +40,21 @@ module.exports = function(grunt) {
           rootDir: "src"
         }
       }
+    },
+    browserify: {
+         dist: {
+            options: {
+               transform: [
+                  ["babelify"]
+               ]
+            },
+            files: {
+               // if the source file has an extension of es6 then
+               // we change the name of the source file accordingly.
+               // The result file's extension is always .js
+               "./dist/public/bundle.js": ["./dist/client/*.js"]
+            }
+        }
     },
     watch: {
       ts: {
@@ -53,13 +68,27 @@ module.exports = function(grunt) {
     }
   });
 
+  grunt.loadNpmTasks("grunt-browserify");
   grunt.loadNpmTasks("grunt-contrib-copy");
   grunt.loadNpmTasks("grunt-contrib-watch");
   grunt.loadNpmTasks("grunt-ts");
 
+  //Main build task
   grunt.registerTask("default", [
     "copy",
+    "ts",
+    "browserify"
+  ]);
+
+  grunt.registerTask("compile", [
     "ts"
   ]);
 
+  grunt.registerTask("bundle", [
+    "browserify"
+  ]);
+
+  //TODO Setup and test WATCHER tasks
+  //TODO Setup grunt-clean for clean build
+  //TODO do we need anything special for JSX? probably not o.O
 };
