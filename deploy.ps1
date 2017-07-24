@@ -121,5 +121,17 @@ if (Test-Path "$DEPLOYMENT_TARGET\package.json") {
   popd
 }
 
+# 4. Build project with grunt
+if (Test-Path "$DEPLOYMENT_TARGET\gruntfile.js") {
+  pushd "$DEPLOYMENT_TARGET"
+  try {
+    iex "$NPM_CMD install"
+    iex "$NPM_CMD run grunt"
+  } catch {
+    exitWithMessageOnError "grunt failed"
+  }
+  popd
+}
+
 ##################################################################################################################################
 echo "Finished successfully."
