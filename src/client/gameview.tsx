@@ -1,5 +1,15 @@
 import * as React from "React";
 
+const CELL_POSITIONS = (function() {
+  const positions = []
+  for (var y = 8; y > 0; y--) {
+    for (var x = 0; x < 8; x++) {
+      positions.push("abcdefgh"[x] + String(y))
+    }
+  }
+  return positions
+}())
+
 class GameView extends React.Component<any,any> {
   constructor(props) {
     super(props)
@@ -35,10 +45,6 @@ class Board extends React.Component<any,any> {
     }
   }
 
-  cellName(x, y) {
-    return "abcdefgh"[x] + String(y)
-  }
-
   makePieceMap() {
     return this.props.pieces.reduce((map, piece) => {
       const pos = piece.position.col + piece.position.row
@@ -49,27 +55,11 @@ class Board extends React.Component<any,any> {
   
   makeCells() {
     const pieceMap = this.makePieceMap()
-    const elements = []
-    for (var y = 8; y > 0; y--) {
-      for (var x = 0; x < 8; x++) {
-        const pos = this.cellName(x, y)
-        const piece = pieceMap[pos.toLowerCase()]
-        const isSelected = this.state.selectedCell == pos ? 'selected' : ''
-
-        let pieceImage = null
-        if (piece) {
-          const className = `piece ${piece.color} ${piece.type} `
-          pieceImage = <div className={className}></div>
-        }
-
-        elements.push(
-          <div className={`cell ${isSelected}`} onClick={() => this.selectCell(pos)}>
-            {pieceImage}
-          </div>
-        )
-      }
-    }
-    return elements
+    return CELL_POSITIONS.map(pos =>
+      <Cell piece={pieceMap[pos.toLowerCase()]}
+            selected={this.state.selectedCell == pos}
+            onClick={() => this.selectCell(pos)}
+            key={pos} />)
   }
 
   posToJson(pos) {
@@ -100,6 +90,18 @@ class Board extends React.Component<any,any> {
     console.log('Board.render', this.props)
     return <div className='board'>{this.makeCells()}</div>
   }
+}
+
+function Cell({piece, selected, onClick}) {
+  return <div className={`cell ${selected ? 'selected' : ''}`}
+              onClick={onClick}>
+    {piece && <Piece piece={piece}/>}
+  </div>
+}
+
+function Piece({piece}) {
+  const {color, type} = piece
+  return <div className={`piece ${color} ${type}`}></div>
 }
 
 
