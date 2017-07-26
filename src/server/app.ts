@@ -13,7 +13,7 @@ import {UserStatesRepository} from "./UserStatesRepository";
 
 var app = express();
 var server = http.createServer(app);
-var io = sio({transports:['websocket']});
+var io: SocketIO.Server = sio({transports:['websocket']});
 io.attach(server);
 var port = process.env.PORT || 3000;
 

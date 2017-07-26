@@ -1,7 +1,9 @@
 import * as React from "React";
 
-const CELL_POSITIONS = (function() {
-  const positions = []
+import {Piece} from "./types"
+
+const CELL_POSITIONS: [string] = (function() {
+  const positions = [] as [string]
   for (var y = 8; y > 0; y--) {
     for (var x = 0; x < 8; x++) {
       positions.push("abcdefgh"[x] + String(y))
@@ -10,8 +12,17 @@ const CELL_POSITIONS = (function() {
   return positions
 }())
 
-class GameView extends React.Component<any,any> {
-  constructor(props) {
+interface GameViewProps {
+  pieces: [Piece]
+  socket: SocketIOClient.Socket
+}
+
+interface GameViewState {
+  pieces: [Piece]
+}
+
+class GameView extends React.Component<GameViewProps, GameViewState> {
+  constructor(props: GameViewProps) {
     super(props)
   }
 
@@ -32,27 +43,18 @@ class GameView extends React.Component<any,any> {
 }
 
 
-interface Piece {
-  type: string;
-  color: string;
-  position: {
-    col: string;
-    row: string;
-  };
-}
-
 interface BoardProps {
-  pieces: [Piece];
-  socket: any;
+  pieces: [Piece]
+  socket: SocketIOClient.Socket
 }
 
 interface BoardState {
-  selectedCell?: string;
-  moveTarget?: string;
+  selectedCell?: string
+  moveTarget?: string
 }
 
 class Board extends React.Component<BoardProps, BoardState> {
-  constructor(props) {
+  constructor(props: BoardProps) {
     super(props)
     this.state = {
       selectedCell: null,
@@ -79,7 +81,7 @@ class Board extends React.Component<BoardProps, BoardState> {
   
   makeCells() {
     const pieceMap = this.makePieceMap()
-    return CELL_POSITIONS.map(pos =>
+    return CELL_POSITIONS.map((pos: string) =>
       <Cell piece={pieceMap[pos.toLowerCase()]}
             selected={this.state.selectedCell == pos}
             targeted={this.state.moveTarget == pos}
@@ -87,7 +89,7 @@ class Board extends React.Component<BoardProps, BoardState> {
             key={pos} />)
   }
 
-  posToJson(pos) {
+  posToJson(pos: string) {
     return {
       col: pos.charAt(0),
       row: pos.charAt(1),

@@ -35,7 +35,7 @@ import GameView from './gameview'
   var typing = false;
   var lastTypingTime;
   
-  var socket = io();
+  const socket: SocketIOClient.Socket = io();
 
 /* LOGIN PAGE MAGIC */
   usernameInput.addEventListener("keydown", function(event){
@@ -129,7 +129,7 @@ import GameView from './gameview'
   }
 
   ReactDOM.render(
-    <GameView pieces={INITIAL_STATE.board} socket={socket} />,
+    <GameView pieces={INITIAL_STATE} socket={socket} />,
     document.querySelector('.game.page')
   )
 
