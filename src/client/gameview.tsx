@@ -21,18 +21,12 @@ class GameView extends React.Component<any,any> {
   }
 
   onMoveResult(room) {
-    console.log('onMoveResult', room.gameState.board)
     this.setState({pieces: room.gameState.board})
   }
 
   render() {
-    console.log('GameView.render')
-    const stateDebug = <pre>{JSON.stringify(this.state, null, 2)}</pre>
-
-    console.log('pieces given to Board', this.state.pieces)
     return <div>
       <Board pieces={this.state.pieces} socket={this.props.socket}/>
-      {stateDebug}
     </div>
   }
 }
@@ -71,23 +65,17 @@ class Board extends React.Component<any,any> {
 
   selectCell(pos) {
     if (this.state.selectedCell) {
-      const movement = {
+      this.props.socket.emit('move', {
         from: this.posToJson(this.state.selectedCell),
         dest: this.posToJson(pos),
-      }
-      this.props.socket.emit('move', movement)
-
-      // TODO Mark move done so we don't send multiples
-
+      })
       this.setState({selectedCell: undefined})
     } else {
-      console.log(`selected piece at ${pos}`)
       this.setState({selectedCell: pos})
     }
   }
 
   render() {
-    console.log('Board.render', this.props)
     return <div className='board'>{this.makeCells()}</div>
   }
 }
