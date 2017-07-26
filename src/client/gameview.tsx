@@ -35,9 +35,6 @@ class Board extends React.Component<any,any> {
     }
   }
 
-  getInitialState() {
-  }
-
   cellName(x, y) {
     return "abcdefgh"[x] + String(y)
   }
