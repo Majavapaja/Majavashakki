@@ -59,7 +59,7 @@ import GameView from './gameview'
     console.log(data)
     connected = true;
     // Render welcome and room selection data
-    var lobbyTitle = <HTMLElement>document.querySelector("#roomWelcome");
+    var lobbyTitle = document.querySelector("#roomWelcome") as HTMLElement;
     lobbyTitle.innerHTML = "Hello " + data.username + "! Welcome to Majavashakki. Please, join existing game or create a new one.";
     
     for(var i=0; i < data.rooms.length; i++){
@@ -136,7 +136,7 @@ import GameView from './gameview'
   }
 
   ReactDOM.render(
-    React.createElement(GameView, {pieces: INITIAL_STATE.board, socket: socket}, null),
+    <GameView pieces={INITIAL_STATE.board} socket={socket} />,
     document.querySelector('.game.page')
   )
 

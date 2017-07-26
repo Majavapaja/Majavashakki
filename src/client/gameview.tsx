@@ -17,16 +17,13 @@ class GameView extends React.Component<any,any> {
 
   render() {
     console.log('GameView.render')
-    const stateDebug = React.createElement('pre', null, JSON.stringify(this.state, null, 2))
+    const stateDebug = <pre>{JSON.stringify(this.state, null, 2)}</pre>
 
     console.log('pieces given to Board', this.state.pieces)
-    return React.createElement('div', null,
-      React.createElement(Board, {
-        pieces: this.state.pieces,
-        socket: this.props.socket,
-      }),
-      stateDebug
-    )
+    return <div>
+      <Board pieces={this.state.pieces} socket={this.props.socket}/>
+      {stateDebug}
+    </div>
   }
 }
 
@@ -65,15 +62,14 @@ class Board extends React.Component<any,any> {
         let pieceImage = null
         if (piece) {
           const className = `piece ${piece.color} ${piece.type} `
-          pieceImage = React.createElement('div', {
-            className: className,
-          })
+          pieceImage = <div className={className}></div>
         }
 
-        elements.push(React.createElement('div', {
-          className: `cell ${isSelected}`,
-          onClick: () => this.selectCell(pos),
-        }, pieceImage))
+        elements.push(
+          <div className={`cell ${isSelected}`} onClick={() => this.selectCell(pos)}>
+            {pieceImage}
+          </div>
+        )
       }
     }
     return elements
@@ -105,9 +101,7 @@ class Board extends React.Component<any,any> {
 
   render() {
     console.log('Board.render', this.props)
-    return React.createElement('div', {className: 'board'},
-      this.makeCells()
-    )
+    return <div className='board'>{this.makeCells()}</div>
   }
 }
 

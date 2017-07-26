@@ -24,15 +24,24 @@ module.exports = function(grunt) {
       app: {
         files: [
             {
-                src: ["src/\server/\*\*/\*.ts", "!src/.baseDir.ts"],
+                src: [
+                  "src/\server/\*\*/\*.ts",
+                  "src/\server/\*\*/\*.tsx",
+                  "!src/.baseDir.ts"
+                ],
                 dest: "./dist"
             },
             {
-                src: ["src/\client/\*\*/\*.ts", "!src/.baseDir.ts"],
+                src: [
+                  "src/\client/\*\*/\*.ts",
+                  "src/\client/\*\*/\*.tsx",
+                  "!src/.baseDir.ts"
+                ],
                 dest: "./dist"
             }
         ],
         options: {
+          jsx: "react",
           fast: "never",
           module: "commonjs",
           target: "es6",
