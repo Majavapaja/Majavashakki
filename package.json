@@ -14,7 +14,9 @@
     "socket.io-client": "^2.0.3"
   },
   "scripts": {
-    "dev": "nodemon app.js",
+    "dev": "npm-run-all --parallel watch:*",
+    "watch:app": "nodemon --watch dist --watch public app.js",
+    "watch:build": "grunt --force && grunt watch",
     "grunt": "grunt",
     "start": "node app.js"
   },
@@ -32,6 +34,7 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-ts": "^6.0.0-beta.16",
     "nodemon": "^1.11.0",
+    "npm-run-all": "^4.0.2",
     "typescript": "^2.4.2"
   }
 }
