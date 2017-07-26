@@ -31,12 +31,42 @@ class GameView extends React.Component<any,any> {
   }
 }
 
-class Board extends React.Component<any,any> {
+
+interface Piece {
+  type: string;
+  color: string;
+  position: {
+    col: string;
+    row: string;
+  };
+}
+
+interface BoardProps {
+  pieces: [Piece];
+  socket: any;
+}
+
+interface BoardState {
+  selectedCell?: string;
+  moveTarget?: string;
+}
+
+class Board extends React.Component<BoardProps, BoardState> {
   constructor(props) {
     super(props)
     this.state = {
-      selectedCell: undefined
+      selectedCell: null,
+      moveTarget: null,
     }
+
+    this.props.socket.on('move_result', room => this.onMoveResult(room))
+  }
+
+  onMoveResult(room) {
+    this.setState({
+      selectedCell: null,
+      moveTarget: null,
+    })
   }
 
   makePieceMap() {
@@ -52,7 +82,8 @@ class Board extends React.Component<any,any> {
     return CELL_POSITIONS.map(pos =>
       <Cell piece={pieceMap[pos.toLowerCase()]}
             selected={this.state.selectedCell == pos}
-            onClick={() => this.selectCell(pos)}
+            targeted={this.state.moveTarget == pos}
+            onClick={() => this.onCellClick(pos)}
             key={pos} />)
   }
 
@@ -63,15 +94,29 @@ class Board extends React.Component<any,any> {
     }
   }
 
-  selectCell(pos) {
+  onCellClick(pos) {
+    if (this.state.moveTarget) {
+      return
+    }
+
+    if (!this.state.selectedCell) {
+      this.setState({selectedCell: pos})
+      return
+    }
+
+    if (pos === this.state.selectedCell) {
+      this.setState({selectedCell: null})
+      return
+    }
+
     if (this.state.selectedCell) {
       this.props.socket.emit('move', {
         from: this.posToJson(this.state.selectedCell),
         dest: this.posToJson(pos),
       })
-      this.setState({selectedCell: undefined})
-    } else {
-      this.setState({selectedCell: pos})
+      this.setState({
+        moveTarget: pos
+      })
     }
   }
 
@@ -80,9 +125,14 @@ class Board extends React.Component<any,any> {
   }
 }
 
-function Cell({piece, selected, onClick}) {
-  return <div className={`cell ${selected ? 'selected' : ''}`}
-              onClick={onClick}>
+function Cell({piece, selected, targeted, onClick}) {
+  const classes = [
+    'cell',
+    selected && 'selected',
+    targeted && 'targeted'
+  ].filter(Boolean)
+
+  return <div className={classes.join(' ')} onClick={onClick}>
     {piece && <Piece piece={piece}/>}
   </div>
 }

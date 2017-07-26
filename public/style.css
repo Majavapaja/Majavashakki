@@ -221,7 +221,6 @@ ul {
 .board .cell .piece.white.pawn { background-position: calc(5 * -32px) calc(0 * -32px); }
 .board .cell .piece.black.pawn { background-position: calc(5 * -32px) calc(1 * -32px); }
 
-.board .cell.selected {
-  background: #0f0 !important;
-}
+.board .cell.selected { background: #0f0 !important; }
+.board .cell.targeted { background: #00f !important; }
 
