@@ -7,12 +7,12 @@ class GameView extends React.Component<any,any> {
 
   componentWillMount() {
     this.setState({pieces: this.props.pieces})
-    this.props.socket.on('move_result', room => this.onMoveResult(room))
+    this.props.socket.on('move_result', board => this.onMoveResult(board))
   }
 
-  onMoveResult(room) {
-    console.log('onMoveResult', room.gameState.board)
-    this.setState({pieces: room.gameState.board})
+  onMoveResult(board) {
+    console.log('onMoveResult', board)
+    this.setState({pieces: board})
   }
 
   render() {

@@ -3,11 +3,11 @@ import {UserState} from "./entities/UserState";
 
 export class GameRoomsRepository {
     private static _instance: GameRoomsRepository = new GameRoomsRepository();
-    private _roomStorage: {[name: string]: Game}; // Using simple object to store gamerooms, we provide easy way to check for existing rooms.
+    private _roomStorage: {[name: string]: Game} = {}; // Using simple object to store gamerooms, we provide easy way to check for existing rooms.
     public MainRoom = "Lobby";
 
     private constructor(){
-        if(!GameRoomsRepository._instance) {
+        if(GameRoomsRepository._instance) {
             throw new Error("The GameRoomRepository is a singleton class and cannot be created!");
         }
         GameRoomsRepository._instance = this;

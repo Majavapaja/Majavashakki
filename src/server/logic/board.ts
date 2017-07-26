@@ -1,9 +1,11 @@
+// TODO refactor for TypeScript. Alex requires some explanation on how board is supposed to be managed o.o
+// Probably we don't want to create instance / store userstate here.
 import {UserState} from "../entities/UserState";
 import {GameRoomsRepository} from "../GameRoomsRepository";
 var initialBoardState = require('../board-template.json');
 
 export class Board {
-    private currentUser: UserState;
+    public currentUser: UserState;
     constructor(userState: UserState) {
         this.currentUser = userState;
         this.currentUser.socket.on('move', (data) => {
@@ -34,14 +36,14 @@ export class Board {
 
         if(destCell === null)  {
             startCell.position = dest;
-            this.currentUser.socket.emit('move_result', game);
-            this.currentUser.socket.broadcast.to(game.title).emit('move_result', game);
+            this.currentUser.socket.emit('move_result', game.gameState.board);
+            this.currentUser.socket.broadcast.to(game.title).emit('move_result', game.gameState.board);
             console.log('Start moved to dest!');
         } else if (destCell.color !== startCell.color) {
             game.gameState.board.splice(game.gameState.board.indexOf(destCell));
             startCell.position = dest;
-            this.currentUser.socket.emit('move_result', game);
-            this.currentUser.socket.broadcast.to(game.title).emit('move_Result', game);
+            this.currentUser.socket.emit('move_result', game.gameState.board);
+            this.currentUser.socket.broadcast.to(game.title).emit('move_Result', game.gameState.board);
             console.log('Start eated dest!');
         } else {
             console.log('Invalid move! Hacker alert!');

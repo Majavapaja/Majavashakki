@@ -2,10 +2,10 @@ import {UserState} from "./entities/UserState";
 
 export class UserStatesRepository {
     private static _instance: UserStatesRepository = new UserStatesRepository();
-    private _userStorage: {[id: string]: UserState};
+    private _userStorage: {[id: string]: UserState} = {};
 
     private constructor() {
-        if(!UserStatesRepository._instance) {
+        if(UserStatesRepository._instance) {
             throw new Error("The UserStatesRepository is a singleton class and cannot be created!");
         }
         UserStatesRepository._instance = this;

@@ -28,6 +28,8 @@ io.on('connection', function (socket: SocketIO.Socket) {
 
   socket.on("new user", function (username: string) { // TODO make proper stuff when auth is introduced
     userStateRepo.createUser(username, socket, roomRepo.MainRoom);
+    // TODO board probably needs rethinking and refactoring. Why are we creating instance in socket connection?
+    let board = new Board(userStateRepo.getState(socket.id));
   });
 
   socket.on("fetch-games", function () {
@@ -42,7 +44,6 @@ io.on('connection', function (socket: SocketIO.Socket) {
     roomRepo.joinRoom(roomTitle, userStateRepo.getState(socket.id));
   });
 
-  let board = new Board(userStateRepo.getState(socket.id));
 });
 
 module.exports = () => {

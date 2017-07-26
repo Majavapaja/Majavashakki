@@ -2,6 +2,9 @@ module.exports = function(grunt) {
   "use strict";
 
   grunt.initConfig({
+    clean: {
+      src: ["./dist"]
+    },
     copy: {
       build: {
         files: [
@@ -24,11 +27,7 @@ module.exports = function(grunt) {
       app: {
         files: [
             {
-                src: ["src/\server/\*\*/\*.ts", "!src/.baseDir.ts"],
-                dest: "./dist"
-            },
-            {
-                src: ["src/\client/\*\*/\*.ts", "!src/.baseDir.ts"],
+                src: ["src/\*\*/\*.ts", "!src/.baseDir.ts"],
                 dest: "./dist"
             }
         ],
@@ -76,6 +75,7 @@ module.exports = function(grunt) {
 
   //Main build task
   grunt.registerTask("default", [
+    "clean",
     "copy",
     "ts",
     "browserify"
@@ -90,6 +90,5 @@ module.exports = function(grunt) {
   ]);
 
   //TODO Setup and test WATCHER tasks
-  //TODO Setup grunt-clean for clean build
   //TODO do we need anything special for JSX? probably not o.O
 };
