@@ -27,11 +27,16 @@ module.exports = function(grunt) {
       app: {
         files: [
             {
-                src: ["src/\*\*/\*.ts", "!src/.baseDir.ts"],
+                src: [
+                  "src/\*\*/\*.ts",
+                  "src/\*\*/\*.tsx",
+                  "!src/.baseDir.ts"
+                ],
                 dest: "./dist"
             }
         ],
         options: {
+          jsx: "react",
           fast: "never",
           module: "commonjs",
           target: "es6",

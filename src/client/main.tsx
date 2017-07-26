@@ -55,7 +55,7 @@ import GameView from './gameview'
   // User has logged in. Switch the page to room selection.
   socket.on('login', function (username: string) {
     // Render welcome and room selection data
-    let lobbyTitle = <HTMLElement>document.querySelector("#roomWelcome");
+    var lobbyTitle = document.querySelector("#roomWelcome") as HTMLElement;
     lobbyTitle.innerHTML = "Hello " + username + "! Welcome to Majavashakki. Please, join existing game or create a new one.";
     loginPage.style.display = "none"; // TODO FADE TO MAKE IT PRETTY (CSS OR REACT?)
     loginPage.removeEventListener('click', focusInput);
@@ -105,7 +105,7 @@ import GameView from './gameview'
   });
 
   // Lobby socket event
-  socket.on("gameroom full", function(gameroom) {
+  socket.on("game-full", function(gameroom) {
     hideRoomInList(gameroom);
   });
 
@@ -129,7 +129,7 @@ import GameView from './gameview'
   }
 
   ReactDOM.render(
-    React.createElement(GameView, {pieces: INITIAL_STATE.board, socket: socket}, null),
+    <GameView pieces={INITIAL_STATE.board} socket={socket} />,
     document.querySelector('.game.page')
   )
 
