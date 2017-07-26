@@ -5,8 +5,11 @@ import * as sio from "socket.io";
 import * as http from "http";
 import * as path from "path";
 // Import custom components
-import {GameRoom} from "./GameRoom";
+import {Game} from "./entities/GameRoom";
 import {Board} from "./logic/board";
+import {GameRoomsRepository} from "./GameRoomsRepository";
+import {UserStatesRepository} from "./UserStatesRepository";
+
 
 var app = express();
 var server = http.createServer(app);
@@ -17,64 +20,29 @@ var port = process.env.PORT || 3000;
 // ################ Routing ################
 app.use(express.static(path.resolve('dist/public')));
 
-// Gameroom
-const GameRooms: Array<GameRoom> = [];
-// Magnificent STATE object
-var TunkkuStates = {};
+// Singleton repository references
+const roomRepo = GameRoomsRepository.getInstance();
+const userStateRepo = UserStatesRepository.getInstance();
 
-io.on('connection', function (socket) {
-  TunkkuStates[socket.id] = {};
-  var addedUser = false;
-  socket.join("lobby");
+io.on('connection', function (socket: SocketIO.Socket) {
 
-  // when the client emits 'create gameroom', this listens and executes
-  socket.on("create gameroom", function (roomTitle: string) {
-    // Create new gameroom to global list.
-    // Add user to proper socket room
-    if(!io.sockets.adapter.rooms[roomTitle]) {
-      var room = new GameRoom(roomTitle, TunkkuStates[socket.id].username);
-      GameRooms.push(room);
-      TunkkuStates[socket.id].room = room;
-      socket.join(room.title);
-      socket.emit("game joined", room);
-      socket.broadcast.to("lobby").emit("gameroom created", room);
-    }
-    else {
-      // TODO näytä keskaria - huone on jo olemassa.
-    }
+  socket.on("new user", function (username: string) { // TODO make proper stuff when auth is introduced
+    userStateRepo.createUser(username, socket, roomRepo.MainRoom);
   });
 
-  socket.on("join gameroom", function (roomTitle){
-    // Add user to socket room
-    if(io.sockets.adapter.rooms[roomTitle].length < 2) {
-      var room = GameRooms.find(function(gameroom) {
-        return gameroom.title === roomTitle;
-      });
-      room.addPlayer(TunkkuStates[socket.id].username);
-      TunkkuStates[socket.id].room = room;
-      socket.join(room.title);
-      socket.broadcast.to("lobby").emit("gameroom full", room);
-      socket.emit("game joined", room);
-      socket.broadcast.to(room.title).emit("game started", room);
-    }
-    else {
-      // TODO gtfo
-    }
+  socket.on("fetch-games", function () {
+    socket.emit("update-games", roomRepo.getAvailableGames());
+  })
+
+  socket.on("create-game", function (title: string) {
+    roomRepo.createRoom(title, userStateRepo.getState(socket.id));
   });
 
-  // when the client emits 'add user', this listens and executes
-  socket.on("new user", function (username: string) {
-    // we store the username in the socket session for this client
-    TunkkuStates[socket.id].username = username;
-
-    // Ditch login page and render hello msg + list of available game rooms
-    socket.emit('login', {
-      username: username,
-      rooms: GameRooms
-    });
+  socket.on("join-game", function (roomTitle){
+    roomRepo.joinRoom(roomTitle, userStateRepo.getState(socket.id));
   });
 
-  let board = new Board(socket, TunkkuStates);
+  let board = new Board(userStateRepo.getState(socket.id));
 });
 
 module.exports = () => {

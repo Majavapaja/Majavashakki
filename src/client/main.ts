@@ -32,8 +32,6 @@ import GameView from './gameview'
   currentInput.focus();
 
   // Prompt for setting a username
-  var username;
-  var connected = false;
   var typing = false;
   var lastTypingTime;
   
@@ -55,22 +53,22 @@ import GameView from './gameview'
   loginPage.addEventListener("click", focusInput);
 
   // User has logged in. Switch the page to room selection.
-  socket.on('login', function (data) {
-    console.log(data)
-    connected = true;
+  socket.on('login', function (username: string) {
     // Render welcome and room selection data
-    var lobbyTitle = <HTMLElement>document.querySelector("#roomWelcome");
-    lobbyTitle.innerHTML = "Hello " + data.username + "! Welcome to Majavashakki. Please, join existing game or create a new one.";
-    
-    for(var i=0; i < data.rooms.length; i++){
-        showRoomInList(data.rooms[i]);
-    }
-
+    let lobbyTitle = <HTMLElement>document.querySelector("#roomWelcome");
+    lobbyTitle.innerHTML = "Hello " + username + "! Welcome to Majavashakki. Please, join existing game or create a new one.";
     loginPage.style.display = "none"; // TODO FADE TO MAKE IT PRETTY (CSS OR REACT?)
-    loginPage.removeEventListener('click',focusInput);
+    loginPage.removeEventListener('click', focusInput);
     currentInput = newRoomInput;
     currentInput.focus();
-    roomPage.style.display = "block"; 
+    roomPage.style.display = "block";
+    socket.emit("fetch-games");
+  });
+
+  socket.on("update-games", function(gameRooms: Array<string>) {
+    for(let i=0; i < gameRooms.length; i++){
+        showRoomInList(gameRooms[i]);
+    }
   });
 
 /* ROOM SELECTION PAGE MAGIC */
@@ -79,19 +77,19 @@ import GameView from './gameview'
     if(event.which === 13) {
       var room = cleanInput(newRoomInput.value.trim());
       if(room) {
-        socket.emit("create gameroom", room);
+        socket.emit("create-game", room);
       }
     }
   });
 
   // Add new room to UI and attach join event
-  function showRoomInList(gameroom) {
+  function showRoomInList(roomTitle: string) {
     var rooms = document.querySelector("#roomList");
     var newRoom = document.createElement("div");
-    newRoom.id = gameroom.title;
-    newRoom.innerText = gameroom.title;
+    newRoom.id = roomTitle;
+    newRoom.innerText = roomTitle;
     newRoom.addEventListener("click",function(event){
-        socket.emit("join gameroom", gameroom.title);
+        socket.emit("join-game", roomTitle);
     });
     rooms.appendChild(newRoom);
   }
@@ -102,8 +100,8 @@ import GameView from './gameview'
     roomList.style.display = "none";
   };
 
-  socket.on("gameroom created", function(gameroom){
-    showRoomInList(gameroom);
+  socket.on("game-created", function(roomTitle){
+    showRoomInList(roomTitle);
   });
 
   // Lobby socket event
@@ -111,12 +109,7 @@ import GameView from './gameview'
     hideRoomInList(gameroom);
   });
 
-  // Gameroom socket event - 2 player joined and game starts
-  socket.on("game started", function(gameroom) {   
-    console.log("derp");
-  });
-
-  socket.on("game joined", function(gameroom) {
+  socket.on("game-joined", function() {
     currentInput = null;
     roomPage.style.display = "none"; //TODO FADE TO MAKE IT PRETTY PLZ (CSS or React?)
     gamePage.style.display = "block";
