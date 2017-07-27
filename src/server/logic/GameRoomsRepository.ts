@@ -1,5 +1,5 @@
-import {Game} from "./entities/GameRoom";
-import {UserState} from "./entities/UserState";
+import {Game} from "../entities/GameRoom";
+import {UserState} from "../entities/UserState";
 
 export class GameRoomsRepository {
     private static _instance: GameRoomsRepository = new GameRoomsRepository();

@@ -7,8 +7,8 @@ import * as path from "path";
 // Import custom components
 import {Game} from "./entities/GameRoom";
 import {Board} from "./logic/board";
-import {GameRoomsRepository} from "./GameRoomsRepository";
-import {UserStatesRepository} from "./UserStatesRepository";
+import {GameRoomsRepository} from "./logic/GameRoomsRepository";
+import {UserStatesRepository} from "./logic/UserStatesRepository";
 
 
 var app = express();
@@ -29,6 +29,7 @@ io.on('connection', function (socket: SocketIO.Socket) {
   socket.on("new user", function (username: string) { // TODO make proper stuff when auth is introduced
     userStateRepo.createUser(username, socket, roomRepo.MainRoom);
     // TODO board probably needs rethinking and refactoring. Why are we creating instance in socket connection?
+    // use repository approach as with game and userstate?
     let board = new Board(userStateRepo.getState(socket.id));
   });
 

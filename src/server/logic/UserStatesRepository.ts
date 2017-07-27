@@ -1,4 +1,4 @@
-import {UserState} from "./entities/UserState";
+import {UserState} from "../entities/UserState";
 
 export class UserStatesRepository {
     private static _instance: UserStatesRepository = new UserStatesRepository();

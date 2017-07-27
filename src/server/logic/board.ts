@@ -1,7 +1,7 @@
 // TODO refactor for TypeScript. Alex requires some explanation on how board is supposed to be managed o.o
 // Probably we don't want to create instance / store userstate here.
 import {UserState} from "../entities/UserState";
-import {GameRoomsRepository} from "../GameRoomsRepository";
+import {GameRoomsRepository} from "./GameRoomsRepository";
 import {Piece, Position} from "../../common/types"
 import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol"
 
