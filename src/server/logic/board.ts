@@ -30,7 +30,7 @@ export class Board {
             return;
         }
 
-        if(destCell === null)  {
+        if(!destCell)  {
             startCell.position = dest;
             this.currentUser.socket.emit('move_result', game.gameState.board);
             this.currentUser.socket.broadcast.to(game.title).emit('move_result', game.gameState.board);
@@ -46,8 +46,11 @@ export class Board {
         }
     }
 
-    getPiece(board, pos) {
-        let piece = board.find((piece) => (piece.position.row === pos.row && piece.position.col === pos.col));
-        return piece ? piece : null;
+    getPiece(board: [Piece], pos): Piece {
+        return board.find(piece => this.comparePos(piece.position, pos))
+    }
+
+    comparePos(a, b) {
+      return a.row === b.row && a.col === b.col
     }
 }
