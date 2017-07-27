@@ -2,8 +2,9 @@ import * as React from "React";
 import * as ReactDOM from "React-DOM";
 import * as io from "socket.io-client";
 
-import INITIAL_STATE from '../common/initial-state'
-import GameView from './gameview'
+import INITIAL_STATE from '../common/initial-state';
+import GameView from './gameview';
+import LoginView from './LoginView';
 
 (function() {
   var FADE_TIME = 150; // ms
@@ -16,10 +17,6 @@ import GameView from './gameview'
 
 /* GENERAL VARIABLES */
 
-  // Login variables
-  var loginPage = document.querySelector('.login.page') as HTMLElement; // The login page
-  var usernameInput = document.querySelector(".login.page .usernameInput") as HTMLInputElement; // Input for username
-
   // Lobby variables
   var roomPage = document.querySelector(".room.page") as HTMLElement; // The room selection page
   var newRoomInput = document.querySelector(".room.page #newRoomInput") as HTMLInputElement; // Next page focus
@@ -28,48 +25,10 @@ import GameView from './gameview'
   var gamePage = document.querySelector(".game.page") as HTMLElement;
 
   // Shared variables
-  var currentInput = usernameInput; // Keydown event binding to follow currentInput
-  currentInput.focus();
-
-  // Prompt for setting a username
-  var typing = false;
-  var lastTypingTime;
+  var currentInput; //usernameInput; // Keydown event binding to follow currentInput
+  //currentInput.focus();
   
   const socket: SocketIOClient.Socket = io();
-
-/* LOGIN PAGE MAGIC */
-  usernameInput.addEventListener("keydown", function(event){
-// Submit on ENTER
-    if(event.which === 13) {
-      var username = cleanInput(usernameInput.value.trim());
-      if (username) {
-        socket.emit('new user', username);
-      }
-    }
-  });
-
-  // Focus input when clicking anywhere on login page // TODO do we need this shit?
-  function focusInput(event){currentInput.focus();}
-  loginPage.addEventListener("click", focusInput);
-
-  // User has logged in. Switch the page to room selection.
-  socket.on('login', function (username: string) {
-    // Render welcome and room selection data
-    var lobbyTitle = document.querySelector("#roomWelcome") as HTMLElement;
-    lobbyTitle.innerHTML = "Hello " + username + "! Welcome to Majavashakki. Please, join existing game or create a new one.";
-    loginPage.style.display = "none"; // TODO FADE TO MAKE IT PRETTY (CSS OR REACT?)
-    loginPage.removeEventListener('click', focusInput);
-    currentInput = newRoomInput;
-    currentInput.focus();
-    roomPage.style.display = "block";
-    socket.emit("fetch-games");
-  });
-
-  socket.on("update-games", function(gameRooms: Array<string>) {
-    for(let i=0; i < gameRooms.length; i++){
-        showRoomInList(gameRooms[i]);
-    }
-  });
 
 /* ROOM SELECTION PAGE MAGIC */
   newRoomInput.addEventListener("keydown", function(event) {
@@ -127,6 +86,11 @@ import GameView from './gameview'
   function cleanInput (input: string) {
     return input.replace("<","").replace(">","");
   }
+
+  ReactDOM.render(
+    <LoginView  socket={socket} />,
+    document.querySelector(".login.page")
+  )
 
   ReactDOM.render(
     <GameView pieces={INITIAL_STATE} socket={socket} />,
