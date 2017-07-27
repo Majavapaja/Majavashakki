@@ -2,7 +2,6 @@
 // Probably we don't want to create instance / store userstate here.
 import {UserState} from "../entities/UserState";
 import {GameRoomsRepository} from "../GameRoomsRepository";
-import INITIAL_STATE from "../../common/initial-state"
 import {Piece} from "../../common/types"
 
 export class Board {
@@ -12,10 +11,6 @@ export class Board {
         this.currentUser.socket.on('move', (data) => {
             this.move(data.from, data.dest);
         });
-    }
-
-    getInitialBoard(socket): [Piece] {
-      return INITIAL_STATE
     }
 
     move(from, dest) {
