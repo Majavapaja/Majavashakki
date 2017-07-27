@@ -2,7 +2,7 @@ import * as React from "React";
 import * as ReactDOM from "React-DOM";
 import * as io from "socket.io-client";
 
-import INITIAL_STATE from './initial-state'
+import INITIAL_STATE from '../common/initial-state'
 import GameView from './gameview'
 
 (function() {

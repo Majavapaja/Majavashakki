@@ -2,7 +2,8 @@
 // Probably we don't want to create instance / store userstate here.
 import {UserState} from "../entities/UserState";
 import {GameRoomsRepository} from "../GameRoomsRepository";
-var initialBoardState = require('../board-template.json');
+import INITIAL_STATE from "../../common/initial-state"
+import {Piece} from "../../common/types"
 
 export class Board {
     public currentUser: UserState;
@@ -13,8 +14,8 @@ export class Board {
         });
     }
 
-    getInitialBoard(socket) {
-        return initialBoardState.board;
+    getInitialBoard(socket): [Piece] {
+      return INITIAL_STATE
     }
 
     move(from, dest) {

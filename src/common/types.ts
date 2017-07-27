@@ -6,4 +6,3 @@ export interface Piece {
     row: string
   }
 }
-

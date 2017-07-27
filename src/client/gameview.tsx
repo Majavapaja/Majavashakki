@@ -1,6 +1,6 @@
 import * as React from "React";
 
-import {Piece} from "./types"
+import {Piece} from "../common/types"
 
 const CELL_POSITIONS: [string] = (function() {
   const positions = [] as [string]

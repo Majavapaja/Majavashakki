@@ -1,4 +1,4 @@
-var initialBoardState = require('../board-template.json');
+import INITIAL_STATE from '../../common/initial-state'
 import {UserState} from "./UserState";
 
 export class Game {
@@ -8,7 +8,7 @@ export class Game {
 
     constructor(title:string, player: UserState) {
         this.title = title;
-        this.gameState = Object.assign({},initialBoardState);
+        this.gameState = {board: Array.from(INITIAL_STATE)}
         this.players.push(player);
     }
 
