@@ -63,7 +63,7 @@ module.exports = function(grunt) {
     watch: {
       ts: {
         files: ["ts", "tsx", "json"].map(ext => "**/*." + ext),
-        tasks: ["ts"]
+        tasks: ["ts", "browserify"]
       },
       public: {
         files: ["public/**/*"],
