@@ -1,65 +1,130 @@
 import * as React from "React";
 
-class LoginView extends React.Component<any,any> {
+// TODO: Maybe split login/lobby
 
-    constructor(socket: SocketIOClient.Socket) {
-        super(socket);
-            // User has logged in. Switch the page to room selection.
-            this.props.socket.on('login', function (username: string) {
-            // Render welcome and room selection data
-            // Login variables
-            var loginPage = document.querySelector('.login.page') as HTMLElement; // The login page
-            var lobbyTitle = document.querySelector("#roomWelcome") as HTMLElement;
-            var roomPage = document.querySelector(".room.page") as HTMLElement; // The room selection page
+class LoginView extends React.Component<any, any> {
+    constructor(props: any) {
+        super(props)
+        this.state = {
+            username: "",
+            newRoomName: "",
+            showLogin: true,
+            rooms: [],
+            inGame: false,
+        }
 
-            // rest of crap
-            lobbyTitle.innerHTML = "Hello " + username + "! Welcome to Majavashakki. Please, join existing game or create a new one.";
-            loginPage.style.display = "none"; // TODO FADE TO MAKE IT PRETTY (CSS OR REACT?)
-            roomPage.style.display = "block";
-            this.props.socket.emit("fetch-games");
-        }.bind(this));
-        this.props.socket.on("update-games", function(gameRooms: Array<string>) {
-            for(let i=0; i < gameRooms.length; i++){
-                this.showRoomInList(gameRooms[i]);
-            }
-        }.bind(this));
+        // User has logged in. Switch the page to room selection.
+        this.props.socket.on('login', (username: string) => {
+            this.setState({loadingRooms: true})
+            setTimeout(() => this.props.socket.emit("fetch-games"), 1000)
+        });
+
+        // Replace room list when receiving full list of games
+        this.props.socket.on("update-games", (gameRooms: Array<string>) => {
+            this.setState({
+                showLogin: false,
+                rooms: gameRooms,
+                loadingRooms: false,
+            })
+        });
+
+        // Add new games to list
+        this.props.socket.on("game-created", room => {
+            this.setState({
+                rooms: [].concat(this.state.rooms, [room])
+            })
+        })
+
+        // Remove game from list when it becomes full
+        this.props.socket.on("game-full", fullRoom => {
+            this.setState({
+                rooms: this.state.rooms.filter(room => room !== fullRoom),
+            })
+        })
+
+        this.props.socket.on("game-notAvailable", () => {
+            // TODO
+        })
+
+        this.props.socket.on("game-joined", () => {
+          this.setState({inGame: true})
+
+          // FIXME: Not idiomatic way but what you gonna do
+          const gamePage = document.querySelector(".game.page") as HTMLElement
+          gamePage.style.display = "block"
+        })
     }
 
-    login = (event) => {
-        if(event.which === 13) {
-            var username = this.cleanInput(event.target.value.trim());
-            if (username) {
-                console.log(username);
-                this.props.socket.emit('new user', username);
-            }
+    onSubmitLogin(event) {
+        event.preventDefault()
+        const username = this.cleanInput(this.state.username)
+        if (username) {
+            this.props.socket.emit('new user', username)
         }
     }
 
-    cleanInput (input: string) {
-        return input.replace("<","").replace(">","");
+    onSubmitNewRoom(event) {
+        event.preventDefault()
+        const room = this.cleanInput(this.state.newRoomName)
+        if (room) {
+            this.props.socket.emit("create-game", room)
+        }
     }
 
-    // Add new room to UI and attach join event
-    showRoomInList = (roomTitle: string) => {
-        var rooms = document.querySelector("#roomList");
-        var newRoom = document.createElement("div");
-        newRoom.id = roomTitle;
-        newRoom.innerText = roomTitle;
-        newRoom.addEventListener("click",function(event){
-            this.props.socket.emit("join-game", roomTitle);
-        }.bind(this));
-        rooms.appendChild(newRoom);
+    cleanInput(input: string): string {
+        return input.trim().replace("<","").replace(">","");
     }
 
-  // Focus input when clicking anywhere on login page // TODO do we need this shit?
-  // function focusInput(event){currentInput.focus();}
-  // loginPage.addEventListener("click", focusInput);
+    onInputChange({target}) {
+        this.setState({[target.name]: target.value})
+    }
+
+    onRoomClick(room) {
+        this.props.socket.emit("join-game", room)
+    }
 
     render() {
-        return <div className='form'>
-            <h3 className="title">What's your nickname?</h3>
-            <input className="usernameInput" type="text" onKeyDown={this.login}></input>
-        </div>
+        // Do not show login/lobby when in game
+        if (this.state.inGame) {
+            return null
+        }
+
+        const onInputChange = this.onInputChange.bind(this)
+
+        if (this.state.showLogin) {
+            const onSubmitLogin = this.onSubmitLogin.bind(this)
+            const title = this.state.loadingRooms ?
+                <h3 className="title">Loading rooms...</h3> :
+                <h3 className="title">What's your nickname?</h3>
+
+            return <div className="login page">
+                <div className='form'>
+                    {title}
+                    <form onSubmit={onSubmitLogin}>
+                        <input name="username" className="usernameInput" type="text" onChange={onInputChange} value={this.state.username}/>
+                    </form>
+                </div>
+            </div>
+        } else {
+            const onRoomClick = room => () => this.onRoomClick(room)
+            const onSubmitNewRoom = this.onSubmitNewRoom.bind(this)
+
+            return <div className="room page">
+                <h2 id="roomWelcome">
+                    Hello {this.state.username}! Welcome to Majavashakki.
+                    Please, join existing game or create a new one.
+                </h2>
+                <ul id="roomList">
+                    {this.state.rooms.map(room =>
+                        <li key={room} onClick={onRoomClick(room)}>{room}</li>)}
+                </ul>
+                <div className="newRoomArea">
+                    <form onSubmit={onSubmitNewRoom}>
+                        Create new room: <input name="newRoomName" type="text" onChange={onInputChange} value={this.state.newRoomName}/>
+                    </form>
+                </div>
+            </div>
+        }
     }
 }
 

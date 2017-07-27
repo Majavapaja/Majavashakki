@@ -97,10 +97,6 @@ ul {
   display: none;
 }
 
-/* Room page */
-.room.page {
-  display:none;
-}
 /* Game page */
 .game.page {
   display: none;
