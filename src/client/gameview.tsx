@@ -1,6 +1,7 @@
 import * as React from "React";
 
 import {Piece} from "../common/types"
+import {MoveResponse} from "../common/protocol"
 
 const CELL_POSITIONS: [string] = (function() {
   const positions = [] as [string]
@@ -19,6 +20,7 @@ interface GameViewProps {
 
 interface GameViewState {
   pieces: [Piece]
+  error?: string
 }
 
 class GameView extends React.Component<GameViewProps, GameViewState> {
@@ -28,16 +30,29 @@ class GameView extends React.Component<GameViewProps, GameViewState> {
 
   componentWillMount() {
     this.setState({pieces: this.props.pieces})
-    this.props.socket.on('move_result', board => this.onMoveResult(board))
+    this.props.socket.on('move_result', this.onMoveResult.bind(this))
   }
 
-  onMoveResult(board) {
-    this.setState({pieces: board})
+  onMoveResult(response: MoveResponse) {
+    switch (response.kind) {
+    case "error":
+      this.setState({
+        error: response.error
+      })
+      break
+    case "success":
+      this.setState({
+        pieces: response.board,
+        error: undefined
+      })
+      break
+    }
   }
 
   render() {
     return <div>
       <Board pieces={this.state.pieces} socket={this.props.socket}/>
+      {this.state.error && <p>Error: {this.state.error}</p>}
     </div>
   }
 }

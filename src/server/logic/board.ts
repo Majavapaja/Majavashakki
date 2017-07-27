@@ -3,23 +3,34 @@
 import {UserState} from "../entities/UserState";
 import {GameRoomsRepository} from "../GameRoomsRepository";
 import {Piece, Position} from "../../common/types"
+import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol"
 
 export class Board {
     public currentUser: UserState;
+
     constructor(userState: UserState) {
         this.currentUser = userState;
+
         this.currentUser.socket.on('move', (data) => {
-            this.move(data.from, data.dest);
+            const game = GameRoomsRepository.getInstance().getGameRoom(this.currentUser.currentRoom);
+            const result = this.move(game, data.from, data.dest);
+            switch (result.kind) {
+            case "error":
+                this.currentUser.socket.emit('move_result', result);
+                break
+            case "success":
+                this.currentUser.socket.emit('move_result', result);
+                this.currentUser.socket.broadcast.to(game.title).emit('move_result', result);
+                break
+            }
         });
     }
 
-    move(from, dest) {
+    move(game, from, dest): MoveResponse {
         if (!from && !dest) {
             console.warn('Movement data is invalid!');
-            return;
+            return this.error("Invalid move")
         }
-        var gameRepo = GameRoomsRepository.getInstance();
-        var game = gameRepo.getGameRoom(this.currentUser.currentRoom);
 
         console.log(`Start: ${from.row}${from.col}, Destination: ${dest.row}${dest.col}`);
         let startCell = this.getPiece(game.gameState.board, from);
@@ -27,23 +38,30 @@ export class Board {
 
         if(startCell === null) {
             console.log('Invalid move! Hacker alert!');
-            return;
+            return this.error("Invalid move")
         }
 
         if(!destCell)  {
             startCell.position = dest;
-            this.currentUser.socket.emit('move_result', game.gameState.board);
-            this.currentUser.socket.broadcast.to(game.title).emit('move_result', game.gameState.board);
             console.log('Start moved to dest!');
+            return this.success(game.gameState.board)
         } else if (destCell.color !== startCell.color) {
             game.gameState.board.splice(game.gameState.board.indexOf(destCell));
             startCell.position = dest;
-            this.currentUser.socket.emit('move_result', game.gameState.board);
-            this.currentUser.socket.broadcast.to(game.title).emit('move_Result', game.gameState.board);
             console.log('Start eated dest!');
+            return this.success(game.gameState.board)
         } else {
             console.log('Invalid move! Hacker alert!');
+            return this.error("Invalid move")
         }
+    }
+
+    success(board: [Piece]): MoveSuccess {
+      return {kind: "success", board: board}
+    }
+
+    error(message: string): MoveError {
+      return {kind: "error", error: message}
     }
 
     getPiece(board: [Piece], pos: Position): Piece {
