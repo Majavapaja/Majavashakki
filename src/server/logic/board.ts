@@ -2,7 +2,7 @@
 // Probably we don't want to create instance / store userstate here.
 import {UserState} from "../entities/UserState";
 import {GameRoomsRepository} from "../GameRoomsRepository";
-import {Piece} from "../../common/types"
+import {Piece, Position} from "../../common/types"
 
 export class Board {
     public currentUser: UserState;
@@ -46,11 +46,11 @@ export class Board {
         }
     }
 
-    getPiece(board: [Piece], pos): Piece {
+    getPiece(board: [Piece], pos: Position): Piece {
         return board.find(piece => this.comparePos(piece.position, pos))
     }
 
-    comparePos(a, b) {
+    comparePos(a: Position, b: Position): boolean {
       return a.row === b.row && a.col === b.col
     }
 }
