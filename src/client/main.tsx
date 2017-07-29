@@ -1,5 +1,5 @@
-import * as React from "React";
-import * as ReactDOM from "React-DOM";
+import * as React from "react";
+import * as ReactDOM from "react-dom";
 import * as io from "socket.io-client";
 
 import INITIAL_STATE from '../common/initial-state';
