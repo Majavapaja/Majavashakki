@@ -5,6 +5,9 @@ class MovementValidator {
     constructor() {}
 
     public isValidMove(board: Board, start: Position, destination: Position): boolean {
+        // Check that start and destination are not the same
+        if(board.comparePos(start, destination)) return false;
+
         // Check that start and destination are within board
         if(!board.isWithinBoard(start) || !board.isWithinBoard(destination)) {
             return false;
