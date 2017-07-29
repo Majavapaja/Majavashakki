@@ -41,7 +41,7 @@ class MovementValidator {
             case 'knight':
                 return this.knightMovement(board, startPiece, destination);
             case 'rook':
-                return true;
+                return this.rookMovement(board, startPiece, destination);
             case 'bishop':
                 return true;
             case 'king':
@@ -57,9 +57,8 @@ class MovementValidator {
     }
 
     private knightMovement(board: Board, startPiece: Piece, destination: Position): boolean {
-        // Knight can move one diagonally then one back to destination
-        let start = this.convertPosition(startPiece.position);
-        let dest = this.convertPosition(destination);
+        let start = this.positionToNumbers(startPiece.position);
+        let dest = this.positionToNumbers(destination);
 
         let rowDiff = Math.abs(dest.row - start.row);
         let colDiff = Math.abs(dest.col - start.col);
@@ -71,8 +70,31 @@ class MovementValidator {
         return false;
     }
 
-    private convertPosition(pos: Position) {
+    private rookMovement(board: Board, startPiece: Piece, destination: Position): boolean {
+        let start = this.positionToNumbers(startPiece.position);
+        let dest = this.positionToNumbers(destination);
+
+        if(dest.col !== start.col && dest.row !== start.row) return false;
+
+        while(start.col !== dest.col || start.row !== dest.row) {
+            if(dest.col > start.col) dest.col --;
+            else if(dest.col < start.col) dest.col ++;
+            else if(dest.row > start.row) dest.row --;
+            else if(dest.row < start.row) dest.row ++;
+
+            if(start.col === dest.col && start.row === dest.row) break;
+
+            if(board.getPiece(this.numbersToPosition(dest))) return false;
+        }
+
+        return true;
+    }
+    private positionToNumbers(pos: Position) {
         return {col: Board.cols.indexOf(pos.col), row: Board.rows.indexOf(pos.row)}
+    }
+
+    private numbersToPosition(pos): Position {
+        return {col: Board.cols.charAt(pos.col), row: Board.rows.charAt(pos.row)}
     }
 }
 
