@@ -6,7 +6,8 @@ export default class Board {
     public pieces: Piece[];
     public moveHistory: Position[][];
 
-    public static size: number = 8;
+    public static cols: string = 'abcdefgh';
+    public static rows: string = '12345678';
 
     constructor() {
         this.pieces = Array.from(INITIAL_STATE)
@@ -42,5 +43,9 @@ export default class Board {
 
     comparePos(a: Position, b: Position): boolean {
         return a.row === b.row && a.col === b.col
+    }
+
+    isWithinBoard(pos: Position) {
+        return Board.cols.indexOf(pos.col) !== -1 && Board.rows.indexOf(pos.row) !== -1;
     }
 }
