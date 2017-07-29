@@ -47,7 +47,7 @@ class MovementValidator {
             case 'queen':
                 return this.queenMovement(board, startPiece, destination);
             case 'king':
-                return true;
+                return this.kingMovement(board, startPiece, destination);
         }
     }
 
@@ -118,6 +118,18 @@ class MovementValidator {
 
     private queenMovement(board: Board, startPiece: Piece, destination: Position): boolean {
         return this.rookMovement(board, startPiece, destination) || this.bishopMovement(board,startPiece, destination);
+    }
+
+    private kingMovement(board: Board, startPiece: Piece, destination: Position) {
+        let start = this.positionToNumbers(startPiece.position);
+        let dest = this.positionToNumbers(destination);
+
+        let rowDiff = Math.abs(dest.row - start.row);
+        let colDiff = Math.abs(dest.col - start.col);
+
+        if(colDiff > 1 || rowDiff > 1) return false;
+        
+        return true;
     }
 
     private positionToNumbers(pos: Position) {
