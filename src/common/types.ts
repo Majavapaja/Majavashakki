@@ -1,6 +1,6 @@
 export interface Position {
-  col: string
-  row: string
+  col: "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h"
+  row: "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8"
 }
 
 export interface Piece {
