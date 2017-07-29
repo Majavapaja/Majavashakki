@@ -44,9 +44,9 @@ class MovementValidator {
                 return this.rookMovement(board, startPiece, destination);
             case 'bishop':
                 return this.bishopMovement(board, startPiece, destination);
-            case 'king':
-                return true;
             case 'queen':
+                return this.queenMovement(board, startPiece, destination);
+            case 'king':
                 return true;
         }
     }
@@ -115,6 +115,11 @@ class MovementValidator {
 
         return true;
     }
+
+    private queenMovement(board: Board, startPiece: Piece, destination: Position): boolean {
+        return this.rookMovement(board, startPiece, destination) || this.bishopMovement(board,startPiece, destination);
+    }
+
     private positionToNumbers(pos: Position) {
         return {col: Board.cols.indexOf(pos.col), row: Board.rows.indexOf(pos.row)}
     }
