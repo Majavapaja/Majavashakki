@@ -58,7 +58,8 @@ export class GameRoomsRepository {
     }
 
     public getAvailableGames(): Array<string> {
-        return Object.keys(this._roomStorage);
+        const hasSpace = title => this._roomStorage[title].players.length < 2
+        return Object.keys(this._roomStorage).filter(hasSpace)
     }
 
     public getGameRoom(title: string): Game {
