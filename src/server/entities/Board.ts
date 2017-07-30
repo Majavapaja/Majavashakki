@@ -1,4 +1,5 @@
 import makeInitialState from "../../common/initial-state";
+import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol";
 import {Piece, Position} from "../../common/types";
 import MovementValidator from "../logic/MovementValidator";
 
@@ -14,10 +15,11 @@ export default class Board {
         this.moveHistory = [];
     }
 
-    public move(start: Position, destination: Position): boolean {
-        if (!start || !destination) return false;
+    public move(start: Position, destination: Position): MoveResponse {
+        if (!start || !destination) return {kind: "error", error: "Error 11: Invalid movement data"};
 
-        if (MovementValidator.isValidMove(this, start, destination)) {
+        const result = MovementValidator.isValidMove(this, start, destination);
+        if (result.kind === "success") {
             // Move piece
             this.removePiece(destination);
             const startPiece = this.getPiece(start);
@@ -25,9 +27,10 @@ export default class Board {
             startPiece.hasMoved = true;
 
             this.moveHistory.push([start, destination]);
-            return true;
+            result.board = this.pieces;
+            return result;
         } else {
-            return false;
+            return result;
         }
     }
 

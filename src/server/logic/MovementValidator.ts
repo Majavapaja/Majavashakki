@@ -1,38 +1,43 @@
 import {Piece, Position} from "../../common/types";
 import Board from "../entities/Board";
 import {doesMoveCauseCheck} from "./Checkmate";
+import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol";
 
 class MovementValidator {
-    public isValidMove(board: Board, start: Position, destination: Position): boolean {
+    public isValidMove(board: Board, start: Position, destination: Position): MoveResponse {
+        const errorResponse: MoveResponse = {kind: "error", error: "Error 10: Invalid move!"};
+
         // Check that start and destination are not the same
-        if (board.comparePos(start, destination)) return false;
+        if (board.comparePos(start, destination)) return errorResponse;
 
         // Check that start and destination are within board
         if (!board.isWithinBoard(start) || !board.isWithinBoard(destination)) {
-            return false;
+            return errorResponse;
         }
 
         // Check that there is a piece at start position
         const startPiece: Piece = board.getPiece(start);
-        if (!startPiece) return false;
+        if (!startPiece) return errorResponse;
 
         // Check that destination is valid (different color or empty)
         const destinationPiece: Piece = board.getPiece(destination);
         if (destinationPiece && destinationPiece.color === startPiece.color) {
             // TODO: Check castling
-            return false;
+            return errorResponse;
         }
 
         // Check that piece movement is valid
         if (!this.checkMovement(board, startPiece, destination)) {
             // TODO: Check En Passant
-            return false;
+            return errorResponse;
         }
 
-        if (doesMoveCauseCheck(board, startPiece, destination)) return false;
+        if (doesMoveCauseCheck(board, startPiece, destination)) return errorResponse;
 
         // Piece movement was valid
-        return true;
+
+        if (destinationPiece) return {kind: "success", moveType: "capture", board: null};
+        else return {kind: "success", moveType: "move", board: null};
     }
 
     private checkMovement(board: Board, startPiece: Piece, destination: Position) {

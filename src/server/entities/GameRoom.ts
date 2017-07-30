@@ -22,12 +22,6 @@ export class Game {
     }
 
     public move(start: Position, destination: Position): MoveResponse {
-        const result = this.gameState.board.move(start, destination);
-
-        if (result) {
-            return {kind: "success", moveType: "move", board: this.gameState.board.pieces};
-        } else {
-            return {kind: "error", error: "Error 10: Invalid movement."};
-        }
+        return this.gameState.board.move(start, destination);
     }
 }
