@@ -100,7 +100,7 @@ const INITIAL_STATE: [Piece] = [
       "col": "f"
     }
   }, {
-    "type": "bishop",
+    "type": "knight",
     "color": "white",
     "position": {
       "row": "8",
@@ -215,7 +215,7 @@ const INITIAL_STATE: [Piece] = [
       "col": "f"
     }
   }, {
-    "type": "bishop",
+    "type": "knight",
     "color": "black",
     "position": {
       "row": "1",

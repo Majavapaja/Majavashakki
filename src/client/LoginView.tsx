@@ -1,4 +1,4 @@
-import * as React from "React";
+import * as React from "react";
 
 // TODO: Maybe split login/lobby
 
@@ -16,7 +16,7 @@ class LoginView extends React.Component<any, any> {
         // User has logged in. Switch the page to room selection.
         this.props.socket.on('login', (username: string) => {
             this.setState({loadingRooms: true})
-            setTimeout(() => this.props.socket.emit("fetch-games"), 1000)
+            this.props.socket.emit("fetch-games")
         });
 
         // Replace room list when receiving full list of games
@@ -42,8 +42,8 @@ class LoginView extends React.Component<any, any> {
             })
         })
 
-        this.props.socket.on("game-notAvailable", () => {
-            // TODO
+        this.props.socket.on("lobby-error", ({error}) => {
+            this.setState({error})
         })
 
         this.props.socket.on("game-joined", () => {
@@ -118,6 +118,7 @@ class LoginView extends React.Component<any, any> {
                     {this.state.rooms.map(room =>
                         <li key={room} onClick={onRoomClick(room)}>{room}</li>)}
                 </ul>
+                {this.state.error && <p>Error: {this.state.error}</p>}
                 <div className="newRoomArea">
                     <form onSubmit={onSubmitNewRoom}>
                         Create new room: <input name="newRoomName" type="text" onChange={onInputChange} value={this.state.newRoomName}/>

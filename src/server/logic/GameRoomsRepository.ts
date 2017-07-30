@@ -24,10 +24,9 @@ export class GameRoomsRepository {
      * @fires game-exists - tells user socket if room with given title already exists
      */
     public createRoom(title: string, creator: UserState): void {
-        if(this._roomStorage[title]) {
-            creator.socket.emit("game-exists"); // TODO listener
-        }
-        else {
+        if (this._roomStorage[title]) {
+            creator.socket.emit("lobby-error", {error: `Room ${title} already exists`})
+        } else {
             let newRoom = new Game(title, creator);
             this._roomStorage[title] = newRoom;
             creator.joinSocket(title);
@@ -45,19 +44,21 @@ export class GameRoomsRepository {
     public joinRoom(title: string, user: UserState): void {
         // TODO check if main room 
         let room = this._roomStorage[title];
-        if(room && room.players.length < 2) {
+        if (!room) {
+            user.socket.emit("lobby-error", {error: `Room ${title} not found`})
+        } else if (room.players.length >= 2) {
+            user.socket.emit("lobby-error", {error: `Room ${title} is full`})
+        } else {
             room.players.push(user);
             user.joinSocket(title);
             user.socket.emit("game-joined");
             user.socket.broadcast.to(this.MainRoom).emit("game-full");
         }
-        else {
-            user.socket.emit("game-notAvailable"); // TODO listener
-        }
     }
 
     public getAvailableGames(): Array<string> {
-        return Object.keys(this._roomStorage);
+        const hasSpace = title => this._roomStorage[title].players.length < 2
+        return Object.keys(this._roomStorage).filter(hasSpace)
     }
 
     public getGameRoom(title: string): Game {

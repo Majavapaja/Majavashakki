@@ -1,4 +1,4 @@
-import * as React from "React";
+import * as React from "react";
 
 import {Piece} from "../common/types"
 import {MoveResponse} from "../common/protocol"
