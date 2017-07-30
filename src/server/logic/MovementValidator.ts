@@ -28,19 +28,21 @@ class MovementValidator {
 
         // Check that piece movement is valid
         if (!this.checkMovement(board, startPiece, destination)) {
-            // TODO: Check En Passant
+            if (this.enPassant(board, startPiece, destination)) {
+                return {kind: "success", moveType: "enpassant", board: null};
+            }
+
             return errorResponse;
         }
 
         if (doesMoveCauseCheck(board, startPiece, destination)) return errorResponse;
 
         // Piece movement was valid
-
         if (destinationPiece) return {kind: "success", moveType: "capture", board: null};
         else return {kind: "success", moveType: "move", board: null};
     }
 
-    private checkMovement(board: Board, startPiece: Piece, destination: Position) {
+    private checkMovement(board: Board, startPiece: Piece, destination: Position): boolean {
         switch (startPiece.type) {
             case "pawn":
                 return this.pawnMovement(board, startPiece, destination);
@@ -159,6 +161,37 @@ class MovementValidator {
         if (colDiff > 1 || rowDiff > 1) return false;
 
         return true;
+    }
+
+    private enPassant(board: Board, startPiece: Piece, destination: Position): boolean {
+        if (startPiece.type === "pawn") {
+            const start = this.positionToNumbers(startPiece.position);
+            const dest = this.positionToNumbers(destination);
+
+            const rowDiff = dest.row - start.row;
+            const colDiff = dest.col - start.col;
+
+            const movementDirection = startPiece.color === "white" ? 1 : -1;
+
+            // Check if diagonal movement
+            if (rowDiff === movementDirection && (colDiff === 1 || colDiff === -1)) {
+                // Check if there is a piece below destination and that piece is enemy pawn
+                dest.row -= movementDirection;
+                const targetPiece: Piece = board.getPiece(this.numbersToPosition(dest));
+
+                if (targetPiece && targetPiece.type === "pawn" && targetPiece.color !== startPiece.color) {
+                    // Check if last move was double move and that its destination was targetPiece
+                    const lastMove: Position[] = board.moveHistory[board.moveHistory.length - 1];
+                    const lastStart = this.positionToNumbers(lastMove[0]);
+                    const lastDest = this.positionToNumbers(lastMove[1]);
+
+                    const lastMoveDiff: number = Math.abs(lastDest.row - lastStart.row);
+                    if (lastMoveDiff === 2 && board.comparePos(lastMove[1], targetPiece.position)) return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     private positionToNumbers(pos: Position) {

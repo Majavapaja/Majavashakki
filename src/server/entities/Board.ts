@@ -20,12 +20,18 @@ export default class Board {
 
         const result = MovementValidator.isValidMove(this, start, destination);
         if (result.kind === "success") {
-            // Move piece
-            this.removePiece(destination);
             const startPiece = this.getPiece(start);
-            startPiece.position = destination;
-            startPiece.hasMoved = true;
 
+            if (result.moveType === "enpassant") {
+                this.removePiece(this.moveHistory[this.moveHistory.length - 1][1]);
+                startPiece.position = destination;
+            } else {
+                this.removePiece(destination);
+                startPiece.position = destination;
+                startPiece.hasMoved = true;
+            }
+
+            // Move piece
             this.moveHistory.push([start, destination]);
             result.board = this.pieces;
             return result;
