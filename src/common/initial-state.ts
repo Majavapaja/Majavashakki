@@ -8,6 +8,7 @@ const INITIAL_STATE: [Piece] = [
       col: "a",
       row: "7",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "pawn",
@@ -15,6 +16,7 @@ const INITIAL_STATE: [Piece] = [
       col: "b",
       row: "7",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "pawn",
@@ -22,6 +24,7 @@ const INITIAL_STATE: [Piece] = [
       col: "c",
       row: "7",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "pawn",
@@ -29,6 +32,7 @@ const INITIAL_STATE: [Piece] = [
       col: "d",
       row: "7",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "pawn",
@@ -36,6 +40,7 @@ const INITIAL_STATE: [Piece] = [
       col: "e",
       row: "7",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "pawn",
@@ -43,6 +48,7 @@ const INITIAL_STATE: [Piece] = [
       col: "f",
       row: "7",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "pawn",
@@ -50,6 +56,7 @@ const INITIAL_STATE: [Piece] = [
       col: "g",
       row: "7",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "pawn",
@@ -57,6 +64,7 @@ const INITIAL_STATE: [Piece] = [
       col: "h",
       row: "7",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "rook",
@@ -64,6 +72,7 @@ const INITIAL_STATE: [Piece] = [
       col: "a",
       row: "8",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "knight",
@@ -71,6 +80,7 @@ const INITIAL_STATE: [Piece] = [
       col: "b",
       row: "8",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "bishop",
@@ -78,6 +88,7 @@ const INITIAL_STATE: [Piece] = [
       col: "c",
       row: "8",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "queen",
@@ -85,6 +96,7 @@ const INITIAL_STATE: [Piece] = [
       col: "d",
       row: "8",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "king",
@@ -92,6 +104,7 @@ const INITIAL_STATE: [Piece] = [
       col: "e",
       row: "8",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "bishop",
@@ -99,6 +112,7 @@ const INITIAL_STATE: [Piece] = [
       col: "f",
       row: "8",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "knight",
@@ -106,6 +120,7 @@ const INITIAL_STATE: [Piece] = [
       col: "g",
       row: "8",
     },
+    hasMoved: false,
   }, {
     color: "black",
     type: "rook",
@@ -113,6 +128,7 @@ const INITIAL_STATE: [Piece] = [
       col: "h",
       row: "8",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "pawn",
@@ -120,6 +136,7 @@ const INITIAL_STATE: [Piece] = [
       col: "a",
       row: "2",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "pawn",
@@ -127,6 +144,7 @@ const INITIAL_STATE: [Piece] = [
       col: "b",
       row: "2",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "pawn",
@@ -134,6 +152,7 @@ const INITIAL_STATE: [Piece] = [
       col: "c",
       row: "2",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "pawn",
@@ -141,6 +160,7 @@ const INITIAL_STATE: [Piece] = [
       col: "d",
       row: "2",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "pawn",
@@ -148,6 +168,7 @@ const INITIAL_STATE: [Piece] = [
       col: "e",
       row: "2",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "pawn",
@@ -155,6 +176,7 @@ const INITIAL_STATE: [Piece] = [
       col: "f",
       row: "2",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "pawn",
@@ -162,6 +184,7 @@ const INITIAL_STATE: [Piece] = [
       col: "g",
       row: "2",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "pawn",
@@ -169,6 +192,7 @@ const INITIAL_STATE: [Piece] = [
       col: "h",
       row: "2",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "rook",
@@ -176,6 +200,7 @@ const INITIAL_STATE: [Piece] = [
       col: "a",
       row: "1",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "knight",
@@ -183,6 +208,7 @@ const INITIAL_STATE: [Piece] = [
       col: "b",
       row: "1",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "bishop",
@@ -190,6 +216,7 @@ const INITIAL_STATE: [Piece] = [
       col: "c",
       row: "1",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "queen",
@@ -197,6 +224,7 @@ const INITIAL_STATE: [Piece] = [
       col: "d",
       row: "1",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "king",
@@ -204,6 +232,7 @@ const INITIAL_STATE: [Piece] = [
       col: "e",
       row: "1",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "bishop",
@@ -211,6 +240,7 @@ const INITIAL_STATE: [Piece] = [
       col: "f",
       row: "1",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "knight",
@@ -218,6 +248,7 @@ const INITIAL_STATE: [Piece] = [
       col: "g",
       row: "1",
     },
+    hasMoved: false,
   }, {
     color: "white",
     type: "rook",
@@ -225,6 +256,7 @@ const INITIAL_STATE: [Piece] = [
       col: "h",
       row: "1",
     },
+    hasMoved: false,
   },
 ];
 
