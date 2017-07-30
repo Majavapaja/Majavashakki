@@ -29,8 +29,8 @@ class MovementValidator {
             return false;
         }
 
-        if(doesMoveCauseCheck(board, startPiece, destination)) return false;
-        
+        if (doesMoveCauseCheck(board, startPiece, destination)) return false;
+
         // Piece movement was valid
         return true;
     }

@@ -1,5 +1,5 @@
-import {copy} from "./util"
 import {Piece} from "./types";
+import {copy} from "./util";
 
 export default () => copy([
   {
