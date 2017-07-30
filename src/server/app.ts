@@ -5,11 +5,7 @@ import * as sio from "socket.io";
 import * as http from "http";
 import * as path from "path";
 // Import custom components
-<<<<<<< HEAD
-import {Board} from "./logic/board";
-=======
 import {Game} from "./entities/GameRoom";
->>>>>>> f738ad50178b401c84ddf8b5a175458f6df1b072
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {UserStatesRepository} from "./logic/UserStatesRepository";
 
