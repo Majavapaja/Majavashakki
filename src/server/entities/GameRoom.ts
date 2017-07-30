@@ -25,7 +25,7 @@ export class Game {
         const result = this.gameState.board.move(start, destination);
 
         if(result) {
-            return {kind: 'success', board: this.gameState.board.pieces}
+            return {kind: 'success', moveType: 'move', board: this.gameState.board.pieces}
         } else {
             return {kind: 'error', error: 'Error 10: Invalid movement.'}
         }

@@ -1,13 +1,14 @@
-import {Piece} from './types'
+import {Piece} from "./types";
 
 export interface MoveSuccess {
-  kind: "success"
-  board: [Piece]
+  kind: "success";
+  moveType: "move" | "capture" | "check" | "checkmate" | "enpassant" | "castling";
+  board: [Piece];
 }
 
 export interface MoveError  {
-  kind: "error"
-  error: string
+  kind: "error";
+  error: string;
 }
 
-export type MoveResponse = MoveSuccess | MoveError
+export type MoveResponse = MoveSuccess | MoveError;
