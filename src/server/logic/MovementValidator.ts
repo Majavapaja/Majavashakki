@@ -67,7 +67,12 @@ class MovementValidator {
         if (destinationPiece && rowDiff === movementDirection && (colDiff === 1 || colDiff === -1)) return true;
         else if (!destinationPiece && colDiff === 0) {
             // Check if pawn is moving
-            if (!startPiece.hasMoved && rowDiff <= movementDirection * 2) return true;
+            if (!startPiece.hasMoved && rowDiff === movementDirection * 2) {
+                // Ensure that double move is not blocked by piece
+                dest.row -= movementDirection;
+                if (!board.getPiece(this.numbersToPosition(dest))) return true;
+            }
+
             if (rowDiff === movementDirection) return true;
         }
 
