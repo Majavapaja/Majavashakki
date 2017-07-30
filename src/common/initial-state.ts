@@ -1,6 +1,7 @@
+import {copy} from "./util"
 import {Piece} from "./types";
 
-const INITIAL_STATE: [Piece] = [
+export default () => copy([
   {
     color: "black",
     type: "pawn",
@@ -258,6 +259,4 @@ const INITIAL_STATE: [Piece] = [
     },
     hasMoved: false,
   },
-];
-
-export default INITIAL_STATE;
+]);

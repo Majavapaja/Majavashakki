@@ -1,4 +1,4 @@
-import INITIAL_STATE from "../../common/initial-state";
+import makeInitialState from "../../common/initial-state";
 import {Piece, Position} from "../../common/types";
 import MovementValidator from "../logic/MovementValidator";
 
@@ -10,7 +10,7 @@ export default class Board {
     public moveHistory: Position[][];
 
     constructor() {
-        this.pieces = Array.from(INITIAL_STATE);
+        this.pieces = makeInitialState();
         this.moveHistory = [];
     }
 
