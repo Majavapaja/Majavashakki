@@ -1,33 +1,17 @@
-import * as React from "react"
+import * as React from "react";
 
-import {MoveResponse} from "../common/protocol"
-import {Piece} from "../common/types"
-import Board from "./Board"
+import {MoveResponse} from "../common/protocol";
+import {Piece} from "../common/types";
+import Board from "./Board";
 
 class GameView extends React.Component<any, any> {
   constructor(props: any) {
-    super(props)
+    super(props);
   }
 
   public componentWillMount() {
-    this.setState({pieces: this.props.pieces})
-    this.props.socket.on("move_result", this.onMoveResult.bind(this))
-  }
-
-  private onMoveResult(response: MoveResponse) {
-    switch (response.kind) {
-    case "error":
-      this.setState({
-        error: response.error,
-      })
-      break
-    case "success":
-      this.setState({
-        pieces: response.board,
-        error: undefined,
-      })
-      break
-    }
+    this.setState({pieces: this.props.pieces});
+    this.props.socket.on("move_result", this.onMoveResult.bind(this));
   }
 
   public render() {
@@ -36,8 +20,24 @@ class GameView extends React.Component<any, any> {
         <Board pieces={this.state.pieces} socket={this.props.socket}/>
         {this.state.error && <p>Error: {this.state.error}</p>}
       </li>
-    )
+    );
+  }
+
+  private onMoveResult(response: MoveResponse) {
+    switch (response.kind) {
+    case "error":
+      this.setState({
+        error: response.error,
+      });
+      break;
+    case "success":
+      this.setState({
+        pieces: response.board,
+        error: undefined,
+      });
+      break;
+    }
   }
 }
 
-export default GameView
+export default GameView;
