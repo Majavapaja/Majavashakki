@@ -6,7 +6,8 @@
     ],
     "jsRules": {},
     "rules": {
-      "object-literal-sort-keys": {"severity": "off"}
+      "object-literal-sort-keys": {"severity": "off"},
+      "curly": [true, "ignore-same-line"]
     },
     "rulesDirectory": []
 }
