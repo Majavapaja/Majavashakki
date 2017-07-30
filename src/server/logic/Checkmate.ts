@@ -16,9 +16,8 @@ export function isCheck(board: Board, color): boolean {
     // Check if any piece of opposite color can eat king
     for (const piece of board.pieces) {
         if (piece.color !== color) {
-            if (MovementValidator.isValidMove(board, piece.position, king.position)) {
-                return true;
-            }
+            const result = MovementValidator.isValidMove(board, piece.position, king.position);
+            if (result.kind === "success") return true;
         }
     }
 
