@@ -2,23 +2,14 @@ import * as React from "react"
 
 import {MoveResponse} from "../common/protocol"
 import {Piece} from "../common/types"
-
-const CELL_POSITIONS: string[] = (() => {
-  const positions = [] as string[]
-  for (let y = 8; y > 0; y--) {
-    for (let x = 0; x < 8; x++) {
-      positions.push("abcdefgh"[x] + String(y))
-    }
-  }
-  return positions
-}())
+import Board from "./Board"
 
 class GameView extends React.Component<any, any> {
   constructor(props: any) {
     super(props)
   }
 
-  private componentWillMount() {
+  public componentWillMount() {
     this.setState({pieces: this.props.pieces})
     this.props.socket.on("move_result", this.onMoveResult.bind(this))
   }
@@ -39,7 +30,7 @@ class GameView extends React.Component<any, any> {
     }
   }
 
-  private render() {
+  public render() {
     return (
       <div>
         <Board pieces={this.state.pieces} socket={this.props.socket}/>

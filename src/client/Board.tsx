@@ -1,4 +1,14 @@
-import React from "react"
+import * as React from "react"
+
+const CELL_POSITIONS: string[] = (() => {
+  const positions = [] as string[]
+  for (let y = 8; y > 0; y--) {
+    for (let x = 0; x < 8; x++) {
+      positions.push("abcdefgh"[x] + String(y))
+    }
+  }
+  return positions
+})()
 
 class Board extends React.Component<any, any> {
   constructor(props) {
@@ -73,7 +83,7 @@ class Board extends React.Component<any, any> {
     }
   }
 
-  private render() {
+  public render() {
     return <div className="board">{this.makeCells()}</div>
   }
 }
