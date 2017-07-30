@@ -9,7 +9,7 @@ import {Game} from "./entities/GameRoom";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {UserStatesRepository} from "./logic/UserStatesRepository";
 
-
+// ################ Server base ################
 var app = express();
 var server = http.createServer(app);
 var io: SocketIO.Server = sio({transports:['websocket']});
@@ -19,10 +19,11 @@ var port = process.env.PORT || 3000;
 // ################ Routing ################
 app.use(express.static(path.resolve('dist/public')));
 
-// Singleton repository references
+// ################ Server constants ################
 const roomRepo = GameRoomsRepository.getInstance();
 const userStateRepo = UserStatesRepository.getInstance();
 
+// ################ Socket event bindings ################
 io.on('connection', function (socket: SocketIO.Socket) {
 
   socket.on("new user", function (username: string) { // TODO make proper stuff when auth is introduced
