@@ -8,7 +8,9 @@
     "rules": {
       "object-literal-sort-keys": false,
       "curly": [true, "ignore-same-line"],
-      "interface-name": [true, "never-prefix"]
+      "interface-name": [true, "never-prefix"],
+      "no-console": false,
+      "ordered-imports": false
     },
     "rulesDirectory": []
 }
