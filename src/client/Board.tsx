@@ -62,9 +62,8 @@ class Board extends React.Component<any, any> {
       return
     }
 
-    if (!this.state.selectedCell) {
-      this.setState({selectedCell: pos})
-      return
+    if (!this.state.selectedCell && this.makePieceMap()[pos]) {
+      return this.setState({selectedCell: pos});
     }
 
     if (pos === this.state.selectedCell) {

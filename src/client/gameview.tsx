@@ -32,10 +32,10 @@ class GameView extends React.Component<any, any> {
 
   public render() {
     return (
-      <div>
+      <li className="game page">
         <Board pieces={this.state.pieces} socket={this.props.socket}/>
         {this.state.error && <p>Error: {this.state.error}</p>}
-      </div>
+      </li>
     )
   }
 }
