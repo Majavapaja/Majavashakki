@@ -1,7 +1,7 @@
 import INITIAL_STATE from '../../common/initial-state'
 import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol"
 import {UserState} from "./UserState";
-import Board from "../entities/board";
+import Board from "../entities/Board";
 
 export class Game {
     public title: string;
