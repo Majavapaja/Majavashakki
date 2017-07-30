@@ -47,11 +47,11 @@ io.on('connection', function (socket: SocketIO.Socket) {
     //TODO: Change parameter names to data.from to data.start and data.dest to data.destiantion
     const result = game.move(data.from, data.dest);
 
-    if(result) {
-      socket.emit('move_result', result);
-      socket.broadcast.to(game.title).emit('move_result', result);
-    } else {
-      socket.emit('move_result', result);
+    switch (result.kind) {
+    case "error":
+        return socket.emit('move_result', result);
+    case "success":
+        return io.to(game.title).emit('move_result', result);
     }
   });
 
