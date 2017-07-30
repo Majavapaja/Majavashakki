@@ -42,8 +42,8 @@ class LoginView extends React.Component<any, any> {
             })
         })
 
-        this.props.socket.on("game-notAvailable", () => {
-            // TODO
+        this.props.socket.on("game-notAvailable", ({error}) => {
+            this.setState({error})
         })
 
         this.props.socket.on("game-joined", () => {
@@ -118,6 +118,7 @@ class LoginView extends React.Component<any, any> {
                     {this.state.rooms.map(room =>
                         <li key={room} onClick={onRoomClick(room)}>{room}</li>)}
                 </ul>
+                {this.state.error && <p>Error: {this.state.error}</p>}
                 <div className="newRoomArea">
                     <form onSubmit={onSubmitNewRoom}>
                         Create new room: <input name="newRoomName" type="text" onChange={onInputChange} value={this.state.newRoomName}/>

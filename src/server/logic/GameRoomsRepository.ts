@@ -45,14 +45,15 @@ export class GameRoomsRepository {
     public joinRoom(title: string, user: UserState): void {
         // TODO check if main room 
         let room = this._roomStorage[title];
-        if(room && room.players.length < 2) {
+        if (!room) {
+            user.socket.emit("game-notAvailable", {error: `Room ${title} not found`})
+        } else if (room.players.length >= 2) {
+            user.socket.emit("game-notAvailable", {error: `Room ${title} is full`})
+        } else {
             room.players.push(user);
             user.joinSocket(title);
             user.socket.emit("game-joined");
             user.socket.broadcast.to(this.MainRoom).emit("game-full");
-        }
-        else {
-            user.socket.emit("game-notAvailable"); // TODO listener
         }
     }
 
