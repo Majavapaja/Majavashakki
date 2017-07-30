@@ -1,234 +1,231 @@
-import {Piece} from './types'
+import {Piece} from "./types";
 
 const INITIAL_STATE: [Piece] = [
   {
-    "type": "pawn",
-    "color": "black",
-    "position": {
-      "row": "7",
-      "col": "a"
-    }
+    color: "black",
+    type: "pawn",
+    position: {
+      col: "a",
+      row: "7",
+    },
   }, {
-    "type": "pawn",
-    "color": "black",
-    "position": {
-      "row": "7",
-      "col": "b"
-    }
+    color: "black",
+    type: "pawn",
+    position: {
+      col: "b",
+      row: "7",
+    },
   }, {
-    "type": "pawn",
-    "color": "black",
-    "position": {
-      "row": "7",
-      "col": "c"
-    }
+    color: "black",
+    type: "pawn",
+    position: {
+      col: "c",
+      row: "7",
+    },
   }, {
-    "type": "pawn",
-    "color": "black",
-    "position": {
-      "row": "7",
-      "col": "d"
-    }
+    color: "black",
+    type: "pawn",
+    position: {
+      col: "d",
+      row: "7",
+    },
   }, {
-    "type": "pawn",
-    "color": "black",
-    "position": {
-      "row": "7",
-      "col": "e"
-    }
+    color: "black",
+    type: "pawn",
+    position: {
+      col: "e",
+      row: "7",
+    },
   }, {
-    "type": "pawn",
-    "color": "black",
-    "position": {
-      "row": "7",
-      "col": "f"
-    }
+    color: "black",
+    type: "pawn",
+    position: {
+      col: "f",
+      row: "7",
+    },
   }, {
-    "type": "pawn",
-    "color": "black",
-    "position": {
-      "row": "7",
-      "col": "g"
-    }
+    color: "black",
+    type: "pawn",
+    position: {
+      col: "g",
+      row: "7",
+    },
   }, {
-    "type": "pawn",
-    "color": "black",
-    "position": {
-      "row": "7",
-      "col": "h"
-    }
+    color: "black",
+    type: "pawn",
+    position: {
+      col: "h",
+      row: "7",
+    },
   }, {
-    "type": "rook",
-    "color": "black",
-    "position": {
-      "row": "8",
-      "col": "a"
-    }
+    color: "black",
+    type: "rook",
+    position: {
+      col: "a",
+      row: "8",
+    },
   }, {
-    "type": "knight",
-    "color": "black",
-    "position": {
-      "row": "8",
-      "col": "b"
-    }
+    color: "black",
+    type: "knight",
+    position: {
+      col: "b",
+      row: "8",
+    },
   }, {
-    "type": "bishop",
-    "color": "black",
-    "position": {
-      "row": "8",
-      "col": "c"
-    }
+    color: "black",
+    type: "bishop",
+    position: {
+      col: "c",
+      row: "8",
+    },
   }, {
-    "type": "queen",
-    "color": "black",
-    "position": {
-      "row": "8",
-      "col": "d"
-    }
+    color: "black",
+    type: "queen",
+    position: {
+      col: "d",
+      row: "8",
+    },
   }, {
-    "type": "king",
-    "color": "black",
-    "position": {
-      "row": "8",
-      "col": "e"
-    }
+    color: "black",
+    type: "king",
+    position: {
+      col: "e",
+      row: "8",
+    },
   }, {
-    "type": "bishop",
-    "color": "black",
-    "position": {
-      "row": "8",
-      "col": "f"
-    }
+    color: "black",
+    type: "bishop",
+    position: {
+      col: "f",
+      row: "8",
+    },
   }, {
-    "type": "knight",
-    "color": "black",
-    "position": {
-      "row": "8",
-      "col": "g"
-    }
+    color: "black",
+    type: "knight",
+    position: {
+      col: "g",
+      row: "8",
+    },
   }, {
-    "type": "rook",
-    "color": "black",
-    "position": {
-      "row": "8",
-      "col": "h"
-    }
+    color: "black",
+    type: "rook",
+    position: {
+      col: "h",
+      row: "8",
+    },
+  }, {
+    color: "white",
+    type: "pawn",
+    position: {
+      col: "a",
+      row: "2",
+    },
+  }, {
+    color: "white",
+    type: "pawn",
+    position: {
+      col: "b",
+      row: "2",
+    },
+  }, {
+    color: "white",
+    type: "pawn",
+    position: {
+      col: "c",
+      row: "2",
+    },
+  }, {
+    color: "white",
+    type: "pawn",
+    position: {
+      col: "d",
+      row: "2",
+    },
+  }, {
+    color: "white",
+    type: "pawn",
+    position: {
+      col: "e",
+      row: "2",
+    },
+  }, {
+    color: "white",
+    type: "pawn",
+    position: {
+      col: "f",
+      row: "2",
+    },
+  }, {
+    color: "white",
+    type: "pawn",
+    position: {
+      col: "g",
+      row: "2",
+    },
+  }, {
+    color: "white",
+    type: "pawn",
+    position: {
+      col: "h",
+      row: "2",
+    },
+  }, {
+    color: "white",
+    type: "rook",
+    position: {
+      col: "a",
+      row: "1",
+    },
+  }, {
+    color: "white",
+    type: "knight",
+    position: {
+      col: "b",
+      row: "1",
+    },
+  }, {
+    color: "white",
+    type: "bishop",
+    position: {
+      col: "c",
+      row: "1",
+    },
+  }, {
+    color: "white",
+    type: "queen",
+    position: {
+      col: "d",
+      row: "1",
+    },
+  }, {
+    color: "white",
+    type: "king",
+    position: {
+      col: "e",
+      row: "1",
+    },
+  }, {
+    color: "white",
+    type: "bishop",
+    position: {
+      col: "f",
+      row: "1",
+    },
+  }, {
+    color: "white",
+    type: "knight",
+    position: {
+      col: "g",
+      row: "1",
+    },
+  }, {
+    color: "white",
+    type: "rook",
+    position: {
+      col: "h",
+      row: "1",
+    },
   },
+];
 
-
-  {
-    "type": "pawn",
-    "color": "white",
-    "position": {
-      "row": "2",
-      "col": "a"
-    }
-  }, {
-    "type": "pawn",
-    "color": "white",
-    "position": {
-      "row": "2",
-      "col": "b"
-    }
-  }, {
-    "type": "pawn",
-    "color": "white",
-    "position": {
-      "row": "2",
-      "col": "c"
-    }
-  }, {
-    "type": "pawn",
-    "color": "white",
-    "position": {
-      "row": "2",
-      "col": "d"
-    }
-  }, {
-    "type": "pawn",
-    "color": "white",
-    "position": {
-      "row": "2",
-      "col": "e"
-    }
-  }, {
-    "type": "pawn",
-    "color": "white",
-    "position": {
-      "row": "2",
-      "col": "f"
-    }
-  }, {
-    "type": "pawn",
-    "color": "white",
-    "position": {
-      "row": "2",
-      "col": "g"
-    }
-  }, {
-    "type": "pawn",
-    "color": "white",
-    "position": {
-      "row": "2",
-      "col": "h"
-    }
-  }, {
-    "type": "rook",
-    "color": "white",
-    "position": {
-      "row": "1",
-      "col": "a"
-    }
-  }, {
-    "type": "knight",
-    "color": "white",
-    "position": {
-      "row": "1",
-      "col": "b"
-    }
-  }, {
-    "type": "bishop",
-    "color": "white",
-    "position": {
-      "row": "1",
-      "col": "c"
-    }
-  }, {
-    "type": "queen",
-    "color": "white",
-    "position": {
-      "row": "1",
-      "col": "d"
-    }
-  }, {
-    "type": "king",
-    "color": "white",
-    "position": {
-      "row": "1",
-      "col": "e"
-    }
-  }, {
-    "type": "bishop",
-    "color": "white",
-    "position": {
-      "row": "1",
-      "col": "f"
-    }
-  }, {
-    "type": "knight",
-    "color": "white",
-    "position": {
-      "row": "1",
-      "col": "g"
-    }
-  }, {
-    "type": "rook",
-    "color": "white",
-    "position": {
-      "row": "1",
-      "col": "h"
-    }
-  }
-]
-
-export default INITIAL_STATE
+export default INITIAL_STATE;
