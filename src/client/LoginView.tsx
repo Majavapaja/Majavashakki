@@ -16,7 +16,7 @@ class LoginView extends React.Component<any, any> {
         // User has logged in. Switch the page to room selection.
         this.props.socket.on('login', (username: string) => {
             this.setState({loadingRooms: true})
-            setTimeout(() => this.props.socket.emit("fetch-games"), 1000)
+            this.props.socket.emit("fetch-games")
         });
 
         // Replace room list when receiving full list of games
