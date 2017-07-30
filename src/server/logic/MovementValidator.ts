@@ -1,5 +1,6 @@
 import {Piece, Position} from "../../common/types";
 import Board from "../entities/Board";
+import {doesMoveCauseCheck} from "./Checkmate";
 
 class MovementValidator {
     public isValidMove(board: Board, start: Position, destination: Position): boolean {
@@ -28,6 +29,8 @@ class MovementValidator {
             return false;
         }
 
+        if(doesMoveCauseCheck(board, startPiece, destination)) return false;
+        
         // Piece movement was valid
         return true;
     }

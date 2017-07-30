@@ -40,6 +40,10 @@ export default class Board {
         return this.pieces.find((piece) => this.comparePos(piece.position, pos));
     }
 
+    public getKing(color): Piece {
+        return this.pieces.find((piece) => piece.color === color && piece.type === "king");
+    }
+
     public comparePos(a: Position, b: Position): boolean {
         return a.row === b.row && a.col === b.col;
     }
