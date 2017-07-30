@@ -35,7 +35,7 @@ class MovementValidator {
     private checkMovement(board: Board, startPiece: Piece, destination: Position) {
         switch (startPiece.type) {
             case "pawn":
-                return true;
+                return this.pawnMovement(board, startPiece, destination);
             case "knight":
                 return this.knightMovement(board, startPiece, destination);
             case "rook":
@@ -50,13 +50,26 @@ class MovementValidator {
     }
 
     private pawnMovement(board: Board, startPiece: Piece, destination: Position): boolean {
-        // TODO Pawn movement
-        // White moves up
-        // Black moves down
-        // If first movement may move two
-        // Captures diagonally
-        // Promotion?
-        return true;
+        const start = this.positionToNumbers(startPiece.position);
+        const dest = this.positionToNumbers(destination);
+
+        const rowDiff = dest.row - start.row;
+        const colDiff = dest.col - start.col;
+
+        const destinationPiece = board.getPiece(destination);
+
+        const movementDirection = startPiece.color === "white" ? 1 : -1;
+
+        // Check if pawn is capturing
+        if (destinationPiece && rowDiff === movementDirection && (colDiff === 1 || colDiff === -1)) return true;
+        else if (!destinationPiece && colDiff === 0) {
+            // Check if pawn is moving
+            if (!startPiece.hasMoved && rowDiff <= movementDirection * 2) return true;
+            if (rowDiff === movementDirection) return true;
+        }
+
+        // TODO: Promotion
+        return false;
     }
 
     private knightMovement(board: Board, startPiece: Piece, destination: Position): boolean {

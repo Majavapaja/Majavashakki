@@ -20,7 +20,9 @@ export default class Board {
         if (MovementValidator.isValidMove(this, start, destination)) {
             // Move piece
             this.removePiece(destination);
-            this.getPiece(start).position = destination;
+            const startPiece = this.getPiece(start);
+            startPiece.position = destination;
+            startPiece.hasMoved = true;
 
             this.moveHistory.push([start, destination]);
             return true;
