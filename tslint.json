@@ -6,8 +6,9 @@
     ],
     "jsRules": {},
     "rules": {
-      "object-literal-sort-keys": {"severity": "off"},
-      "curly": [true, "ignore-same-line"]
+      "object-literal-sort-keys": false,
+      "curly": [true, "ignore-same-line"],
+      "interface-name": [true, "never-prefix"]
     },
     "rulesDirectory": []
 }
