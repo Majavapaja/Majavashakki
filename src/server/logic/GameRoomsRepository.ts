@@ -25,7 +25,7 @@ export class GameRoomsRepository {
      */
     public createRoom(title: string, creator: UserState): void {
         if (this._roomStorage[title]) {
-            creator.socket.emit("lobby-error", {error: `Room ${title} already exists`)
+            creator.socket.emit("lobby-error", {error: `Room ${title} already exists`})
         } else {
             let newRoom = new Game(title, creator);
             this._roomStorage[title] = newRoom;
