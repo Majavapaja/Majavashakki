@@ -51,7 +51,7 @@ io.on("connection", (socket: SocketIO.Socket) => {
 
 });
 
-export default () => {
+export const start = () => {
   server.listen(port, () => {
     console.log("Server listening at port %d", port);
   });

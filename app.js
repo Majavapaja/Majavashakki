@@ -1,3 +1,1 @@
-const serverApp = require('./dist/server/app')
-
-serverApp()
+require('./dist/server/app').start()
