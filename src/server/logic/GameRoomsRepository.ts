@@ -24,10 +24,9 @@ export class GameRoomsRepository {
      * @fires game-exists - tells user socket if room with given title already exists
      */
     public createRoom(title: string, creator: UserState): void {
-        if(this._roomStorage[title]) {
-            creator.socket.emit("game-exists"); // TODO listener
-        }
-        else {
+        if (this._roomStorage[title]) {
+            creator.socket.emit("lobby-error", {error: `Room ${title} already exists`)
+        } else {
             let newRoom = new Game(title, creator);
             this._roomStorage[title] = newRoom;
             creator.joinSocket(title);
@@ -46,9 +45,9 @@ export class GameRoomsRepository {
         // TODO check if main room 
         let room = this._roomStorage[title];
         if (!room) {
-            user.socket.emit("game-notAvailable", {error: `Room ${title} not found`})
+            user.socket.emit("lobby-error", {error: `Room ${title} not found`})
         } else if (room.players.length >= 2) {
-            user.socket.emit("game-notAvailable", {error: `Room ${title} is full`})
+            user.socket.emit("lobby-error", {error: `Room ${title} is full`})
         } else {
             room.players.push(user);
             user.joinSocket(title);

@@ -42,7 +42,7 @@ class LoginView extends React.Component<any, any> {
             })
         })
 
-        this.props.socket.on("game-notAvailable", ({error}) => {
+        this.props.socket.on("lobby-error", ({error}) => {
             this.setState({error})
         })
 
