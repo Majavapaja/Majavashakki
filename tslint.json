@@ -5,6 +5,9 @@
         "tslint-react"
     ],
     "jsRules": {},
-    "rules": {},
+    "rules": {
+      "object-literal-sort-keys": {"severity": "off"},
+      "curly": [true, "ignore-same-line"]
+    },
     "rulesDirectory": []
 }
