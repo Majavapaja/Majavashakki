@@ -7,10 +7,26 @@ import * as sio from "socket.io";
 import {Game} from "./entities/GameRoom";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {UserStatesRepository} from "./logic/UserStatesRepository";
+import {enableSessions, getSession} from "./session"
+import {copy} from "../common/util"
+
 
 const app = express();
-const server = http.createServer(app);
 const io: SocketIO.Server = sio({transports: ["websocket"]});
+enableSessions(app, io)
+
+const logSession = (path, session) => {
+  const withoutCookie = copy(session)
+  delete withoutCookie.cookie
+  console.log(`[${session.id}] ${path} ${JSON.stringify(withoutCookie)}`)
+}
+
+app.use((req, res, next) => {
+  logSession(req.path, getSession(req))
+  next()
+})
+
+const server = http.createServer(app);
 io.attach(server);
 const port = process.env.PORT || 3000;
 
@@ -20,6 +36,7 @@ const roomRepo = GameRoomsRepository.getInstance();
 const userStateRepo = UserStatesRepository.getInstance();
 
 io.on("connection", (socket: SocketIO.Socket) => {
+  logSession("/socket.io", getSession(socket))
 
   socket.on("new user", (username: string) => {
     userStateRepo.createUser(username, socket, roomRepo.MainRoom);
