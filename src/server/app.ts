@@ -1,5 +1,5 @@
 import * as http from "http";
-import {resolvePath} from "path";
+import {resolve} from "path";
 
 import * as express from "express";
 import * as sio from "socket.io";
@@ -14,7 +14,7 @@ const app = express();
 const io: SocketIO.Server = sio({transports: ["websocket"]});
 enableSessions(app, io);
 
-const l ogSession = (path, session) => {
+const logSession = (path, session) => {
   const withoutCookie = copy(session);
   delete withoutCookie.cookie;
   console.log(`[${session.id}] ${path} ${JSON.stringify(withoutCookie)}`);
@@ -29,7 +29,7 @@ const server = http.createServer(app);
 io.attach(server);
 const port = process.env.PORT || 3000;
 
-app.use(express.static(resolvePath("dist/public")));
+app.use(express.static(resolve("dist/public")));
 
 const roomRepo = GameRoomsRepository.getInstance();
 const userStateRepo = UserStatesRepository.getInstance();
