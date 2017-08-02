@@ -1,5 +1,5 @@
 import * as http from "http";
-import * as path from "path";
+import {resolvePath} from "path";
 
 import * as express from "express";
 import * as sio from "socket.io";
@@ -7,36 +7,35 @@ import * as sio from "socket.io";
 import {Game} from "./entities/GameRoom";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {UserStatesRepository} from "./logic/UserStatesRepository";
-import {enableSessions, getSession} from "./session"
-import {copy} from "../common/util"
-
+import {enableSessions, getSession} from "./session";
+import {copy} from "../common/util";
 
 const app = express();
 const io: SocketIO.Server = sio({transports: ["websocket"]});
-enableSessions(app, io)
+enableSessions(app, io);
 
-const logSession = (path, session) => {
-  const withoutCookie = copy(session)
-  delete withoutCookie.cookie
-  console.log(`[${session.id}] ${path} ${JSON.stringify(withoutCookie)}`)
-}
+const l ogSession = (path, session) => {
+  const withoutCookie = copy(session);
+  delete withoutCookie.cookie;
+  console.log(`[${session.id}] ${path} ${JSON.stringify(withoutCookie)}`);
+};
 
 app.use((req, res, next) => {
-  logSession(req.path, getSession(req))
-  next()
-})
+  logSession(req.path, getSession(req));
+  next();
+});
 
 const server = http.createServer(app);
 io.attach(server);
 const port = process.env.PORT || 3000;
 
-app.use(express.static(path.resolve("dist/public")));
+app.use(express.static(resolvePath("dist/public")));
 
 const roomRepo = GameRoomsRepository.getInstance();
 const userStateRepo = UserStatesRepository.getInstance();
 
 io.on("connection", (socket: SocketIO.Socket) => {
-  logSession("/socket.io", getSession(socket))
+  logSession("/socket.io", getSession(socket));
 
   socket.on("new user", (username: string) => {
     userStateRepo.createUser(username, socket, roomRepo.MainRoom);
