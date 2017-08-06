@@ -1,6 +1,6 @@
 import {Piece, Position} from "../../common/types";
 import Board from "../entities/Board";
-import {doesMoveCauseCheck} from "./Checkmate";
+import {doesMoveCauseCheck, isCheck} from "./Checkmate";
 import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol";
 
 class MovementValidator {
@@ -22,7 +22,6 @@ class MovementValidator {
         // Check that destination is valid (different color or empty)
         const destinationPiece: Piece = board.getPiece(destination);
         if (destinationPiece && destinationPiece.color === startPiece.color) {
-            // TODO: Check castling
             return errorResponse;
         }
 
@@ -32,10 +31,14 @@ class MovementValidator {
                 return {kind: "success", moveType: "enpassant", board: null};
             }
 
+            if (this.castling(board, startPiece, destination)) {
+                return {kind: "success", moveType: "castling", board: null};
+            }
+
             return errorResponse;
         }
 
-        if (doesMoveCauseCheck(board, startPiece, destination)) return errorResponse;
+        if (doesMoveCauseCheck(board, start, destination)) return errorResponse;
 
         // Piece movement was valid
         if (destinationPiece) return {kind: "success", moveType: "capture", board: null};
@@ -192,6 +195,55 @@ class MovementValidator {
         }
 
         return false;
+    }
+
+    private castling(board: Board, startPiece: Piece, destination: Position): boolean {
+        // Check that the piece is king and it hasn't moved
+        if (startPiece.type !== "king" || startPiece.hasMoved) return false;
+
+        // Check that destination is two columns away from king
+        const start = this.positionToNumbers(startPiece.position);
+        const dest = this.positionToNumbers(destination);
+
+        const rowDiff = dest.row - start.row;
+        const colDiff = dest.col - start.col;
+
+        if (Math.abs(colDiff) !== 2 || Math.abs(rowDiff) !== 0) return false;
+
+        // Get rook from A1, H1, A8, H8 depending on the kings destination and color
+        const rookPosition: Position = {
+            col: (colDiff > 0) ? "h" : "a",
+            row: startPiece.color === "white" ? "1" : "8",
+        };
+
+        const rook = board.getPiece(rookPosition);
+
+        // Check that rook hasn't moved
+        if (!rook || rook.hasMoved) return false;
+
+        // King is not currently in check
+        if (isCheck(board, startPiece.color)) return false;
+
+        // There must be no pieces between king and rook
+        // King cannot pass throught a square attacked by an enemy piece
+
+        // Check that king can move two steps to the direction he wanted
+        const direction = (colDiff > 0) ? 1 : -1;
+
+        // Move 1
+        dest.col -= direction;
+        if (doesMoveCauseCheck(board, startPiece.position, this.numbersToPosition(dest))) return false;
+
+        // Move 2
+        dest.col += direction;
+        if (doesMoveCauseCheck(board, startPiece.position, this.numbersToPosition(dest))) return false;
+
+        // Check that rook can move to "Move 1" position.
+        dest.col -= direction;
+        if (!this.isValidMove(board, rookPosition, this.numbersToPosition(dest))) return false;
+
+        // Valid castling
+        return true;
     }
 
     private positionToNumbers(pos: Position) {

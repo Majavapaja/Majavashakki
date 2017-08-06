@@ -24,12 +24,12 @@ export function isCheck(board: Board, color): boolean {
     return false;
 }
 
-export function doesMoveCauseCheck(board: Board, startPiece: Piece, destination: Position): boolean {
+export function doesMoveCauseCheck(board: Board, start: Position, destination: Position): boolean {
     const boardCopy: Board = new Board();
     boardCopy.pieces = copy(board.pieces);
 
     boardCopy.removePiece(destination);
-    const startPieceCopy: Piece = boardCopy.getPiece(startPiece.position);
+    const startPieceCopy: Piece = boardCopy.getPiece(start);
     startPieceCopy.position = destination;
     startPieceCopy.hasMoved = true;
 

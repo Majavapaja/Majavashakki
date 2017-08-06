@@ -25,6 +25,18 @@ export default class Board {
             if (result.moveType === "enpassant") {
                 this.removePiece(this.moveHistory[this.moveHistory.length - 1][1]);
                 startPiece.position = destination;
+            } else if (result.moveType === "castling") {
+                startPiece.position = destination;
+                startPiece.hasMoved = true;
+
+                const rookPosition: Position = {
+                    col: destination.col === "c" ? "a" : "h", // If king moved to c, get rook from left corner.
+                    row: startPiece.color === "white" ? "1" : "8",
+                };
+
+                const rook = this.getPiece(rookPosition);
+                rook.position.col = destination.col === "c" ? "d" : "f"; // If king moved to c, move rook to d
+                rook.hasMoved = true;
             } else {
                 this.removePiece(destination);
                 startPiece.position = destination;
