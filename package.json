@@ -25,6 +25,8 @@
     "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.ts"
   },
   "devDependencies": {
+    "@types/chai": "^4.0.2",
+    "@types/chai-as-promised": "0.0.31",
     "@types/express": "^4.0.36",
     "@types/mocha": "^2.2.41",
     "@types/react": "^15.0.38",
@@ -32,6 +34,8 @@
     "@types/socket.io": "^1.4.29",
     "@types/socket.io-client": "^1.4.29",
     "babelify": "^7.3.0",
+    "chai": "^4.1.1",
+    "chai-as-promised": "^7.1.1",
     "factory-girl": "^4.3.0",
     "grunt": "^1.0.1",
     "grunt-browserify": "^5.0.0",
