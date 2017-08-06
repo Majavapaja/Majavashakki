@@ -45,6 +45,14 @@ class MovementValidator {
         else return {kind: "success", moveType: "move", board: null};
     }
 
+    public positionToNumbers(pos: Position) {
+        return {col: Board.cols.indexOf(pos.col), row: Board.rows.indexOf(pos.row)};
+    }
+
+    public numbersToPosition(pos): Position {
+        return {col: Board.cols.charAt(pos.col), row: Board.rows.charAt(pos.row)};
+    }
+
     private checkMovement(board: Board, startPiece: Piece, destination: Position): boolean {
         switch (startPiece.type) {
             case "pawn":
@@ -244,14 +252,6 @@ class MovementValidator {
 
         // Valid castling
         return true;
-    }
-
-    private positionToNumbers(pos: Position) {
-        return {col: Board.cols.indexOf(pos.col), row: Board.rows.indexOf(pos.row)};
-    }
-
-    private numbersToPosition(pos): Position {
-        return {col: Board.cols.charAt(pos.col), row: Board.rows.charAt(pos.row)};
     }
 }
 

@@ -2,6 +2,7 @@ import makeInitialState from "../../common/initial-state";
 import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol";
 import {Piece, Position} from "../../common/types";
 import MovementValidator from "../logic/MovementValidator";
+import {isCheck, isCheckMate} from "../logic/Checkmate";
 
 export default class Board {
     public static cols: string = "abcdefgh";
@@ -46,6 +47,24 @@ export default class Board {
             // Move piece
             this.moveHistory.push([start, destination]);
             result.board = this.pieces;
+
+            const nextPlayerColor = startPiece.color === "white" ? "black" : "white";
+            if (isCheck(this, nextPlayerColor)) {
+                if (isCheckMate(this, nextPlayerColor)) {
+                    return {
+                        kind: "success",
+                        moveType: "checkmate",
+                        board: this.pieces,
+                    };
+                }
+
+                return {
+                    kind: "success",
+                    moveType: "check",
+                    board: this.pieces,
+                };
+            }
+
             return result;
         } else {
             return result;
@@ -71,5 +90,11 @@ export default class Board {
 
     public isWithinBoard(pos: Position) {
         return Board.cols.indexOf(pos.col) !== -1 && Board.rows.indexOf(pos.row) !== -1;
+    }
+
+    public getCoordinateByIndex(type: "col"|"row", index): string {
+        if (index < 0 || index >= Board.rows.length) return null;
+
+        return type === "col" ? Board.cols[index] : Board.rows[index];
     }
 }
