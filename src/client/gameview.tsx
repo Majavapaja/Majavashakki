@@ -33,7 +33,7 @@ class GameView extends React.Component<any, any> {
     case "success":
       this.setState({
         pieces: response.board,
-        error: undefined,
+        error: response.moveType,
       });
       break;
     }
