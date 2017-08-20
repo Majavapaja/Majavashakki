@@ -27,7 +27,6 @@ app.use((req, res, next) => {
 
 const server = http.createServer(app);
 io.attach(server);
-const port = process.env.PORT || 3000;
 
 app.use(express.static(resolve("dist/public")));
 
@@ -67,8 +66,9 @@ io.on("connection", (socket: SocketIO.Socket) => {
 
 });
 
-export const start = () => {
+export const start = port => {
   server.listen(port, () => {
     console.log("Server listening at port %d", port);
   });
+  return server;
 };
