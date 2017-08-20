@@ -14,7 +14,7 @@ factory.define("board", Board, {});
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
 */
-factory.define("board-capture", Board, {}, {
+factory.define("board-pawn-capture", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             {color: "white", type: "pawn", position: {col: "c", row: "5"}, hasMoved: true},
@@ -39,7 +39,7 @@ factory.define("board-capture", Board, {}, {
     ♙♙♙⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
 */
-factory.define("board-double-move", Board, {}, {
+factory.define("board-pawn-double-move", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             {color: "black", type: "pawn", position: {col: "a", row: "7"}, hasMoved: false},
