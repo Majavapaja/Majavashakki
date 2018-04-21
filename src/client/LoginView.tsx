@@ -1,5 +1,6 @@
 import * as React from "react";
 import CircularProgress from "material-ui/CircularProgress";
+import TextField from "material-ui/TextField";
 
 // TODO: Maybe split login/lobby
 
@@ -86,7 +87,7 @@ class LoginView extends React.Component<any, any> {
     }
 
     public renderLoading() {
-        const style = {"margin-top": "50%", "margin-left": "50%"}
+        const style = {marginTop: "50%", marginLeft: "50%"}
         return <CircularProgress size={40} style={style} />
     }
 
@@ -107,13 +108,7 @@ class LoginView extends React.Component<any, any> {
                     <div className="form">
                         <h3 className="title">What's your nickname?</h3>
                         <form onSubmit={onSubmitLogin}>
-                            <input
-                                name="username"
-                                className="usernameInput"
-                                type="text"
-                                onChange={onInputChange}
-                                value={this.state.username}
-                            />
+                          <TextField name="username" hintText="Username" onChange={onInputChange} />
                         </form>
                     </div>
                 </div>
@@ -135,11 +130,10 @@ class LoginView extends React.Component<any, any> {
                     <div className="newRoomArea">
                         <form onSubmit={onSubmitNewRoom}>
                             Create new room:
-                            <input
+                            <TextField
                                 name="newRoomName"
-                                type="text"
+                                hintText="Room name"
                                 onChange={onInputChange}
-                                value={this.state.newRoomName}
                             />
                         </form>
                     </div>

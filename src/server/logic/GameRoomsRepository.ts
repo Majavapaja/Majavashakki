@@ -107,7 +107,7 @@ export class GameRoomsRepository {
         } else {
             room.players.push(user);
             user.joinSocket(title);
-            user.socket.emit("game-joined");
+            user.socket.emit("game-joined", room.gameState.board.pieces);
             user.socket.broadcast.to(this.MainRoom).emit("game-full");
         }
     }

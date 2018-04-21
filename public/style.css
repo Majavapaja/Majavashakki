@@ -41,15 +41,11 @@ ul {
 }
 
 .page {
-  height: 100%;
-  position: absolute;
-  width: 100%;
 }
 
 /* Login Page */
 
 .login.page {
-  background-color: #000;
 }
 
 .login.page .form {
@@ -87,7 +83,6 @@ ul {
 }
 
 .login.page .title, .login.page .usernameInput {
-  color: #fff;
   font-weight: 100;
 }
 
