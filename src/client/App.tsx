@@ -1,12 +1,13 @@
+import AppBar from "material-ui/AppBar";
 import GameView from "./gameview";
 import makeInitialState from "../common/initial-state";
 import LoginView from "./LoginView";
 import * as React from "react";
 
-export default ({socket}) =>
-  (
-    <ul id="app" className="pages">
-      <LoginView socket={socket} />
-      <GameView pieces={makeInitialState()} socket={socket} />
-    </ul>
-  );
+export default ({socket}) => (
+  <div>
+    <AppBar title={"Majavashakki"} />
+    <LoginView socket={socket} />
+    <GameView socket={socket} pieces={makeInitialState()} />
+  </div>
+);

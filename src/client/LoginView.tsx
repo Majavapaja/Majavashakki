@@ -1,4 +1,5 @@
 import * as React from "react";
+import CircularProgress from "material-ui/CircularProgress";
 
 // TODO: Maybe split login/lobby
 
@@ -15,7 +16,7 @@ class LoginView extends React.Component<any, any> {
 
         // User has logged in. Switch the page to room selection.
         this.props.socket.on("login", (username: string) => {
-            this.setState({loadingRooms: true});
+            this.setState({isLoading: true});
             this.props.socket.emit("fetch-games");
         });
 
@@ -24,7 +25,7 @@ class LoginView extends React.Component<any, any> {
             this.setState({
                 showLogin: false,
                 rooms: gameRooms,
-                loadingRooms: false,
+                isLoading: false,
             });
         });
 
@@ -57,6 +58,7 @@ class LoginView extends React.Component<any, any> {
 
     public onSubmitLogin(event) {
         event.preventDefault();
+        this.setState({isLoading: true});
         const username = this.cleanInput(this.state.username);
         if (username) {
             this.props.socket.emit("new user", username);
@@ -83,6 +85,11 @@ class LoginView extends React.Component<any, any> {
         this.props.socket.emit("join-game", room);
     }
 
+    public renderLoading() {
+        const style = {"margin-top": "50%", "margin-left": "50%"}
+        return <CircularProgress size={40} style={style} />
+    }
+
     public render() {
         // Do not show login/lobby when in game
         if (this.state.inGame) {
@@ -90,17 +97,15 @@ class LoginView extends React.Component<any, any> {
         }
 
         const onInputChange = this.onInputChange.bind(this);
-
-        if (this.state.showLogin) {
+        if (this.state.showLogin && this.state.isLoading) {
+            return this.renderLoading();
+        } else if (this.state.showLogin) {
             const onSubmitLogin = this.onSubmitLogin.bind(this);
-            const title = this.state.loadingRooms ?
-                <h3 className="title">Loading rooms...</h3> :
-                <h3 className="title">What's your nickname?</h3>;
 
             return (
                 <div className="login page">
                     <div className="form">
-                        {title}
+                        <h3 className="title">What's your nickname?</h3>
                         <form onSubmit={onSubmitLogin}>
                             <input
                                 name="username"

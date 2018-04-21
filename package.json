@@ -10,6 +10,7 @@
     "express": "4.13.4",
     "express-session": "^1.15.4",
     "express-socket.io-session": "^1.3.2",
+    "material-ui": "0.20.0",
     "mongodb": "^3.0.7",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
