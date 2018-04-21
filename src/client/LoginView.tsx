@@ -130,11 +130,10 @@ class LoginView extends React.Component<any, any> {
                     <div className="newRoomArea">
                         <form onSubmit={onSubmitNewRoom}>
                             Create new room:
-                            <input
+                            <TextField
                                 name="newRoomName"
-                                type="text"
+                                hintText="Room name"
                                 onChange={onInputChange}
-                                value={this.state.newRoomName}
                             />
                         </form>
                     </div>
