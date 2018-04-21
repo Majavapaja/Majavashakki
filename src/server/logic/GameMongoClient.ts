@@ -55,14 +55,18 @@ export class GameMongoClient {
         const client = await this.getClient();
         const collection = this.getCollection(client);
  
-        const existing = collection.find({ title: game.title });
+        //const results = await collection.find({ title: game.title }).toArray();
+        //console.log("Found " + results.length + " games");
+
+        const existing = await collection.findOne({ title: game.title });
         const savedState = { title: game.title, gameState: game.gameState, players: [] };
-        if (existing) {
-            console.log("Updated game state");
-            collection.replaceOne({ title: game.title }, savedState);
+        if (existing) {            
+            console.log("Updated game state: " + existing.title);
+            await collection.replaceOne({ title: game.title }, savedState);
         } else {
             console.log("Created game state");
-            collection.insertOne(savedState);
+            var result = await collection.insertOne(savedState);
+            console.log("Inserted: " + result.insertedId);
         }
 
         await client.close();
