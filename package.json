@@ -25,7 +25,7 @@
     "grunt": "grunt",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "start": "node app.js",
-    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.ts"
+    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.spec.ts"
   },
   "devDependencies": {
     "@types/chai": "^4.0.2",

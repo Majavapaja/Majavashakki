@@ -1,6 +1,6 @@
 import * as chai from "chai";
 import * as chaiAsPromised from "chai-as-promised";
-import factory from "./BishopFactory";
+import factory from "./QueenFactory";
 import {moveSequence} from "./BoardHelper";
 chai.should();
 chai.use(chaiAsPromised);
