@@ -1,5 +1,7 @@
 import {Game} from "../entities/GameRoom";
 import {UserState} from "../entities/UserState";
+import {GameMongoClient} from "./GameMongoClient";
+import * as _ from "lodash";
 
 export class GameRoomsRepository {
     public static getInstance(): GameRoomsRepository {
@@ -8,12 +10,24 @@ export class GameRoomsRepository {
     private static instance: GameRoomsRepository = new GameRoomsRepository();
     public MainRoom = "Lobby";
     private roomStorage: {[name: string]: Game} = {};
+    private mongoClient: GameMongoClient = new GameMongoClient();
 
     private constructor() {
         if (GameRoomsRepository.instance) {
             throw new Error("The GameRoomRepository is a singleton class and cannot be created!");
         }
         GameRoomsRepository.instance = this;
+        
+        this.getGames();
+        
+    }
+
+    private async getGames() {
+        this.roomStorage = await this.mongoClient.getGames();
+    }
+
+    public async saveGame(game: Game) {
+        await this.mongoClient.saveGame(game);
     }
 
     /**
@@ -28,6 +42,7 @@ export class GameRoomsRepository {
         } else {
             const newRoom = new Game(title, creator);
             this.roomStorage[title] = newRoom;
+            this.mongoClient.saveGame(newRoom);
             creator.joinSocket(title);
             creator.socket.emit("game-joined");
             creator.socket.broadcast.to(this.MainRoom).emit("game-created", newRoom.title);
@@ -61,6 +76,7 @@ export class GameRoomsRepository {
     }
 
     public getGameRoom(title: string): Game {
+        console.log("Get game '" + title + "'");
         return this.roomStorage[title];
     }
 }
