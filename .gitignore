@@ -4,6 +4,7 @@ logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+tscommand-*.tmp.txt
 
 # Runtime data
 pids
@@ -59,3 +60,4 @@ typings/
 
 # Built JS
 dist/
+

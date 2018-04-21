@@ -1,5 +1,7 @@
 import {Game} from "../entities/GameRoom";
 import {UserState} from "../entities/UserState";
+import { MongoClient, Collection } from "mongodb";
+import * as _ from "lodash";
 
 export class GameRoomsRepository {
     public static getInstance(): GameRoomsRepository {
@@ -14,6 +16,51 @@ export class GameRoomsRepository {
             throw new Error("The GameRoomRepository is a singleton class and cannot be created!");
         }
         GameRoomsRepository.instance = this;
+        this.getGames();
+    }
+
+    private async getGames() {
+
+        console.log("Get games");
+        
+        // Connection URL
+        const url = 'mongodb://localhost:27017';
+        const dbName = 'majavashakki';
+        console.log(url);
+
+        // Use connect method to connect to the server
+        const client = await MongoClient.connect(url);
+        console.log("Connected successfully to server");
+        
+        const db = client.db(dbName);
+        const collection: Collection<Game> = db.collection('games');
+        const games = await collection.find().toArray();
+        _.forEach(games, game => {
+            this.roomStorage[game.title] = game;
+        });
+        
+        client.close();
+
+    }
+
+    private async saveGame(game: Game) {
+
+        console.log("Save game");
+        
+        // Connection URL
+        const url = 'mongodb://localhost:27017';
+        const dbName = 'majavashakki';
+        console.log(url);
+
+        // Use connect method to connect to the server
+        const client = await MongoClient.connect(url);
+        console.log("Connected successfully to server");
+        
+        const db = client.db(dbName);
+        const collection: Collection<Game> = db.collection('games');
+ 
+        collection.insertOne({ title: game.title, gameState: game.gameState, players: [] });
+
     }
 
     /**
@@ -28,6 +75,7 @@ export class GameRoomsRepository {
         } else {
             const newRoom = new Game(title, creator);
             this.roomStorage[title] = newRoom;
+            this.saveGame(newRoom);
             creator.joinSocket(title);
             creator.socket.emit("game-joined");
             creator.socket.broadcast.to(this.MainRoom).emit("game-created", newRoom.title);
