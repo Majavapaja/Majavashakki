@@ -1,16 +1,18 @@
 import Board from "../entities/Board";
 import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol";
 import {UserState} from "./UserState";
+import {Position} from "../../common/types";
 
 export class Game {
     public title: string;
     public players: UserState[] = [];
-    public gameState: any;
+    public gameState: {board: Board };
 
-    constructor(title: string, player: UserState) {
+    constructor(title: string, player?: UserState) {
         this.title = title;
         this.gameState = {board: new Board()};
-        this.players.push(player);
+        if (player)
+            this.players.push(player);
     }
 
     public addPlayer(player: UserState) {

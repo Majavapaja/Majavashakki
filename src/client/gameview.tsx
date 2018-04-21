@@ -12,6 +12,7 @@ class GameView extends React.Component<any, any> {
   public componentWillMount() {
     this.setState({pieces: this.props.pieces});
     this.props.socket.on("move_result", this.onMoveResult.bind(this));
+    this.props.socket.on("game-joined", this.onJoined.bind(this));
   }
 
   public render() {
@@ -20,6 +21,12 @@ class GameView extends React.Component<any, any> {
         <Board pieces={this.state.pieces} socket={this.props.socket}/>
         {this.state.error && <p>Error: {this.state.error}</p>}
       </li>
+    );
+  }
+
+  private onJoined(pieces: Piece[]) {
+    this.setState(
+      { pieces: pieces }
     );
   }
 
