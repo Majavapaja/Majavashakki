@@ -1,6 +1,8 @@
 import * as React from "react";
 import CircularProgress from "material-ui/CircularProgress";
 import TextField from "material-ui/TextField";
+import {List, ListItem} from "material-ui/List";
+import Divider from "material-ui/Divider";
 
 // TODO: Maybe split login/lobby
 
@@ -123,9 +125,12 @@ class LoginView extends React.Component<any, any> {
                         Hello {this.state.username}! Welcome to Majavashakki.
                         Please, join existing game or create a new one.
                     </h2>
-                    <ul id="roomList">
-                        {this.state.rooms.map(room => <li key={room} onClick={onRoomClick(room)}>{room}</li>)}
-                    </ul>
+                    <List>
+                        {this.state.rooms.map(room => [
+                            <ListItem key={room} onClick={onRoomClick(room)}>{room}</ListItem>,
+                            <Divider />,
+                        ]) }
+                    </List>
                     {this.state.error && <p>Error: {this.state.error}</p>}
                     <div className="newRoomArea">
                         <form onSubmit={onSubmitNewRoom}>

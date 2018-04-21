@@ -25,9 +25,11 @@ class GameView extends React.Component<any, any> {
   }
 
   private onJoined(pieces: Piece[]) {
-    this.setState(
-      { pieces: pieces }
-    );
+    if (pieces) {
+      this.setState(
+        { pieces: pieces }
+      );  
+    }
   }
 
   private onMoveResult(response: MoveResponse) {
