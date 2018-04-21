@@ -55,6 +55,7 @@ io.on("connection", (socket: SocketIO.Socket) => {
   socket.on("move", (data) => {
     const game = roomRepo.getGameRoom(userStateRepo.getState(socket.id).currentRoom);
     const result = game.move(data.from, data.dest);
+    roomRepo.saveGame(game);
 
     switch (result.kind) {
     case "error":

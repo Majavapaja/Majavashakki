@@ -36,14 +36,17 @@ export class GameRoomsRepository {
         const collection: Collection<Game> = db.collection('games');
         const games = await collection.find().toArray();
         _.forEach(games, game => {
-            this.roomStorage[game.title] = game;
+            console.log("Adding game '" + game.title + "'");
+            const newGame = new Game(game.title);
+            newGame.gameState.board.pieces = game.gameState.board.pieces;
+            this.roomStorage[game.title] = newGame;
         });
         
         client.close();
 
     }
 
-    private async saveGame(game: Game) {
+    public async saveGame(game: Game) {
 
         console.log("Save game");
         
@@ -59,7 +62,13 @@ export class GameRoomsRepository {
         const db = client.db(dbName);
         const collection: Collection<Game> = db.collection('games');
  
-        collection.insertOne({ title: game.title, gameState: game.gameState, players: [] });
+        const existing = collection.find({ title: game.title });
+        const savedState = { title: game.title, gameState: game.gameState, players: [] };
+        if (existing) {
+            collection.replaceOne({ title: game.title }, savedState);
+        } else {
+            collection.insertOne(savedState);
+        }
 
     }
 
@@ -109,6 +118,7 @@ export class GameRoomsRepository {
     }
 
     public getGameRoom(title: string): Game {
+        console.log("Get game '" + title + "'");
         return this.roomStorage[title];
     }
 }
