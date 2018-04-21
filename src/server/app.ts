@@ -2,6 +2,7 @@ import * as http from "http";
 import {resolve} from "path";
 
 import * as express from "express";
+import * as passportFb from "passport-facebook";
 import * as sio from "socket.io";
 
 import {Game} from "./entities/GameRoom";
