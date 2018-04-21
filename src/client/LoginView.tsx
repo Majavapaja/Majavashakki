@@ -108,7 +108,7 @@ class LoginView extends React.Component<any, any> {
                     <div className="form">
                         <h3 className="title">What's your nickname?</h3>
                         <form onSubmit={onSubmitLogin}>
-                          <TextField name={"username"} onChange={onInputChange} />
+                          <TextField name="username" hintText="Username" onChange={onInputChange} />
                         </form>
                     </div>
                 </div>
