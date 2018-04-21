@@ -1,6 +1,6 @@
 import {Game} from "../entities/GameRoom";
 import {UserState} from "../entities/UserState";
-import { MongoClient, Collection } from "mongodb";
+import {GameMongoClient} from "./GameMongoClient";
 import * as _ from "lodash";
 
 export class GameRoomsRepository {
@@ -10,66 +10,24 @@ export class GameRoomsRepository {
     private static instance: GameRoomsRepository = new GameRoomsRepository();
     public MainRoom = "Lobby";
     private roomStorage: {[name: string]: Game} = {};
+    private mongoClient: GameMongoClient = new GameMongoClient();
 
     private constructor() {
         if (GameRoomsRepository.instance) {
             throw new Error("The GameRoomRepository is a singleton class and cannot be created!");
         }
         GameRoomsRepository.instance = this;
+        
         this.getGames();
+        
     }
 
     private async getGames() {
-
-        console.log("Get games");
-        
-        // Connection URL
-        const url = 'mongodb://localhost:27017';
-        const dbName = 'majavashakki';
-        console.log(url);
-
-        // Use connect method to connect to the server
-        const client = await MongoClient.connect(url);
-        console.log("Connected successfully to server");
-        
-        const db = client.db(dbName);
-        const collection: Collection<Game> = db.collection('games');
-        const games = await collection.find().toArray();
-        _.forEach(games, game => {
-            console.log("Adding game '" + game.title + "'");
-            const newGame = new Game(game.title);
-            newGame.gameState.board.pieces = game.gameState.board.pieces;
-            this.roomStorage[game.title] = newGame;
-        });
-        
-        client.close();
-
+        this.roomStorage = await this.mongoClient.getGames();
     }
 
     public async saveGame(game: Game) {
-
-        console.log("Save game");
-        
-        // Connection URL
-        const url = 'mongodb://localhost:27017';
-        const dbName = 'majavashakki';
-        console.log(url);
-
-        // Use connect method to connect to the server
-        const client = await MongoClient.connect(url);
-        console.log("Connected successfully to server");
-        
-        const db = client.db(dbName);
-        const collection: Collection<Game> = db.collection('games');
- 
-        const existing = collection.find({ title: game.title });
-        const savedState = { title: game.title, gameState: game.gameState, players: [] };
-        if (existing) {
-            collection.replaceOne({ title: game.title }, savedState);
-        } else {
-            collection.insertOne(savedState);
-        }
-
+        await this.mongoClient.saveGame(game);
     }
 
     /**
@@ -84,7 +42,7 @@ export class GameRoomsRepository {
         } else {
             const newRoom = new Game(title, creator);
             this.roomStorage[title] = newRoom;
-            this.saveGame(newRoom);
+            this.mongoClient.saveGame(newRoom);
             creator.joinSocket(title);
             creator.socket.emit("game-joined");
             creator.socket.broadcast.to(this.MainRoom).emit("game-created", newRoom.title);
