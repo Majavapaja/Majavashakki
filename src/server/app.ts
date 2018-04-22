@@ -11,6 +11,8 @@ import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {UserStatesRepository} from "./logic/UserStatesRepository";
 import {enableSessions, getSession} from "./session";
 import {copy} from "../common/util";
+const siteName = process.env["WEBSITE_SITE_NAME"];
+const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";
 
 const app = express();
 passport.serializeUser((user, done) => done(null, user));
@@ -19,7 +21,7 @@ passport.deserializeUser((obj, done) => done(null, obj));
 passport.use(new Strategy({
     clientID: process.env["MajavashakkiFbClientId"],
     clientSecret: process.env["MajavashakkiFbSecret"],
-    callbackURL: "http://localhost:3000/login"
+    callbackURL: appRootUrl + "/login"
   },
   function(accessToken, refreshToken, profile, done) {
     console.log(`User '${profile.displayName}' logged in successfully.`);
