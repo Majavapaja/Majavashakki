@@ -22,7 +22,7 @@ passport.use(new Strategy({
     callbackURL: "http://localhost:3000/login"
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log("Profile displayname: ", profile.displayName);
+    console.log(`User '${profile.displayName}' logged in successfully.`);
     process.nextTick(() => done(null, profile));
   }
 ));
@@ -40,14 +40,12 @@ app.use((req, res, next) => {
   logSession(req.path, getSession(req));
   next();
 });
-
+// Mitä nää tekee? :)
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/", function(req, res, next) {
-  console.log("I are authed: " + req.isAuthenticated());
   if(!req.isAuthenticated()) {
-    console.log("NOT AUTHED BASTARD");
     return res.redirect("/login");
   }
   initSockets();
