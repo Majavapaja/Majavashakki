@@ -241,12 +241,12 @@ class MovementValidator {
         // Move 1
         dest.col -= direction;
         if (doesMoveCauseCheck(board, startPiece.position, this.numbersToPosition(dest))) return false;
-        if (board.getPiece(this.numbersToPosition(dest))) return false
+        if (board.getPiece(this.numbersToPosition(dest))) return false;
 
         // Move 2
         dest.col += direction;
         if (doesMoveCauseCheck(board, startPiece.position, this.numbersToPosition(dest))) return false;
-        if (board.getPiece(this.numbersToPosition(dest))) return false
+        if (board.getPiece(this.numbersToPosition(dest))) return false;
 
         // Check that rook can move to "Move 1" position.
         dest.col -= direction;

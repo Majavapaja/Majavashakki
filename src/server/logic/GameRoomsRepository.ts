@@ -1,6 +1,6 @@
 import {Game} from "../entities/GameRoom";
 import {UserState} from "../entities/UserState";
-import {GameMongoClient} from "./GameMongoClient";
+import {GameMongoClient} from "../data/GameMongoClient";
 import * as _ from "lodash";
 
 export class GameRoomsRepository {
@@ -17,13 +17,7 @@ export class GameRoomsRepository {
             throw new Error("The GameRoomRepository is a singleton class and cannot be created!");
         }
         GameRoomsRepository.instance = this;
-        
         this.getGames();
-        
-    }
-
-    private async getGames() {
-        this.roomStorage = await this.mongoClient.getGames();
     }
 
     public async saveGame(game: Game) {
@@ -78,5 +72,9 @@ export class GameRoomsRepository {
     public getGameRoom(title: string): Game {
         console.log("Get game '" + title + "'");
         return this.roomStorage[title];
+    }
+
+    private async getGames() {
+        this.roomStorage = await this.mongoClient.getGames();
     }
 }

@@ -26,9 +26,7 @@ class GameView extends React.Component<any, any> {
 
   private onJoined(pieces: Piece[]) {
     if (pieces) {
-      this.setState(
-        { pieces: pieces }
-      );  
+      this.setState({pieces});
     }
   }
 

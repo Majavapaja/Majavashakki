@@ -89,8 +89,8 @@ class LoginView extends React.Component<any, any> {
     }
 
     public renderLoading() {
-        const style = {marginTop: "50%", marginLeft: "50%"}
-        return <CircularProgress size={40} style={style} />
+        const style = {marginTop: "50%", marginLeft: "50%"};
+        return <CircularProgress size={40} style={style} />;
     }
 
     public render() {
@@ -129,7 +129,7 @@ class LoginView extends React.Component<any, any> {
                         {this.state.rooms.map(room => [
                             <ListItem key={room} onClick={onRoomClick(room)}>{room}</ListItem>,
                             <Divider />,
-                        ]) }
+                        ]) };
                     </List>
                     {this.state.error && <p>Error: {this.state.error}</p>}
                     <div className="newRoomArea">
