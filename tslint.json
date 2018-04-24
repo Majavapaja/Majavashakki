@@ -13,7 +13,8 @@
       "no-console": false,
       "ordered-imports": false,
       "arrow-parens": false,
-	  "max-line-length": false
+	  "max-line-length": false,
+	  "interface-name": [true, "always-prefix"]
     },
     "rulesDirectory": []
 }
