@@ -3,6 +3,7 @@ import {IDisposableAsync} from "../components/disposable";
 import * as util from "util";
 
 export class MajavaDbClient implements IDisposableAsync {
+  public static readonly UserCollection: string = "ApplicationUsers";
   private client: MongoClient;
   private readonly dbName = "majavashakki";
 

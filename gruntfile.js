@@ -40,7 +40,7 @@ module.exports = function(grunt) {
           fast: "never",
           module: "commonjs",
           target: "es6",
-          sourceMap: false,
+          sourceMap: true,
           rootDir: "src"
         }
       }
@@ -50,7 +50,10 @@ module.exports = function(grunt) {
             options: {
                transform: [
                   ["babelify"]
-               ]
+               ],
+               browserifyOptions: {
+                 debug: true
+               }
             },
             files: {
                // if the source file has an extension of es6 then

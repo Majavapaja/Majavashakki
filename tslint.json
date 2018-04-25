@@ -14,7 +14,8 @@
       "ordered-imports": false,
       "arrow-parens": false,
 	  "max-line-length": false,
-	  "interface-name": [true, "always-prefix"]
+	  "interface-name": false,
+	  "no-debugger": false
     },
     "rulesDirectory": []
 }

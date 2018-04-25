@@ -10,8 +10,10 @@
             "name": "Launch Program",
             "program": "${workspaceFolder}\\app.js",
             "outFiles": [
-                "${workspaceFolder}/**/*.js"
-            ]
+                "${workspaceFolder}/dist/**/*.js"
+            ],
+            "protocol":"inspector",
+            "sourceMaps":true,
         }
     ]
 }
