@@ -15,7 +15,8 @@
       "arrow-parens": false,
 	  "max-line-length": false,
 	  "interface-name": false,
-	  "no-debugger": false
+	  "no-debugger": false,
+	  "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"]
     },
     "rulesDirectory": []
 }

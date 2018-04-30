@@ -5,6 +5,8 @@ import * as express from "express";
 import * as passport from "passport";
 import {Strategy} from "passport-facebook";
 import * as sio from "socket.io";
+import {MongooseClient} from "./data/MongooseClient";
+import {User} from "./data/User";
 
 import {Game} from "./entities/GameRoom";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
@@ -13,7 +15,7 @@ import {enableSessions, getSession} from "./session";
 import {copy} from "../common/util";
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";
-
+MongooseClient.InitMongoConnection();
 const app = express();
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
@@ -26,7 +28,10 @@ passport.use(
   },
   (accessToken, refreshToken, profile, done) => {
     console.log(`User '${profile.displayName}' logged in successfully.`);
-    process.nextTick(() => done(null, profile));
+    User.findOrCreate(profile.id, (err, user) => {
+      console.log("ERNO: " + err);
+      process.nextTick(() => done(err, user));
+    });
   },
 ));
 
