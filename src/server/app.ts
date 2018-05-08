@@ -15,25 +15,9 @@ import {enableSessions, getSession} from "./session";
 import {copy} from "../common/util";
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";
-MongooseClient.InitMongoConnection();
 const app = express();
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((obj, done) => done(null, obj));
-
-passport.use(
-  new Strategy({
-    clientID: process.env.MajavashakkiFbClientId,
-    clientSecret: process.env.MajavashakkiFbSecret,
-    callbackURL: appRootUrl + "/login",
-  },
-  (accessToken, refreshToken, profile, done) => {
-    console.log(`User '${profile.displayName}' logged in successfully.`);
-    User.findOrCreate(profile.id, (err, user) => {
-      console.log("ERNO: " + err);
-      process.nextTick(() => done(err, user));
-    });
-  },
-));
+MongooseClient.InitMongoConnection();
+initPassport(appRootUrl);
 
 const io: SocketIO.Server = sio({transports: ["websocket"]});
 enableSessions(app, io);
@@ -107,6 +91,26 @@ function initSockets() {
       }
     });
   });
+}
+
+function initPassport(appUrl: string) {
+  passport.serializeUser((user, done) => done(null, user));
+  passport.deserializeUser((obj, done) => done(null, obj));
+
+  passport.use(
+    new Strategy({
+      clientID: process.env.MajavashakkiFbClientId,
+      clientSecret: process.env.MajavashakkiFbSecret,
+      callbackURL: appUrl + "/login",
+    },
+    (accessToken, refreshToken, profile, done) => {
+      console.log(`User '${profile.displayName}' logged in successfully.`);
+      User.findOrCreate(profile.id, (err, user) => {
+        console.log("ERNO: " + err);
+        process.nextTick(() => done(err, user));
+      });
+    },
+  ));
 }
 
 export const start = port => {
