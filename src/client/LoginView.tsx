@@ -20,6 +20,9 @@ class LoginView extends React.Component<any, any> {
         // User has logged in. Switch the page to room selection.
         this.props.socket.on("login", (username: string) => {
             this.setState({isLoading: true});
+            if (!this.state.username) {
+                this.setState({username});
+            }
             this.props.socket.emit("fetch-games");
         });
 
@@ -126,10 +129,7 @@ class LoginView extends React.Component<any, any> {
                         Please, join existing game or create a new one.
                     </h2>
                     <List>
-                        {this.state.rooms.map(room => [
-                            <ListItem key={room} onClick={onRoomClick(room)}>{room}</ListItem>,
-                            <Divider />,
-                        ]) };
+                        {this.state.rooms.map(room => [<ListItem key={room} onClick={onRoomClick(room)}>{room}</ListItem>, <Divider />])};
                     </List>
                     {this.state.error && <p>Error: {this.state.error}</p>}
                     <div className="newRoomArea">

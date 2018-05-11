@@ -6,7 +6,7 @@ import * as passport from "passport";
 import {Strategy} from "passport-facebook";
 import * as sio from "socket.io";
 import {MongooseClient} from "./data/MongooseClient";
-import {User} from "./data/User";
+import {User, IUserDocument} from "./data/User";
 
 import {Game} from "./entities/GameRoom";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
@@ -60,9 +60,14 @@ const userStateRepo = UserStatesRepository.getInstance();
 
 function initSockets() {
   io.on("connection", (socket: SocketIO.Socket) => {
-    logSession("/socket.io", getSession(socket));
+    const session = getSession(socket.handshake);
+    logSession("/socket.io", session);
 
     socket.on("new user", (username: string) => {
+      const currentUser: IUserDocument = session.passport.user;
+      console.log("New user received :" + currentUser.facebookId);
+      User.updateName(currentUser._id, username);
+      currentUser.name = username;
       userStateRepo.createUser(username, socket, roomRepo.MainRoom);
     });
 
@@ -90,6 +95,11 @@ function initSockets() {
           return io.to(game.title).emit("move_result", result);
       }
     });
+
+    if (session.passport.user && session.passport.user.name) {
+      // Skip login view - TODO routing for views and stop abusing sockets for app navigation...
+      userStateRepo.createUser(session.passport.user.name, socket, roomRepo.MainRoom);
+    }
   });
 }
 
