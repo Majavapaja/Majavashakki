@@ -14,6 +14,7 @@
             ],
             "protocol":"inspector",
             "sourceMaps":true,
+            "preLaunchTask":"npm: grunt"
         }
     ]
 }
