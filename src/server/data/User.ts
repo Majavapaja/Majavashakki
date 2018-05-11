@@ -1,6 +1,7 @@
 /* Defines user schema and model */
 
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
+import { ObjectID } from "../../../node_modules/@types/bson/index";
 
 export interface IUserDocument extends IUser, Document {
   facebookId?: string;
@@ -13,6 +14,7 @@ export interface IUserDocument extends IUser, Document {
 
 export interface IUserModel extends Model<IUserDocument> {
   findOrCreate(facebookId: string, callback: (err, user: IUser) => void);
+  updateName(id: string|ObjectID, name: string);
 }
 
 const options: SchemaOptions = {timestamps: true};
@@ -37,8 +39,16 @@ UserSchema.statics.findOrCreate = (facebookId: string, callback: (err, user: IUs
       userObj.facebookId = facebookId;
       userObj.save(callback);
     } else {
-      console.log(`FOUND EXISTING USER ${result.facebookId}`);
+      console.log(`FOUND EXISTING USER ${result.facebookId} NAME: ${result.name}`);
       callback(err, result);
+    }
+  });
+};
+
+UserSchema.statics.updateName = (_id: string|ObjectID, name: string) => {
+  User.findOneAndUpdate({_id}, {name}, (err, doc, res) => {
+    if (err) {
+      console.log(`Updating username for ${_id} failed with_ ${err}`);
     }
   });
 };
