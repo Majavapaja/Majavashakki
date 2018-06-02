@@ -55,9 +55,33 @@ UserSchema.statics.updateName = (_id: string|ObjectID, name: string) => {
   });
 };
 
-UserSchema.statics.addGame = (id: string, gameTitle: string) => {
+UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
 
-  console.log(`Add game ${gameTitle} for user ${id}`);
+  //const doc = await User.findOne({id}).exec();
+
+  User.findOne({_id}, (err, doc) => {
+    if (err) {
+      console.log(`Updating games list for ${_id} failed with_ ${err}`);
+      return;
+    }
+    if (!doc) {
+      console.log(`No user found by ID ${_id}`);
+      return;
+    }
+
+    console.log(`Adding game '${gameTitle}' for user ${doc.name}`);
+
+    if (!doc.games) {
+      doc.games = [];
+    }
+    if (doc.games.indexOf(gameTitle) != -1) {
+      console.log("Game already added, skipping");
+      return;
+    }
+    doc.games.push(gameTitle);
+    doc.save();
+    console.log("Added game");
+  });
 
 }
 
