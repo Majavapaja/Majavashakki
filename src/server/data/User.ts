@@ -60,24 +60,24 @@ UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
 
   const user = await User.findById(_id).exec();
 
-    if (!user) {
-      console.log(`No user found by ID ${_id}`);
-      return;
-    }
+  if (!user) {
+    console.log(`No user found by ID ${_id}`);
+    return;
+  }
 
-    console.log(`Adding game '${gameTitle}' for user ${user.name}`);
+  console.log(`Adding game '${gameTitle}' for user ${user.name}`);
 
-    if (!user.games) {
-      user.games = [];
-    }
-    if (user.games.indexOf(gameTitle) != -1) {
-      console.log("Game already added, skipping");
-      return;
-    }
-    user.games.push(gameTitle);
-    await user.save();
-    user.update(user);
-    console.log("Added game");
+  if (!user.games) {
+    user.games = [];
+  }
+  if (user.games.indexOf(gameTitle) != -1) {
+    console.log("Game already added, skipping");
+    return;
+  }
+  user.games.push(gameTitle);
+  await user.save();
+  user.update(user);
+  console.log("Added game");
 
 }
 

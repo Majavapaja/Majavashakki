@@ -60,6 +60,7 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-ts": "^6.0.0-beta.16",
     "mocha": "^3.5.0",
+    "mockgoose": "^7.3.5",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.2",
     "ts-node": "^3.3.0",
