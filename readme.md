@@ -1,3 +1,8 @@
+### Install MongoDB using Vagrant ###
+
+1. Install Virtual Box and Vagrant
+2. Run `vagrant up` inside `local-services` directory
+
 ### Install local MongoDB as windows service ###
 https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/#get-mongodb-community-edition
 
