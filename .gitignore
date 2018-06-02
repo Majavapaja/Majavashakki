@@ -63,3 +63,5 @@ dist/
 
 .vagrant
 *.retry
+
+.cache
