@@ -33,8 +33,10 @@ app.use((req, res, next) => {
   logSession(req.path, getSession(req));
   next();
 });
-// Mitä nää tekee? :)
+
+// Mitä tää tekee? :)
 app.use(passport.initialize());
+
 app.use(passport.session());
 
 app.get("/", (req, res, next) => {
@@ -45,11 +47,14 @@ app.get("/", (req, res, next) => {
   return next();
 });
 
-app.get("/login",
-  passport.authenticate("facebook", { failureRedirect: "/error" }),
-  (req, res) => { // Successful authentication, redirect home.
-    res.redirect("/");
-});
+app.get("/login", (req, res) =>
+  // res.send("hello world");
+
+ passport.authenticate("facebook", { failureRedirect: "/error" }),
+ (req, res) => { // Successful authentication, redirect home.
+   res.redirect("/");
+}
+);
 
 const server = http.createServer(app);
 io.attach(server);
