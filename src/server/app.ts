@@ -20,9 +20,8 @@ const app = express();
 MongooseClient.InitMongoConnection();
 initPassport(appRootUrl);
 
-const socketServer: SocketIO.Server = sio({transports: ["websocket"]});
-enableSessions(app, socketServer);
-initSocketEventHandlers(socketServer);
+const io: SocketIO.Server = sio({transports: ["websocket"]});
+enableSessions(app, io);
 
 const logSession = (path, session) => {
   const withoutCookie = copy(session);
@@ -44,6 +43,7 @@ app.get("/", (req, res, next) => {
   if (!req.isAuthenticated()) {
     return res.redirect("/login");
   }
+  initSockets();
   return next();
 });
 
@@ -57,14 +57,14 @@ app.get("/login", (req, res) =>
 );
 
 const server = http.createServer(app);
-socketServer.attach(server);
+io.attach(server);
 
 app.use(express.static(resolve(__dirname, "../../dist")));
 
 const roomRepo = GameRoomsRepository.getInstance();
 const userStateRepo = UserStatesRepository.getInstance();
 
-function initSocketEventHandlers(io: SocketIO.Server) {
+function initSockets() {
   io.on("connection", (socket: SocketIO.Socket) => {
     const session = getSession(socket.handshake);
     logSession("/socket.io", session);
