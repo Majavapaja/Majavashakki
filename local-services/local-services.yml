@@ -1,0 +1,6 @@
+- name: Configure local services
+  hosts: all
+  become: yes
+
+  tasks:
+    - include: mongo.yml

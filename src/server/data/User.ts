@@ -10,10 +10,11 @@ export interface IUserDocument extends IUser, Document {
   // join sockets?
   // do the twist?
   logMe(greeting: string);
+  validatePassword(password: string);
 }
 
 export interface IUserModel extends Model<IUserDocument> {
-  findOrCreate(facebookId: string, callback: (err, user: IUser) => void);
+  findOrCreate(facebookId: string, callback: (err, user: IUserDocument) => void);
   updateName(id: string|ObjectID, name: string);
   addGame(userId: string, gameName: string);
 }
@@ -32,7 +33,7 @@ UserSchema.pre("save", (next) => {
   next();
 });
 
-UserSchema.statics.findOrCreate = (facebookId: string, callback: (err, user: IUser) => void) => {
+UserSchema.statics.findOrCreate = (facebookId: string, callback: (err, user: IUserDocument) => void) => {
   const userObj = new User();
   User.findOne({facebookId}, (err, result) => {
     if (!result) {

@@ -3,7 +3,8 @@ import {resolve} from "path";
 
 import * as express from "express";
 import * as passport from "passport";
-import {Strategy} from "passport-facebook";
+import {Strategy as FbStrategy} from "passport-facebook";
+import { Strategy as LocalStrategy } from "passport-local";
 import * as sio from "socket.io";
 import {MongooseClient} from "./data/MongooseClient";
 import {User, IUserDocument} from "./data/User";
@@ -115,7 +116,7 @@ function initPassport(appUrl: string) {
   passport.deserializeUser((obj, done) => done(null, obj));
 
   passport.use(
-    new Strategy({
+    new FbStrategy({
       clientID: process.env.MajavashakkiFbClientId,
       clientSecret: process.env.MajavashakkiFbSecret,
       callbackURL: appUrl + "/login",
@@ -123,11 +124,28 @@ function initPassport(appUrl: string) {
     (accessToken, refreshToken, profile, done) => {
       console.log(`User '${profile.displayName}' logged in successfully.`);
       User.findOrCreate(profile.id, (err, user) => {
-        console.log("ERNO: " + err);
+        user.logMe("kekkeli");
         process.nextTick(() => done(err, user));
       });
     },
   ));
+
+  // passport.use(
+  //   new LocalStrategy((email, password, done) => {
+  //     console.log(`User ${email} trying to login with local strategy`)
+  //     User.findOne({ email }, (err, user) => {
+  //       if (err) { return done(err); } // Pilikseen meni, yllätys!
+  //       if (!user) {
+  //         return done(null, false, { message: 'Incorrect user.' });
+  //       }
+
+  //       if (!user.validPassword(password)) {
+  //         return done(null, false, { message: 'Incorrect password.' });
+  //       }
+  //       return done(null, false, { message: 'Incorrect password.' });
+  //     });
+  //   }
+  // ));
 }
 
 export const start = port => {
