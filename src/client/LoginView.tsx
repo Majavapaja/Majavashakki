@@ -129,7 +129,7 @@ class LoginView extends React.Component<any, any> {
                         Please, join existing game or create a new one.
                     </h2>
                     <List>
-                        {this.state.rooms.map(room => [<ListItem key={room} onClick={onRoomClick(room)}>{room}</ListItem>, <Divider />])};
+                        {this.state.rooms.map(room => [<ListItem key={room} onClick={onRoomClick(room)}>{room}</ListItem>, <Divider />])}
                     </List>
                     {this.state.error && <p>Error: {this.state.error}</p>}
                     <div className="newRoomArea">

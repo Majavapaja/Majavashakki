@@ -63,6 +63,8 @@ function initSockets() {
     const session = getSession(socket.handshake);
     logSession("/socket.io", session);
 
+    // User has logged in and entered username
+    // Creates user state and updates name in database
     socket.on("new user", (username: string) => {
       const currentUser: IUserDocument = session.passport.user;
       console.log("New user received :" + currentUser.facebookId);
