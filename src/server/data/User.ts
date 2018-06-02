@@ -16,7 +16,7 @@ export interface IUserDocument extends IUser, Document {
 export interface IUserModel extends Model<IUserDocument> {
   findOrCreate(facebookId: string, callback: (err, user: IUserDocument) => void);
   updateName(id: string|ObjectID, name: string);
-  addGame(userId: string, gameName: string);
+  addGame(userId: string, gameName: string): Promise<void>;
 }
 
 const options: SchemaOptions = {timestamps: true};
@@ -26,6 +26,7 @@ export let UserSchema: Schema = new Schema({
   name: String,
   password: String,
   facebookId: String,
+  games: Array,
 }, options);
 
 UserSchema.pre("save", (next) => {
@@ -57,31 +58,26 @@ UserSchema.statics.updateName = (_id: string|ObjectID, name: string) => {
 
 UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
 
-  //const doc = await User.findOne({id}).exec();
+  const user = await User.findById(_id).exec();
 
-  User.findOne({_id}, (err, doc) => {
-    if (err) {
-      console.log(`Updating games list for ${_id} failed with_ ${err}`);
-      return;
-    }
-    if (!doc) {
+    if (!user) {
       console.log(`No user found by ID ${_id}`);
       return;
     }
 
-    console.log(`Adding game '${gameTitle}' for user ${doc.name}`);
+    console.log(`Adding game '${gameTitle}' for user ${user.name}`);
 
-    if (!doc.games) {
-      doc.games = [];
+    if (!user.games) {
+      user.games = [];
     }
-    if (doc.games.indexOf(gameTitle) != -1) {
+    if (user.games.indexOf(gameTitle) != -1) {
       console.log("Game already added, skipping");
       return;
     }
-    doc.games.push(gameTitle);
-    doc.save();
+    user.games.push(gameTitle);
+    await user.save();
+    user.update(user);
     console.log("Added game");
-  });
 
 }
 
