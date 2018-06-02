@@ -14,9 +14,9 @@ export class UserStatesRepository {
         UserStatesRepository.instance = this;
     }
 
-    public createUser(name: string, socket: SocketIO.Socket, initRoom: string) {
+    public createUser(name: string, socket: SocketIO.Socket, initRoom: string, id: string) {
         // No need to check if exists already. Socket id's are unique and we don't care about duplicate usernames so far
-        const newUser = new UserState(name, socket, initRoom);
+        const newUser = new UserState(name, socket, initRoom, id);
         this.userStorage[socket.id] = newUser;
         // Tell client to ditch login page and render hello msg
         newUser.socket.emit("login", newUser.name);

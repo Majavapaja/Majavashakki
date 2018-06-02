@@ -70,7 +70,7 @@ function initSockets() {
       console.log("New user received :" + currentUser.facebookId);
       User.updateName(currentUser._id, username);
       currentUser.name = username;
-      userStateRepo.createUser(username, socket, roomRepo.MainRoom);
+      userStateRepo.createUser(username, socket, roomRepo.MainRoom, currentUser._id);
     });
 
     socket.on("fetch-games", () => {
@@ -100,7 +100,7 @@ function initSockets() {
 
     if (session.passport.user && session.passport.user.name) {
       // Skip login view - TODO routing for views and stop abusing sockets for app navigation...
-      userStateRepo.createUser(session.passport.user.name, socket, roomRepo.MainRoom);
+      userStateRepo.createUser(session.passport.user.name, socket, roomRepo.MainRoom, session.passport.user._id);
     }
   });
 }

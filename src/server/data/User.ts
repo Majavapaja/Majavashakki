@@ -39,7 +39,7 @@ UserSchema.statics.findOrCreate = (facebookId: string, callback: (err, user: IUs
       userObj.facebookId = facebookId;
       userObj.save(callback);
     } else {
-      console.log(`FOUND EXISTING USER ${result.facebookId} NAME: ${result.name}`);
+      console.log(`FOUND EXISTING USER ${result.facebookId} NAME: ${result.name}, ID: ${result._id}`);
       callback(err, result);
     }
   });
