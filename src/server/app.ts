@@ -47,14 +47,11 @@ app.get("/", (req, res, next) => {
   return next();
 });
 
-app.get("/login", (req, res) =>
-  // res.send("hello world");
-
- passport.authenticate("facebook", { failureRedirect: "/error" }),
- (req, res) => { // Successful authentication, redirect home.
-   res.redirect("/");
-}
-);
+app.get("/login",
+  passport.authenticate("facebook", { failureRedirect: "/error" }),
+  (req, res) => { // Successful authentication, redirect home.
+    res.redirect("/");
+});
 
 const server = http.createServer(app);
 io.attach(server);
