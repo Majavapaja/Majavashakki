@@ -78,11 +78,16 @@ function initSockets() {
     });
 
     socket.on("create-game", (title: string) => {
-      roomRepo.createRoom(title, userStateRepo.getState(socket.id));
+      const state = userStateRepo.getState(socket.id);
+      roomRepo.createRoom(title, state).then(g => g ? User.addGame(state.id, g.title) : null);
     });
 
     socket.on("join-game", (roomTitle) => {
-      roomRepo.joinRoom(roomTitle, userStateRepo.getState(socket.id));
+      const state = userStateRepo.getState(socket.id);
+      const game = roomRepo.joinRoom(roomTitle, state);
+      if (game) {
+        User.addGame(state.id, game.title);
+      }
     });
 
     socket.on("move", (data) => {

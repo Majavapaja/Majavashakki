@@ -30,16 +30,17 @@ export class GameRoomsRepository {
      * @fires game-created - tells lobby that new room is available
      * @fires game-exists - tells user socket if room with given title already exists
      */
-    public createRoom(title: string, creator: UserState): void {
+    public async createRoom(title: string, creator: UserState): Promise<Game> {
         if (this.roomStorage[title]) {
             creator.socket.emit("lobby-error", {error: `Room ${title} already exists`});
         } else {
             const newRoom = new Game(title, creator);
             this.roomStorage[title] = newRoom;
-            this.mongoClient.saveGame(newRoom);
+            await this.mongoClient.saveGame(newRoom);
             creator.joinSocket(title);
             creator.socket.emit("game-joined");
             creator.socket.broadcast.to(this.MainRoom).emit("game-created", newRoom.title);
+            return newRoom;
         }
     }
 
@@ -49,7 +50,7 @@ export class GameRoomsRepository {
      * @fires game-full - tells lobby that room is full and not available anymore
      * @fires game-notAvailable - tells user socket if room does not exist or is full
      */
-    public joinRoom(title: string, user: UserState): void {
+    public joinRoom(title: string, user: UserState): Game {
         // TODO check if main room
         const room = this.roomStorage[title];
         if (!room) {
@@ -62,6 +63,7 @@ export class GameRoomsRepository {
             user.socket.emit("game-joined", room.gameState.board.pieces);
             user.socket.broadcast.to(this.MainRoom).emit("game-full");
         }
+        return room;
     }
 
     public getAvailableGames(): string[] {

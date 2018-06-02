@@ -15,6 +15,7 @@ export interface IUserDocument extends IUser, Document {
 export interface IUserModel extends Model<IUserDocument> {
   findOrCreate(facebookId: string, callback: (err, user: IUser) => void);
   updateName(id: string|ObjectID, name: string);
+  addGame(userId: string, gameName: string);
 }
 
 const options: SchemaOptions = {timestamps: true};
@@ -52,6 +53,12 @@ UserSchema.statics.updateName = (_id: string|ObjectID, name: string) => {
     }
   });
 };
+
+UserSchema.statics.addGame = (id: string, gameTitle: string) => {
+
+  console.log(`Add game ${gameTitle} for user ${id}`);
+
+}
 
 UserSchema.methods.logMe = (greeting: string) => {
   console.log(`${greeting}, my name is: ${this.name}`);
