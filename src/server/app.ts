@@ -59,7 +59,7 @@ app.get("/login", (req, res) =>
 const server = http.createServer(app);
 io.attach(server);
 
-app.use(express.static(resolve("dist/public")));
+app.use(express.static(resolve(__dirname, "../../dist")));
 
 const roomRepo = GameRoomsRepository.getInstance();
 const userStateRepo = UserStatesRepository.getInstance();

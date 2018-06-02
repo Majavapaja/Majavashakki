@@ -192,7 +192,7 @@ ul {
 }
 
 .board .cell .piece {
-  background: url(/sprites.png);
+  background: url(./sprites.png);
   position: absolute;
   width: 32px;
   height: 32px;

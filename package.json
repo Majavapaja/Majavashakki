@@ -26,12 +26,11 @@
     "socket.io-client": "^2.0.3"
   },
   "scripts": {
-    "dev": "npm-run-all --parallel watch:*",
-    "watch:app": "nodemon --watch dist --watch public app.js",
-    "watch:build": "grunt --force && grunt watch",
-    "grunt": "grunt",
+    "dev": "npm-run-all --parallel watch:client watch:server",
+    "watch:client": "parcel watch src/client/index.html --public-url '/'",
+    "watch:server": "nodemon --watch src --watch public --ext ts,tsx app.js",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "start": "node app.js",
+    "start": "NODE_ENV=production parcel build src/client/index.html --public-url '/' && NODE_ENV=production node app.js",
     "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.spec.ts"
   },
   "devDependencies": {
@@ -53,17 +52,13 @@
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "factory-girl": "^4.3.0",
-    "grunt": "^1.0.1",
-    "grunt-browserify": "^5.0.0",
-    "grunt-contrib-clean": "^1.1.0",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-ts": "^6.0.0-beta.16",
     "mocha": "^3.5.0",
     "mockgoose": "^7.3.5",
     "nodemon": "^1.11.0",
     "npm-run-all": "^4.0.2",
-    "ts-node": "^3.3.0",
+    "parcel-bundler": "1.8.1",
+    "parcel-plugin-typescript": "0.7.1",
+    "ts-node": "6.0.5",
     "tslint": "^5.9.1",
     "tslint-react": "^3.1.0",
     "typescript": "^2.4.2"
