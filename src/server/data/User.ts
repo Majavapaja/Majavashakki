@@ -14,7 +14,7 @@ export interface IUserDocument extends IUser, Document {
 }
 
 export interface IUserModel extends Model<IUserDocument> {
-  findOrCreate(facebookId: string, callback: (err, user: IUserDocument) => void);
+  findOrCreate(facebookId: string): Promise<IUserDocument>;
   updateName(id: string|ObjectID, name: string);
   addGame(userId: string, gameName: string): Promise<void>;
 }
@@ -34,18 +34,20 @@ UserSchema.pre("save", (next) => {
   next();
 });
 
-UserSchema.statics.findOrCreate = (facebookId: string, callback: (err, user: IUserDocument) => void) => {
+UserSchema.statics.findOrCreate = async (facebookId: string) => {
   const userObj = new User();
-  User.findOne({facebookId}, (err, result) => {
-    if (!result) {
-      console.log(`CREATING NEW USER ${facebookId}`);
-      userObj.facebookId = facebookId;
-      userObj.save(callback);
-    } else {
-      console.log(`FOUND EXISTING USER ${result.facebookId} NAME: ${result.name}, ID: ${result._id}`);
-      callback(err, result);
-    }
-  });
+  const result = await User.findOne({facebookId}).exec();
+
+  if (!result) {
+    console.log(`CREATING NEW USER ${facebookId}`);
+    userObj.facebookId = facebookId;
+    await userObj.save();
+    return userObj;
+  } else {
+    console.log(`FOUND EXISTING USER ${result.facebookId} NAME: ${result.name}, ID: ${result._id}`);
+    return result;
+  }
+
 };
 
 UserSchema.statics.updateName = (_id: string|ObjectID, name: string) => {

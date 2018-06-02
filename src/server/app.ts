@@ -123,9 +123,9 @@ function initPassport(appUrl: string) {
     },
     (accessToken, refreshToken, profile, done) => {
       console.log(`User '${profile.displayName}' logged in successfully.`);
-      User.findOrCreate(profile.id, (err, user) => {
+      User.findOrCreate(profile.id).then((user) => {
         user.logMe("kekkeli");
-        process.nextTick(() => done(err, user));
+        process.nextTick(() => done(null, user));
       });
     },
   ));
