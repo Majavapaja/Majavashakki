@@ -33,8 +33,10 @@ app.use((req, res, next) => {
   logSession(req.path, getSession(req));
   next();
 });
-// Mitä nää tekee? :)
+
+// Mitä tää tekee? :)
 app.use(passport.initialize());
+
 app.use(passport.session());
 
 app.get("/", (req, res, next) => {
