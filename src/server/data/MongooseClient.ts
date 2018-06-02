@@ -12,6 +12,11 @@ export class MongooseClient {
 
     this.initDefaultHooks();
   }
+
+  public static getConnection(): mongoose.Connection {
+    return mongoose.connection;
+  }
+
   private static  _url: string = MongooseClient.getMongoServerUrl();
   private static _isDev: boolean = !!process.env.MajavaMongoPassword;
   private static _dbName: string = "Majavashakki";
