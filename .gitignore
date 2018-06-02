@@ -61,3 +61,5 @@ typings/
 # Built JS
 dist/
 
+.vagrant
+*.retry
