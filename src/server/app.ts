@@ -22,6 +22,7 @@ initPassport(appRootUrl);
 
 const io: SocketIO.Server = sio({transports: ["websocket"]});
 enableSessions(app, io);
+initSockets();
 
 const logSession = (path, session) => {
   const withoutCookie = copy(session);
@@ -43,7 +44,6 @@ app.get("/", (req, res, next) => {
   if (!req.isAuthenticated()) {
     return res.redirect("/login");
   }
-  initSockets();
   return next();
 });
 
