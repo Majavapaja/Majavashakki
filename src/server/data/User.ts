@@ -3,6 +3,12 @@
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
 import { ObjectID } from "../../../node_modules/@types/bson/index";
 
+interface IUser {
+  email: string;
+  name: string;
+  games?: string[];
+}
+
 export interface IUserDocument extends IUser, Document {
   facebookId?: string;
   // Insert user methods etc
