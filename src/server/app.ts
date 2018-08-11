@@ -42,6 +42,10 @@ app.get("/", (req, res, next) => {
   if (!req.isAuthenticated()) {
     return res.redirect("/login", );
   }
+  else {
+    // TODO check if user has setup required initial profile information
+    // -> IF PROFILE IS NOT SET, THEN REDIRECT TO PROFILE PAGE ALWAYS
+  }
   return next();
 });
 
@@ -60,7 +64,7 @@ app.use(bodyParser.json())
 
 const roomRepo = GameRoomsRepository.getInstance();
 
-app.post("/api/newuser", (req, res) => {
+app.post("/api/user", (req, res) => {
   const {session, body: {name}} = req
   const currentUser: IUserDocument = session.passport.user;
   console.log("New user received :" + currentUser.facebookId);
