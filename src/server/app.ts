@@ -73,6 +73,11 @@ app.post("/api/newuser", (req, res) => {
   res.send("OK")
 })
 
+app.get("/api/games", async (req, res) => {
+ const openGames = await roomRepo.getAvailableGames()
+ res.send(openGames);
+})
+
 function initSockets() {
   io.on("connection", (socket: SocketIO.Socket) => {
     const session = getSession(socket.handshake);
@@ -80,23 +85,23 @@ function initSockets() {
 
     let state = null;
 
-    socket.on("fetch-games", () => {
-      socket.emit("update-games", roomRepo.getAvailableGames());
-    });
+    // socket.on("fetch-games", () => {
+    //   socket.emit("update-games", roomRepo.getAvailableGames());
+    // });
 
     socket.on("create-game", (title: string) => {
       roomRepo.createRoom(title, state).then(g => g ? User.addGame(state.id, g.title) : null);
     });
 
-    socket.on("join-game", (roomTitle) => {
-      const game = roomRepo.joinRoom(roomTitle, state);
+    socket.on("join-game", async (roomTitle) => {
+      const game = await roomRepo.joinRoom(roomTitle, state);
       if (game) {
         User.addGame(state.id, game.title);
       }
     });
 
-    socket.on("move", (data) => {
-      const game = roomRepo.getGameRoom(state.currentRoom);
+    socket.on("move", async (data) => {
+      const game = await roomRepo.getGameRoom(state.currentRoom);
       const result = game.move(data.from, data.dest);
       roomRepo.saveGame(game);
 
@@ -108,7 +113,7 @@ function initSockets() {
       }
     });
 
-    if (session.passport.user && session.passport.user.name) {
+    if (session.passport && session.passport.user && session.passport.user.name) {
       const name = session.passport.user.name
       // Skip login view - TODO routing for views and stop abusing sockets for app navigation...
       state = new UserState(name, socket, roomRepo.MainRoom, session.passport.user._id);

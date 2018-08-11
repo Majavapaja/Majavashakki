@@ -20,13 +20,13 @@ class LoginView extends React.Component<any, any> {
         };
 
         // Replace room list when receiving full list of games
-        this.props.socket.on("update-games", (gameRooms: string[]) => {
-            this.setState({
-                showLogin: false,
-                rooms: gameRooms,
-                isLoading: false,
-            });
-        });
+        // this.props.socket.on("update-games", (gameRooms: string[]) => {
+        //     this.setState({
+        //         showLogin: false,
+        //         rooms: gameRooms,
+        //         isLoading: false,
+        //     });
+        // });
 
         // Add new games to list
         this.props.socket.on("game-created", room => {
@@ -66,7 +66,17 @@ class LoginView extends React.Component<any, any> {
                 if (!this.state.username) {
                     this.setState({username});
                 }
-                this.props.socket.emit("fetch-games");
+                // this.props.socket.emit("fetch-games");
+
+                getOpenGames().then((data) => {
+                    console.log(typeof(data))
+                    console.log(data)
+                    this.setState({
+                        showLogin: false,
+                        rooms: data,
+                        isLoading: false,
+                    });
+                })
             })
         }
     }
@@ -154,6 +164,14 @@ function newUserReq(name) {
         url: window.location.origin + "/api/newuser",
         body: {name},
         json: true,
+    })
+}
+
+function getOpenGames() {
+    return request({
+        method: "GET",
+        url: window.location.origin + "/api/games",
+        json: true
     })
 }
 

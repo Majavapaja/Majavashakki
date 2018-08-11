@@ -9,7 +9,6 @@ export class GameRoomsRepository {
     }
     private static instance: GameRoomsRepository = new GameRoomsRepository();
     public MainRoom = "Lobby";
-    private roomStorage: {[name: string]: Game} = {};
     private mongoClient: GameMongoClient = new GameMongoClient();
 
     private constructor() {
@@ -17,7 +16,6 @@ export class GameRoomsRepository {
             throw new Error("The GameRoomRepository is a singleton class and cannot be created!");
         }
         GameRoomsRepository.instance = this;
-        this.getGames();
     }
 
     public async saveGame(game: Game) {
@@ -31,11 +29,12 @@ export class GameRoomsRepository {
      * @fires game-exists - tells user socket if room with given title already exists
      */
     public async createRoom(title: string, creator: UserState): Promise<Game> {
-        if (this.roomStorage[title]) {
+        const games = await this.mongoClient.getGames();
+        if (games[title]) {
             creator.socket.emit("lobby-error", {error: `Room ${title} already exists`});
         } else {
             const newRoom = new Game(title, creator);
-            this.roomStorage[title] = newRoom;
+            games[title] = newRoom;
             await this.mongoClient.saveGame(newRoom);
             creator.joinSocket(title);
             creator.socket.emit("game-joined");
@@ -50,9 +49,10 @@ export class GameRoomsRepository {
      * @fires game-full - tells lobby that room is full and not available anymore
      * @fires game-notAvailable - tells user socket if room does not exist or is full
      */
-    public joinRoom(title: string, user: UserState): Game {
+    public async joinRoom(title: string, user: UserState): Promise<Game> {
+        const games = await this.mongoClient.getGames();
         // TODO check if main room
-        const room = this.roomStorage[title];
+        const room = games[title];
         if (!room) {
             user.socket.emit("lobby-error", {error: `Room ${title} not found`});
         } else if (room.players.length >= 2) {
@@ -66,17 +66,17 @@ export class GameRoomsRepository {
         return room;
     }
 
-    public getAvailableGames(): string[] {
-        const hasSpace = (title) => this.roomStorage[title].players.length < 2;
-        return Object.keys(this.roomStorage).filter(hasSpace);
+    public async getAvailableGames(): Promise<string[]> {
+        // TODO ditch mongo client, use mongoose. Filter query straight for db.
+        const games = await this.mongoClient.getGames();
+        console.log("Games: " + JSON.stringify(games))
+        const hasSpace = (title) => games[title].players.length < 2;
+        return Object.keys(games).filter(hasSpace);
     }
 
-    public getGameRoom(title: string): Game {
+    public async getGameRoom(title: string): Promise<Game> {
         console.log("Get game '" + title + "'");
-        return this.roomStorage[title];
-    }
-
-    private async getGames() {
-        this.roomStorage = await this.mongoClient.getGames();
+        const games = await this.mongoClient.getGames();
+        return games[title];
     }
 }
