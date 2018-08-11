@@ -19,13 +19,6 @@ class LoginView extends React.Component<any, any> {
             inGame: false,
         };
 
-        // Add new games to list
-        this.props.socket.on("game-created", room => {
-            this.setState({
-                rooms: [].concat(this.state.rooms, [room]),
-            });
-        });
-
         // Remove game from list when it becomes full
         this.props.socket.on("game-full", fullRoom => {
             this.setState({
@@ -57,7 +50,6 @@ class LoginView extends React.Component<any, any> {
                 if (!this.state.username) {
                     this.setState({username});
                 }
-                // this.props.socket.emit("fetch-games");
 
                 getOpenGames().then((data) => {
                     console.log(typeof(data))
@@ -80,6 +72,7 @@ class LoginView extends React.Component<any, any> {
                 this.setState({
                     rooms: [...this.state.rooms, game.title],
                 });
+                joinGame(game.title);
             })
         }
     }
@@ -92,8 +85,8 @@ class LoginView extends React.Component<any, any> {
         this.setState({[target.name]: target.value});
     }
 
-    public onRoomClick(room) {
-        this.props.socket.emit("join-game", room);
+    public onRoomClick(gameName: string) {
+        joinGame(gameName);
     }
 
     public renderLoading() {
@@ -174,6 +167,15 @@ function createGame(name) {
     return request({
         method: "POST",
         url: window.location.origin + "/api/games",
+        body: {name},
+        json: true
+    })
+}
+
+function joinGame(name) {
+    return request({
+        method: "POST",
+        url: window.location.origin + "/api/games/join",
         body: {name},
         json: true
     })

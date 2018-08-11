@@ -5,22 +5,28 @@ import {Position} from "../../common/types";
 
 export class Game {
     public title: string;
-    public players: UserState[] = [];
+    public playerIdWhite: string;
+    public playerIdBlack: string;
     public gameState: {board: Board };
 
     constructor(title: string, player?: UserState) {
         this.title = title;
         this.gameState = {board: new Board()};
-        // if (player) {
-        //     this.players.push(player);
-        // }
     }
 
-    public addPlayer(player: UserState) {
-        if (this.players.length === 2) {
-            return false;
+    public isFull(): boolean {
+        return !!this.playerIdWhite && !!this.playerIdBlack;
+    }
+
+    public addPlayer(playerId: string) {
+        if(!this.playerIdWhite) {
+            this.playerIdWhite = playerId;
+        } else if (!this.playerIdBlack) {
+            this.playerIdBlack = playerId;
         }
-        this.players.push(player);
+        else {
+            throw new Error("Paskaa täynnä, ei mahu - shit has hit fan even though it should not be possible, call Avengers")
+        }
         return true;
     }
 

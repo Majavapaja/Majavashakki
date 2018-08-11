@@ -81,27 +81,35 @@ app.get("/api/games", async (req, res) => {
 app.post("/api/games", async (req, res) => {
   const {session, body: {name}} = req
   const game = await roomRepo.createRoom(name)
-  // User.addGame(session.passport.user._id, name)
-  if(!game) {
-    res.status(400).send("Game exists with given name - ask admins to refactor this shit")
-  } else {
-    res.send(game)
-  }
+  const socket = sessionSocketMap[session.id];
+  socket.broadcast.to(this.MainRoom).emit("game-created", game.title);
+  res.send(game)
 })
+
+app.post("/api/games/join", async (req, res) => {
+  const {session, body: {name}} = req
+  const socket = sessionSocketMap[session.id];
+  const userId = session.passport.user._id;
+  const game = await roomRepo.joinRoom(name, userId);
+  await User.addGame(userId, game.title)
+  socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
+  socket.join(name); // TODO we should use game ids
+  socket.emit("game-joined", game.gameState.board.pieces); // TODO return response instead of socket communication
+  if(game.isFull()) {
+    socket.broadcast.to(this.MainRoom).emit("game-full");
+  }
+  res.send(game);
+})
+
+const sessionSocketMap = {};
 
 function initSockets() {
   io.on("connection", (socket: SocketIO.Socket) => {
     const session = getSession(socket.handshake);
     logSession("/socket.io", session);
 
-    let state = null;
-
-    socket.on("join-game", async (roomTitle) => {
-      const game = await roomRepo.joinRoom(roomTitle, state);
-      if (game) {
-        User.addGame(state.id, game.title);
-      }
-    });
+    sessionSocketMap[session.id] = socket;
+    let state: UserState = null;
 
     socket.on("move", async (data) => {
       const game = await roomRepo.getGameRoom(state.currentRoom);
