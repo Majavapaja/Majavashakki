@@ -6,6 +6,8 @@ import Divider from "material-ui/Divider";
 
 // TODO: Maybe split login/lobby
 
+import * as request from "request-promise";
+
 class LoginView extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
@@ -16,15 +18,6 @@ class LoginView extends React.Component<any, any> {
             rooms: [],
             inGame: false,
         };
-
-        // User has logged in. Switch the page to room selection.
-        this.props.socket.on("login", (username: string) => {
-            this.setState({isLoading: true});
-            if (!this.state.username) {
-                this.setState({username});
-            }
-            this.props.socket.emit("fetch-games");
-        });
 
         // Replace room list when receiving full list of games
         this.props.socket.on("update-games", (gameRooms: string[]) => {
@@ -67,7 +60,14 @@ class LoginView extends React.Component<any, any> {
         this.setState({isLoading: true});
         const username = this.cleanInput(this.state.username);
         if (username) {
-            this.props.socket.emit("new user", username);
+            newUserReq(username).then(() => {
+                // User has logged in. Switch the page to room selection.
+                this.setState({isLoading: true});
+                if (!this.state.username) {
+                    this.setState({username});
+                }
+                this.props.socket.emit("fetch-games");
+            })
         }
     }
 
@@ -146,6 +146,15 @@ class LoginView extends React.Component<any, any> {
             );
         }
     }
+}
+
+function newUserReq(name) {
+    return request({
+        method: "POST",
+        url: window.location.origin + "/api/newuser",
+        body: {name},
+        json: true,
+    })
 }
 
 export default LoginView;

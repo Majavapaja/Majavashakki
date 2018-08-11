@@ -9,6 +9,8 @@
   "dependencies": {
     "@types/express-session": "1.15.10",
     "@types/material-ui": "0.21.5",
+    "@types/request-promise": "4.1.42",
+    "body-parser": "1.18.3",
     "check-node-version": "3.2.0",
     "connect-mongo": "2.0.1",
     "express": "4.16.3",
@@ -23,6 +25,8 @@
     "passport-local": "^1.0.0",
     "react": "16.4.2",
     "react-dom": "16.4.2",
+    "request": "2.88.0",
+    "request-promise": "4.2.2",
     "socket.io": "2.1.1",
     "socket.io-client": "2.1.1"
   },

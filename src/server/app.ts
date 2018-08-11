@@ -1,6 +1,7 @@
 import * as http from "http";
 import {resolve} from "path";
 
+import * as bodyParser from "body-parser";
 import * as express from "express";
 import * as passport from "passport";
 import {Strategy as FbStrategy} from "passport-facebook";
@@ -11,7 +12,6 @@ import {User, IUserDocument} from "./data/User";
 
 import {Game} from "./entities/GameRoom";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
-import {UserStatesRepository} from "./logic/UserStatesRepository";
 import {enableSessions, getSession} from "./session";
 import {copy} from "../common/util";
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
@@ -58,11 +58,20 @@ const server = http.createServer(app);
 io.attach(server);
 
 app.use(express.static(resolve(__dirname, "../../dist")));
+app.use(bodyParser.json())
 
 const roomRepo = GameRoomsRepository.getInstance();
-const userStateRepo = UserStatesRepository.getInstance();
 
 import {UserState} from "./entities/UserState";
+
+app.post("/api/newuser", (req, res) => {
+  const {session, body: {name}} = req
+  const currentUser: IUserDocument = session.passport.user;
+  console.log("New user received :" + currentUser.facebookId);
+  User.updateName(currentUser._id, name);
+  currentUser.name = name;
+  res.send("OK")
+})
 
 function initSockets() {
   io.on("connection", (socket: SocketIO.Socket) => {
@@ -70,18 +79,6 @@ function initSockets() {
     logSession("/socket.io", session);
 
     let state = null;
-
-    // User has logged in and entered username
-    // Creates user state and updates name in database
-    socket.on("new user", (username: string) => {
-      const currentUser: IUserDocument = session.passport.user;
-      console.log("New user received :" + currentUser.facebookId);
-      User.updateName(currentUser._id, username);
-      currentUser.name = username;
-      state = new UserState(currentUser.name, socket, roomRepo.MainRoom, currentUser._id);
-      // Tell client to ditch login page and render hello msg
-      socket.emit("login", username);
-    });
 
     socket.on("fetch-games", () => {
       socket.emit("update-games", roomRepo.getAvailableGames());
