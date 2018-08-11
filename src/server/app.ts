@@ -62,10 +62,14 @@ app.use(express.static(resolve(__dirname, "../../dist")));
 const roomRepo = GameRoomsRepository.getInstance();
 const userStateRepo = UserStatesRepository.getInstance();
 
+import {UserState} from "./entities/UserState";
+
 function initSockets() {
   io.on("connection", (socket: SocketIO.Socket) => {
     const session = getSession(socket.handshake);
     logSession("/socket.io", session);
+
+    let state = null;
 
     // User has logged in and entered username
     // Creates user state and updates name in database
@@ -74,7 +78,9 @@ function initSockets() {
       console.log("New user received :" + currentUser.facebookId);
       User.updateName(currentUser._id, username);
       currentUser.name = username;
-      userStateRepo.createUser(username, socket, roomRepo.MainRoom, currentUser._id);
+      state = new UserState(currentUser.name, socket, roomRepo.MainRoom, currentUser._id);
+      // Tell client to ditch login page and render hello msg
+      socket.emit("login", username);
     });
 
     socket.on("fetch-games", () => {
@@ -82,12 +88,10 @@ function initSockets() {
     });
 
     socket.on("create-game", (title: string) => {
-      const state = userStateRepo.getState(socket.id);
       roomRepo.createRoom(title, state).then(g => g ? User.addGame(state.id, g.title) : null);
     });
 
     socket.on("join-game", (roomTitle) => {
-      const state = userStateRepo.getState(socket.id);
       const game = roomRepo.joinRoom(roomTitle, state);
       if (game) {
         User.addGame(state.id, game.title);
@@ -95,7 +99,7 @@ function initSockets() {
     });
 
     socket.on("move", (data) => {
-      const game = roomRepo.getGameRoom(userStateRepo.getState(socket.id).currentRoom);
+      const game = roomRepo.getGameRoom(state.currentRoom);
       const result = game.move(data.from, data.dest);
       roomRepo.saveGame(game);
 
@@ -108,8 +112,10 @@ function initSockets() {
     });
 
     if (session.passport.user && session.passport.user.name) {
+      const name = session.passport.user.name
       // Skip login view - TODO routing for views and stop abusing sockets for app navigation...
-      userStateRepo.createUser(session.passport.user.name, socket, roomRepo.MainRoom, session.passport.user._id);
+      state = new UserState(name, socket, roomRepo.MainRoom, session.passport.user._id);
+      socket.emit("login", name);
     }
   });
 }
