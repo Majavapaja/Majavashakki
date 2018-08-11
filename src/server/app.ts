@@ -112,7 +112,8 @@ function initSockets() {
     let state: UserState = null;
 
     socket.on("move", async (data) => {
-      const game = await roomRepo.getGameRoom(state.currentRoom);
+      const currentRoom = Object.keys(socket.rooms)[0] // TODO Move room data into some smart structure inside session when its needed (not yet)
+      const game = await roomRepo.getGameRoom(currentRoom);
       const result = game.move(data.from, data.dest);
       roomRepo.saveGame(game);
 
