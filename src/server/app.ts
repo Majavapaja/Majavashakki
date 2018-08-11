@@ -62,8 +62,6 @@ app.use(bodyParser.json())
 
 const roomRepo = GameRoomsRepository.getInstance();
 
-import {UserState} from "./entities/UserState";
-
 app.post("/api/newuser", (req, res) => {
   const {session, body: {name}} = req
   const currentUser: IUserDocument = session.passport.user;
@@ -95,7 +93,7 @@ app.post("/api/games/join", async (req, res) => {
   socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
   socket.join(name); // TODO we should use game ids
   socket.emit("game-joined", game.gameState.board.pieces); // TODO return response instead of socket communication
-  if(game.isFull()) {
+  if (game.isFull()) {
     socket.broadcast.to(this.MainRoom).emit("game-full");
   }
   res.send(game);
@@ -107,9 +105,7 @@ function initSockets() {
   io.on("connection", (socket: SocketIO.Socket) => {
     const session = getSession(socket.handshake);
     logSession("/socket.io", session);
-
     sessionSocketMap[session.id] = socket;
-    let state: UserState = null;
 
     socket.on("move", async (data) => {
       const currentRoom = Object.keys(socket.rooms)[0] // TODO Move room data into some smart structure inside session when its needed (not yet)
@@ -124,13 +120,6 @@ function initSockets() {
           return io.to(game.title).emit("move_result", result);
       }
     });
-
-    if (session.passport && session.passport.user && session.passport.user.name) {
-      const name = session.passport.user.name
-      // Skip login view - TODO routing for views and stop abusing sockets for app navigation...
-      state = new UserState(name, socket, roomRepo.MainRoom, session.passport.user._id);
-      socket.emit("login", name);
-    }
   });
 }
 

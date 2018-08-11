@@ -1,6 +1,5 @@
 import Board from "../entities/Board";
 import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol";
-import {UserState} from "./UserState";
 import {Position} from "../../common/types";
 
 export class Game {
@@ -9,7 +8,7 @@ export class Game {
     public playerIdBlack: string;
     public gameState: {board: Board };
 
-    constructor(title: string, player?: UserState) {
+    constructor(title: string) {
         this.title = title;
         this.gameState = {board: new Board()};
     }
@@ -19,12 +18,11 @@ export class Game {
     }
 
     public addPlayer(playerId: string) {
-        if(!this.playerIdWhite) {
+        if (!this.playerIdWhite) {
             this.playerIdWhite = playerId;
         } else if (!this.playerIdBlack) {
             this.playerIdBlack = playerId;
-        }
-        else {
+        } else {
             throw new Error("Paskaa täynnä, ei mahu - shit has hit fan even though it should not be possible, call Avengers")
         }
         return true;

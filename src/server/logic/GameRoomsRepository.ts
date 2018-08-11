@@ -1,5 +1,4 @@
 import {Game} from "../entities/GameRoom";
-import {UserState} from "../entities/UserState";
 import {GameMongoClient} from "../data/GameMongoClient";
 import * as _ from "lodash";
 
