@@ -2,15 +2,16 @@ import AppBar from "material-ui/AppBar";
 import GameView from "./gameview";
 import makeInitialState from "../common/initial-state";
 import LoginView from "./LoginView";
+import LobbyView from "./LobbyView";
 import * as React from "react";
 import { Route } from "react-router-dom";
 
-export default ({socket}) => (
+export default ({ socket }) => (
   <div>
     <AppBar title={"Majavashakki"} />
     <Route
       exact
-      path='/'
+      path='/login'
       render={() => (
         <LoginView socket={socket} />
       )}
@@ -22,6 +23,14 @@ export default ({socket}) => (
       render={() => (
         <GameView socket={socket} pieces={makeInitialState()} />
       )}
-      />
+    />
+
+    <Route
+      exact
+      path='/'
+      render={() => (
+        <LobbyView socket={socket} />
+      )}
+    />
   </div>
 );

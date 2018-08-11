@@ -35,19 +35,17 @@ app.use((req, res, next) => {
   next();
 });
 
-// Mitä tää tekee? :)
 app.use(passport.initialize());
-
 app.use(passport.session());
 
 app.get("/", (req, res, next) => {
   if (!req.isAuthenticated()) {
-    return res.redirect("/login");
+    return res.redirect("/login", );
   }
   return next();
 });
 
-app.get("/login",
+app.get("/authFacebook",
  passport.authenticate("facebook", { failureRedirect: "/error" }),
  (req, res) => { // Successful authentication, redirect home.
    res.redirect("/");
@@ -131,7 +129,7 @@ function initPassport(appUrl: string) {
     new FbStrategy({
       clientID: process.env.MajavashakkiFbClientId,
       clientSecret: process.env.MajavashakkiFbSecret,
-      callbackURL: appUrl + "/login",
+      callbackURL: appUrl + "/authFacebook",
     },
     (accessToken, refreshToken, profile, done) => {
       console.log(`User '${profile.displayName}' logged in successfully.`);
@@ -159,6 +157,10 @@ function initPassport(appUrl: string) {
   //   }
   // ));
 }
+
+app.get("*", (req, res, next) => {
+  res.sendFile(resolve(__dirname, "../../dist/index.html"));
+})
 
 export const start = port => {
   server.listen(port, () => {
