@@ -1,4 +1,5 @@
 import * as React from "react";
+import { withRouter } from "react-router-dom";
 import CircularProgress from "material-ui/CircularProgress";
 import TextField from "material-ui/TextField";
 import {List, ListItem} from "material-ui/List";
@@ -31,11 +32,7 @@ class LoginView extends React.Component<any, any> {
         });
 
         this.props.socket.on("game-joined", () => {
-          this.setState({inGame: true});
-
-          // FIXME: Not idiomatic way but what you gonna do
-          const gamePage = document.querySelector(".game.page") as HTMLElement;
-          gamePage.style.display = "block";
+          this.props.history.push('/game')
         });
     }
 
@@ -181,4 +178,4 @@ function joinGame(name) {
     })
 }
 
-export default LoginView;
+export default withRouter(LoginView);
