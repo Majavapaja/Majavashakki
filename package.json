@@ -32,10 +32,10 @@
   },
   "scripts": {
     "dev": "npm-run-all --parallel watch:client watch:server",
-    "watch:client": "parcel watch src/client/index.html --public-url '/'",
+    "watch:client": "parcel watch src/client/index.html --public-url /",
     "watch:server": "nodemon --watch src --watch public --ext ts,tsx app.js",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "start": "NODE_ENV=production parcel build src/client/index.html --public-url '/' && NODE_ENV=production node app.js",
+    "start": "NODE_ENV=production parcel build src/client/index.html --public-url / && NODE_ENV=production node app.js",
     "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.spec.ts"
   },
   "devDependencies": {
