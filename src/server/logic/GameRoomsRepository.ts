@@ -28,17 +28,17 @@ export class GameRoomsRepository {
      * @fires game-created - tells lobby that new room is available
      * @fires game-exists - tells user socket if room with given title already exists
      */
-    public async createRoom(title: string, creator: UserState): Promise<Game> {
+    public async createRoom(title: string): Promise<Game> {
         const games = await this.mongoClient.getGames();
         if (games[title]) {
-            creator.socket.emit("lobby-error", {error: `Room ${title} already exists`});
+            return null;
         } else {
-            const newRoom = new Game(title, creator);
-            games[title] = newRoom;
+            const newRoom = new Game(title);
+            // games[title] = newRoom;
             await this.mongoClient.saveGame(newRoom);
-            creator.joinSocket(title);
-            creator.socket.emit("game-joined");
-            creator.socket.broadcast.to(this.MainRoom).emit("game-created", newRoom.title);
+            // creator.joinSocket(title);
+            // creator.socket.emit("game-joined");
+            // creator.socket.broadcast.to(this.MainRoom).emit("game-created", newRoom.title);
             return newRoom;
         }
     }

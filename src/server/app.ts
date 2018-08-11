@@ -74,8 +74,19 @@ app.post("/api/newuser", (req, res) => {
 })
 
 app.get("/api/games", async (req, res) => {
- const openGames = await roomRepo.getAvailableGames()
+ const openGames = await roomRepo.getAvailableGames();
  res.send(openGames);
+});
+
+app.post("/api/games", async (req, res) => {
+  const {session, body: {name}} = req
+  const game = await roomRepo.createRoom(name)
+  // User.addGame(session.passport.user._id, name)
+  if(!game) {
+    res.status(400).send("Game exists with given name - ask admins to refactor this shit")
+  } else {
+    res.send(game)
+  }
 })
 
 function initSockets() {
@@ -84,14 +95,6 @@ function initSockets() {
     logSession("/socket.io", session);
 
     let state = null;
-
-    // socket.on("fetch-games", () => {
-    //   socket.emit("update-games", roomRepo.getAvailableGames());
-    // });
-
-    socket.on("create-game", (title: string) => {
-      roomRepo.createRoom(title, state).then(g => g ? User.addGame(state.id, g.title) : null);
-    });
 
     socket.on("join-game", async (roomTitle) => {
       const game = await roomRepo.joinRoom(roomTitle, state);

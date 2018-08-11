@@ -19,15 +19,6 @@ class LoginView extends React.Component<any, any> {
             inGame: false,
         };
 
-        // Replace room list when receiving full list of games
-        // this.props.socket.on("update-games", (gameRooms: string[]) => {
-        //     this.setState({
-        //         showLogin: false,
-        //         rooms: gameRooms,
-        //         isLoading: false,
-        //     });
-        // });
-
         // Add new games to list
         this.props.socket.on("game-created", room => {
             this.setState({
@@ -83,9 +74,13 @@ class LoginView extends React.Component<any, any> {
 
     public onSubmitNewRoom(event) {
         event.preventDefault();
-        const room = this.cleanInput(this.state.newRoomName);
-        if (room) {
-            this.props.socket.emit("create-game", room);
+        const gameName = this.cleanInput(this.state.newRoomName);
+        if (gameName) {
+            createGame(gameName).then((game) => {
+                this.setState({
+                    rooms: [...this.state.rooms, game.title],
+                });
+            })
         }
     }
 
@@ -171,6 +166,15 @@ function getOpenGames() {
     return request({
         method: "GET",
         url: window.location.origin + "/api/games",
+        json: true
+    })
+}
+
+function createGame(name) {
+    return request({
+        method: "POST",
+        url: window.location.origin + "/api/games",
+        body: {name},
         json: true
     })
 }

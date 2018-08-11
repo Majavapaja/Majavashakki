@@ -11,9 +11,9 @@ export class Game {
     constructor(title: string, player?: UserState) {
         this.title = title;
         this.gameState = {board: new Board()};
-        if (player) {
-            this.players.push(player);
-        }
+        // if (player) {
+        //     this.players.push(player);
+        // }
     }
 
     public addPlayer(player: UserState) {
