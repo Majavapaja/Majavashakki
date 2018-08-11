@@ -13,8 +13,7 @@
                 "${workspaceFolder}/dist/**/*.js"
             ],
             "protocol":"inspector",
-            "sourceMaps":true,
-            "preLaunchTask":"npm: dev"
+            "sourceMaps":true
         }
     ]
 }
