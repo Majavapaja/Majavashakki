@@ -169,7 +169,7 @@ app.get("*", (req, res, next) => {
 
 export const start = port => {
   server.listen(port, () => {
-    console.log("Server listening at port %d", port);
+    console.log(`Server listening at port ${port}`);
   });
   return server;
 };
