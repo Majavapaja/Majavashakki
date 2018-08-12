@@ -1,4 +1,4 @@
-import AppBar from "material-ui/AppBar";
+import NavigationBar from "./NavigationBar";
 import GameView from "./gameview";
 import makeInitialState from "../common/initial-state";
 import LoginView from "./LoginView";
@@ -9,10 +9,10 @@ import { Route } from "react-router-dom";
 
 export default ({ socket }) => (
   <div>
-    <AppBar title={"Majavashakki"} />
+    <NavigationBar />
     <Route
-      exact
-      path='/login'
+      exact={true}
+      path="/login"
       render={() => (
         <LoginView socket={socket} />
       )}

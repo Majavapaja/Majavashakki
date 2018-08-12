@@ -9,7 +9,7 @@ class LoginView extends React.Component {
 
     public render() {
         return (
-            <RaisedButton label="Facebook" href="/authFacebook"></RaisedButton>
+            <RaisedButton label="Facebook" href="/authFacebook" />
         );
     }
 }

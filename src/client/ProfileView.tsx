@@ -1,9 +1,6 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
-import CircularProgress from "material-ui/CircularProgress";
 import TextField from "material-ui/TextField";
-import Divider from "material-ui/Divider";
-import RaisedButton from "material-ui/RaisedButton";
 import * as request from "request-promise";
 
 // TODO an actual view with some reasonable ui and more fields! email! password! whoa, very much data, so doge
@@ -26,11 +23,11 @@ class ProfileView extends React.Component<any, any> {
     )
   }
 
-  onInputChange = ({target}) => {
+  public onInputChange = ({target}) => {
       this.setState({[target.name]: target.value});
   }
 
-  onSubmitLogin = (event) => {
+  public onSubmitLogin = (event) => {
     event.preventDefault();
     const username = this.cleanInput(this.state.username);
     if (username) {
