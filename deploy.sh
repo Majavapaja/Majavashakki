@@ -5,7 +5,7 @@ set -o errexit -o nounset -o pipefail
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 if [ ! -d "$repo/deployment/.venv" ]; then
-  virtualenv --python "$(which python3)" "$repo/deployment/.venv"
+  python3 -m venv "$repo/deployment/.venv"
 fi
 
 set +o nounset

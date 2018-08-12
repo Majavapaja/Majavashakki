@@ -9,12 +9,11 @@ if [ -z "$DEPLOYER_PRIVATE_GPG_KEY_BASE64" ]; then
   exit 1
 fi
 
+apt-get update
+apt-get install -y git gnupg python3-pip python3-venv
+
 echo $DEPLOYER_PRIVATE_GPG_KEY_BASE64 | base64 --decode > private.key
 gpg --import private.key
 rm -f private.key
 
-apt-get update
-apt-get install -y python3-venv
-
-pip3 install -r ./deployment/requirements.txt
 ./deploy.sh
