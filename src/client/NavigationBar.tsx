@@ -6,7 +6,7 @@ import MenuItem from "material-ui/MenuItem";
 import FlatButton from "material-ui/FlatButton";
 import Toggle from "material-ui/Toggle";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 class Login extends React.Component {
   private static muiName = "FlatButton";
@@ -51,6 +51,10 @@ class NavigationBar extends React.Component<any, any> {
     this.setState({logged});
   };
 
+  public navigateToMain = (event: any) => {
+    this.props.history.push("/")
+  }
+
   public render() {
     return (
       <div>
@@ -62,7 +66,9 @@ class NavigationBar extends React.Component<any, any> {
           style={{margin: 20}}
         />
         <AppBar
-          title="Majavashakki"
+          title={<span onClick={this.navigateToMain} style={{cursor: "pointer"}}>Majavashakki</span>}
+          // titleStyle={{cursor: "pointer"}}
+          // onTitleClick={this.navigateToMain}
           showMenuIconButton={false}
           iconElementRight={this.state.logged ? <Logged /> : <Login />}
         />
@@ -71,4 +77,4 @@ class NavigationBar extends React.Component<any, any> {
   }
 }
 
-export default NavigationBar;
+export default withRouter(NavigationBar);
