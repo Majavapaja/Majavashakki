@@ -16,6 +16,7 @@ export interface IUserDocument extends IUser, Document {
   // join sockets?
   // do the twist?
   logMe(greeting: string);
+  isProfileComplete(): boolean;
   validatePassword(password: string);
 }
 
@@ -23,6 +24,7 @@ export interface IUserModel extends Model<IUserDocument> {
   findOrCreate(facebookId: string): Promise<IUserDocument>;
   updateName(id: string|ObjectID, name: string);
   addGame(userId: string, gameName: string): Promise<void>;
+  validProfile(user: IUserDocument): boolean;
 }
 
 const options: SchemaOptions = {timestamps: true};
@@ -39,6 +41,14 @@ UserSchema.pre("save", (next) => {
   // Hash / Salt 'n' shit?
   next();
 });
+
+// Statics can be called straight from the model (find, search, create)
+
+// TODO passport session doesn't get methods set by mongoose for IUserDocument instances via UserSchema.methods...
+// unclear, if functions can be serialized / deserialized for passport session at all
+UserSchema.statics.validProfile = (user: IUserDocument): boolean => {
+  return !!user.name;
+}
 
 UserSchema.statics.findOrCreate = async (facebookId: string) => {
   const userObj = new User();
@@ -78,7 +88,7 @@ UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
   if (!user.games) {
     user.games = [];
   }
-  if (user.games.indexOf(gameTitle) != -1) {
+  if (user.games.indexOf(gameTitle) !== -1) {
     console.log("Game already added, skipping");
     return;
   }
@@ -89,8 +99,18 @@ UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
 
 }
 
-UserSchema.methods.logMe = (greeting: string) => {
-  console.log(`${greeting}, my name is: ${this.name}`);
+// Methods are used for instance of items
+UserSchema.methods.logMe = function logMe(greeting: string) {
+  const self = this as IUserDocument;
+  console.log(`${greeting}, my name is: ${self.name}`);
 };
+
+// WHY ARE THESE NOT APPLIED FOR USER OBJECT IN PASSPORT SESSION !? WHO AND WHEN IS THAT BASTARD GIVEN FOR PASSPORT?
+// IN passport.serialize we are already missing these methods. HOW DOES PASSPORT FETCH THE USER OBJECT?
+UserSchema.methods.isProfileComplete = function isProfileComplete() {
+  // TODO later on email
+  const self = this as IUserDocument;
+  return !!self.name;
+}
 
 export const User: IUserModel = model<IUserDocument, IUserModel>("User", UserSchema);

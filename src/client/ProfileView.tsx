@@ -37,7 +37,7 @@ class ProfileView extends React.Component<any, any> {
       // Add separate button to navigate away from profile view? "back to lobby"
       update(username).then(() => {
         // User has logged in. Switch the page to room selection.
-        this.props.history.push("/lobby");
+        this.props.history.push("/");
       })
     }
   }

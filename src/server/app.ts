@@ -41,11 +41,9 @@ app.use(passport.session());
 app.get("/", (req, res, next) => {
   if (!req.isAuthenticated()) {
     return res.redirect("/login");
-  }  else {
-    // TODO check if user has setup required initial profile information
-    // -> IF PROFILE IS NOT SET, THEN REDIRECT TO PROFILE PAGE ALWAYS
   }
-  return next();
+  const session = getSession(req)
+  return User.validProfile(session.passport.user) ? next() : res.redirect("/profile");
 });
 
 app.get("/authFacebook",
@@ -125,8 +123,12 @@ function initSockets() {
 }
 
 function initPassport(appUrl: string) {
-  passport.serializeUser((user, done) => done(null, user));
-  passport.deserializeUser((obj, done) => done(null, obj));
+  passport.serializeUser((user, done) =>
+    done(null, user)
+  );
+  passport.deserializeUser((obj, done) =>
+    done(null, obj)
+  );
 
   passport.use(
     new FbStrategy({
