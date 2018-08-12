@@ -56,19 +56,11 @@ async def main():
     )
   ).result()
 
-  try:
-    pub_cred = web_client.web_apps.list_publishing_credentials(RESOURCE_GROUP_NAME, site_name).result()
-    git_url = mk_git_url(site_name, pub_cred)
-    log.info("Adding deployment remote")
-    p = await asyncio.create_subprocess_exec("git", "remote", "add", "deployment", git_url)
-    await p.wait()
-    log.info("Pushing code to App Service")
-    p = await asyncio.create_subprocess_exec("git", "push", "--force", "deployment", "HEAD")
-    await p.wait()
-  finally:
-    log.info("Cleaning up deployment remote")
-    p = await asyncio.create_subprocess_exec("git", "remote", "remove", "deployment")
-    await p.wait()
+  log.info("Pushing code to App Service")
+  pub_cred = web_client.web_apps.list_publishing_credentials(RESOURCE_GROUP_NAME, site_name).result()
+  git_url = mk_git_url(site_name, pub_cred)
+  p = await asyncio.create_subprocess_exec("git", "push", "--force", git_url, "HEAD:master")
+  await p.wait()
 
   log.info("Done")
 
