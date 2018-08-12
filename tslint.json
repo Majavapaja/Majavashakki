@@ -6,6 +6,8 @@
     ],
     "jsRules": {},
     "rules": {
+	  "semicolon": false,
+	  "trailing-comma": false,
 	  "indent": [true, "spaces"],
       "object-literal-sort-keys": false,
       "curly": [true, "ignore-same-line"],

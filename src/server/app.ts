@@ -40,9 +40,8 @@ app.use(passport.session());
 
 app.get("/", (req, res, next) => {
   if (!req.isAuthenticated()) {
-    return res.redirect("/login", );
-  }
-  else {
+    return res.redirect("/login");
+  }  else {
     // TODO check if user has setup required initial profile information
     // -> IF PROFILE IS NOT SET, THEN REDIRECT TO PROFILE PAGE ALWAYS
   }
