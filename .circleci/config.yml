@@ -1,0 +1,13 @@
+---
+version: 2
+
+jobs:
+  build:
+    branches:
+      only:
+        - master
+    docker:
+      - image: ubuntu:18.04
+    steps:
+      - checkout
+      - run: ./.circleci/circleci.sh
