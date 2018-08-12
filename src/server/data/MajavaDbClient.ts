@@ -8,10 +8,10 @@ if (process.env.MajavashakkiMongoConnectionString) {
     .replace(process.env.MajavaMongoPassword, encodeURIComponent(process.env.MajavaMongoPassword))
 }
 
-console.log("Connectiong to Mongo:", connectionString)
+console.log("MajavaDbClient connecting")
 const clientPromise = MongoClient.connect(connectionString)
   .then(client => {
-    console.log("Connected to Mongo url", connectionString)
+    console.log("MajavaDbClient connected")
     return client
   })
 

@@ -10,7 +10,7 @@ if (process.env.MajavashakkiMongoConnectionString) {
 
 export class MongooseClient {
   public static InitMongoConnection() {
-    console.log("Mongoose connecting to ", connectionString)
+    console.log("MongooseClient connecting")
     mongoose.connect(connectionString, {dbName: "Majavashakki"});
     mongoose.set("debug", true);
 
@@ -24,7 +24,7 @@ export class MongooseClient {
   private static initDefaultHooks() {
     // https://medium.com/@vsvaibhav2016/best-practice-of-mongoose-connection-with-mongodb-c470608483f0
     mongoose.connection.on("connected", () => {
-      console.log("Mongoose default connection is open to ", connectionString);
+      console.log("MongooseClient connected")
     });
 
     mongoose.connection.on("error", (err) => {
