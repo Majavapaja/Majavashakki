@@ -21,11 +21,11 @@ class LobbyView extends React.Component<any, any> {
         });
 
         this.props.socket.on("game-joined", () => {
-          this.props.history.push('/game')
+          this.props.history.push("/game");
         });
     }
 
-    componentDidMount() {
+    public componentDidMount() {
         getOpenGames().then((games) => {
             this.setState({
                 rooms: games,
@@ -42,7 +42,7 @@ class LobbyView extends React.Component<any, any> {
                     rooms: [...this.state.rooms, game.title],
                 });
                 joinGame(game.title);
-            })
+            });
         }
     }
 
@@ -71,7 +71,7 @@ class LobbyView extends React.Component<any, any> {
                     Please, join existing game or create a new one.
                 </h2>
                 <List>
-                    {this.state.rooms.map(room => [<ListItem key={room} onClick={onRoomClick(room)}>{room}</ListItem>, <Divider />])}
+                    {this.state.rooms.map(room => [<ListItem key={room} onClick={onRoomClick(room)}>{room}</ListItem>, <Divider key={"divider-" + room} />])}
                 </List>
                 {this.state.error && <p>Error: {this.state.error}</p>}
                 <div className="newRoomArea">
@@ -93,8 +93,8 @@ function getOpenGames() {
     return request({
         method: "GET",
         url: window.location.origin + "/api/games",
-        json: true
-    })
+        json: true,
+    });
 }
 
 function createGame(name) {
@@ -102,8 +102,8 @@ function createGame(name) {
         method: "POST",
         url: window.location.origin + "/api/games",
         body: {name},
-        json: true
-    })
+        json: true,
+    });
 }
 
 function joinGame(name) {
@@ -111,8 +111,8 @@ function joinGame(name) {
         method: "POST",
         url: window.location.origin + "/api/games/join",
         body: {name},
-        json: true
-    })
+        json: true,
+    });
 }
 
 export default withRouter(LobbyView);
