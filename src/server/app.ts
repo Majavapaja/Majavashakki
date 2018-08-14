@@ -38,20 +38,23 @@ app.use((req, res, next) => {
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.get("/", (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    return res.redirect("/login");
-  }
+const uiAuth = requireAuth((req, res, next) =>
+  res.redirect("/login"))
+
+const apiAuth = requireAuth((req, res, next) =>
+  res.status(401).send({error: "Login required"}))
+
+app.get("/", uiAuth, (req, res, next) => {
   const session = getSession(req)
   return User.validProfile(session.passport.user) ? next() : res.redirect("/profile");
 });
 
 app.get("/authFacebook",
- passport.authenticate("facebook", { failureRedirect: "/error" }),
- (req, res) => { // Successful authentication, redirect home.
-   res.redirect("/");
-  }
-);
+  passport.authenticate("facebook", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+  })
+)
 
 const server = http.createServer(app);
 io.attach(server);
@@ -61,7 +64,7 @@ app.use(bodyParser.json())
 
 const roomRepo = GameRoomsRepository.getInstance();
 
-app.post("/api/user", (req, res) => {
+app.post("/api/user", apiAuth, (req, res) => {
   const {session, body: {name}} = req
   const currentUser: IUserDocument = session.passport.user;
   console.log("New user received :" + currentUser.facebookId);
@@ -70,12 +73,12 @@ app.post("/api/user", (req, res) => {
   res.send("OK")
 })
 
-app.get("/api/games", async (req, res) => {
+app.get("/api/games", apiAuth, async (req, res) => {
  const openGames = await roomRepo.getAvailableGames();
  res.send(openGames);
 });
 
-app.post("/api/games", async (req, res) => {
+app.post("/api/games", apiAuth, async (req, res) => {
   const {session, body: {name}} = req
   const game = await roomRepo.createRoom(name)
   const socket = sessionSocketMap[session.id];
@@ -83,7 +86,7 @@ app.post("/api/games", async (req, res) => {
   res.send(game)
 })
 
-app.post("/api/games/join", async (req, res) => {
+app.post("/api/games/join", apiAuth, async (req, res) => {
   const {session, body: {name}} = req
   const socket = sessionSocketMap[session.id];
   const userId = session.passport.user._id;
@@ -123,27 +126,26 @@ function initSockets() {
 }
 
 function initPassport(appUrl: string) {
-  passport.serializeUser((user, done) =>
-    done(null, user)
-  );
-  passport.deserializeUser((obj, done) =>
-    done(null, obj)
-  );
+  passport.serializeUser((user, done) => done(null, user))
+  passport.deserializeUser((obj, done) => done(null, obj))
 
-  passport.use(
-    new FbStrategy({
+  passport.use(new FbStrategy({
       clientID: process.env.MajavashakkiFbClientId,
       clientSecret: process.env.MajavashakkiFbSecret,
       callbackURL: appUrl + "/authFacebook",
     },
-    (accessToken, refreshToken, profile, done) => {
-      console.log(`User '${profile.displayName}' logged in successfully.`);
-      User.findOrCreate(profile.id).then((user) => {
-        user.logMe("kekkeli");
-        process.nextTick(() => done(null, user));
-      });
-    },
-  ));
+    async (accessToken, refreshToken, profile, done) => {
+      console.log(`User '${profile.displayName}' logged in successfully.`)
+      try {
+        const user = await User.findOrCreate(profile.id)
+        console.log(user)
+        user.logMe("kekkeli")
+        done(null, user)
+      } catch (err) {
+        done(err)
+      }
+    }
+  ))
 
   // passport.use(
   //   new LocalStrategy((email, password, done) => {
@@ -163,9 +165,27 @@ function initPassport(appUrl: string) {
   // ));
 }
 
-app.get("*", (req, res, next) => {
-  res.sendFile(resolve(__dirname, "../../dist/index.html"));
+// XXX: Not yet accessible in UI
+app.get("/logout", (req, res) => {
+  req.logout()
+  res.redirect("/")
 })
+app.get("/login", serveUI)
+app.get("*", uiAuth, serveUI)
+
+function serveUI(req, res) {
+  res.sendFile(resolve(__dirname, "../../dist/index.html"));
+}
+
+function requireAuth(onFailure) {
+  return function(req, res, next) {
+    if (req.isAuthenticated()) {
+      next()
+    } else {
+      onFailure(req, res, next)
+    }
+  }
+}
 
 export const start = port => {
   server.listen(port, () => {
