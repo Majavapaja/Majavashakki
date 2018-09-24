@@ -1,6 +1,11 @@
 # Mursushakki
 The amazing sequel to the fantastic Majavashakki. With this new version we are planning to add several new bugs and more unreadable code!
 
+## Aukioloajat
+MA-PE 17-18
+LA 15-16
+SU Suljettu
+
 ### Install MongoDB using Vagrant ###
 
 1. Install Virtual Box and Vagrant
@@ -25,7 +30,7 @@ systemLog:
 storage:
  dbPath: C:\MongoData\db
  )
- 
+
  3. Run from administrator cmd (from mongo installation bin folder or if env var exists)
- 
+
  mongod.exe --config "C:\MongoData\mongod.cfg" --install
