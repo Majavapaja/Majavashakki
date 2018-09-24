@@ -7,6 +7,7 @@
   "private": true,
   "license": "BSD",
   "dependencies": {
+    "@material-ui/core": "^3.1.1",
     "@types/express-session": "1.15.10",
     "@types/material-ui": "0.21.5",
     "@types/react-router-dom": "^4.3.0",
@@ -35,10 +36,10 @@
   "scripts": {
     "npm-check": "npm-check --skip-unused",
     "dev": "npm-run-all --parallel watch:client watch:server",
-    "watch:client": "parcel watch src/client/index.html --public-url /",
+    "watch:client": "npx parcel watch src/client/index.html --public-url /",
     "watch:server": "nodemon --watch src --watch public --ext ts,tsx app.js",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
-    "build": "parcel build src/client/index.html --public-url /",
+    "build": "npx parcel build src/client/index.html --public-url /",
     "start": "node app.js",
     "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.spec.ts"
   },
