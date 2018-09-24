@@ -2,12 +2,16 @@ import { MongoClient, Collection } from "mongodb";
 import {IDisposableAsync} from "../components/disposable";
 import * as util from "util";
 
-const password = process.env.MajavaMongoPassword;
-const mongoConnectionStr = process.env.MajavashakkiMongoConnectionString;
-const url = !!password ? util.format(mongoConnectionStr, encodeURIComponent(password)) : "mongodb://localhost:27017";
-const clientPromise = MongoClient.connect(url)
+let connectionString = "mongodb://localhost:27017"
+if (process.env.MajavashakkiMongoConnectionString) {
+  connectionString = process.env.MajavashakkiMongoConnectionString
+    .replace(process.env.MajavaMongoPassword, encodeURIComponent(process.env.MajavaMongoPassword))
+}
+
+console.log("MajavaDbClient connecting")
+const clientPromise = MongoClient.connect(connectionString)
   .then(client => {
-    console.log("Connected to Mongo url", url)
+    console.log("MajavaDbClient connected")
     return client
   })
 
