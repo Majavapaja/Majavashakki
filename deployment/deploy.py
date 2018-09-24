@@ -17,6 +17,8 @@ from azure.mgmt.cosmosdb.models import DatabaseAccountKind, DatabaseAccountCreat
 from azure.mgmt.web import WebSiteManagementClient
 from azure.mgmt.web.models import AppServicePlan, SkuDescription, SkuName, Site, SiteConfig, ScmType, NameValuePair
 
+SKU_D1_SHARED = SkuDescription(name="D1", capacity=1, tier=SkuName.shared.value)
+
 async def main():
   log.info("Loading secrets")
   secrets = load_secrets()
@@ -37,7 +39,7 @@ async def main():
     app_service_plan=AppServicePlan(
       LOCATION,
       f"{RESOURCE_GROUP_NAME}Plan",
-      sku=SkuDescription(name="B1", capacity=1, tier=SkuName.basic.value)
+      sku=SKU_D1_SHARED
     )
   ).result()
 
