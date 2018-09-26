@@ -17,6 +17,10 @@ from azure.mgmt.cosmosdb.models import DatabaseAccountKind, DatabaseAccountCreat
 from azure.mgmt.web import WebSiteManagementClient
 from azure.mgmt.web.models import AppServicePlan, SkuDescription, SkuName, Site, SiteConfig, ScmType, NameValuePair
 
+from cosmosdb import configure_collections
+
+from config import Mongo
+
 SKU_D1_SHARED = SkuDescription(name="D1", capacity=1, tier=SkuName.shared.value)
 
 async def main():
@@ -27,6 +31,13 @@ async def main():
   db, keys, connection_strings = setup_cosmosdb(cosmosdb_client, f"{RESOURCE_GROUP_NAME}mongo".lower())
   assert len(connection_strings) == 1, f"Expected 1 connection string for mongodb, got {len(connection_strings)}"
   assert keys.primary_master_key
+
+  configure_collections(
+    Mongo.database_name,
+    Mongo.collections,
+    keys.primary_master_key,
+    db.document_endpoint
+  )
 
   app_env = deepcopy(secrets["appEnvironment"])
   app_env["MajavashakkiMongoConnectionString"] = connection_strings[0].connection_string
