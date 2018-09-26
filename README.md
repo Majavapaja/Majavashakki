@@ -34,3 +34,13 @@ storage:
  3. Run from administrator cmd (from mongo installation bin folder or if env var exists)
 
  mongod.exe --config "C:\MongoData\mongod.cfg" --install
+
+## Environment variables
+### Required
+MajavashakkiFbClientId=derp
+MajavashakkiFbSecret=herp
+MajavashakkiSessionSecret=herpderp
+
+### Optional
+MajavashakkiMongoConnectionString
+MajavaMongoPassword
