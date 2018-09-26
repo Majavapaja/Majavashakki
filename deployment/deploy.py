@@ -7,9 +7,6 @@ FORMAT = '%(asctime)s %(levelname)s %(name)s %(message)s'
 logging.basicConfig(level=logging.INFO, format=FORMAT)
 log = logging.getLogger("deploy")
 
-RESOURCE_GROUP_NAME = "MajavaShakki"
-LOCATION = "northeurope"
-
 from copy import deepcopy
 from azure.common.credentials import ServicePrincipalCredentials
 from azure.mgmt.cosmosdb import CosmosDB
@@ -19,7 +16,7 @@ from azure.mgmt.web.models import AppServicePlan, SkuDescription, SkuName, Site,
 
 from cosmosdb import configure_collections
 
-from config import Mongo
+from config import Mongo, Azure
 
 SKU_D1_SHARED = SkuDescription(name="D1", capacity=1, tier=SkuName.shared.value)
 
@@ -28,7 +25,7 @@ async def main():
   secrets = load_secrets()
   web_client, cosmosdb_client = setup_azure(secrets)
 
-  db, keys, connection_strings = setup_cosmosdb(cosmosdb_client, f"{RESOURCE_GROUP_NAME}mongo".lower())
+  db, keys, connection_strings = setup_cosmosdb(cosmosdb_client, Azure.cosmosdb_name)
   assert len(connection_strings) == 1, f"Expected 1 connection string for mongodb, got {len(connection_strings)}"
   assert keys.primary_master_key
 
@@ -45,23 +42,22 @@ async def main():
 
   log.info("Creating App Service Plan")
   plan = web_client.app_service_plans.create_or_update(
-    RESOURCE_GROUP_NAME,
-    f"{RESOURCE_GROUP_NAME}Plan",
+    Azure.resource_group,
+    Azure.plan_name,
     app_service_plan=AppServicePlan(
-      LOCATION,
-      f"{RESOURCE_GROUP_NAME}Plan",
+      Azure.location,
+      Azure.plan_name,
       sku=SKU_D1_SHARED
     )
   ).result()
 
   log.info("Creating Web App")
-  site_name = f"{RESOURCE_GROUP_NAME}Site"
   env_pairs = [NameValuePair(k, v) for k, v in app_env.items()]
   site = web_client.web_apps.create_or_update(
-    RESOURCE_GROUP_NAME,
-    site_name,
+    Azure.resource_group,
+    Azure.site_name,
     Site(
-      location=LOCATION,
+      location=Azure.location,
       site_config=SiteConfig(
         app_settings=env_pairs,
         scm_type=ScmType.local_git,
@@ -70,8 +66,8 @@ async def main():
   ).result()
 
   log.info("Pushing code to App Service")
-  pub_cred = web_client.web_apps.list_publishing_credentials(RESOURCE_GROUP_NAME, site_name).result()
-  git_url = mk_git_url(site_name, pub_cred)
+  pub_cred = web_client.web_apps.list_publishing_credentials(Azure.resource_group, Azure.site_name).result()
+  git_url = mk_git_url(Azure.site_name, pub_cred)
   p = await asyncio.create_subprocess_exec("git", "push", "--force", git_url, "HEAD:master")
   await p.wait()
 
@@ -80,19 +76,19 @@ async def main():
 def setup_cosmosdb(cosmosdb_client, database_account_name):
   log.info("Creating CosmosDB")
   mongo = cosmosdb_client.database_accounts.create_or_update(
-    RESOURCE_GROUP_NAME,
+    Azure.resource_group,
     database_account_name,
     DatabaseAccountCreateUpdateParameters(
-      location=LOCATION,
-      locations=[Location(location_name=LOCATION)],
+      location=Azure.location,
+      locations=[Location(location_name=Azure.location)],
       kind=DatabaseAccountKind.mongo_db
     ),
     database_account_offer_type=DatabaseAccountOfferType.standard
   ).result()
 
   log.info("Fetching CosmosDB connection details")
-  keys = cosmosdb_client.database_accounts.list_keys(RESOURCE_GROUP_NAME, database_account_name)
-  connection_strings = cosmosdb_client.database_accounts.list_connection_strings(RESOURCE_GROUP_NAME, database_account_name).connection_strings
+  keys = cosmosdb_client.database_accounts.list_keys(Azure.resource_group, database_account_name)
+  connection_strings = cosmosdb_client.database_accounts.list_connection_strings(Azure.resource_group, database_account_name).connection_strings
 
   return mongo, keys, connection_strings
 
