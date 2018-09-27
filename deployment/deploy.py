@@ -19,6 +19,7 @@ from cosmosdb import configure_collections
 from config import Mongo, Azure
 
 SKU_D1_SHARED = SkuDescription(name="D1", capacity=1, tier=SkuName.shared.value)
+SKU_B1_BASIC = SkuDescription(name="B1", capacity=1, tier=SkuName.basic.value)
 
 async def main():
   log.info("Loading secrets")
@@ -47,7 +48,7 @@ async def main():
     app_service_plan=AppServicePlan(
       Azure.location,
       Azure.plan_name,
-      sku=SKU_D1_SHARED
+      sku=SKU_B1_BASIC
     )
   ).result()
 
