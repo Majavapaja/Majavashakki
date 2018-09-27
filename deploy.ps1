@@ -48,7 +48,7 @@ if ($KUDU_SYNC_CMD -eq $null) {
 }
 
 if ($env:IN_PLACE_DEPLOYMENT -ne "1") {
-  $ignoredFiles = ".git;.hg;.deployment;deploy.ps1;deployment;.cache"
+  $ignoredFiles = ".git;.hg;.deployment;deploy.ps1;deployment;.cache;node_modules"
   & $KUDU_SYNC_CMD -v 50 -f "$DEPLOYMENT_SOURCE" -t "$DEPLOYMENT_TARGET" -n "$NEXT_MANIFEST_PATH" -p "$PREVIOUS_MANIFEST_PATH" -i "$ignoredFiles"
   exitWithMessageOnError "Kudu Sync failed"
 }
