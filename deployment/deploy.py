@@ -69,6 +69,8 @@ async def main():
   log.info("Pushing code to App Service")
   pub_cred = web_client.web_apps.list_publishing_credentials(Azure.resource_group, Azure.site_name).result()
   git_url = mk_git_url(Azure.site_name, pub_cred)
+  await shell("git", "config", "user.email", "majavashakki-deployer@majavapaja.fi")
+  await shell("git", "config", "user.name", "Majavashakki Deployer")
   await shell("git", "commit", "--allow-empty", "-m", "Empty commit to force app service to redeploy")
   await shell("git", "push", "--force", git_url, "HEAD:master")
 
