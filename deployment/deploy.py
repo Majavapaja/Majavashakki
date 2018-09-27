@@ -69,10 +69,15 @@ async def main():
   log.info("Pushing code to App Service")
   pub_cred = web_client.web_apps.list_publishing_credentials(Azure.resource_group, Azure.site_name).result()
   git_url = mk_git_url(Azure.site_name, pub_cred)
-  p = await asyncio.create_subprocess_exec("git", "push", "--force", git_url, "HEAD:master")
-  await p.wait()
+  await shell("git", "push", "--force", git_url, "HEAD:master")
 
   log.info("Done")
+
+async def shell(*cmd):
+  p = await asyncio.create_subprocess_exec(*cmd)
+  await p.wait()
+  if p.returncode != 0:
+    raise RuntimeError(f"command exited with code {p.returncode}")
 
 def setup_cosmosdb(cosmosdb_client, database_account_name):
   log.info("Creating CosmosDB")
