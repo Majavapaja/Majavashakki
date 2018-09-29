@@ -62,6 +62,7 @@ async def main():
       site_config=SiteConfig(
         app_settings=env_pairs,
         scm_type=ScmType.local_git,
+        web_sockets_enabled=True,
       )
     )
   ).result()
