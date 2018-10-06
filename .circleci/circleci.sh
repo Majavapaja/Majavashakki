@@ -10,7 +10,7 @@ if [ -z "$DEPLOYER_PRIVATE_GPG_KEY_BASE64" ]; then
 fi
 
 apt-get update
-apt-get install -y git gnupg python3-pip python3-venv
+apt-get install -y git gnupg python3-pip python3-venv curl
 
 # Install nodejs for running tests
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
