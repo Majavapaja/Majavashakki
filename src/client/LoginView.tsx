@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 
 import * as logo from "./assets/logo.png";
 
@@ -27,6 +28,11 @@ const styles = theme => ({
     facebookButton: {
         backgroundColor: '#3B5998',
         color: '#fff'
+    },
+    divider: {
+        border: '1px solid rgba(0,0,0,.1)',
+        width: '100%',
+        margin: '25px 0'
     }
 })
 
@@ -41,8 +47,23 @@ class LoginView extends React.Component<any, any> {
             <div className={classes.root}>
                 <Paper className={classes.loginContainer}>
                     <img src={String(logo)} className={classes.logo} />
+                    <TextField
+                        id="username"
+                        label="Name"
+                        margin="normal"
+                    />
+                    <TextField
+                        id="password"
+                        label="Password"
+                        type="password"
+                        margin="normal"
+                    />
+                    <Button variant="raised" color="primary">
+                        Sign in
+                    </Button>
+                    <hr className={classes.divider} />
                     <Button variant="raised" className={classes.facebookButton} href="/authFacebook">
-                        Facebook
+                        Sign in with Facebook
                     </Button>
                 </Paper>
             </div>
