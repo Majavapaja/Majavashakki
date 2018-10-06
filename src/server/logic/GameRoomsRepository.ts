@@ -1,5 +1,4 @@
 import {Game} from "../entities/GameRoom";
-import {UserState} from "../entities/UserState";
 import {GameMongoClient} from "../data/GameMongoClient";
 import * as _ from "lodash";
 
@@ -9,7 +8,6 @@ export class GameRoomsRepository {
     }
     private static instance: GameRoomsRepository = new GameRoomsRepository();
     public MainRoom = "Lobby";
-    private roomStorage: {[name: string]: Game} = {};
     private mongoClient: GameMongoClient = new GameMongoClient();
 
     private constructor() {
@@ -17,66 +15,51 @@ export class GameRoomsRepository {
             throw new Error("The GameRoomRepository is a singleton class and cannot be created!");
         }
         GameRoomsRepository.instance = this;
-        this.getGames();
     }
 
     public async saveGame(game: Game) {
         await this.mongoClient.saveGame(game);
     }
 
-    /**
-     * Tries to create new game if room name is available and moves current user's socket accordingly.
-     * @fires game-joined - tells user socket that new room has been joined
-     * @fires game-created - tells lobby that new room is available
-     * @fires game-exists - tells user socket if room with given title already exists
-     */
-    public async createRoom(title: string, creator: UserState): Promise<Game> {
-        if (this.roomStorage[title]) {
-            creator.socket.emit("lobby-error", {error: `Room ${title} already exists`});
+    public async createRoom(title: string): Promise<Game> {
+        const games = await this.mongoClient.getGames();
+        if (games[title]) {
+            throw new Error("Peli on jo olemassa, tästä administraatio tekee joskus hienomman error response käsittelyn")
         } else {
-            const newRoom = new Game(title, creator);
-            this.roomStorage[title] = newRoom;
+            const newRoom = new Game(title);
             await this.mongoClient.saveGame(newRoom);
-            creator.joinSocket(title);
-            creator.socket.emit("game-joined");
-            creator.socket.broadcast.to(this.MainRoom).emit("game-created", newRoom.title);
             return newRoom;
         }
     }
 
-    /**
-     * Adds the player to game and socket room if there's still empty slot. Removes user from currently active room.
-     * @fires game-joined - tells user socket that new room has been joined
-     * @fires game-full - tells lobby that room is full and not available anymore
-     * @fires game-notAvailable - tells user socket if room does not exist or is full
-     */
-    public joinRoom(title: string, user: UserState): Game {
+    public async joinRoom(gameName: string, userId: string): Promise<Game> {
+        const games = await this.mongoClient.getGames();
+        console.log("PEWIT " + JSON.stringify(games));
+        console.log("gameName: " + gameName)
+        console.log(Object.keys(games));
         // TODO check if main room
-        const room = this.roomStorage[title];
-        if (!room) {
-            user.socket.emit("lobby-error", {error: `Room ${title} not found`});
-        } else if (room.players.length >= 2) {
-            user.socket.emit("lobby-error", {error: `Room ${title} is full`});
+        const game = games[gameName];
+        if (!game) {
+            throw new Error("Paskan möivät - peliä ei löywy")
+        } else if (game.isFull()) {
+            throw new Error("Paskaa ei voi myyä, loppuunmyyty eli täysi")
         } else {
-            room.players.push(user);
-            user.joinSocket(title);
-            user.socket.emit("game-joined", room.gameState.board.pieces);
-            user.socket.broadcast.to(this.MainRoom).emit("game-full");
+            game.addPlayer(userId);
+            await this.mongoClient.saveGame(game);
         }
-        return room;
+        return game;
     }
 
-    public getAvailableGames(): string[] {
-        const hasSpace = (title) => this.roomStorage[title].players.length < 2;
-        return Object.keys(this.roomStorage).filter(hasSpace);
+    public async getAvailableGames(): Promise<string[]> {
+        // TODO ditch mongo client, use mongoose. Filter query straight for db.
+        const games = await this.mongoClient.getGames();
+        const hasSpace = (title) => !games[title].isFull();
+        return Object.keys(games).filter(hasSpace);
     }
 
-    public getGameRoom(title: string): Game {
+    public async getGameRoom(title: string): Promise<Game> {
         console.log("Get game '" + title + "'");
-        return this.roomStorage[title];
-    }
-
-    private async getGames() {
-        this.roomStorage = await this.mongoClient.getGames();
+        const games = await this.mongoClient.getGames();
+        return games[title];
     }
 }

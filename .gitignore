@@ -63,3 +63,8 @@ dist/
 
 .vagrant
 *.retry
+
+.cache
+
+.venv/
+__pycache__/

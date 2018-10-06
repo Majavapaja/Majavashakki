@@ -1,26 +1,30 @@
 import Board from "../entities/Board";
 import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol";
-import {UserState} from "./UserState";
 import {Position} from "../../common/types";
 
 export class Game {
     public title: string;
-    public players: UserState[] = [];
+    public playerIdWhite: string;
+    public playerIdBlack: string;
     public gameState: {board: Board };
 
-    constructor(title: string, player?: UserState) {
+    constructor(title: string) {
         this.title = title;
         this.gameState = {board: new Board()};
-        if (player) {
-            this.players.push(player);
-        }
     }
 
-    public addPlayer(player: UserState) {
-        if (this.players.length === 2) {
-            return false;
+    public isFull(): boolean {
+        return !!this.playerIdWhite && !!this.playerIdBlack;
+    }
+
+    public addPlayer(playerId: string) {
+        if (!this.playerIdWhite) {
+            this.playerIdWhite = playerId;
+        } else if (!this.playerIdBlack) {
+            this.playerIdBlack = playerId;
+        } else {
+            throw new Error("Paskaa täynnä, ei mahu - shit has hit fan even though it should not be possible, call Avengers")
         }
-        this.players.push(player);
         return true;
     }
 
