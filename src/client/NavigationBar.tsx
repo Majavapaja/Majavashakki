@@ -45,7 +45,7 @@ class LoginMenu extends React.Component<any, any> {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+          <MenuItem onClick={this.profile}>Profile</MenuItem>
           <MenuItem onClick={this.handleClose}>My account</MenuItem>
           <MenuItem onClick={this.logout}>Logout</MenuItem>
         </Menu>
@@ -65,6 +65,11 @@ class LoginMenu extends React.Component<any, any> {
   private handleClose = () => {
     this.setState({ anchorEl: null });
   }
+
+  private profile =() => {
+    this.handleClose()
+    this.props.profile();
+  }
 }
 
 class NavigationBar extends React.Component<any, any> {
@@ -74,11 +79,16 @@ class NavigationBar extends React.Component<any, any> {
   }
 
   public logout = () => {
+    this.props.history.push("/logout");
     this.setState({ logged: false });
   };
 
   public login = () => {
-    this.setState({ logged: true });
+    this.props.history.push("/login");
+  };
+
+  public profile = () => {
+    this.props.history.push("/profile");
   };
 
   public navigateToMain = (event: any) => {
