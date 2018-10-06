@@ -5,7 +5,7 @@ import {moveSequence} from "./BoardHelper";
 chai.should();
 chai.use(chaiAsPromised);
 
-describe.only("EnPassant", () => {
+describe("EnPassant", () => {
     it("should allow en passant", done => {
         const promise = factory.build("board-enpassant")
             .then(board => moveSequence(board, [["c2", "c4"], ["d4", "c3"]]));
