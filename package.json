@@ -36,7 +36,7 @@
   },
   "scripts": {
     "npm-check": "npm-check --skip-unused",
-    "dev": "npm-run-all --parallel watch:client watch:server",
+    "dev": "set TS_NODE_FILES=true && npm-run-all --parallel watch:client watch:server",
     "watch:client": "parcel watch src/client/index.html --public-url /",
     "watch:server": "nodemon --watch src --watch public --ext ts,tsx app.js",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",

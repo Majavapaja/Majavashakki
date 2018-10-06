@@ -1,262 +1,50 @@
-import {Piece} from "./types";
+
 import {copy} from "./util";
 
+const createPiece = (color: Majavashakki.PieceColor, type: Majavashakki.PieceType, position: Majavashakki.IPosition, hasMoved: boolean) =>
+<Majavashakki.IPiece>({ color, type, position, hasMoved });
+
+const blackPiece = (type: Majavashakki.PieceType, pos: string) =>
+  createPiece(Majavashakki.PieceColor.Black, type, {col: pos.charAt(0), row: pos.charAt(1)}, false);
+
+const whitePiece = (type: Majavashakki.PieceType, pos: string) =>
+  createPiece(Majavashakki.PieceColor.White, type, {col: pos.charAt(0), row: pos.charAt(1)}, false);
+
 export default () => copy([
-  {
-    color: "black",
-    type: "pawn",
-    position: {
-      col: "a",
-      row: "7",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "pawn",
-    position: {
-      col: "b",
-      row: "7",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "pawn",
-    position: {
-      col: "c",
-      row: "7",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "pawn",
-    position: {
-      col: "d",
-      row: "7",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "pawn",
-    position: {
-      col: "e",
-      row: "7",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "pawn",
-    position: {
-      col: "f",
-      row: "7",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "pawn",
-    position: {
-      col: "g",
-      row: "7",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "pawn",
-    position: {
-      col: "h",
-      row: "7",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "rook",
-    position: {
-      col: "a",
-      row: "8",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "knight",
-    position: {
-      col: "b",
-      row: "8",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "bishop",
-    position: {
-      col: "c",
-      row: "8",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "queen",
-    position: {
-      col: "d",
-      row: "8",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "king",
-    position: {
-      col: "e",
-      row: "8",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "bishop",
-    position: {
-      col: "f",
-      row: "8",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "knight",
-    position: {
-      col: "g",
-      row: "8",
-    },
-    hasMoved: false,
-  }, {
-    color: "black",
-    type: "rook",
-    position: {
-      col: "h",
-      row: "8",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "pawn",
-    position: {
-      col: "a",
-      row: "2",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "pawn",
-    position: {
-      col: "b",
-      row: "2",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "pawn",
-    position: {
-      col: "c",
-      row: "2",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "pawn",
-    position: {
-      col: "d",
-      row: "2",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "pawn",
-    position: {
-      col: "e",
-      row: "2",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "pawn",
-    position: {
-      col: "f",
-      row: "2",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "pawn",
-    position: {
-      col: "g",
-      row: "2",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "pawn",
-    position: {
-      col: "h",
-      row: "2",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "rook",
-    position: {
-      col: "a",
-      row: "1",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "knight",
-    position: {
-      col: "b",
-      row: "1",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "bishop",
-    position: {
-      col: "c",
-      row: "1",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "queen",
-    position: {
-      col: "d",
-      row: "1",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "king",
-    position: {
-      col: "e",
-      row: "1",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "bishop",
-    position: {
-      col: "f",
-      row: "1",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "knight",
-    position: {
-      col: "g",
-      row: "1",
-    },
-    hasMoved: false,
-  }, {
-    color: "white",
-    type: "rook",
-    position: {
-      col: "h",
-      row: "1",
-    },
-    hasMoved: false,
-  },
-]);
+  blackPiece(Majavashakki.PieceType.Pawn, "a7"),
+  blackPiece(Majavashakki.PieceType.Pawn, "b7"),
+  blackPiece(Majavashakki.PieceType.Pawn, "c7"),
+  blackPiece(Majavashakki.PieceType.Pawn, "d7"),
+  blackPiece(Majavashakki.PieceType.Pawn, "f7"),
+  blackPiece(Majavashakki.PieceType.Pawn, "e7"),
+  blackPiece(Majavashakki.PieceType.Pawn, "g7"),
+  blackPiece(Majavashakki.PieceType.Pawn, "h7"),
+
+  blackPiece(Majavashakki.PieceType.Rook,   "a8"),
+  blackPiece(Majavashakki.PieceType.Knight, "b8"),
+  blackPiece(Majavashakki.PieceType.Bishop, "c8"),
+  blackPiece(Majavashakki.PieceType.Queen,  "d8"),
+  blackPiece(Majavashakki.PieceType.King,   "f8"),
+  blackPiece(Majavashakki.PieceType.Bishop, "e8"),
+  blackPiece(Majavashakki.PieceType.Knight, "g8"),
+  blackPiece(Majavashakki.PieceType.Rook,   "h8"),
+
+  whitePiece(Majavashakki.PieceType.Pawn, "a2"),
+  whitePiece(Majavashakki.PieceType.Pawn, "b2"),
+  whitePiece(Majavashakki.PieceType.Pawn, "c2"),
+  whitePiece(Majavashakki.PieceType.Pawn, "d2"),
+  whitePiece(Majavashakki.PieceType.Pawn, "f2"),
+  whitePiece(Majavashakki.PieceType.Pawn, "e2"),
+  whitePiece(Majavashakki.PieceType.Pawn, "g2"),
+  whitePiece(Majavashakki.PieceType.Pawn, "h2"),
+
+  whitePiece(Majavashakki.PieceType.Rook,   "a1"),
+  whitePiece(Majavashakki.PieceType.Knight, "b1"),
+  whitePiece(Majavashakki.PieceType.Bishop, "c1"),
+  whitePiece(Majavashakki.PieceType.Queen,  "d1"),
+  whitePiece(Majavashakki.PieceType.King,   "f1"),
+  whitePiece(Majavashakki.PieceType.Bishop, "e1"),
+  whitePiece(Majavashakki.PieceType.Knight, "g1"),
+  whitePiece(Majavashakki.PieceType.Rook,   "h1")
+
+]) as Majavashakki.IPiece[];

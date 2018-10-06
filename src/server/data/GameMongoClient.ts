@@ -15,7 +15,7 @@ export class GameMongoClient {
       _.forEach(games, game => {
         console.log("Adding game '" + game.title + "'");
         const newGame = new Game(game.title);
-        newGame.gameState.board.pieces = game.gameState.board.pieces;
+        newGame.board.pieces = game.board.pieces;
         roomStorage[game.title] = newGame;
       });
     });
@@ -28,7 +28,7 @@ export class GameMongoClient {
     await usingAsync(new MajavaDbClient(), async (mongo) => {
       const collection = mongo.getCollection<Game>("games");
       const existing = await collection.findOne({ title: game.title });
-      const savedState = { title: game.title, gameState: game.gameState, players: [] };
+      const savedState = { title: game.title, gameState: game.board, players: [] };
       if (existing) {
         console.log("Updated game state: " + existing.title);
         await collection.replaceOne({ title: game.title }, savedState);

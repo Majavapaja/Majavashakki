@@ -1,7 +1,4 @@
 import * as React from "react";
-
-import {MoveResponse} from "../common/protocol";
-import {Piece} from "../common/types";
 import Board from "./Board";
 
 class GameView extends React.Component<any, any> {
@@ -24,13 +21,13 @@ class GameView extends React.Component<any, any> {
     );
   }
 
-  private onJoined(pieces: Piece[]) {
+  private onJoined(pieces: Majavashakki.IPiece[]) {
     if (pieces) {
       this.setState({pieces});
     }
   }
 
-  private onMoveResult(response: MoveResponse) {
+  private onMoveResult(response: Majavashakki.IMoveResponse) {
     switch (response.kind) {
     case "error":
       this.setState({

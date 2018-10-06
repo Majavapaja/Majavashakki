@@ -1,11 +1,9 @@
-import {Piece, Position} from "../../common/types";
 import Board from "../entities/Board";
 import {doesMoveCauseCheck, isCheck} from "./Checkmate";
-import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol";
 
 class MovementValidator {
-    public isValidMove(board: Board, start: Position, destination: Position): MoveResponse {
-        const errorResponse: MoveResponse = {kind: "error", error: "Error 10: Invalid move!"};
+    public isValidMove(board: Board, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
+        const errorResponse: Majavashakki.IMoveResponse = {kind: "error", error: "Error 10: Invalid move!"};
 
         // Check that start and destination are not the same
         if (board.comparePos(start, destination)) return errorResponse;
@@ -16,11 +14,11 @@ class MovementValidator {
         }
 
         // Check that there is a piece at start position
-        const startPiece: Piece = board.getPiece(start);
+        const startPiece: Majavashakki.IPiece = board.getPiece(start);
         if (!startPiece) return errorResponse;
 
         // Check that destination is valid (different color or empty)
-        const destinationPiece: Piece = board.getPiece(destination);
+        const destinationPiece: Majavashakki.IPiece = board.getPiece(destination);
         if (destinationPiece && destinationPiece.color === startPiece.color) {
             return errorResponse;
         }
@@ -45,15 +43,15 @@ class MovementValidator {
         else return {kind: "success", moveType: "move", board: null};
     }
 
-    public positionToNumbers(pos: Position) {
+    public positionToNumbers(pos: Majavashakki.IPosition) {
         return {col: Board.cols.indexOf(pos.col), row: Board.rows.indexOf(pos.row)};
     }
 
-    public numbersToPosition(pos): Position {
+    public numbersToPosition(pos): Majavashakki.IPosition {
         return {col: Board.cols.charAt(pos.col), row: Board.rows.charAt(pos.row)};
     }
 
-    private checkMovement(board: Board, startPiece: Piece, destination: Position): boolean {
+    private checkMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
         switch (startPiece.type) {
             case "pawn":
                 return this.pawnMovement(board, startPiece, destination);
@@ -70,7 +68,7 @@ class MovementValidator {
         }
     }
 
-    private pawnMovement(board: Board, startPiece: Piece, destination: Position): boolean {
+    private pawnMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
         const start = this.positionToNumbers(startPiece.position);
         const dest = this.positionToNumbers(destination);
 
@@ -98,7 +96,7 @@ class MovementValidator {
         return false;
     }
 
-    private knightMovement(board: Board, startPiece: Piece, destination: Position): boolean {
+    private knightMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
         const start = this.positionToNumbers(startPiece.position);
         const dest = this.positionToNumbers(destination);
 
@@ -112,7 +110,7 @@ class MovementValidator {
         return false;
     }
 
-    private rookMovement(board: Board, startPiece: Piece, destination: Position): boolean {
+    private rookMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
         const start = this.positionToNumbers(startPiece.position);
         const dest = this.positionToNumbers(destination);
 
@@ -132,7 +130,7 @@ class MovementValidator {
         return true;
     }
 
-    private bishopMovement(board: Board, startPiece: Piece, destination: Position): boolean {
+    private bishopMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
         const start = this.positionToNumbers(startPiece.position);
         const dest = this.positionToNumbers(destination);
 
@@ -158,11 +156,11 @@ class MovementValidator {
         return true;
     }
 
-    private queenMovement(board: Board, startPiece: Piece, destination: Position): boolean {
+    private queenMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
         return this.rookMovement(board, startPiece, destination) || this.bishopMovement(board, startPiece, destination);
     }
 
-    private kingMovement(board: Board, startPiece: Piece, destination: Position) {
+    private kingMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition) {
         const start = this.positionToNumbers(startPiece.position);
         const dest = this.positionToNumbers(destination);
 
@@ -174,7 +172,7 @@ class MovementValidator {
         return true;
     }
 
-    private enPassant(board: Board, startPiece: Piece, destination: Position): boolean {
+    private enPassant(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
         if (startPiece.type === "pawn") {
             const start = this.positionToNumbers(startPiece.position);
             const dest = this.positionToNumbers(destination);
@@ -188,11 +186,11 @@ class MovementValidator {
             if (rowDiff === movementDirection && (colDiff === 1 || colDiff === -1)) {
                 // Check if there is a piece below destination and that piece is enemy pawn
                 dest.row -= movementDirection;
-                const targetPiece: Piece = board.getPiece(this.numbersToPosition(dest));
+                const targetPiece: Majavashakki.IPiece = board.getPiece(this.numbersToPosition(dest));
 
                 if (targetPiece && targetPiece.type === "pawn" && targetPiece.color !== startPiece.color) {
                     // Check if last move was double move and that its destination was targetPiece
-                    const lastMove: Position[] = board.moveHistory[board.moveHistory.length - 1];
+                    const lastMove: Majavashakki.IPosition[] = board.moveHistory[board.moveHistory.length - 1];
                     const lastStart = this.positionToNumbers(lastMove[0]);
                     const lastDest = this.positionToNumbers(lastMove[1]);
 
@@ -205,7 +203,7 @@ class MovementValidator {
         return false;
     }
 
-    private castling(board: Board, startPiece: Piece, destination: Position): boolean {
+    private castling(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
         // Check that the piece is king and it hasn't moved
         if (startPiece.type !== "king" || startPiece.hasMoved) return false;
 
@@ -219,7 +217,7 @@ class MovementValidator {
         if (Math.abs(colDiff) !== 2 || Math.abs(rowDiff) !== 0) return false;
 
         // Get rook from A1, H1, A8, H8 depending on the kings destination and color
-        const rookPosition: Position = {
+        const rookPosition: Majavashakki.IPosition = {
             col: (colDiff > 0) ? "h" : "a",
             row: startPiece.color === "white" ? "1" : "8",
         };

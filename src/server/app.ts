@@ -94,7 +94,7 @@ app.post("/api/games/join", apiAuth, async (req, res) => {
   await User.addGame(userId, game.title)
   socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
   socket.join(name); // TODO we should use game ids
-  socket.emit("game-joined", game.gameState.board.pieces); // TODO return response instead of socket communication
+  socket.emit("game-joined", game.board.pieces); // TODO return response instead of socket communication
   if (game.isFull()) {
     socket.broadcast.to(this.MainRoom).emit("game-full");
   }

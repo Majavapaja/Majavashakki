@@ -18,14 +18,14 @@ class Board extends React.Component<any, any> {
       moveTarget: null,
     };
 
-    this.props.socket.on("move_result", (room) => this.onMoveResult(room));
+    this.props.socket.on("move_result", () => this.onMoveResult());
   }
 
   public render() {
     return <div className="board">{this.makeCells()}</div>;
   }
 
-  private onMoveResult(board) {
+  private onMoveResult() {
     this.setState({
       selectedCell: null,
       moveTarget: null,

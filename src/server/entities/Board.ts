@@ -1,22 +1,19 @@
 import makeInitialState from "../../common/initial-state";
-import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol";
-import {Piece, Position} from "../../common/types";
 import MovementValidator from "../logic/MovementValidator";
 import {isCheck, isCheckMate} from "../logic/Checkmate";
 
-export default class Board {
+export default class Board implements Majavashakki.IBoard {
     public static cols: string = "abcdefgh";
     public static rows: string = "12345678";
-
-    public pieces: Piece[];
-    public moveHistory: Position[][];
+    public pieces: Majavashakki.IPiece[];
+    public moveHistory: Majavashakki.IPosition[][];
 
     constructor() {
         this.pieces = makeInitialState();
         this.moveHistory = [];
     }
 
-    public move(start: Position, destination: Position): MoveResponse {
+    public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
         if (!start || !destination) return {kind: "error", error: "Error 11: Invalid movement data"};
 
         const result = MovementValidator.isValidMove(this, start, destination);
@@ -30,7 +27,7 @@ export default class Board {
                 startPiece.position = destination;
                 startPiece.hasMoved = true;
 
-                const rookPosition: Position = {
+                const rookPosition: Majavashakki.IPosition = {
                     col: destination.col === "c" ? "a" : "h", // If king moved to c, get rook from left corner.
                     row: startPiece.color === "white" ? "1" : "8",
                 };
@@ -71,24 +68,24 @@ export default class Board {
         }
     }
 
-    public removePiece(pos: Position): void {
+    public removePiece(pos: Majavashakki.IPosition): void {
         const index: number = this.pieces.indexOf(this.getPiece(pos));
         if (index !== -1) this.pieces.splice(index, 1);
     }
 
-    public getPiece(pos: Position): Piece {
+    public getPiece(pos: Majavashakki.IPosition): Majavashakki.IPiece {
         return this.pieces.find((piece) => this.comparePos(piece.position, pos));
     }
 
-    public getKing(color): Piece {
+    public getKing(color): Majavashakki.IPiece {
         return this.pieces.find((piece) => piece.color === color && piece.type === "king");
     }
 
-    public comparePos(a: Position, b: Position): boolean {
+    public comparePos(a: Majavashakki.IPosition, b: Majavashakki.IPosition): boolean {
         return a.row === b.row && a.col === b.col;
     }
 
-    public isWithinBoard(pos: Position) {
+    public isWithinBoard(pos: Majavashakki.IPosition) {
         return Board.cols.indexOf(pos.col) !== -1 && Board.rows.indexOf(pos.row) !== -1;
     }
 

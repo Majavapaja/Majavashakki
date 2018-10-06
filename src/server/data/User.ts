@@ -50,7 +50,7 @@ UserSchema.statics.validProfile = (user: IUserDocument): boolean => {
   return !!user.name;
 }
 
-UserSchema.statics.findOrCreate = async (facebookId: string) => {
+UserSchema.statics.findOrCreate = async (facebookId: string): Promise<IUserDocument> => {
   const userObj = new User();
   const result = await User.findOne({facebookId}).exec();
 
