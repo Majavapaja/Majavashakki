@@ -18,7 +18,6 @@ apt-get install -y nodejs
 
 # Run tests
 npm ci
-MajavashakkiMongoConnectionString="mongodb://majavashakki:majavashakki@localhost:27017/Majavashakki" \
 npm test
 
 echo $DEPLOYER_PRIVATE_GPG_KEY_BASE64 | base64 --decode > private.key

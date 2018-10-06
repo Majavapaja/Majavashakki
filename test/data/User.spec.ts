@@ -2,9 +2,7 @@ import {UserSchema, IUserModel} from "../../src/server/data/User";
 import * as mongoose from "mongoose";
 import * as assert from "assert";
 
-const connectionString = process.env.MajavashakkiMongoConnectionString ?
-    process.env.MajavashakkiMongoConnectionString :
-    "mongodb://localhost/test"
+const connectionString = "mongodb://localhost/test"
 
 const User = mongoose.model('User', UserSchema) as IUserModel;
 
