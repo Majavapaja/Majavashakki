@@ -42,7 +42,7 @@
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "build": "parcel build src/client/index.html --public-url /",
     "start": "node app.js",
-    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.spec.ts"
+    "test": "mocha --timeout 999999 --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.spec.ts"
   },
   "devDependencies": {
     "@types/chai": "4.1.4",

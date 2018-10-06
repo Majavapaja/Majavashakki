@@ -83,7 +83,7 @@ UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
     return;
   }
 
-  console.log(`Adding game '${gameTitle}' for user ${user.name}`);
+  console.log(`Adding game '${gameTitle}' for user ${user.name} (ID ${user._id})`);
 
   if (!user.games) {
     user.games = [];
