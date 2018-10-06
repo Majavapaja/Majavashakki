@@ -51,6 +51,9 @@ UserSchema.statics.validProfile = (user: IUserDocument): boolean => {
 }
 
 UserSchema.statics.findOrCreate = async (facebookId: string) => {
+
+  console.log(`Find user by FBID '${facebookId}'`);
+
   const userObj = new User();
   const result = await User.findOne({facebookId}).exec();
 
