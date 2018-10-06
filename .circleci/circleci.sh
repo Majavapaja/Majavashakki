@@ -14,7 +14,7 @@ apt-get install -y git gnupg python3-pip python3-venv curl
 
 # Install nodejs for running tests
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
-sudo apt-get install -y nodejs
+apt-get install -y nodejs
 
 # Run tests
 npm ci
