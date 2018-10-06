@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as request from "request-promise";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, createStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -13,7 +13,7 @@ import {Link} from "react-router-dom";
 
 import { withRouter } from "react-router-dom";
 
-const styles = theme => ({
+const styles = createStyles({
   grow: {
     flexGrow: 1
   }

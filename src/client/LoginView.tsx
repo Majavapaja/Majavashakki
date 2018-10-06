@@ -1,13 +1,13 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, createStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
 import * as logo from "./assets/logo.png";
 
-const styles = theme => ({
+const styles = createStyles({
     root: {
         display: 'flex',
         height: '100vh',
