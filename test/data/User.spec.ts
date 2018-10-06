@@ -7,8 +7,10 @@ var mockgoose: Mockgoose;
 
 describe("User", () => {
 
-    beforeEach(() => {
+    beforeEach(async () => {
         mockgoose = new Mockgoose(mongoose);
+        await mockgoose.prepareStorage();
+        await mongoose.connect("mongodb://localhost/test");
     });
 
     describe("findOrCreate", () => {
@@ -22,9 +24,6 @@ describe("User", () => {
     describe("addGame", () => {
         it("should add game for logged in user", async () => {
 
-            console.log("prepare");
-            await mockgoose.prepareStorage();
-            await mongoose.connect("mongodb://localhost/test");
             var Usr = mongoose.model('User', UserSchema) as IUserModel;
 
             var user = await Usr.findOrCreate("M4T4L4");
