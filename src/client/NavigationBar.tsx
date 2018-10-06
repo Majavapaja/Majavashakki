@@ -9,6 +9,7 @@ import Button from "@material-ui/core/Button";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
+import {Link} from "react-router-dom";
 
 import { withRouter } from "react-router-dom";
 
@@ -66,7 +67,7 @@ class LoginMenu extends React.Component<any, any> {
     this.setState({ anchorEl: null });
   }
 
-  private profile =() => {
+  private profile = () => {
     this.handleClose()
     this.props.profile();
   }
@@ -75,7 +76,7 @@ class LoginMenu extends React.Component<any, any> {
 class NavigationBar extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-    this.state = {logged: true};
+    this.state = {logged: false};
     this.init();
   }
 
