@@ -9,6 +9,15 @@ if [ -z "$DEPLOYER_PRIVATE_GPG_KEY_BASE64" ]; then
   exit 1
 fi
 
+# Install nodejs for running tests
+curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Run tests
+npm ci
+MajavashakkiMongoConnectionString="mongodb://majavashakki:majavashakki@localhost:27017/Majavashakki" \
+npm test
+
 apt-get update
 apt-get install -y git gnupg python3-pip python3-venv
 
