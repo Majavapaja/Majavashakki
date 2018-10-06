@@ -1,4 +1,4 @@
-import {UserSchema, IUserModel} from "../../src/server/Data/User";
+import {UserSchema, IUserModel} from "../../src/server/data/User";
 import * as mongoose from "mongoose";
 import {Mockgoose} from "../../node_modules/mockgoose/built/mockgoose";
 import * as assert from "assert";
