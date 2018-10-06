@@ -5,7 +5,7 @@ import {moveSequence} from "./BoardHelper";
 chai.should();
 chai.use(chaiAsPromised);
 
-describe.only("Checkmate", () => {
+describe("Checkmate", () => {
     describe("Basics", () => {
             it("should not checkmate if king can move away", done => {
                 const promise = factory.build("board-kingcanmove")
