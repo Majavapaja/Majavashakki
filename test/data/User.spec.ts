@@ -3,20 +3,24 @@ import * as mongoose from "mongoose";
 import {Mockgoose} from "../../node_modules/mockgoose/built/mockgoose";
 import * as assert from "assert";
 
-var mockgoose: Mockgoose;
+const mockgoose = new Mockgoose(mongoose);
+var User: IUserModel;
 
 describe("User", () => {
 
     beforeEach(async () => {
-        mockgoose = new Mockgoose(mongoose);
         await mockgoose.prepareStorage();
         await mongoose.connect("mongodb://localhost/test");
+        User = mongoose.model('User', UserSchema) as IUserModel;
     });
 
     describe("findOrCreate", () => {
-        it("should create user", done => {
+        it("should create user", async () => {
 
-            done();
+            await User.findOrCreate("M4T4L4");
+
+            var users = await User.find().exec();
+            assert.equal(1, users.length, "users");
 
         });
     });
@@ -24,8 +28,7 @@ describe("User", () => {
     describe("addGame", () => {
         it("should add game for logged in user", async () => {
 
-            var Usr = mongoose.model('User', UserSchema) as IUserModel;
-
+            var Usr = User;
             var user = await Usr.findOrCreate("M4T4L4");
 
             Usr.updateName(user._id, "HerraMatala");
@@ -34,6 +37,8 @@ describe("User", () => {
 
             assert.equal(user.games.length, 1, "added game");
             assert.equal(user.games[0], "P3L1", "game title");
+
+            // https://github.com/Mockgoose/Mockgoose/issues/71
 
         });
     });
