@@ -56,7 +56,7 @@ if ($env:IN_PLACE_DEPLOYMENT -ne "1") {
 pushd "$DEPLOYMENT_TARGET"
 $NODE_ENV = $env:NODE_ENV
 $env:NODE_ENV = "development"
-npm ci
+npm install
 $env:NODE_ENV = $NODE_ENV
 npm run build
 popd
