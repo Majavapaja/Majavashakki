@@ -8,6 +8,10 @@ jobs:
         - master
     docker:
       - image: ubuntu:18.04
+      - image: mongo:3.2.21-jessie
+        environment:
+          MONGO_INITDB_ROOT_USERNAME: majavashakki
+          MONGO_INITDB_ROOT_PASSWORD: majavashakki
     steps:
       - checkout
       - run: ./.circleci/circleci.sh

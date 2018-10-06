@@ -3,13 +3,17 @@ import * as mongoose from "mongoose";
 import {Mockgoose} from "../../node_modules/mockgoose/built/mockgoose";
 import * as assert from "assert";
 
+const connectionString = process.env.MajavashakkiMongoConnectionString ?
+    process.env.MajavashakkiMongoConnectionString :
+    "mongodb://localhost/test"
+
 const mockgoose = new Mockgoose(mongoose);
 const User = mongoose.model('User', UserSchema) as IUserModel;
 
 describe("User", () => {
     beforeEach(async () => {
         await mockgoose.prepareStorage();
-        await mongoose.connect("mongodb://localhost/test");
+        await mongoose.connect(connectionString);
     });
 
     afterEach(async () => {
