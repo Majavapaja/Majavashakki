@@ -64,6 +64,12 @@ app.use(bodyParser.json())
 
 const roomRepo = GameRoomsRepository.getInstance();
 
+app.get("/api/user", (req, res) => {
+  var user = req.session.passport.user;
+  res.set('Cache-Control', 'no-cache');
+  res.send(user);
+});
+
 app.post("/api/user", apiAuth, (req, res) => {
   const {session, body: {name}} = req
   const currentUser: IUserDocument = session.passport.user;

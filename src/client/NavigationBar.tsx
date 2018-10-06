@@ -1,5 +1,5 @@
 import * as React from "react";
-
+import * as request from "request-promise";
 import { withStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -76,6 +76,13 @@ class NavigationBar extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
     this.state = {logged: true};
+    this.init();
+  }
+
+  private init = () => {
+    request({ method: "GET", url: window.location.origin + "/api/user" }).then(user => {
+      this.setState({ logged: !!user });
+    });
   }
 
   public logout = () => {
