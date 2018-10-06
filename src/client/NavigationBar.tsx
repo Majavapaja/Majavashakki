@@ -112,7 +112,7 @@ class NavigationBar extends React.Component<any, any> {
             <Typography variant="title" color="inherit" className={classes.grow}>
               Majavashakki
             </Typography>
-            {this.state.logged && <LoginMenu logout={this.logout} />}
+            {this.state.logged && <LoginMenu logout={this.logout} profile={this.profile} />}
             {!this.state.logged && <Button onClick={this.login}><Typography color="textSecondary">Login</Typography></Button>}
           </Toolbar>
         </AppBar>
