@@ -1,12 +1,10 @@
 import {usingAsync} from "../components/disposable";
 import {MajavaDbClient} from "./MajavaDbClient";
 import {Game} from "../entities/GameRoom";
-import {UserState} from "../entities/UserState";
 import * as _ from "lodash";
 import * as util from "util";
 
 export class GameMongoClient {
-
   public async getGames() {
     console.log("Get games");
     const roomStorage: {[name: string]: Game} = {};

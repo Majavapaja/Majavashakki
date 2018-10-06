@@ -1,6 +1,11 @@
 # Mursushakki
 The amazing sequel to the fantastic Majavashakki. With this new version we are planning to add several new bugs and more unreadable code!
 
+## Business hours
+Mon-Fri 17-18
+Sat 15-16
+Sun Closed
+
 ### Install MongoDB using Vagrant ###
 
 1. Install Virtual Box and Vagrant
@@ -25,7 +30,17 @@ systemLog:
 storage:
  dbPath: C:\MongoData\db
  )
- 
+
  3. Run from administrator cmd (from mongo installation bin folder or if env var exists)
- 
+
  mongod.exe --config "C:\MongoData\mongod.cfg" --install
+
+## Environment variables
+### Required
+MajavashakkiFbClientId=derp
+MajavashakkiFbSecret=herp
+MajavashakkiSessionSecret=herpderp
+
+### Optional
+MajavashakkiMongoConnectionString
+MajavaMongoPassword
