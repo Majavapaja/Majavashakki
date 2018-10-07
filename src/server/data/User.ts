@@ -32,7 +32,11 @@ export interface IUserModel extends Model<IUserDocument> {
 const options: SchemaOptions = {timestamps: true};
 export let UserSchema: Schema = new Schema({
   createdAt: Date,
-  email: String,
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
   name: String,
   password: String,
   facebookId: String,
