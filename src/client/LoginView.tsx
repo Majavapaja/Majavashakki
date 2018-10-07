@@ -9,27 +9,27 @@ import Majava from "./Majava";
 
 const styles = createStyles({
     root: {
-        display: 'flex',
-        height: '100vh',
-        justifyContent: 'center',
-        alignItems: 'center'
+        display: "flex",
+        height: "100vh",
+        justifyContent: "center",
+        alignItems: "center"
     },
     loginContainer: {
         width: 500,
         padding: 25,
-        display: 'flex',
-        justifyContent: 'center',
-        flexDirection: 'column',
-        alignItems: 'center'
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center"
     },
     facebookButton: {
-        backgroundColor: '#3B5998',
-        color: '#fff'
+        backgroundColor: "#3B5998",
+        color: "#fff"
     },
     divider: {
-        border: '1px solid rgba(0,0,0,.1)',
-        width: '100%',
-        margin: '25px 0'
+        border: "1px solid rgba(0,0,0,.1)",
+        width: "100%",
+        margin: "25px 0"
     }
 })
 
