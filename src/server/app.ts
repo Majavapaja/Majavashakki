@@ -96,15 +96,29 @@ app.post("/api/games", apiAuth, async (req, res) => {
   res.send(game)
 })
 
+app.get("/api/games/get/:name", apiAuth, async (req, res) => {
+  const {session, params: {name}} = req
+  const socket = sessionSocketMap[session.id];
+
+  // TODO: Check the user has permissions to the game
+
+  const game = await roomRepo.getGameRoom(name);
+  socket.join(game.title)
+  if (game) {
+    res.send(game);
+  } else {
+    res.status(404).send({error: "Game not found"})
+  }
+})
+
 app.post("/api/games/join", apiAuth, async (req, res) => {
   const {session, body: {name}} = req
   const socket = sessionSocketMap[session.id];
   const userId = session.passport.user._id;
-  const game = await roomRepo.joinRoom(name, userId);
+  const game = await roomRepo.joinRoom(name, userId) // TODO: Handle full room exception
   await User.addGame(userId, game.title)
   socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
   socket.join(name); // TODO we should use game ids
-  socket.emit("game-joined", game.gameState.board.pieces); // TODO return response instead of socket communication
   if (game.isFull()) {
     socket.broadcast.to(this.MainRoom).emit("game-full");
   }
@@ -120,10 +134,10 @@ function initSockets() {
     sessionSocketMap[session.id] = socket;
 
     socket.on("move", async (data) => {
-      const currentRoom = Object.keys(socket.rooms)[0] // TODO Move room data into some smart structure inside session when its needed (not yet)
-      const game = await roomRepo.getGameRoom(currentRoom);
+      // TODO: Check the player is allowed to make moves in the game
+      const game = await roomRepo.getGameRoom(data.gameName);
       const result = game.move(data.from, data.dest);
-      roomRepo.saveGame(game);
+      await roomRepo.saveGame(game);
 
       switch (result.kind) {
       case "error":

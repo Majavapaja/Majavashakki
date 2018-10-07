@@ -18,7 +18,11 @@ class Board extends React.Component<any, any> {
       moveTarget: null,
     };
 
-    this.props.socket.on("move_result", (room) => this.onMoveResult(room));
+    this.onMoveResult = this.onMoveResult.bind(this)
+  }
+
+  public componentWillMount() {
+    this.props.socket.on("move_result", this.onMoveResult);
   }
 
   public render() {
@@ -77,6 +81,7 @@ class Board extends React.Component<any, any> {
 
     if (this.state.selectedCell) {
       this.props.socket.emit("move", {
+        gameName: this.props.gameName,
         from: this.posToJson(this.state.selectedCell),
         dest: this.posToJson(pos),
       });

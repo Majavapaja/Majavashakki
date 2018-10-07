@@ -1,4 +1,6 @@
 import * as React from "react";
+import * as request from "request-promise";
+import { withRouter } from "react-router-dom";
 
 import {MoveResponse} from "../common/protocol";
 import {Piece} from "../common/types";
@@ -7,27 +9,29 @@ import Board from "./Board";
 class GameView extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
+    this.state = {
+      pieces: [],
+      gameName: props.match.params.gameName
+    }
   }
 
   public componentWillMount() {
-    this.setState({pieces: this.props.pieces});
-    this.props.socket.on("move_result", this.onMoveResult.bind(this));
-    this.props.socket.on("game-joined", this.onJoined.bind(this));
+    fetchGame(this.state.gameName).then(game => {
+      this.setState({pieces: game.gameState.board.pieces})
+      this.props.socket.on("move_result", this.onMoveResult.bind(this));
+    })
   }
 
   public render() {
+    if (!this.state.pieces) {
+      return <div>>Loading...</div>
+    }
     return (
       <li className="game page">
-        <Board pieces={this.state.pieces} socket={this.props.socket}/>
+        <Board pieces={this.state.pieces} socket={this.props.socket} gameName={this.state.gameName}/>
         {this.state.error && <p>Error: {this.state.error}</p>}
       </li>
     );
-  }
-
-  private onJoined(pieces: Piece[]) {
-    if (pieces) {
-      this.setState({pieces});
-    }
   }
 
   private onMoveResult(response: MoveResponse) {
@@ -46,4 +50,12 @@ class GameView extends React.Component<any, any> {
   }
 }
 
-export default GameView;
+function fetchGame(name) {
+    return request({
+        method: "GET",
+        url: `${window.location.origin}/api/games/get/${name}`,
+        json: true,
+    })
+}
+
+export default withRouter(GameView);

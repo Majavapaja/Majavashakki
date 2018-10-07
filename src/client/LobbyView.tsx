@@ -8,6 +8,9 @@ import * as request from "request-promise";
 class LobbyView extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
+
+        this.handleJoinResponse = this.handleJoinResponse.bind(this)
+
         this.state = {
             newRoomName: "",
             rooms: [],
@@ -18,10 +21,6 @@ class LobbyView extends React.Component<any, any> {
             this.setState({
                 rooms: this.state.rooms.filter(room => room !== fullRoom),
             });
-        });
-
-        this.props.socket.on("game-joined", () => {
-          this.props.history.push("/game");
         });
     }
 
@@ -41,7 +40,7 @@ class LobbyView extends React.Component<any, any> {
                 this.setState({
                     rooms: [...this.state.rooms, game.title],
                 });
-                joinGame(game.title);
+                joinGame(game.title).then(this.handleJoinResponse)
             });
         }
     }
@@ -55,7 +54,11 @@ class LobbyView extends React.Component<any, any> {
     }
 
     public onRoomClick(gameName: string) {
-        joinGame(gameName);
+        joinGame(gameName).then(this.handleJoinResponse);
+    }
+
+    public handleJoinResponse({title}) {
+        this.props.history.push(`/game/${title}`)
     }
 
     public render() {

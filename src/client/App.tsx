@@ -20,9 +20,9 @@ export default ({ socket }) => (
 
     <Route
       exact
-      path='/game'
+      path="/game/:gameName"
       render={() => (
-        <GameView socket={socket} pieces={makeInitialState()} />
+        <GameView socket={socket} />
       )}
     />
 
