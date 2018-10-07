@@ -8,12 +8,13 @@ import {Strategy as FbStrategy} from "passport-facebook";
 import { Strategy as LocalStrategy } from "passport-local";
 import * as sio from "socket.io";
 import {MongooseClient} from "./data/MongooseClient";
-import {User, IUserDocument} from "./data/User";
+import {User, IUserDocument, IUser} from "./data/User";
 
 import {Game} from "./entities/GameRoom";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {enableSessions, getSession} from "./session";
 import {copy} from "../common/util";
+
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";
 const app = express();
@@ -81,6 +82,17 @@ app.post("/api/user", apiAuth, (req, res) => {
   User.updateName(currentUser._id, name);
   currentUser.name = name;
   res.send("OK")
+})
+
+app.post("/api/user/register", async (req, res) => {
+  const { body: { username, password, email } } = req
+  const newUser: IUser = { name: username, email, password };
+  console.log("New user received :" + newUser);
+
+  const result = await User.registerUser(newUser);
+
+  if (result) res.send("OK")
+  else res.status(500).send({ error: "Couldn't create user" })
 })
 
 app.get("/api/games", apiAuth, async (req, res) => {
