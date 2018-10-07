@@ -65,12 +65,12 @@ app.use(bodyParser.json())
 const roomRepo = GameRoomsRepository.getInstance();
 
 app.get("/api/user", (req, res) => {
-  var user = req.user;
-  var result = {
+  const user = req.user;
+  const result = {
     loggedIn: !!user,
     name: user.name
   };
-  res.set('Cache-Control', 'no-cache');
+  res.set("Cache-Control", "no-cache");
   res.send(result);
 });
 
@@ -203,7 +203,7 @@ function serveUI(req, res) {
 }
 
 function requireAuth(onFailure) {
-  return function(req, res, next) {
+  return (req, res, next) => {
     if (req.isAuthenticated()) {
       next()
     } else {
