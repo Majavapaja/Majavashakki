@@ -4,6 +4,7 @@ import { withStyles, createStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
 
 import Majava from "./Majava";
 
@@ -30,6 +31,9 @@ const styles = createStyles({
         border: "1px solid rgba(0,0,0,.1)",
         width: "100%",
         margin: "25px 0"
+    },
+    button: {
+        margin: "10px 0"
     }
 })
 
@@ -55,10 +59,24 @@ class LoginView extends React.Component<any, any> {
                         type="password"
                         margin="normal"
                     />
-                    <Button variant="raised" color="primary">
-                        Sign in
+
+                    <Button variant="raised" color="primary" className={classes.button}>
+                        <Typography color="inherit">Sign in</Typography>
                     </Button>
+
+                    <Typography variant="subheading">or</Typography>
+
+                    <Button
+                        variant="raised"
+                        color="primary"
+                        className={classes.button}
+                        href="/signup"
+                    >
+                        <Typography color="inherit">Register</Typography>
+                    </Button>
+
                     <hr className={classes.divider} />
+
                     <Button variant="raised" className={classes.facebookButton} href="/authFacebook">
                         Sign in with Facebook
                     </Button>
