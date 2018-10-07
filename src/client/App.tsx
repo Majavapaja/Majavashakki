@@ -6,6 +6,7 @@ import LobbyView from "./LobbyView";
 import ProfileView from "./ProfileView";
 import * as React from "react";
 import { Route } from "react-router-dom";
+import SignUpView from "./SignUpView";
 
 export default ({ socket }) => (
   <div>
@@ -16,6 +17,12 @@ export default ({ socket }) => (
       render={() => (
         <LoginView socket={socket} />
       )}
+    />
+
+    <Route
+      exact
+      path="/signup"
+      component={SignUpView}
     />
 
     <Route
