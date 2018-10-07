@@ -102,7 +102,7 @@ class SignUpView extends React.Component<any, any> {
                 isLoading: true
             })
             registerUser(this.state).then(() => {
-                console.log("Forward user to lobby or login or whatever")
+                this.props.history.push("/login");
                 this.setState({
                     isLoading: false
                 })
