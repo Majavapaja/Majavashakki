@@ -12,11 +12,9 @@ export default ({ socket }) => (
   <div>
     <NavigationBar />
     <Route
-      exact={true}
+      exact
       path="/login"
-      render={() => (
-        <LoginView socket={socket} />
-      )}
+      component={LoginView}
     />
 
     <Route
@@ -35,7 +33,7 @@ export default ({ socket }) => (
 
     <Route
       exact
-      path='/'
+      path="/"
       render={() => (
         <LobbyView socket={socket} />
       )}
@@ -43,10 +41,8 @@ export default ({ socket }) => (
 
     <Route
       exact
-      path='/profile'
-      render={() => (
-        <ProfileView socket={socket} />
-      )}
+      path="/profile"
+      component={ProfileView}
     />
   </div>
 );
