@@ -195,6 +195,7 @@ app.get("/logout", (req, res) => {
   res.redirect("/")
 })
 app.get("/login", serveUI)
+app.get("/signup", serveUI)
 app.get("*", uiAuth, serveUI)
 
 function serveUI(req, res) {
