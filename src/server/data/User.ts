@@ -34,7 +34,6 @@ export let UserSchema: Schema = new Schema({
   createdAt: Date,
   email: {
     type: String,
-    required: true,
     unique: true
   },
   name: String,
