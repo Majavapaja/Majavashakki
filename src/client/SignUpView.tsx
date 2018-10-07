@@ -5,6 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import * as request from "request-promise";
 
 import Majava from "./Majava";
 
@@ -128,9 +129,20 @@ class SignUpView extends React.Component<any, any> {
 
 const registerUser = (formData) => {
     return new Promise((resolve, reject) => {
-        console.log("Submitted: " + JSON.stringify(this.state));
-        // TODO Post data to server
-        setTimeout(resolve, 3500)
+        return request({
+            method: "POST",
+            url: window.location.origin + "/api/user/register",
+            body: {
+                name: formData.username,
+                email: formData.email,
+                password: formData.password
+            },
+            json: true,
+        }).then(() => {
+            setTimeout(resolve, 2000)
+        }).catch(error => {
+            setTimeout(() => reject(error), 5000)
+        })
     })
 }
 
