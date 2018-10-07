@@ -37,10 +37,10 @@ storage:
 
 ## Environment variables
 ### Required
-MajavashakkiFbClientId=derp
-MajavashakkiFbSecret=herp
-MajavashakkiSessionSecret=herpderp
+MajavashakkiFbClientId  
+MajavashakkiFbSecret  
+MajavashakkiSessionSecret  
 
 ### Optional
-MajavashakkiMongoConnectionString
+MajavashakkiMongoConnectionString  
 MajavaMongoPassword
