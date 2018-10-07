@@ -5,7 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
-import * as logo from "./assets/logo.png";
+import Majava from "./Majava";
 
 const styles = createStyles({
     root: {
@@ -21,9 +21,6 @@ const styles = createStyles({
         justifyContent: 'center',
         flexDirection: 'column',
         alignItems: 'center'
-    },
-    logo: {
-        width: 100
     },
     facebookButton: {
         backgroundColor: '#3B5998',
@@ -46,7 +43,7 @@ class LoginView extends React.Component<any, any> {
         return (
             <div className={classes.root}>
                 <Paper className={classes.loginContainer}>
-                    <img src={String(logo)} className={classes.logo} />
+                    <Majava />
                     <TextField
                         id="username"
                         label="Name"
