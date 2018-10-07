@@ -82,7 +82,7 @@ UserSchema.statics.registerUser = async (user: IUser): Promise<boolean> => {
     userObj.name = user.name
     userObj.email = user.email
     // TODO: Hash password
-    userObj.password = `bcrypt(user.password, salt)`
+    userObj.password = `bcrypt(${user.password}, salt)`
 
     await userObj.save();
 
