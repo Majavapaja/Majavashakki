@@ -8,12 +8,13 @@ import {Strategy as FbStrategy} from "passport-facebook";
 import { Strategy as LocalStrategy } from "passport-local";
 import * as sio from "socket.io";
 import {MongooseClient} from "./data/MongooseClient";
-import {User, IUserDocument} from "./data/User";
+import {User, IUserDocument, IUser} from "./data/User";
 
 import {Game} from "./entities/GameRoom";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {enableSessions, getSession} from "./session";
 import {copy} from "../common/util";
+
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";
 const app = express();
@@ -64,6 +65,16 @@ app.use(bodyParser.json())
 
 const roomRepo = GameRoomsRepository.getInstance();
 
+app.get("/api/user", (req, res) => {
+  const user = req.user;
+  const result = {
+    loggedIn: !!user,
+    name: user.name
+  };
+  res.set("Cache-Control", "no-cache");
+  res.send(result);
+});
+
 app.post("/api/user", apiAuth, (req, res) => {
   const {session, body: {name}} = req
   const currentUser: IUserDocument = session.passport.user;
@@ -71,6 +82,17 @@ app.post("/api/user", apiAuth, (req, res) => {
   User.updateName(currentUser._id, name);
   currentUser.name = name;
   res.send("OK")
+})
+
+app.post("/api/user/register", async (req, res) => {
+  const { body: { username, password, email } } = req
+  const newUser: IUser = { name: username, email, password };
+  console.log("New user received :" + newUser);
+
+  const result = await User.registerUser(newUser);
+
+  if (result) res.send("OK")
+  else res.status(500).send({ error: "Couldn't create user" })
 })
 
 app.get("/api/games", apiAuth, async (req, res) => {
@@ -87,11 +109,26 @@ app.post("/api/games", apiAuth, async (req, res) => {
   res.send(game)
 })
 
+app.get("/api/games/get/:name", apiAuth, async (req, res) => {
+  const {session, params: {name}} = req
+  const socket = sessionSocketMap[session.id];
+
+  // TODO: Check the user has permissions to the game
+
+  const game = await roomRepo.getGameRoom(name);
+  socket.join(game.title)
+  if (game) {
+    res.send(game);
+  } else {
+    res.status(404).send({error: "Game not found"})
+  }
+})
+
 app.post("/api/games/join", apiAuth, async (req, res) => {
   const {session, body: {name}} = req
   const socket = sessionSocketMap[session.id];
   const userId = session.passport.user._id;
-  const game = await roomRepo.joinRoom(name, userId);
+  const game = await roomRepo.joinRoom(name, userId) // TODO: Handle full room exception
   await User.addGame(userId, game.title)
   socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
   socket.join(name); // TODO we should use game ids
@@ -111,10 +148,10 @@ function initSockets() {
     sessionSocketMap[session.id] = socket;
 
     socket.on("move", async (data) => {
-      const currentRoom = Object.keys(socket.rooms)[0] // TODO Move room data into some smart structure inside session when its needed (not yet)
-      const game = await roomRepo.getGameRoom(currentRoom);
+      // TODO: Check the player is allowed to make moves in the game
+      const game = await roomRepo.getGameRoom(data.gameName);
       const result = game.move(data.from, data.dest);
-      roomRepo.saveGame(game);
+      await roomRepo.saveGame(game);
 
       switch (result.kind) {
       case "error":
@@ -172,6 +209,7 @@ app.get("/logout", (req, res) => {
   res.redirect("/")
 })
 app.get("/login", serveUI)
+app.get("/signup", serveUI)
 app.get("*", uiAuth, serveUI)
 
 function serveUI(req, res) {
@@ -179,7 +217,7 @@ function serveUI(req, res) {
 }
 
 function requireAuth(onFailure) {
-  return function(req, res, next) {
+  return (req, res, next) => {
     if (req.isAuthenticated()) {
       next()
     } else {

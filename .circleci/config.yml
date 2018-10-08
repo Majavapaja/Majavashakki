@@ -8,6 +8,7 @@ jobs:
         - master
     docker:
       - image: ubuntu:18.04
+      - image: mongo:3.2.21-jessie
     steps:
       - checkout
       - run: ./.circleci/circleci.sh

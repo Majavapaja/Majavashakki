@@ -38,7 +38,7 @@ export class GameRoomsRepository {
 
     public async getAvailableGames(): Promise<string[]> {
         const games = await GameModel.getAvailableGames();
-        return games.map((item: IGameDocument) => { return item.title });
+        return games.map((item: IGameDocument) => item.title);
     }
 
     public async getGameRoom(title: string): Promise<Game> {

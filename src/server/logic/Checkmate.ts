@@ -71,12 +71,12 @@ export function isCheckMate(board: Board, color): boolean {
 
     console.log("Mr. Check cannot be captured");
 
-    // Check if anyone can someone block the treathening piece
-    // I need checking piece path to king D:
+    // Check if anyone can somehow block the treathening piece
 
     const pathToKing = getPiecePathToKing(board, king, checkingPiece);
 
-    if (pathToKing.length === 0) return false;
+    // If checking piece is next to king, no one can block it
+    if (pathToKing.length === 0) return true;
 
     console.log("There is path to king, can anyone block it?");
 

@@ -64,6 +64,7 @@ async def main():
         app_settings=env_pairs,
         scm_type=ScmType.local_git,
         web_sockets_enabled=True,
+        always_on=True,
       )
     )
   ).result()

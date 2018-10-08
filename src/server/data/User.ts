@@ -3,10 +3,11 @@
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
 import { ObjectID } from "../../../node_modules/@types/bson/index";
 
-interface IUser {
+export interface IUser {
   email: string;
   name: string;
   games?: string[];
+  password: string;
 }
 
 export interface IUserDocument extends IUser, Document {
@@ -25,12 +26,16 @@ export interface IUserModel extends Model<IUserDocument> {
   updateName(id: string|ObjectID, name: string);
   addGame(userId: string, gameName: string): Promise<void>;
   validProfile(user: IUserDocument): boolean;
+  registerUser(newUser: IUser): Promise<boolean>;
 }
 
 const options: SchemaOptions = {timestamps: true};
 export let UserSchema: Schema = new Schema({
   createdAt: Date,
-  email: String,
+  email: {
+    type: String,
+    unique: true
+  },
   name: String,
   password: String,
   facebookId: String,
@@ -51,11 +56,14 @@ UserSchema.statics.validProfile = (user: IUserDocument): boolean => {
 }
 
 UserSchema.statics.findOrCreate = async (facebookId: string): Promise<IUserDocument> => {
+
+  console.log(`Find user by FBID '${facebookId}'`);
+
   const userObj = new User();
   const result = await User.findOne({facebookId}).exec();
 
   if (!result) {
-    console.log(`CREATING NEW USER ${facebookId}`);
+    console.log(`CREATING NEW USER ${facebookId}`); // Please don't yell :(
     userObj.facebookId = facebookId;
     await userObj.save();
     return userObj;
@@ -65,6 +73,29 @@ UserSchema.statics.findOrCreate = async (facebookId: string): Promise<IUserDocum
   }
 
 };
+
+UserSchema.statics.registerUser = async (user: IUser): Promise<boolean> => {
+  console.log(`Find user by email '${user.email}'`);
+
+  const userObj = new User();
+  const result = await User.findOne({ email: user.email }).exec();
+
+  if (!result) {
+    console.log(`Registering user ${user}`);
+    userObj.name = user.name
+    userObj.email = user.email
+    // TODO: Hash password
+    userObj.password = `bcrypt(${user.password}, salt)`
+
+    await userObj.save();
+
+    return true;
+  } else {
+    console.log(`User already exists ${result.email} name: ${result.name}, id: ${result._id}`);
+    return false;
+  }
+
+}
 
 UserSchema.statics.updateName = (_id: string|ObjectID, name: string) => {
   User.findOneAndUpdate({_id}, {name}, (err, doc, res) => {
@@ -83,7 +114,7 @@ UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
     return;
   }
 
-  console.log(`Adding game '${gameTitle}' for user ${user.name}`);
+  console.log(`Adding game '${gameTitle}' for user ${user.name} (ID ${user._id})`);
 
   if (!user.games) {
     user.games = [];

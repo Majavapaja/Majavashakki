@@ -7,7 +7,7 @@ export class Game implements Majavashakki.IGame {
     public board: Board;
 
     public static MapFromDb(gameState: Majavashakki.IGame): Game {
-        var game = new Game(gameState.title);
+        const game = new Game(gameState.title);
         game.board.pieces = gameState.board.pieces;
         game.board.moveHistory = gameState.board.moveHistory;
         game.playerIdBlack = gameState.playerIdBlack;

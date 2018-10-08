@@ -1,6 +1,6 @@
 import * as React from "react";
-
-import { withStyles } from "@material-ui/core/styles";
+import * as request from "request-promise";
+import { withStyles, createStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
@@ -11,8 +11,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 
 import { withRouter } from "react-router-dom";
+import MajavapajaLogo from "./MajavapajaLogo";
 
-const styles = theme => ({
+const styles = createStyles({
   grow: {
     flexGrow: 1
   }
@@ -45,7 +46,7 @@ class LoginMenu extends React.Component<any, any> {
           open={Boolean(anchorEl)}
           onClose={this.handleClose}
         >
-          <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+          <MenuItem onClick={this.profile}>Profile</MenuItem>
           <MenuItem onClick={this.handleClose}>My account</MenuItem>
           <MenuItem onClick={this.logout}>Logout</MenuItem>
         </Menu>
@@ -65,20 +66,31 @@ class LoginMenu extends React.Component<any, any> {
   private handleClose = () => {
     this.setState({ anchorEl: null });
   }
+
+  private profile = () => {
+    this.handleClose()
+    this.props.profile();
+  }
 }
 
 class NavigationBar extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
-    this.state = {logged: true};
+    this.state = {logged: false};
+    this.init();
   }
 
   public logout = () => {
+    this.props.history.push("/logout");
     this.setState({ logged: false });
   };
 
   public login = () => {
-    this.setState({ logged: true });
+    this.props.history.push("/login");
+  };
+
+  public profile = () => {
+    this.props.history.push("/profile");
   };
 
   public navigateToMain = (event: any) => {
@@ -91,15 +103,19 @@ class NavigationBar extends React.Component<any, any> {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="title" color="inherit" className={classes.grow}>
-              Majavashakki
-            </Typography>
-            {this.state.logged && <LoginMenu logout={this.logout} />}
+            <MajavapajaLogo />
+            {this.state.logged && <LoginMenu logout={this.logout} profile={this.profile} />}
             {!this.state.logged && <Button onClick={this.login}><Typography color="textSecondary">Login</Typography></Button>}
           </Toolbar>
         </AppBar>
       </div>
     );
+  }
+
+  private init = () => {
+    request({ method: "GET", url: window.location.origin + "/api/user" }).then(user => {
+      this.setState({ logged: !!user });
+    });
   }
 }
 

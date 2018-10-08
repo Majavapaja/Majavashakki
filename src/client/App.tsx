@@ -6,29 +6,34 @@ import LobbyView from "./LobbyView";
 import ProfileView from "./ProfileView";
 import * as React from "react";
 import { Route } from "react-router-dom";
+import SignUpView from "./SignUpView";
 
 export default ({ socket }) => (
   <div>
     <NavigationBar />
     <Route
-      exact={true}
+      exact
       path="/login"
+      component={LoginView}
+    />
+
+    <Route
+      exact
+      path="/signup"
+      component={SignUpView}
+    />
+
+    <Route
+      exact
+      path="/game/:gameName"
       render={() => (
-        <LoginView socket={socket} />
+        <GameView socket={socket} />
       )}
     />
 
     <Route
       exact
-      path='/game'
-      render={() => (
-        <GameView socket={socket} pieces={makeInitialState()} />
-      )}
-    />
-
-    <Route
-      exact
-      path='/'
+      path="/"
       render={() => (
         <LobbyView socket={socket} />
       )}
@@ -36,10 +41,8 @@ export default ({ socket }) => (
 
     <Route
       exact
-      path='/profile'
-      render={() => (
-        <ProfileView socket={socket} />
-      )}
+      path="/profile"
+      component={ProfileView}
     />
   </div>
 );

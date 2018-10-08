@@ -12,14 +12,16 @@
 	  "indent": [true, "spaces"],
       "object-literal-sort-keys": false,
       "curly": [true, "ignore-same-line"],
-      "interface-name": [true, "never-prefix"],
       "no-console": false,
       "ordered-imports": false,
       "arrow-parens": false,
 	  "max-line-length": false,
 	  "interface-name": false,
 	  "no-debugger": false,
-	  "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"]
+      "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"],
+      "jsx-no-multiline-js": false,
+      "jsx-boolean-value": ["never"],
+      "object-literal-key-quotes": false
     },
     "rulesDirectory": []
 }

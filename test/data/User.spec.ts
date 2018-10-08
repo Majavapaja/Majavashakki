@@ -1,25 +1,40 @@
-import {User, IUserModel} from "../../src/server/Data/User";
+import {UserSchema, IUserModel} from "../../src/server/data/User";
 import * as mongoose from "mongoose";
-import {Mockgoose} from "mockgoose";
 import * as assert from "assert";
 
+const connectionString = "mongodb://localhost/test"
+
+const User = mongoose.model('User', UserSchema) as IUserModel;
+
 describe("User", () => {
+    beforeEach(async () => {
+        await mongoose.connect(connectionString);
+        await mongoose.connection.db.dropDatabase()
+    });
+
+    afterEach(async () => {
+        await mongoose.disconnect()
+    })
+
+    describe("findOrCreate", () => {
+        it("should create user", async () => {
+            await User.findOrCreate("M4T4L4");
+
+            const users = await User.find().exec();
+            assert.equal(1, users.length, "users");
+        });
+    });
+
     describe("addGame", () => {
-        it("should add game for logged in user", done => {
+        it("should add game for logged in user", async () => {
+            let user = await User.findOrCreate("M4T4L4");
 
-            var mockgoose = new Mockgoose(mongoose);
+            User.updateName(user._id, "HerraMatala");
+            await User.addGame(user._id, "P3L1");
+            user = await User.findOrCreate("M4T4L4");
 
-            mockgoose.prepareStorage().then(async () => {
-                var Usr = mongoose.model('User') as IUserModel;
-                const user = await Usr.findOrCreate("P3L1");
-                await Usr.addGame(user._id, "peli");
-
-                assert.equal(user.games.length, 1, "added game");
-                assert.equal(user.games[0], "P3L1", "game title");
-                done();
-            });
-            done();
-
+            assert.equal(user.games.length, 1, "added game");
+            assert.equal(user.games[0], "P3L1", "game title");
         });
     });
 });
