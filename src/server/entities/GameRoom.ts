@@ -15,6 +15,10 @@ export class Game implements Majavashakki.IGame {
         return game;
     }
 
+    public static MapForDb(game: Game): Majavashakki.IGame {
+        return { title: game.title, board: game.board, playerIdWhite: game.playerIdWhite, playerIdBlack: game.playerIdBlack };
+    }
+
     constructor(title: string) {
         this.title = title;
         this.board = new Board();

@@ -83,6 +83,7 @@ app.post("/api/games", apiAuth, async (req, res) => {
   const game = await roomRepo.createRoom(name)
   const socket = sessionSocketMap[session.id];
   socket.broadcast.to(this.MainRoom).emit("game-created", game.title);
+  // TODO check do we leak mongo document data for client? (origin IGameDocument)
   res.send(game)
 })
 
