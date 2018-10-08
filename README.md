@@ -1,4 +1,4 @@
-[![Build status](https://circleci.com/gh/Majavapaja/Mursushakki.svg?style=svg)](https://circleci.com/gh/Majavapaja/Mursushakki)
+[![CircleCI](https://circleci.com/gh/Majavapaja/Mursushakki.svg?style=svg)](https://circleci.com/gh/Majavapaja/Mursushakki)
 
 # Mursushakki
 The amazing sequel to the fantastic Majavashakki. With this new version we are planning to add several new bugs and more unreadable code!
@@ -39,10 +39,10 @@ storage:
 
 ## Environment variables
 ### Required
-MajavashakkiFbClientId  
-MajavashakkiFbSecret  
-MajavashakkiSessionSecret  
+MajavashakkiFbClientId=derp
+MajavashakkiFbSecret=herp
+MajavashakkiSessionSecret=herpderp
 
 ### Optional
-MajavashakkiMongoConnectionString  
+MajavashakkiMongoConnectionString
 MajavaMongoPassword
