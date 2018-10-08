@@ -20,7 +20,8 @@
 	  "no-debugger": false,
       "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"],
       "jsx-no-multiline-js": false,
-      "jsx-boolean-value": ["never"]
+      "jsx-boolean-value": ["never"],
+      "object-literal-key-quotes": false
     },
     "rulesDirectory": []
 }
