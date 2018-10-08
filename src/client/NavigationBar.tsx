@@ -9,9 +9,9 @@ import Button from "@material-ui/core/Button";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-import {Link} from "react-router-dom";
 
 import { withRouter } from "react-router-dom";
+import MajavapajaLogo from "./MajavapajaLogo";
 
 const styles = createStyles({
   grow: {
@@ -80,12 +80,6 @@ class NavigationBar extends React.Component<any, any> {
     this.init();
   }
 
-  private init = () => {
-    request({ method: "GET", url: window.location.origin + "/api/user" }).then(user => {
-      this.setState({ logged: !!user });
-    });
-  }
-
   public logout = () => {
     this.props.history.push("/logout");
     this.setState({ logged: false });
@@ -109,15 +103,19 @@ class NavigationBar extends React.Component<any, any> {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <Typography variant="title" color="inherit" className={classes.grow}>
-              Majavashakki
-            </Typography>
+            <MajavapajaLogo />
             {this.state.logged && <LoginMenu logout={this.logout} profile={this.profile} />}
             {!this.state.logged && <Button onClick={this.login}><Typography color="textSecondary">Login</Typography></Button>}
           </Toolbar>
         </AppBar>
       </div>
     );
+  }
+
+  private init = () => {
+    request({ method: "GET", url: window.location.origin + "/api/user" }).then(user => {
+      this.setState({ logged: !!user });
+    });
   }
 }
 
