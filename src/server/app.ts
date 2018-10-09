@@ -18,6 +18,12 @@ import * as Majavashakki from "../common/GamePieces"
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";
 const app = express();
+
+// Get facebook authentication values from environment variables
+const facebookClientId = process.env.MajavashakkiFbClientId
+const facebookSecret = process.env.MajavashakkiFbSecret
+const isFacebookAuthEnabled = facebookClientId && facebookSecret
+
 MongooseClient.InitMongoConnection();
 initPassport(appRootUrl);
 
@@ -168,12 +174,10 @@ function initPassport(appUrl: string) {
   passport.serializeUser((user, done) => done(null, user))
   passport.deserializeUser((obj, done) => done(null, obj))
 
-  if (!process.env.MajavashakkiFbClientId || !process.env.MajavashakkiFbSecret) {
-    throw new Error("Missing critical environment configurations!")
-  }
+  if (isFacebookAuthEnabled) {
   passport.use(new FbStrategy({
-      clientID: process.env.MajavashakkiFbClientId,
-      clientSecret: process.env.MajavashakkiFbSecret,
+        clientID: facebookClientId,
+        clientSecret: facebookSecret,
       callbackURL: appUrl + "/authFacebook",
     },
     async (accessToken, refreshToken, profile, done) => {
@@ -188,6 +192,9 @@ function initPassport(appUrl: string) {
       }
     }
   ))
+  } else {
+    console.warn("[WARNING] Facebook authentication was not enabled. Missing environment variables 'MajavashakkiFbClientId' or 'MajavashakkiFbSecret'")
+  }
 
   // passport.use(
   //   new LocalStrategy((email, password, done) => {
