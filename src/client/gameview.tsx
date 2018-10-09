@@ -2,6 +2,7 @@ import * as React from "react";
 import * as request from "request-promise";
 import { withRouter } from "react-router-dom";
 import Board from "./Board";
+import * as Majavashakki from "../common/GamePieces"
 
 class GameView extends React.Component<any, any> {
   constructor(props: any) {
@@ -31,24 +32,11 @@ class GameView extends React.Component<any, any> {
     );
   }
 
-  private onJoined(pieces: Majavashakki.IPiece[]) {
-    if (pieces) {
-      this.setState({pieces});
-    }
-  }
-
   private onMoveResult(response: Majavashakki.IMoveResponse) {
-    switch (response.kind) {
-    case "error":
-      this.setState({
-        error: response.error,
-      });
-      break;
-    case "success":
-      this.setState({
-        pieces: response.board,
-      });
-      break;
+    if (response.status === Majavashakki.MoveStatus.Error) {
+      this.setState({error: response.error})
+    } else {
+      this.setState({pieces: response.board})
     }
   }
 }

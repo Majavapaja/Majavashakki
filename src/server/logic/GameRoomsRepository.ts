@@ -1,6 +1,6 @@
 import {Game} from "../entities/GameRoom";
 import {GameModel, IGameDocument} from "../data/GameModel";
-import * as _ from "lodash";
+import * as Majavashakki from "../../common/GamePieces"
 
 export class GameRoomsRepository {
     public static getInstance(): GameRoomsRepository {

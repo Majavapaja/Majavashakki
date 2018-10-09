@@ -10,10 +10,10 @@ import * as sio from "socket.io";
 import {MongooseClient} from "./data/MongooseClient";
 import {User, IUserDocument, IUser} from "./data/User";
 
-import {Game} from "./entities/GameRoom";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {enableSessions, getSession} from "./session";
 import {copy} from "../common/util";
+import * as Majavashakki from "../common/GamePieces"
 
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";
@@ -77,6 +77,8 @@ app.get("/api/user", (req, res) => {
 
 app.post("/api/user", apiAuth, (req, res) => {
   const {session, body: {name}} = req
+  if (!session) throw new Error("No session found, things are broken")
+
   const currentUser: IUserDocument = session.passport.user;
   console.log("New user received :" + currentUser.facebookId);
   User.updateName(currentUser._id, name);
@@ -150,14 +152,13 @@ function initSockets() {
     socket.on("move", async (data) => {
       // TODO: Check the player is allowed to make moves in the game
       const game = await roomRepo.getGameRoom(data.gameName);
-      const result = game.move(data.from, data.dest);
+      const move = game.move(data.from, data.dest);
       await roomRepo.saveGame(game);
 
-      switch (result.kind) {
-      case "error":
-          return socket.emit("move_result", result);
-      case "success":
-          return io.to(game.title).emit("move_result", result);
+      if (move.status === Majavashakki.MoveStatus.Error) {
+        return socket.emit("move_result", move);
+      } else {
+        return io.to(game.title).emit("move_result", move);
       }
     });
   });
@@ -167,6 +168,9 @@ function initPassport(appUrl: string) {
   passport.serializeUser((user, done) => done(null, user))
   passport.deserializeUser((obj, done) => done(null, obj))
 
+  if (!process.env.MajavashakkiFbClientId || !process.env.MajavashakkiFbSecret) {
+    throw new Error("Missing critical environment configurations!")
+  }
   passport.use(new FbStrategy({
       clientID: process.env.MajavashakkiFbClientId,
       clientSecret: process.env.MajavashakkiFbSecret,

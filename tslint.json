@@ -21,7 +21,8 @@
       "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"],
       "jsx-no-multiline-js": false,
       "jsx-boolean-value": ["never"],
-      "object-literal-key-quotes": false
+      "object-literal-key-quotes": false,
+	  "eofline":false
     },
     "rulesDirectory": []
 }

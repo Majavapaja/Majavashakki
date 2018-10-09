@@ -40,10 +40,10 @@ class Majava extends React.Component<any, any> {
     }
 
     public render() {
-        let styles: any
+        let anim: any
 
         if (this.props.animation) {
-            styles = { animation: `${this.props.animation} 1s infinite alternate`}
+            anim = { animation: `${this.props.animation} 1s infinite alternate`}
         }
 
         const { classes } = this.props

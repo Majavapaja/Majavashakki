@@ -1,10 +1,7 @@
-import Board from "../entities/Board";
+import Board from "./Board";
+import * as Majavashakki from "../../common/GamePieces"
 
 export class Game implements Majavashakki.IGame {
-    public title: string;
-    public playerIdWhite: string;
-    public playerIdBlack: string;
-    public board: Board;
 
     public static MapFromDb(gameState: Majavashakki.IGame): Game {
         const game = new Game(gameState.title);
@@ -18,6 +15,11 @@ export class Game implements Majavashakki.IGame {
     public static MapForDb(game: Game): Majavashakki.IGame {
         return { title: game.title, board: game.board, playerIdWhite: game.playerIdWhite, playerIdBlack: game.playerIdBlack };
     }
+
+    public title: string;
+    public playerIdWhite: string;
+    public playerIdBlack: string;
+    public board: Board;
 
     constructor(title: string) {
         this.title = title;

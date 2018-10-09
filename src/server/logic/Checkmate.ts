@@ -1,6 +1,7 @@
 import Board from "../entities/Board";
 import {copy} from "../../common/util";
 import MovementValidator from "./MovementValidator";
+import * as Majavashakki from "../../common/GamePieces"
 
 export function isCheck(board: Board, color): boolean {
     // Get current players king
@@ -46,7 +47,7 @@ export function isCheckMate(board: Board, color): boolean {
             if (!pos.col || !pos.row) continue;
 
             const result = MovementValidator.isValidMove(board, king.position, pos);
-            if (result.kind === "success") {
+            if (result.status === "success") {
                 return false;
             }
         }
@@ -65,7 +66,7 @@ export function isCheckMate(board: Board, color): boolean {
     for (const piece of board.pieces) {
         if (piece.color === king.color) {
             const result = MovementValidator.isValidMove(board, piece.position, checkingPiece.position);
-            if (result.kind === "success") return false;
+            if (result.status === "success") return false;
         }
     }
 
@@ -84,7 +85,7 @@ export function isCheckMate(board: Board, color): boolean {
         if (piece.color === king.color) {
             for (const pos of pathToKing) {
                 const result = MovementValidator.isValidMove(board, piece.position, pos);
-                if (result.kind === "success") return false;
+                if (result.status === "success") return false;
             }
         }
     }
@@ -100,7 +101,7 @@ function getCheckingPiece(board: Board, king: Majavashakki.IPiece): Majavashakki
     for (const piece of board.pieces) {
         if (piece.color !== king.color) {
             const result = MovementValidator.isValidMove(board, piece.position, king.position);
-            if (result.kind === "success") return piece;
+            if (result.status === "success") return piece;
         }
     }
 
@@ -113,7 +114,7 @@ function isDoubleCheck(board: Board, king: Majavashakki.IPiece): boolean {
     for (const piece of board.pieces) {
         if (piece.color !== king.color) {
             const result = MovementValidator.isValidMove(board, piece.position, king.position);
-            if (result.kind === "success") checkingPieces ++;
+            if (result.status === "success") checkingPieces ++;
         }
     }
 
@@ -143,7 +144,7 @@ function getPiecePathToKing(board: Board, king: Majavashakki.IPiece, piece: Maja
         if (rowDiff <= 0 && colDiff <= 0) break;
 
         const result = MovementValidator.isValidMove(board, piece.position, MovementValidator.numbersToPosition(dest));
-        if (result.kind === "success") {
+        if (result.status === "success") {
             pathToKing.push(MovementValidator.numbersToPosition(dest));
         }
     }

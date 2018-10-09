@@ -1,6 +1,5 @@
 import NavigationBar from "./NavigationBar";
 import GameView from "./gameview";
-import makeInitialState from "../common/initial-state";
 import LoginView from "./LoginView";
 import LobbyView from "./LobbyView";
 import ProfileView from "./ProfileView";

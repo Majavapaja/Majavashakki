@@ -1,6 +1,7 @@
 import makeInitialState from "../../common/initial-state";
 import MovementValidator from "../logic/MovementValidator";
 import {isCheck, isCheckMate} from "../logic/Checkmate";
+import * as Majavashakki from "../../common/GamePieces"
 
 export default class Board implements Majavashakki.IBoard {
     public static cols: string = "abcdefgh";
@@ -14,58 +15,56 @@ export default class Board implements Majavashakki.IBoard {
     }
 
     public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
-        if (!start || !destination) return {kind: "error", error: "Error 11: Invalid movement data"};
+        if (!start || !destination) return {status: Majavashakki.MoveStatus.Error, error: "Error 11: Invalid movement data"} as Majavashakki.IMoveResponse;
 
-        const result = MovementValidator.isValidMove(this, start, destination);
-        if (result.kind === "success") {
-            const startPiece = this.getPiece(start);
-
-            if (result.moveType === "enpassant") {
-                this.removePiece(this.moveHistory[this.moveHistory.length - 1][1]);
-                startPiece.position = destination;
-            } else if (result.moveType === "castling") {
-                startPiece.position = destination;
-                startPiece.hasMoved = true;
-
-                const rookPosition: Majavashakki.IPosition = {
-                    col: destination.col === "c" ? "a" : "h", // If king moved to c, get rook from left corner.
-                    row: startPiece.color === "white" ? "1" : "8",
-                };
-
-                const rook = this.getPiece(rookPosition);
-                rook.position.col = destination.col === "c" ? "d" : "f"; // If king moved to c, move rook to d
-                rook.hasMoved = true;
-            } else {
-                this.removePiece(destination);
-                startPiece.position = destination;
-                startPiece.hasMoved = true;
-            }
-
-            // Move piece
-            this.moveHistory.push([start, destination]);
-            result.board = this.pieces;
-
-            const nextPlayerColor = startPiece.color === "white" ? "black" : "white";
-            if (isCheck(this, nextPlayerColor)) {
-                if (isCheckMate(this, nextPlayerColor)) {
-                    return {
-                        kind: "success",
-                        moveType: "checkmate",
-                        board: this.pieces,
-                    };
-                }
-
-                return {
-                    kind: "success",
-                    moveType: "check",
-                    board: this.pieces,
-                };
-            }
-
-            return result;
-        } else {
-            return result;
+        const move = MovementValidator.isValidMove(this, start, destination);
+        if (move.status !== Majavashakki.MoveStatus.Success) {
+            return move;
         }
+
+        const startPiece = this.getPiece(start);
+
+        if (move.result === Majavashakki.MoveResult.Enpassant) {
+            this.removePiece(this.moveHistory[this.moveHistory.length - 1][1]);
+        } else if (move.result === Majavashakki.MoveResult.Castling) {
+            startPiece.hasMoved = true;
+
+            const rookPosition: Majavashakki.IPosition = {
+                col: destination.col === "c" ? "a" : "h", // If king moved to c, get rook from left corner.
+                row: startPiece.color === "white" ? "1" : "8",
+            };
+
+            const rook = this.getPiece(rookPosition);
+            rook.position.col = destination.col === "c" ? "d" : "f"; // If king moved to c, move rook to d
+            rook.hasMoved = true;
+        } else {
+            this.removePiece(destination);
+            startPiece.hasMoved = true;
+        }
+
+        // Move piece
+        startPiece.position = destination;
+        this.moveHistory.push([start, destination]);
+        move.board = this.pieces;
+
+        const nextPlayerColor = startPiece.color === "white" ? "black" : "white";
+        if (!isCheck(this, nextPlayerColor)) {
+            return move;
+        }
+
+        if (isCheckMate(this, nextPlayerColor)) {
+            return {
+                status: Majavashakki.MoveStatus.Success,
+                result: Majavashakki.MoveResult.Checkmate,
+                board: this.pieces,
+            } as Majavashakki.IMoveResponse;
+        }
+
+        return {
+            status: Majavashakki.MoveStatus.Success,
+            result: Majavashakki.MoveResult.Check,
+            board: this.pieces,
+        } as Majavashakki.IMoveResponse;
     }
 
     public removePiece(pos: Majavashakki.IPosition): void {

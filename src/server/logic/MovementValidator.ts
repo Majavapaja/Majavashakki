@@ -1,9 +1,10 @@
 import Board from "../entities/Board";
 import {doesMoveCauseCheck, isCheck} from "./Checkmate";
+import * as Majavashakki from "../../common/GamePieces"
 
 class MovementValidator {
     public isValidMove(board: Board, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
-        const errorResponse: Majavashakki.IMoveResponse = {kind: "error", error: "Error 10: Invalid move!"};
+        const errorResponse: Majavashakki.IMoveResponse = {status: Majavashakki.MoveStatus.Error, error: "Error 10: Invalid move!"} as Majavashakki.IMoveResponse;
 
         // Check that start and destination are not the same
         if (board.comparePos(start, destination)) return errorResponse;
@@ -26,11 +27,11 @@ class MovementValidator {
         // Check that piece movement is valid
         if (!this.checkMovement(board, startPiece, destination)) {
             if (this.enPassant(board, startPiece, destination)) {
-                return {kind: "success", moveType: "enpassant", board: null};
+                return {status: Majavashakki.MoveStatus.Success, result: Majavashakki.MoveResult.Enpassant, board: null} as Majavashakki.IMoveResponse;
             }
 
             if (this.castling(board, startPiece, destination)) {
-                return {kind: "success", moveType: "castling", board: null};
+                return {status: Majavashakki.MoveStatus.Success, result: Majavashakki.MoveResult.Castling, board: null} as Majavashakki.IMoveResponse;
             }
 
             return errorResponse;
@@ -39,8 +40,8 @@ class MovementValidator {
         if (doesMoveCauseCheck(board, start, destination)) return errorResponse;
 
         // Piece movement was valid
-        if (destinationPiece) return {kind: "success", moveType: "capture", board: null};
-        else return {kind: "success", moveType: "move", board: null};
+        if (destinationPiece) return {status: Majavashakki.MoveStatus.Success, result: Majavashakki.MoveResult.Capture, board: null} as Majavashakki.IMoveResponse;
+        else  return {status: Majavashakki.MoveStatus.Success, result: Majavashakki.MoveResult.Move, board: null} as Majavashakki.IMoveResponse;
     }
 
     public positionToNumbers(pos: Majavashakki.IPosition) {

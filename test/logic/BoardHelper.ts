@@ -1,12 +1,13 @@
 import Board from "../../src/server/entities/Board";
+import * as Majavashakki from "../../src/common/GamePieces"
 
 export function moveSequence(board: Board, moves: string[][]) {
     const results = [];
 
     for (const move of moves) {
-        const result = board.move(stringToPosition(move[0]), stringToPosition(move[1]));
-        if (result.kind === "success") results.push(result.moveType);
-        else results.push(result.kind);
+        const action = board.move(stringToPosition(move[0]), stringToPosition(move[1]));
+        if (action.status === Majavashakki.MoveStatus.Success) results.push(action.result);
+        else results.push(action.status);
     }
 
     return results;

@@ -2,6 +2,7 @@
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
 import { ObjectID } from "../../../node_modules/@types/bson/index";
 import {Game} from "../entities/GameRoom";
+import * as Majavashakki from "../../common/GamePieces"
 
 export interface IGameDocument extends Majavashakki.IGame, Document {
 
@@ -10,7 +11,7 @@ export interface IGameDocument extends Majavashakki.IGame, Document {
 export interface IGameModel extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<IGameDocument>;
   save(game: Majavashakki.IGame, isNew?: boolean): Promise<IGameDocument>;
-  findByTitle(title: string) : Promise<IGameDocument>;
+  findByTitle(title: string): Promise<IGameDocument>;
   getAvailableGames(): Promise<IGameDocument[]>;
 }
 
@@ -29,8 +30,8 @@ GameSchema.statics.findOrCreate = async (title: string): Promise<IGameDocument> 
 
   if (!result) {
     console.log(`CREATING NEW GAME ${title}`);
-    var game = new Game(title);
-    var gameState = Game.MapForDb(game);
+    const game = new Game(title);
+    const gameState = Game.MapForDb(game);
     return await GameModel.save(gameState, true);
   } else {
     console.log(`FOUND EXISTING GAME ${result.id} NAME: ${result.title}, ID: ${result._id}`);
@@ -45,7 +46,7 @@ GameSchema.statics.save = async (game: Majavashakki.IGame, isNew: boolean = fals
 
 GameSchema.statics.findByTitle = async (title: string): Promise<IGameDocument> => {
   console.log("Find by title: " + title)
-  var gameState = await GameModel.findOne({title}).exec();
+  const gameState = await GameModel.findOne({title}).exec();
   if (!gameState) throw new Error("Peliä ei löywy!");
   return gameState;
 }
