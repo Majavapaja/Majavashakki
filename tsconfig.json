@@ -4,7 +4,7 @@
         "target": "es6",
         "jsx": "preserve",
         "sourceMap":true,
-        "rootDir": "src",
+        "rootDirs": ["src", "test"],
         "allowSyntheticDefaultImports": true
     },
     "include": [
