@@ -74,8 +74,8 @@ const roomRepo = GameRoomsRepository.getInstance();
 app.get("/api/user", (req, res) => {
   const user = req.user;
   const result = {
-    loggedIn: !!user,
-    name: user.name
+    loggedIn: Boolean(user),
+    name: user ? user.name : "Anonymous",
   };
   res.set("Cache-Control", "no-cache");
   res.send(result);
