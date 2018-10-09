@@ -18,7 +18,7 @@ apt-get install -y nodejs
 
 # Run tests
 npm ci
-npm test
+TS_NODE_FILES=true npm test
 
 echo $DEPLOYER_PRIVATE_GPG_KEY_BASE64 | base64 --decode > private.key
 gpg --import private.key
