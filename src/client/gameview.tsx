@@ -1,9 +1,6 @@
 import * as React from "react";
 import * as request from "request-promise";
 import { withRouter } from "react-router-dom";
-
-import {MoveResponse} from "../common/protocol";
-import {Piece} from "../common/types";
 import Board from "./Board";
 
 class GameView extends React.Component<any, any> {
@@ -17,7 +14,7 @@ class GameView extends React.Component<any, any> {
 
   public componentWillMount() {
     fetchGame(this.state.gameName).then(game => {
-      this.setState({pieces: game.gameState.board.pieces})
+      this.setState({pieces: game.board.pieces})
       this.props.socket.on("move_result", this.onMoveResult.bind(this));
     })
   }
@@ -34,7 +31,13 @@ class GameView extends React.Component<any, any> {
     );
   }
 
-  private onMoveResult(response: MoveResponse) {
+  private onJoined(pieces: Majavashakki.IPiece[]) {
+    if (pieces) {
+      this.setState({pieces});
+    }
+  }
+
+  private onMoveResult(response: Majavashakki.IMoveResponse) {
     switch (response.kind) {
     case "error":
       this.setState({

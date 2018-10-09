@@ -1,6 +1,5 @@
 import Board from "../entities/Board";
 import {copy} from "../../common/util";
-import {Piece, Position} from "../../common/types";
 import MovementValidator from "./MovementValidator";
 
 export function isCheck(board: Board, color): boolean {
@@ -13,12 +12,12 @@ export function isCheck(board: Board, color): boolean {
     return false;
 }
 
-export function doesMoveCauseCheck(board: Board, start: Position, destination: Position): boolean {
+export function doesMoveCauseCheck(board: Board, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): boolean {
     const boardCopy: Board = new Board();
     boardCopy.pieces = copy(board.pieces);
 
     boardCopy.removePiece(destination);
-    const startPieceCopy: Piece = boardCopy.getPiece(start);
+    const startPieceCopy: Majavashakki.IPiece = boardCopy.getPiece(start);
     startPieceCopy.position = destination;
     startPieceCopy.hasMoved = true;
 
@@ -39,7 +38,7 @@ export function isCheckMate(board: Board, color): boolean {
     // Loop through all adjacent squares to king
     for (let i = -1; i < 2; i++) {
         for (let j = -1; j < 2; j++) {
-            const pos: Position = {
+            const pos: Majavashakki.IPosition = {
                 col: board.getCoordinateByIndex("col", kingCol + j),
                 row: board.getCoordinateByIndex("row", kingRow + i),
             };
@@ -95,7 +94,7 @@ export function isCheckMate(board: Board, color): boolean {
     return true;
 }
 
-function getCheckingPiece(board: Board, king: Piece): Piece {
+function getCheckingPiece(board: Board, king: Majavashakki.IPiece): Majavashakki.IPiece {
     if (!king) return null;
 
     for (const piece of board.pieces) {
@@ -108,7 +107,7 @@ function getCheckingPiece(board: Board, king: Piece): Piece {
     return null;
 }
 
-function isDoubleCheck(board: Board, king: Piece): boolean {
+function isDoubleCheck(board: Board, king: Majavashakki.IPiece): boolean {
     let checkingPieces = 0;
 
     for (const piece of board.pieces) {
@@ -121,7 +120,7 @@ function isDoubleCheck(board: Board, king: Piece): boolean {
     return checkingPieces >= 2;
 }
 
-function getPiecePathToKing(board: Board, king: Piece, piece: Piece): Position[] {
+function getPiecePathToKing(board: Board, king: Majavashakki.IPiece, piece: Majavashakki.IPiece): Majavashakki.IPosition[] {
     if (piece.type === "king" || piece.type === "pawn" || piece.type === "knight") return [];
 
     const pathToKing = [];

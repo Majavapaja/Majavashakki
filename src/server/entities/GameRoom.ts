@@ -1,16 +1,27 @@
 import Board from "../entities/Board";
-import {MoveResponse, MoveSuccess, MoveError} from "../../common/protocol";
-import {Position} from "../../common/types";
 
-export class Game {
+export class Game implements Majavashakki.IGame {
     public title: string;
     public playerIdWhite: string;
     public playerIdBlack: string;
-    public gameState: {board: Board };
+    public board: Board;
+
+    public static MapFromDb(gameState: Majavashakki.IGame): Game {
+        const game = new Game(gameState.title);
+        game.board.pieces = gameState.board.pieces;
+        game.board.moveHistory = gameState.board.moveHistory;
+        game.playerIdBlack = gameState.playerIdBlack;
+        game.playerIdWhite = gameState.playerIdWhite;
+        return game;
+    }
+
+    public static MapForDb(game: Game): Majavashakki.IGame {
+        return { title: game.title, board: game.board, playerIdWhite: game.playerIdWhite, playerIdBlack: game.playerIdBlack };
+    }
 
     constructor(title: string) {
         this.title = title;
-        this.gameState = {board: new Board()};
+        this.board = new Board();
     }
 
     public isFull(): boolean {
@@ -28,7 +39,7 @@ export class Game {
         return true;
     }
 
-    public move(start: Position, destination: Position): MoveResponse {
-        return this.gameState.board.move(start, destination);
+    public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
+        return this.board.move(start, destination);
     }
 }

@@ -1,5 +1,5 @@
 import {Game} from "../entities/GameRoom";
-import {GameMongoClient} from "../data/GameMongoClient";
+import {GameModel, IGameDocument} from "../data/GameModel";
 import * as _ from "lodash";
 
 export class GameRoomsRepository {
@@ -8,7 +8,6 @@ export class GameRoomsRepository {
     }
     private static instance: GameRoomsRepository = new GameRoomsRepository();
     public MainRoom = "Lobby";
-    private mongoClient: GameMongoClient = new GameMongoClient();
 
     private constructor() {
         if (GameRoomsRepository.instance) {
@@ -18,48 +17,33 @@ export class GameRoomsRepository {
     }
 
     public async saveGame(game: Game) {
-        await this.mongoClient.saveGame(game);
+        const state: Majavashakki.IGame = Game.MapForDb(game);
+        await GameModel.save(state)
     }
 
-    public async createRoom(title: string): Promise<Game> {
-        const games = await this.mongoClient.getGames();
-        if (games[title]) {
-            throw new Error("Peli on jo olemassa, tästä administraatio tekee joskus hienomman error response käsittelyn")
-        } else {
-            const newRoom = new Game(title);
-            await this.mongoClient.saveGame(newRoom);
-            return newRoom;
-        }
+    public async createRoom(title: string): Promise<Majavashakki.IGame> {
+        return await GameModel.findOrCreate(title);
     }
 
-    public async joinRoom(gameName: string, userId: string): Promise<Game> {
-        const games = await this.mongoClient.getGames();
-        console.log("PEWIT " + JSON.stringify(games));
-        console.log("gameName: " + gameName)
-        console.log(Object.keys(games));
-        // TODO check if main room
-        const game = games[gameName];
-        if (!game) {
-            throw new Error("Paskan möivät - peliä ei löywy")
-        } else if (game.isFull()) {
-            throw new Error("Paskaa ei voi myyä, loppuunmyyty eli täysi")
-        } else {
-            game.addPlayer(userId);
-            await this.mongoClient.saveGame(game);
-        }
+    public async joinRoom(title: string, userId: string): Promise<Game> {
+        console.log("joining room : " + title)
+        const doc = await GameModel.findByTitle(title);
+        const game = Game.MapFromDb(doc);
+        if (game.isFull()) throw new Error("Paskaa ei voi myyä, loppuunmyyty eli täysi");
+
+        game.addPlayer(userId);
+        await GameModel.save(Game.MapForDb(game));
         return game;
     }
 
     public async getAvailableGames(): Promise<string[]> {
-        // TODO ditch mongo client, use mongoose. Filter query straight for db.
-        const games = await this.mongoClient.getGames();
-        const hasSpace = (title) => !games[title].isFull();
-        return Object.keys(games).filter(hasSpace);
+        const games = await GameModel.getAvailableGames();
+        return games.map((item: IGameDocument) => item.title);
     }
 
     public async getGameRoom(title: string): Promise<Game> {
         console.log("Get game '" + title + "'");
-        const games = await this.mongoClient.getGames();
-        return games[title];
+        const doc = await GameModel.findByTitle(title);
+        return Game.MapFromDb(doc);
     }
 }

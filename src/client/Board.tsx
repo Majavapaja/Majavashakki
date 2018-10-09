@@ -29,7 +29,7 @@ class Board extends React.Component<any, any> {
     return <div className="board">{this.makeCells()}</div>;
   }
 
-  private onMoveResult(board) {
+  private onMoveResult() {
     this.setState({
       selectedCell: null,
       moveTarget: null,

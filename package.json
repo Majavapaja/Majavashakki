@@ -36,13 +36,13 @@
   },
   "scripts": {
     "npm-check": "npm-check --skip-unused",
-    "dev": "npm-run-all --parallel watch:client watch:server",
+    "dev": "set TS_NODE_FILES=true && npm-run-all --parallel watch:client watch:server",
     "watch:client": "parcel watch src/client/index.html --public-url /",
     "watch:server": "nodemon --watch src --watch public --ext ts,tsx app.js",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "build": "parcel build src/client/index.html --public-url /",
     "start": "node app.js",
-    "test": "mocha --timeout 999999 --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.spec.ts"
+    "test": "set TS_NODE_FILES=true && mocha --timeout 999999 --compilers ts:ts-node/register,tsx:ts-node/register test/**/*.spec.ts"
   },
   "devDependencies": {
     "@types/chai": "4.1.4",

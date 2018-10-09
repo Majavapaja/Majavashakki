@@ -1,5 +1,4 @@
 import Board from "../../src/server/entities/Board";
-import {Position} from "../../src/common/types";
 
 export function moveSequence(board: Board, moves: string[][]) {
     const results = [];
@@ -13,7 +12,7 @@ export function moveSequence(board: Board, moves: string[][]) {
     return results;
 }
 
-function stringToPosition(str): Position {
+function stringToPosition(str): Majavashakki.IPosition {
     if (!str || str.length !== 2) return null;
 
     const colIndex = Board.cols.indexOf(str.charAt(0));
