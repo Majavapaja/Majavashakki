@@ -69,22 +69,20 @@ app.get("/authFacebook",
   })
 )
 
-// app.post("/login", async (req, res, next) => {
-//   await passport.authenticate("local", (err, user, info) => {
-//     if (err) {
-//       res.status(500).send("Authentication error")
-//     } else if (!user) {
-//       res.status(401).send(info.message)
-//     } else {
-//       res.redirect("/")
-//     }
-//   })(req, res, next)
-// })
-
-app.post("/login", passport.authenticate("local", {
-  successRedirect: "/",
-  failureRedirect: "/login",
-}))
+app.post("/login", (req, res, next) => {
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return res.status(500).send("Authentication error")
+    } else if (!user) {
+      return res.status(401).send(info.message)
+    } else {
+      req.login(user, loginError => {
+        if (loginError) return next(loginError)
+        return res.redirect("/")
+      })
+    }
+  })(req, res, next)
+})
 
 const roomRepo = GameRoomsRepository.getInstance();
 
