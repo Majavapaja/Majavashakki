@@ -221,6 +221,7 @@ function initPassport(appUrl: string) {
         if (!user) {
           return done(null, false, { message: "There is no account with this email. :O" });
         }
+
         if (!user.isCorrectPassword(password)) {
           return done(null, false, { message: "Invalid password, did you try 'salasana1'?" });
         }
@@ -237,7 +238,7 @@ function initPassport(appUrl: string) {
 // XXX: Not yet accessible in UI
 app.get("/logout", (req, res) => {
   req.logout()
-  res.redirect("/")
+  res.redirect("/login")
 })
 app.get("/login", serveUI)
 app.get("/signup", serveUI)
