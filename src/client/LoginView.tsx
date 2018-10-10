@@ -5,6 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
+import * as request from "request-promise";
 
 import Majava from "./Majava";
 
@@ -40,6 +41,7 @@ const styles = createStyles({
 class LoginView extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
+        this.state = { }
     }
 
     public render() {
@@ -48,19 +50,27 @@ class LoginView extends React.Component<any, any> {
             <div className={classes.root}>
                 <Paper className={classes.loginContainer}>
                     <Majava />
+                    <Typography color="error">{this.state.error}</Typography>
                     <TextField
-                        id="username"
-                        label="Name"
+                        name="email"
+                        label="Email"
                         margin="normal"
+                        onChange={this.handleInputChange}
                     />
                     <TextField
-                        id="password"
+                        name="password"
                         label="Password"
                         type="password"
                         margin="normal"
+                        onChange={this.handleInputChange}
                     />
 
-                    <Button variant="raised" color="primary" className={classes.button}>
+                    <Button
+                        variant="raised"
+                        color="primary"
+                        className={classes.button}
+                        onClick={this.handleSubmit}
+                    >
                         <Typography color="inherit">Sign in</Typography>
                     </Button>
 
@@ -84,6 +94,42 @@ class LoginView extends React.Component<any, any> {
             </div>
         );
     }
+
+    private handleInputChange = event => {
+        const target = event.target;
+        const value = target.type === "checkbox" ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+          [name]: value
+        });
+    }
+
+    private handleSubmit = () => {
+        login(this.state.email, this.state.password).then(() => {
+            this.props.history.push("/");
+        }).catch(error => {
+            this.setState({ error })
+        })
+    }
+}
+
+const login = (email, password) => {
+    return new Promise((resolve, reject) => {
+        return request({
+            method: "POST",
+            url: window.location.origin + "/login",
+            body: {
+                email,
+                password
+            },
+            json: true,
+        }).then((res) => {
+            setTimeout(resolve, 200)
+        }).catch(error => {
+            setTimeout(() => reject(error.message), 500)
+        })
+    })
 }
 
 export default withStyles(styles)(withRouter(LoginView));
