@@ -40,10 +40,10 @@ class Majava extends React.Component<any, any> {
     }
 
     public render() {
-        let anim: any
+        let inlineStyles: any
 
         if (this.props.animation) {
-            anim = { animation: `${this.props.animation} 1s infinite alternate`}
+            inlineStyles = { animation: `${this.props.animation} 1s infinite alternate`}
         }
 
         const { classes } = this.props
@@ -51,7 +51,7 @@ class Majava extends React.Component<any, any> {
             <img
                 src={String(logo)}
                 className={classes.logo}
-                style={styles}
+                style={inlineStyles}
             />
         );
     }
