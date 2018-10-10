@@ -1,11 +1,11 @@
-[![CircleCI](https://circleci.com/gh/Majavapaja/Mursushakki.svg?style=svg)](https://circleci.com/gh/Majavapaja/Mursushakki)
-
 # Mursushakki
 The amazing sequel to the fantastic Majavashakki. With this new version we are planning to add several new bugs and more unreadable code!
 
 ## Business hours
 Mon-Fri 17-18
+
 Sat 15-16
+
 Sun Closed
 
 ### Install MongoDB using Vagrant ###
@@ -39,10 +39,13 @@ storage:
 
 ## Environment variables
 ### Required
-MajavashakkiFbClientId=derp
-MajavashakkiFbSecret=herp
-MajavashakkiSessionSecret=herpderp
+MajavashakkiFbClientId
+
+MajavashakkiFbSecret
+
+MajavashakkiSessionSecret
 
 ### Optional
 MajavashakkiMongoConnectionString
+
 MajavaMongoPassword
