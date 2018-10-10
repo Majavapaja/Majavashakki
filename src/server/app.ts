@@ -42,8 +42,14 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(bodyParser.json())
+app.use(express.static(resolve(__dirname, "../../dist")));
+
 app.use(passport.initialize());
 app.use(passport.session());
+
+const server = http.createServer(app);
+io.attach(server);
 
 const uiAuth = requireAuth((req, res, next) =>
   res.redirect("/login"))
@@ -63,11 +69,22 @@ app.get("/authFacebook",
   })
 )
 
-const server = http.createServer(app);
-io.attach(server);
+// app.post("/login", async (req, res, next) => {
+//   await passport.authenticate("local", (err, user, info) => {
+//     if (err) {
+//       res.status(500).send("Authentication error")
+//     } else if (!user) {
+//       res.status(401).send(info.message)
+//     } else {
+//       res.redirect("/")
+//     }
+//   })(req, res, next)
+// })
 
-app.use(express.static(resolve(__dirname, "../../dist")));
-app.use(bodyParser.json())
+app.post("/login", passport.authenticate("local", {
+  successRedirect: "/",
+  failureRedirect: "/login",
+}))
 
 const roomRepo = GameRoomsRepository.getInstance();
 
@@ -175,43 +192,48 @@ function initPassport(appUrl: string) {
   passport.deserializeUser((obj, done) => done(null, obj))
 
   if (isFacebookAuthEnabled) {
-  passport.use(new FbStrategy({
+    passport.use(new FbStrategy({
         clientID: facebookClientId,
         clientSecret: facebookSecret,
-      callbackURL: appUrl + "/authFacebook",
-    },
-    async (accessToken, refreshToken, profile, done) => {
-      console.log(`User '${profile.displayName}' logged in successfully.`)
-      try {
-        const user = await User.findOrCreate(profile.id)
-        console.log(user)
-        user.logMe("kekkeli")
-        done(null, user)
-      } catch (err) {
-        done(err)
+        callbackURL: appUrl + "/authFacebook",
+      },
+      async (accessToken, refreshToken, profile, done) => {
+        console.log(`User '${profile.displayName}' logged in successfully.`)
+        try {
+          const user = await User.findOrCreate(profile.id)
+          console.log(user)
+          user.logMe("kekkeli")
+          done(null, user)
+        } catch (err) {
+          done(err)
+        }
       }
-    }
-  ))
+    ))
   } else {
     console.warn("[WARNING] Facebook authentication was not enabled. Missing environment variables 'MajavashakkiFbClientId' or 'MajavashakkiFbSecret'")
   }
 
-  // passport.use(
-  //   new LocalStrategy((email, password, done) => {
-  //     console.log(`User ${email} trying to login with local strategy`)
-  //     User.findOne({ email }, (err, user) => {
-  //       if (err) { return done(err); } // Pilikseen meni, yllätys!
-  //       if (!user) {
-  //         return done(null, false, { message: 'Incorrect user.' });
-  //       }
+  passport.use(new LocalStrategy({
+      usernameField: "email"
+    }, async (email, password, done) => {
+      console.log(`User '${email}' trying to login.`)
+      try {
+        const user: IUserDocument = await User.findOne({ email })
 
-  //       if (!user.validPassword(password)) {
-  //         return done(null, false, { message: 'Incorrect password.' });
-  //       }
-  //       return done(null, false, { message: 'Incorrect password.' });
-  //     });
-  //   }
-  // ));
+        if (!user) {
+          return done(null, false, { message: "There is no account with this email. :O" });
+        }
+        if (!user.isCorrectPassword(password)) {
+          return done(null, false, { message: "Invalid password, did you try 'salasana1'?" });
+        }
+
+        console.log("User logged in successfully")
+        return done(null, user);
+      } catch (error) {
+        return done(error)
+      }
+    }
+  ));
 }
 
 // XXX: Not yet accessible in UI

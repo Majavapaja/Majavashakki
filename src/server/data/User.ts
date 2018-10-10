@@ -19,6 +19,7 @@ export interface IUserDocument extends IUser, Document {
   logMe(greeting: string);
   isProfileComplete(): boolean;
   validatePassword(password: string);
+  isCorrectPassword(password: string);
 }
 
 export interface IUserModel extends Model<IUserDocument> {
@@ -134,6 +135,12 @@ UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
 UserSchema.methods.logMe = function logMe(greeting: string) {
   const self = this as IUserDocument;
   console.log(`${greeting}, my name is: ${self.name}`);
+};
+
+// Methods are used for instance of items
+UserSchema.methods.isCorrectPassword = function(password: string): boolean {
+  const self = this as IUserDocument;
+  return self.password === `bcrypt(${password}, salt)`
 };
 
 // WHY ARE THESE NOT APPLIED FOR USER OBJECT IN PASSPORT SESSION !? WHO AND WHEN IS THAT BASTARD GIVEN FOR PASSPORT?
