@@ -81,7 +81,7 @@ class NavigationBar extends React.Component<any, any> {
   }
 
   public logout = () => {
-    this.props.history.push("/logout");
+    window.location.href = "/logout"
     this.setState({ logged: false });
   };
 
