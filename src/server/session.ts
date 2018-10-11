@@ -1,10 +1,14 @@
 import * as expressSession from "express-session";
 import * as ConnectMongo from "connect-mongo";
 import * as socketIoSession from "express-socket.io-session";
+import * as crypto from "crypto"
 import {MongooseClient} from "./data/MongooseClient";
 
-const MajavashakkiSessionSecret = process.env.MajavashakkiSessionSecret;
-if (!MajavashakkiSessionSecret) throw new Error("Environment variable 'MajavashakkiSessionSecret' missing");
+let MajavashakkiSessionSecret = process.env.MajavashakkiSessionSecret;
+if (!MajavashakkiSessionSecret) {
+  console.warn("[WARNING] Environment variable 'MajavashakkiSessionSecret' missing!")
+  MajavashakkiSessionSecret = crypto.randomBytes(20).toString("hex");
+}
 
 export const getSession = (x: any): any =>
   x.session ? x.session : x.handshake.session;
