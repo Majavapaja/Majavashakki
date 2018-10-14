@@ -25,8 +25,8 @@ const state: Majavashakki.IPiece[] = [
   blackPiece(Majavashakki.PieceType.Knight, "b8"),
   blackPiece(Majavashakki.PieceType.Bishop, "c8"),
   blackPiece(Majavashakki.PieceType.Queen,  "d8"),
-  blackPiece(Majavashakki.PieceType.King, "e8"),
-  blackPiece(Majavashakki.PieceType.Bishop,   "f8"),
+  blackPiece(Majavashakki.PieceType.King,   "e8"),
+  blackPiece(Majavashakki.PieceType.Bishop, "f8"),
   blackPiece(Majavashakki.PieceType.Knight, "g8"),
   blackPiece(Majavashakki.PieceType.Rook,   "h8"),
 
