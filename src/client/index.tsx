@@ -5,7 +5,7 @@ import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
 import theme from "./mui-theme";
 import * as io from "socket.io-client"
 import { BrowserRouter } from "react-router-dom"
-import App from "./App"
+import App from "./routes/App"
 
 (() => {
   const socket: SocketIOClient.Socket = io()

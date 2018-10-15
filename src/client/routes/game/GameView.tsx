@@ -2,7 +2,7 @@ import * as React from "react";
 import * as request from "request-promise";
 import { withRouter } from "react-router-dom";
 import Board from "./Board";
-import * as Majavashakki from "../common/GamePieces"
+import * as Majavashakki from "../../../common/GamePieces"
 
 class GameView extends React.Component<any, any> {
   constructor(props: any) {

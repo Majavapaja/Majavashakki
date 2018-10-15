@@ -1,11 +1,11 @@
-import NavigationBar from "./NavigationBar";
-import GameView from "./gameview";
-import LoginView from "./LoginView";
-import LobbyView from "./LobbyView";
-import ProfileView from "./ProfileView";
+import NavigationBar from "../common/NavigationBar";
+import GameView from "./game/GameView";
+import LoginView from "./login/LoginView";
+import LobbyView from "./lobby/LobbyView";
+import ProfileView from "./profile/ProfileView";
 import * as React from "react";
 import { Route } from "react-router-dom";
-import SignUpView from "./SignUpView";
+import SignUpView from "./signup/SignUpView";
 
 export default ({ socket }) => (
   <div>

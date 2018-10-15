@@ -7,7 +7,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import * as request from "request-promise";
 
-import Majava from "./Majava";
+import Majava from "../../common/Majava";
 
 const styles = createStyles({
     root: {
