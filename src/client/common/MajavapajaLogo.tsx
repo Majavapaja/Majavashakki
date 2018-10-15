@@ -1,7 +1,7 @@
 import * as React from "react";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
-import * as logo from "./assets/majavapajalogo.png";
+import * as logo from "../assets/majavapajalogo.png";
 
 const styles = createStyles({
     root: {

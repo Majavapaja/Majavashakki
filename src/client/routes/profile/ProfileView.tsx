@@ -16,7 +16,7 @@ class ProfileView extends React.Component<any, any> {
         <div className="form">
           <h3 className="title">What's your nickname?</h3>
           <form onSubmit={this.onSubmitLogin}>
-            <TextField name="username" hintText="Username" onChange={this.onInputChange} />
+            <TextField name="username" label="Username" onChange={this.onInputChange} />
           </form>
         </div>
       </div>

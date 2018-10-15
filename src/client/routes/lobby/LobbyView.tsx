@@ -1,7 +1,8 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
-import {List, ListItem} from "@material-ui/core/List";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
 import * as request from "request-promise";
 
@@ -87,7 +88,7 @@ class LobbyView extends React.Component<any, any> {
                         Create new room:
                         <TextField
                             name="newRoomName"
-                            hintText="Room name"
+                            label="Room name"
                             onChange={onInputChange}
                         />
                     </form>

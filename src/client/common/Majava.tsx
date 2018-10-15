@@ -2,7 +2,7 @@ import * as React from "react";
 import PropTypes from "prop-types"
 import { withStyles, createStyles } from "@material-ui/core/styles";
 
-import * as logo from "./assets/logo.png";
+import * as logo from "../assets/logo.png";
 
 const styles = createStyles({
     logo: {
