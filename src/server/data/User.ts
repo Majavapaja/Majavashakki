@@ -1,10 +1,8 @@
 /* Defines user schema and model */
 
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
-import * as bcrypt from "bcrypt";
+import * as bcrypt from "bcryptjs";
 import { ObjectID } from "../../../node_modules/@types/bson/index";
-
-const saltRounds = 10
 
 export interface IUser {
   email: string;
@@ -85,6 +83,8 @@ UserSchema.statics.registerUser = async (user: IUser): Promise<boolean> => {
     console.log(`Registering user ${user}`);
     userObj.name = user.name
     userObj.email = user.email
+
+    const saltRounds = 10
     userObj.password = await bcrypt.hash(user.password, saltRounds)
 
     await userObj.save();
