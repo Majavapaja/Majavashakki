@@ -57,10 +57,8 @@ pushd "$DEPLOYMENT_TARGET"
 $NODE_ENV = $env:NODE_ENV
 $env:NODE_ENV = "development"
 npm install
-exitWithMessageOnError "FAILED: npm install"
 $env:NODE_ENV = $NODE_ENV
 npm run build
-exitWithMessageOnError "FAILED: npm run build"
 popd
 
 ###################################################################################################################################
