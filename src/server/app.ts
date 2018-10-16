@@ -199,8 +199,6 @@ function initPassport(appUrl: string) {
         console.log(`User '${profile.displayName}' logged in successfully.`)
         try {
           const user = await User.findOrCreate(profile.id)
-          console.log(user)
-          user.logMe("kekkeli")
           done(null, user)
         } catch (err) {
           done(err)

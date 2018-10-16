@@ -19,9 +19,6 @@ export interface IUserDocument extends IUser, Document {
   // get games?
   // join sockets?
   // do the twist?
-  logMe(greeting: string);
-  isProfileComplete(): boolean;
-  validatePassword(password: string);
   isCorrectPassword(password: string);
 }
 
@@ -88,7 +85,6 @@ UserSchema.statics.registerUser = async (user: IUser): Promise<boolean> => {
     console.log(`Registering user ${user}`);
     userObj.name = user.name
     userObj.email = user.email
-
     userObj.password = await bcrypt.hash(user.password, saltRounds)
 
     await userObj.save();
@@ -135,23 +131,9 @@ UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
 }
 
 // Methods are used for instance of items
-UserSchema.methods.logMe = function logMe(greeting: string) {
-  const self = this as IUserDocument;
-  console.log(`${greeting}, my name is: ${self.name}`);
-};
-
-// Methods are used for instance of items
 UserSchema.methods.isCorrectPassword = async function(password: string): Promise<boolean> {
   const self = this as IUserDocument;
   return await bcrypt.compare(password, self.password)
 };
-
-// WHY ARE THESE NOT APPLIED FOR USER OBJECT IN PASSPORT SESSION !? WHO AND WHEN IS THAT BASTARD GIVEN FOR PASSPORT?
-// IN passport.serialize we are already missing these methods. HOW DOES PASSPORT FETCH THE USER OBJECT?
-UserSchema.methods.isProfileComplete = function isProfileComplete() {
-  // TODO later on email
-  const self = this as IUserDocument;
-  return !!self.name;
-}
 
 export const User: IUserModel = model<IUserDocument, IUserModel>("User", UserSchema);
