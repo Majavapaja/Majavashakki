@@ -1,13 +1,14 @@
 /* Defines user schema and model */
 
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
+import {IGameDocument, IGameRef} from "./GameModel";
 import * as bcrypt from "bcryptjs";
-import { ObjectID } from "../../../node_modules/@types/bson/index";
+import * as _ from "lodash";
 
 export interface IUser {
   email: string;
   name: string;
-  games?: string[];
+  games?: IGameRef[];
   password: string;
 }
 
@@ -22,8 +23,8 @@ export interface IUserDocument extends IUser, Document {
 
 export interface IUserModel extends Model<IUserDocument> {
   findOrCreate(facebookId: string): Promise<IUserDocument>;
-  updateName(id: string|ObjectID, name: string);
-  addGame(userId: string, gameName: string): Promise<void>;
+  updateName(id: string|Schema.Types.ObjectId, name: string);
+  addGame(userId: string, game: IGameDocument): Promise<IGameRef>;
   validProfile(user: IUserDocument): boolean;
   registerUser(newUser: IUser): Promise<boolean>;
 }
@@ -38,7 +39,7 @@ export let UserSchema: Schema = new Schema({
   name: String,
   password: String,
   facebookId: String,
-  games: Array,
+  games: {type: Array, default: []},
 }, options);
 
 UserSchema.pre("save", (next) => {
@@ -97,7 +98,7 @@ UserSchema.statics.registerUser = async (user: IUser): Promise<boolean> => {
 
 }
 
-UserSchema.statics.updateName = (_id: string|ObjectID, name: string) => {
+UserSchema.statics.updateName = (_id: string|Schema.Types.ObjectId, name: string) => {
   User.findOneAndUpdate({_id}, {name}, (err, doc, res) => {
     if (err) {
       console.log(`Updating username for ${_id} failed with_ ${err}`);
@@ -105,29 +106,22 @@ UserSchema.statics.updateName = (_id: string|ObjectID, name: string) => {
   });
 };
 
-UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
-
+UserSchema.statics.addGame = async (_id: string, game: IGameDocument) => {
   const user = await User.findById(_id).exec();
-
   if (!user) {
     console.log(`No user found by ID ${_id}`);
-    return;
+    throw new Error(`Cannot add game because user was not found with ID ${_id}`)
   }
 
-  console.log(`Adding game '${gameTitle}' for user ${user.name} (ID ${user._id})`);
-
-  if (!user.games) {
-    user.games = [];
-  }
-  if (user.games.indexOf(gameTitle) !== -1) {
+  console.log(`Adding game '${game.title}' for user ${user.name} (ID ${user._id})`);
+  const gameRef = game.denormalize();
+  if (_.includes(user.games, gameRef)) {
     console.log("Game already added, skipping");
     return;
   }
-  user.games.push(gameTitle);
+  user.games.push(gameRef);
   await user.save();
-  user.update(user);
   console.log("Added game");
-
 }
 
 // Methods are used for instance of items
