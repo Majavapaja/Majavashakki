@@ -1,11 +1,15 @@
 /* Defines user schema and model */
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
-import { ObjectID } from "../../../node_modules/@types/bson/index";
 import {Game} from "../entities/GameRoom";
 import * as Majavashakki from "../../common/GamePieces"
 
 export interface IGameDocument extends Majavashakki.IGame, Document {
+  denormalize(): IGameRef;
+}
 
+export interface IGameRef {
+  ref: Schema.Types.ObjectId;
+  title: string;
 }
 
 export interface IGameModel extends Model<IGameDocument> {
@@ -54,5 +58,11 @@ GameSchema.statics.findByTitle = async (title: string): Promise<IGameDocument> =
 GameSchema.statics.getAvailableGames = async (): Promise<IGameDocument[]> => {
   return await GameModel.find({$or: [{playerIdWhite: null}, {playerIdBlack: null}]}).exec();
 }
+
+// Methods are used for instance of items
+GameSchema.methods.denormalize = function(): IGameRef {
+  const self = this as IGameDocument;
+  return {ref: self._id, title: self.title};
+};
 
 export const GameModel: IGameModel = model<IGameDocument, IGameModel>("GameModel", GameSchema);
