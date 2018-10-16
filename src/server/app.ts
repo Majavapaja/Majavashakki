@@ -150,7 +150,6 @@ app.post("/api/games/join", apiAuth, async (req, res) => {
   const socket = sessionSocketMap[session.id];
   const userId = session.passport.user._id;
   const game = await roomRepo.joinRoom(name, userId) // TODO: Handle full room exception
-  await User.addGame(userId, game.title)
   socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
   socket.join(name); // TODO we should use game ids
   socket.emit("game-joined", game.board.pieces); // TODO return response instead of socket communication

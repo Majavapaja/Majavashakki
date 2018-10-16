@@ -1,4 +1,5 @@
 import {Game} from "../entities/GameRoom";
+import {User} from "../data/User";
 import {GameModel, IGameDocument} from "../data/GameModel";
 import * as Majavashakki from "../../common/GamePieces"
 
@@ -30,7 +31,7 @@ export class GameRoomsRepository {
         const doc = await GameModel.findByTitle(title);
         const game = Game.MapFromDb(doc);
         if (game.isFull()) throw new Error("Paskaa ei voi myyä, loppuunmyyty eli täysi");
-
+        await User.addGame(userId, doc);
         game.addPlayer(userId);
         await GameModel.save(Game.MapForDb(game));
         return game;
