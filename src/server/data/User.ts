@@ -1,7 +1,10 @@
 /* Defines user schema and model */
 
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
+import * as bcrypt from "bcrypt";
 import { ObjectID } from "../../../node_modules/@types/bson/index";
+
+const saltRounds = 10
 
 export interface IUser {
   email: string;
@@ -85,8 +88,8 @@ UserSchema.statics.registerUser = async (user: IUser): Promise<boolean> => {
     console.log(`Registering user ${user}`);
     userObj.name = user.name
     userObj.email = user.email
-    // TODO: Hash password
-    userObj.password = `bcrypt(${user.password}, salt)`
+
+    userObj.password = await bcrypt.hash(user.password, saltRounds)
 
     await userObj.save();
 
@@ -138,9 +141,9 @@ UserSchema.methods.logMe = function logMe(greeting: string) {
 };
 
 // Methods are used for instance of items
-UserSchema.methods.isCorrectPassword = function(password: string): boolean {
+UserSchema.methods.isCorrectPassword = async function(password: string): Promise<boolean> {
   const self = this as IUserDocument;
-  return self.password === `bcrypt(${password}, salt)`
+  return await bcrypt.compare(password, self.password)
 };
 
 // WHY ARE THESE NOT APPLIED FOR USER OBJECT IN PASSPORT SESSION !? WHO AND WHEN IS THAT BASTARD GIVEN FOR PASSPORT?

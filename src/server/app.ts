@@ -222,7 +222,9 @@ function initPassport(appUrl: string) {
           return done(null, false, { message: "There is no account with this email. :O" });
         }
 
-        if (!user.isCorrectPassword(password)) {
+        const isValidPassword = await user.isCorrectPassword(password)
+
+        if (!isValidPassword) {
           return done(null, false, { message: "Invalid password, did you try 'salasana1'?" });
         }
 
