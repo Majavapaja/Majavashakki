@@ -27,6 +27,7 @@ export interface IUserModel extends Model<IUserDocument> {
   addGame(userId: string, game: IGameDocument): Promise<IGameRef>;
   validProfile(user: IUserDocument): boolean;
   registerUser(newUser: IUser): Promise<boolean>;
+  getMyGames(userId: string, active?: boolean): Promise<IGameRef[]>;
 }
 
 const options: SchemaOptions = {timestamps: true};
@@ -122,6 +123,12 @@ UserSchema.statics.addGame = async (_id: string, game: IGameDocument) => {
   user.games.push(gameRef);
   await user.save();
   console.log("Added game");
+}
+
+UserSchema.statics.getMyGames = async (_id: string, active: boolean = true): Promise<IGameRef[]> => {
+  const user = await User.findOne({_id}).exec();
+  if (!user) throw new Error(`Invalid user id '${_id}' for fetching my games`);
+  return user.games.filter(gameref => gameref.active);
 }
 
 // Methods are used for instance of items
