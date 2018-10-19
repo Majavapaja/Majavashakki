@@ -1,10 +1,8 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Divider from "@material-ui/core/Divider";
 import * as request from "request-promise";
+import GameList from "./GameList";
 
 class LobbyView extends React.Component<any, any> {
     constructor(props: any) {
@@ -54,10 +52,6 @@ class LobbyView extends React.Component<any, any> {
         this.setState({[target.name]: target.value});
     }
 
-    public onRoomClick(gameName: string) {
-        joinGame(gameName).then(this.handleJoinResponse);
-    }
-
     public handleJoinResponse({title}) {
         this.props.history.push(`/game/${title}`)
     }
@@ -65,7 +59,6 @@ class LobbyView extends React.Component<any, any> {
     public render() {
 
         const onInputChange = this.onInputChange.bind(this);
-        const onRoomClick = room => () => this.onRoomClick(room);
         const onSubmitNewRoom = this.onSubmitNewRoom.bind(this);
 
         return (
@@ -74,14 +67,7 @@ class LobbyView extends React.Component<any, any> {
                     Hello! Welcome to Majavashakki.
                     Please, join existing game or create a new one.
                 </h2>
-                <List>
-                    {this.state.rooms.map(room => (
-                        <React.Fragment key={room}>
-                            <ListItem onClick={onRoomClick(room)}>{room}</ListItem>
-                            <Divider />
-                        </React.Fragment>
-                    ))}
-                </List>
+                <GameList rooms={this.state.rooms} />
                 {this.state.error && <p>Error: {this.state.error}</p>}
                 <div className="newRoomArea">
                     <form onSubmit={onSubmitNewRoom}>
