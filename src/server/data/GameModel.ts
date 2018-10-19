@@ -10,6 +10,7 @@ export interface IGameDocument extends Majavashakki.IGame, Document {
 export interface IGameRef {
   ref: Schema.Types.ObjectId;
   title: string;
+  active: boolean;
 }
 
 export interface IGameModel extends Model<IGameDocument> {
@@ -62,7 +63,7 @@ GameSchema.statics.getAvailableGames = async (): Promise<IGameDocument[]> => {
 // Methods are used for instance of items
 GameSchema.methods.denormalize = function(): IGameRef {
   const self = this as IGameDocument;
-  return {ref: self._id, title: self.title};
+  return {ref: self._id, title: self.title, active: true};
 };
 
 export const GameModel: IGameModel = model<IGameDocument, IGameModel>("GameModel", GameSchema);

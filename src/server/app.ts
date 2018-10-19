@@ -145,6 +145,12 @@ app.get("/api/games/get/:name", apiAuth, async (req, res) => {
   }
 })
 
+app.get("/api/games/my-games", apiAuth, async (req, res) => {
+  const {session, user} = req;
+  const myGames = await User.getMyGames(user._id); // TODO active rule for fetch
+  res.send(myGames);
+})
+
 app.post("/api/games/join", apiAuth, async (req, res) => {
   const {session, body: {name}} = req
   const socket = sessionSocketMap[session.id];
