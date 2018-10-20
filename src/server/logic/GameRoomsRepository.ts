@@ -31,7 +31,10 @@ export class GameRoomsRepository {
         console.log("joining room : " + title)
         const doc = await GameModel.findByTitle(title);
         const game = Game.MapFromDb(doc);
-        if (game.isFull()) throw new Error("Paskaa ei voi myyä, loppuunmyyty eli täysi");
+        if (game.containsUser(userId)) return game;
+
+        if (game.isFull()) throw new Error(`User '${userId}' is trying to join game '${title}' which is already full!`);
+
         await User.addGame(userId, doc);
         game.addPlayer(userId);
         await GameModel.save(Game.MapForDb(game));

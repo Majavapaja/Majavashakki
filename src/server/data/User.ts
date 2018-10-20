@@ -118,7 +118,7 @@ UserSchema.statics.addGame = async (_id: string, game: IGameDocument) => {
   console.log(`Adding game '${game.title}' for user ${user.name} (ID ${user._id})`);
   const gameRef = game.denormalize();
   if (_.includes(user.games, gameRef)) {
-    console.log("Game already added, skipping");
+    console.log("Game already added, go on with your business");
     return;
   }
   user.games.push(gameRef);
