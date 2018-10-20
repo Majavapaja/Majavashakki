@@ -1,10 +1,12 @@
 import {UserSchema, IUserModel} from "../../src/server/data/User";
+import {IGameDocument} from "../../src/server/data/GameModel";
 import * as mongoose from "mongoose";
 import * as assert from "assert";
+import * as TypeMoq from "typemoq";
+import * as Majavashakki from "../../src/common/GamePieces";
 
 const connectionString = "mongodb://localhost/test"
-
-const User = mongoose.model('User', UserSchema) as IUserModel;
+const User = mongoose.model("User", UserSchema) as IUserModel;
 
 describe("User", () => {
     beforeEach(async () => {
@@ -28,13 +30,16 @@ describe("User", () => {
     describe("addGame", () => {
         it("should add game for logged in user", async () => {
             let user = await User.findOrCreate("M4T4L4");
-
             User.updateName(user._id, "HerraMatala");
-            await User.addGame(user._id, "P3L1");
+
+            const mockGameDoc = TypeMoq.Mock.ofType<IGameDocument>();
+            mockGameDoc.setup(d => d.denormalize()).returns(() => ({title: "P3L1"} as Majavashakki.IGameRef));
+
+            await User.addGame(user._id, mockGameDoc.object);
             user = await User.findOrCreate("M4T4L4");
 
             assert.equal(user.games.length, 1, "added game");
-            assert.equal(user.games[0], "P3L1", "game title");
+            assert.equal(user.games[0].title, "P3L1", "game title");
         });
     });
 });
