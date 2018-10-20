@@ -1,6 +1,6 @@
 import {Game} from "../entities/GameRoom";
 import {User} from "../data/User";
-import {GameModel, IGameDocument} from "../data/GameModel";
+import {GameModel} from "../data/GameModel";
 import * as Majavashakki from "../../common/GamePieces"
 
 export class GameRoomsRepository {
@@ -22,8 +22,9 @@ export class GameRoomsRepository {
         await GameModel.save(state)
     }
 
-    public async createRoom(title: string): Promise<Majavashakki.IGame> {
-        return await GameModel.findOrCreate(title);
+    public async createRoom(title: string): Promise<Majavashakki.IGameRef> {
+        const doc = await GameModel.findOrCreate(title);
+        return doc.denormalize();
     }
 
     public async joinRoom(title: string, userId: string): Promise<Game> {
@@ -37,9 +38,8 @@ export class GameRoomsRepository {
         return game;
     }
 
-    public async getAvailableGames(): Promise<string[]> {
-        const games = await GameModel.getAvailableGames();
-        return games.map((item: IGameDocument) => item.title);
+    public async getAvailableGames(): Promise<Majavashakki.IGameRef[]> {
+        return await GameModel.getAvailableGames();
     }
 
     public async getGameRoom(title: string): Promise<Game> {
