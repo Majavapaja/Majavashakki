@@ -41,8 +41,8 @@ export class GameRoomsRepository {
         return game;
     }
 
-    public async getAvailableGames(): Promise<Majavashakki.IGameRef[]> {
-        return await GameModel.getAvailableGames();
+    public async getAvailableGames(userId: string): Promise<Majavashakki.IGameRef[]> {
+        return await GameModel.getAvailableGames(userId);
     }
 
     public async getGameRoom(title: string): Promise<Game> {

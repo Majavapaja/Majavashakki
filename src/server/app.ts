@@ -117,7 +117,7 @@ app.post("/api/user/register", async (req, res) => {
 })
 
 app.get("/api/games", apiAuth, async (req, res) => {
- const openGames = await roomRepo.getAvailableGames();
+ const openGames = await roomRepo.getAvailableGames(req.user._id);
  res.send(openGames);
 });
 
