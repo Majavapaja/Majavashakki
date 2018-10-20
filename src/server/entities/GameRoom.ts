@@ -30,6 +30,10 @@ export class Game implements Majavashakki.IGame {
         return !!this.playerIdWhite && !!this.playerIdBlack;
     }
 
+    public containsUser(userId: string): boolean {
+        return this.playerIdWhite === userId || this.playerIdBlack === userId;
+    }
+
     public addPlayer(playerId: string) {
         if (!this.playerIdWhite) {
             this.playerIdWhite = playerId;
