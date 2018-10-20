@@ -5,6 +5,7 @@ import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
 import * as request from "request-promise";
 import { withStyles } from "@material-ui/core/styles";
+import * as Majavashakki from "../../../common/GamePieces"
 
 // TODO styles
 const styles = theme => ({
@@ -20,20 +21,29 @@ class GameList extends React.Component<any, any> {
     super(props);
 
     this.state = {
-      rooms: this.props.rooms
+      title: this.props.title,
+      games: this.props.games
     };
   }
 
   public render() {
+    const { classes } = this.props
+    const games: Majavashakki.IGameRef[] = this.props.games;
+    console.log(this.state.title + " games")
+    console.log(games)
     return (
-      <List>
-        {this.props.rooms.map(room => (
-            <React.Fragment key={room}>
-                <ListItem onClick={() => this.onRoomClick(room)}>{room}</ListItem>
-                <Divider />
-            </React.Fragment>
-        ))}
-      </List>
+      <div className={classes.root}>
+        <h2>{this.state.title}</h2>
+        <List>
+          {
+            games.map(game => (
+              <React.Fragment key={game.title}>
+                  <ListItem onClick={() => this.onRoomClick(game.title)}>{game.title}</ListItem>
+                  <Divider />
+              </React.Fragment>
+          ))}
+        </List>
+      </div>
     );
   }
 

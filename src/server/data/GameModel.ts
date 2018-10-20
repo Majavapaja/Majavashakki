@@ -4,20 +4,14 @@ import {Game} from "../entities/GameRoom";
 import * as Majavashakki from "../../common/GamePieces"
 
 export interface IGameDocument extends Majavashakki.IGame, Document {
-  denormalize(): IGameRef;
-}
-
-export interface IGameRef {
-  ref: Schema.Types.ObjectId;
-  title: string;
-  active: boolean;
+  denormalize(): Majavashakki.IGameRef;
 }
 
 export interface IGameModel extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<IGameDocument>;
   save(game: Majavashakki.IGame, isNew?: boolean): Promise<IGameDocument>;
   findByTitle(title: string): Promise<IGameDocument>;
-  getAvailableGames(): Promise<IGameDocument[]>;
+  getAvailableGames(): Promise<Majavashakki.IGameRef[]>;
 }
 
 const options: SchemaOptions = {timestamps: true};
@@ -56,12 +50,13 @@ GameSchema.statics.findByTitle = async (title: string): Promise<IGameDocument> =
   return gameState;
 }
 
-GameSchema.statics.getAvailableGames = async (): Promise<IGameDocument[]> => {
-  return await GameModel.find({$or: [{playerIdWhite: null}, {playerIdBlack: null}]}).exec();
+GameSchema.statics.getAvailableGames = async (): Promise<Majavashakki.IGameRef[]> => {
+  const games = await GameModel.find({$or: [{playerIdWhite: null}, {playerIdBlack: null}]}).exec();
+  return games.map((doc) => doc.denormalize());
 }
 
 // Methods are used for instance of items
-GameSchema.methods.denormalize = function(): IGameRef {
+GameSchema.methods.denormalize = function(): Majavashakki.IGameRef {
   const self = this as IGameDocument;
   return {ref: self._id, title: self.title, active: true};
 };

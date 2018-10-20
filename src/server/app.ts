@@ -127,9 +127,9 @@ app.post("/api/games", apiAuth, async (req, res) => {
   const {session, body: {name}} = req
   const game = await roomRepo.createRoom(name)
   const socket = sessionSocketMap[session.id];
+  // TODO this broadcast is not supported anymore? Does other users see new games when created?? Check if this is "oopsies".
   socket.broadcast.to(this.MainRoom).emit("game-created", game.title);
-  // TODO check do we leak mongo document data for client? (origin IGameDocument)
-  res.send(game)
+  res.send(game);
 })
 
 app.get("/api/games/get/:name", apiAuth, async (req, res) => {

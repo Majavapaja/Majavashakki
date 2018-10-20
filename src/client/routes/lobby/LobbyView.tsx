@@ -12,33 +12,43 @@ class LobbyView extends React.Component<any, any> {
 
         this.state = {
             newRoomName: "",
-            rooms: [],
+            availableGames: [],
+            myGames: []
         };
 
         // Remove game from list when it becomes full
         this.props.socket.on("game-full", fullRoom => {
             this.setState({
-                rooms: this.state.rooms.filter(room => room !== fullRoom),
+                availableGames: this.state.availableGames.filter(room => room !== fullRoom),
             });
         });
     }
 
     public componentDidMount() {
+        // TODO async plox and parallel Promise.All invokes.
         getOpenGames().then((games) => {
+            console.log("open games")
+            console.log(games)
             this.setState({
-                rooms: games,
+                availableGames: games,
+            });
+        });
+        getMyGames().then((games) => {
+            this.setState({
+                myGames: games
             });
         });
     }
 
     public onSubmitNewRoom(event) {
         event.preventDefault();
-        const gameName = this.cleanInput(this.state.newRoomName);
-        if (gameName) {
-            createGame(gameName).then((game) => {
+        const gameTitle = this.cleanInput(this.state.newRoomName);
+        if (gameTitle) {
+            createGame(gameTitle).then((game) => {
                 this.setState({
-                    rooms: [...this.state.rooms, game.title],
+                    availableGames: [...this.state.availableGames, game],
                 });
+                // TODO don't join game immediatly, instead push to my-games?
                 joinGame(game.title).then(this.handleJoinResponse)
             });
         }
@@ -67,7 +77,8 @@ class LobbyView extends React.Component<any, any> {
                     Hello! Welcome to Majavashakki.
                     Please, join existing game or create a new one.
                 </h2>
-                <GameList rooms={this.state.rooms} />
+                <GameList games={this.state.availableGames} title="Avoimet pelit" />
+                <GameList games={this.state.myGames} title="Minnun pellit" />
                 {this.state.error && <p>Error: {this.state.error}</p>}
                 <div className="newRoomArea">
                     <form onSubmit={onSubmitNewRoom}>
@@ -92,20 +103,28 @@ function getOpenGames() {
     });
 }
 
-function createGame(name) {
+function getMyGames() {
+    return request({
+        method: "GET",
+        url: window.location.origin + "/api/games/my-games",
+        json: true
+    });
+}
+
+function createGame(title) {
     return request({
         method: "POST",
         url: window.location.origin + "/api/games",
-        body: {name},
+        body: {title},
         json: true,
     });
 }
 
-function joinGame(name) {
+function joinGame(title) {
     return request({
         method: "POST",
         url: window.location.origin + "/api/games/join",
-        body: {name},
+        body: {title},
         json: true,
     });
 }
