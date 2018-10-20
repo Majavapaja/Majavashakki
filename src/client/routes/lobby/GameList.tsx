@@ -29,8 +29,6 @@ class GameList extends React.Component<any, any> {
   public render() {
     const { classes } = this.props
     const games: Majavashakki.IGameRef[] = this.props.games;
-    console.log(this.state.title + " games")
-    console.log(games)
     return (
       <div className={classes.root}>
         <h2>{this.state.title}</h2>
@@ -47,16 +45,16 @@ class GameList extends React.Component<any, any> {
     );
   }
 
-  private onRoomClick = (gameName: string) => {
-    this.joinGame(gameName).then(this.handleJoinResponse);
+  private onRoomClick = (gameTitle: string) => {
+    this.joinGame(gameTitle).then(this.handleJoinResponse);
   }
 
   // TODO implement service layer / redux
-  private joinGame = (name) => {
+  private joinGame = (title) => {
     return request({
         method: "POST",
         url: window.location.origin + "/api/games/join",
-        body: {name},
+        body: {title},
         json: true,
     });
   }
