@@ -27,8 +27,6 @@ class LobbyView extends React.Component<any, any> {
     public componentDidMount() {
         // TODO async plox and parallel Promise.All invokes.
         getOpenGames().then((games) => {
-            console.log("open games")
-            console.log(games)
             this.setState({
                 availableGames: games,
             });
