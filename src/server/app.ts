@@ -43,8 +43,6 @@ app.use((req, res, next) => {
 });
 
 app.use(bodyParser.json())
-app.use(express.static(resolve(__dirname, "../../dist")));
-
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -247,7 +245,6 @@ app.get("/logout", (req, res) => {
 })
 app.get("/login", serveUI)
 app.get("/signup", serveUI)
-app.get("*", uiAuth, serveUI)
 
 function serveUI(req, res) {
   res.sendFile(resolve(__dirname, "../../dist/index.html"));
@@ -262,6 +259,7 @@ function requireAuth(onFailure) {
     }
   }
 }
+app.use(express.static(resolve(__dirname, "../../dist")));
 
 export const start = port => {
   server.listen(port, () => {
