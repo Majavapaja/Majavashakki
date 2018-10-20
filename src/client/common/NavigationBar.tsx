@@ -105,7 +105,6 @@ class NavigationBar extends React.Component<any, any> {
           <Toolbar>
             <MajavapajaLogo />
             {this.state.logged && <LoginMenu logout={this.logout} profile={this.profile} />}
-            {!this.state.logged && <Button onClick={this.login}><Typography color="textSecondary">Login</Typography></Button>}
           </Toolbar>
         </AppBar>
       </div>
@@ -114,7 +113,7 @@ class NavigationBar extends React.Component<any, any> {
 
   private init = () => {
     request({ method: "GET", url: window.location.origin + "/api/user" }).then(user => {
-      this.setState({ logged: !!user });
+      this.setState({ logged: user.loggedIn });
     });
   }
 }
