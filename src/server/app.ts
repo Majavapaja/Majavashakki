@@ -240,6 +240,9 @@ app.get("/logout", (req, res) => {
 })
 app.get("/login", serveUI)
 app.get("/signup", serveUI)
+// Important!! Resolve serving of static files before catch-em-all serve
+app.use(express.static(resolve(__dirname, "../../dist")));
+app.get("*", uiAuth, serveUI)
 
 function serveUI(req, res) {
   res.sendFile(resolve(__dirname, "../../dist/index.html"));
@@ -254,7 +257,6 @@ function requireAuth(onFailure) {
     }
   }
 }
-app.use(express.static(resolve(__dirname, "../../dist")));
 
 export const start = port => {
   server.listen(port, () => {
