@@ -1,15 +1,24 @@
 import request from "request-promise";
+import { string } from "prop-types";
 
 const base = window.location.origin;
 export default class ApiService {
   public static read = {
-    user: async (): Promise<global.IUserContract> =>      await request({ method: "GET", url: `${base}/api/user`,           json: true }),
-    availableGames: async (): Promise<global.IGameRef> => await request({ method: "GET", url: `${base}/api/games`,          json: true }),
-    myGames: async (): Promise<global.IGameRef> =>        await request({ method: "GET", url: `${base}/api/games/my-games`, json: true }),
+    user: async () =>           await getIt<global.IUserContract>("api/user"),
+    availableGames: async () => await getIt<global.IGameRef>("api/games"),
+    myGames: async () =>        await getIt<global.IGameRef>("api/games/my-games"),
   };
 
   public static write = {
-    game:     async (title: string): Promise<global.IGameRef> => await request({method: "POST", url: `${base}/api/games`,       body: {title}, json: true}),
-    joinGame: async (title: string): Promise<global.IGameRef> => await request({method: "POST", url: `${base}/api/games/join`,  body: {title}, json: true})
+    game:     async (title: string) => await postIt<global.IGameRef>("api/games", {title}),
+    joinGame: async (title: string) => await postIt<global.IGameRef>("api/games/join", {title})
   }
+}
+
+export const postIt = async <T>(api: string, body: object): Promise<T> => {
+  return await request({method: "POST", url: `${base}/${api}`, body, json: true})
+}
+
+export const getIt = async <T>(api: string): Promise<T> => {
+  return await request({method: "GET", url: `${base}/${api}`, json: true})
 }
