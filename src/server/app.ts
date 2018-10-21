@@ -106,8 +106,8 @@ app.post("/api/user", apiAuth, (req, res) => {
 })
 
 app.post("/api/user/register", async (req, res) => {
-  const { body: { username, password, email } } = req
-  const newUser: IUser = { name: username, email, password };
+  const { body: { name, password, email } } = req
+  const newUser: IUser = { name, email, password };
   console.log("New user received :" + newUser);
 
   const result = await User.registerUser(newUser);
