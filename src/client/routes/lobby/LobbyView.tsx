@@ -26,11 +26,11 @@ class LobbyView extends React.Component<any, any> {
     }
 
     public async componentDidMount() {
-        const availableGames = await ApiService.read.availableGames();
-        this.setState({availableGames});
+        const [availableGames, myGames] = await Promise.all([
+            ApiService.read.availableGames(),
+            ApiService.read.myGames()]);
 
-        const myGames = await ApiService.read.myGames();
-        this.setState({myGames});
+        this.setState({availableGames, myGames});
     }
 
     public onSubmitNewRoom(event) {
