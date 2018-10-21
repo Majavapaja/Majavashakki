@@ -2,14 +2,13 @@
 
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
 import {IGameDocument} from "./GameModel";
-import * as Majavashakki from "../../common/GamePieces";
 import * as _ from "lodash";
 import bcrypt from "bcryptjs";
 
 export interface IUser {
   email: string;
   name: string;
-  games?: Majavashakki.IGameRef[];
+  games?: global.IGameRef[];
   password: string;
 }
 
@@ -25,10 +24,10 @@ export interface IUserDocument extends IUser, Document {
 export interface IUserModel extends Model<IUserDocument> {
   findOrCreate(facebookId: string): Promise<IUserDocument>;
   updateName(id: string|Schema.Types.ObjectId, name: string);
-  addGame(userId: string, game: IGameDocument): Promise<Majavashakki.IGameRef>;
+  addGame(userId: string, game: IGameDocument): Promise<global.IGameRef>;
   validProfile(user: IUserDocument): boolean;
   registerUser(newUser: IUser): Promise<boolean>;
-  getMyGames(userId: string, active?: boolean): Promise<Majavashakki.IGameRef[]>;
+  getMyGames(userId: string, active?: boolean): Promise<global.IGameRef[]>;
 }
 
 const options: SchemaOptions = {timestamps: true};
@@ -129,7 +128,7 @@ UserSchema.statics.addGame = async (_id: string, game: IGameDocument) => {
   console.log("Added game");
 }
 
-UserSchema.statics.getMyGames = async (_id: string, active: boolean = true): Promise<Majavashakki.IGameRef[]> => {
+UserSchema.statics.getMyGames = async (_id: string, active: boolean = true): Promise<global.IGameRef[]> => {
   const user = await User.findOne({_id}).exec();
   if (!user) throw new Error(`Invalid user id '${_id}' for fetching my games`);
   return user.games.filter(gameref => gameref.active);

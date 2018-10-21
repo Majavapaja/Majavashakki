@@ -22,7 +22,7 @@ export class GameRoomsRepository {
         await GameModel.save(state)
     }
 
-    public async createRoom(title: string): Promise<Majavashakki.IGameRef> {
+    public async createRoom(title: string): Promise<global.IGameRef> {
         const doc = await GameModel.findOrCreate(title);
         return doc.denormalize();
     }
@@ -41,7 +41,7 @@ export class GameRoomsRepository {
         return game;
     }
 
-    public async getAvailableGames(userId: string): Promise<Majavashakki.IGameRef[]> {
+    public async getAvailableGames(userId: string): Promise<global.IGameRef[]> {
         return await GameModel.getAvailableGames(userId);
     }
 

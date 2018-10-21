@@ -3,9 +3,8 @@ import { withRouter } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
-import * as request from "request-promise";
+import request from "request-promise";
 import { withStyles } from "@material-ui/core/styles";
-import * as Majavashakki from "../../../common/GamePieces"
 
 // TODO styles
 const styles = theme => ({
@@ -28,7 +27,7 @@ class GameList extends React.Component<any, any> {
 
   public render() {
     const { classes } = this.props
-    const games: Majavashakki.IGameRef[] = this.props.games;
+    const games: global.IGameRef[] = this.props.games;
     return (
       <div className={classes.root}>
         <h2>{this.state.title}</h2>
