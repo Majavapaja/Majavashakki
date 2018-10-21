@@ -10,6 +10,6 @@ export default class ApiService {
 
   public static write = {
     game:     async (title: string): Promise<global.IGameRef> => await request({method: "POST", url: `${base}/api/games`,       body: {title}, json: true}),
-    joinGame: async (title: string): Promise<any> =>             await request({method: "POST", url: `${base}/api/games/join`,  body: {title}, json: true})
+    joinGame: async (title: string): Promise<global.IGameRef> => await request({method: "POST", url: `${base}/api/games/join`,  body: {title}, json: true})
   }
 }

@@ -156,13 +156,10 @@ app.post("/api/games/join", apiAuth, async (req, res) => {
   const {session, body: {title}} = req
   const socket = sessionSocketMap[session.id];
   const userId = session.passport.user._id;
-  const game = await roomRepo.joinRoom(title, userId) // TODO: Handle full room exception
+  const game = await roomRepo.joinRoom(socket, title, userId) // TODO: Handle full room exception
+
   socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
   socket.join(title); // TODO we should use game ids
-  socket.emit("game-joined", game.board.pieces); // TODO return response instead of socket communication -> Done, should we still emit something to update other players?
-  if (game.isFull()) {
-    socket.broadcast.to(this.MainRoom).emit("game-full");
-  }
   res.send(game);
 })
 

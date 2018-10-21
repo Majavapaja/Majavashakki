@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
-import request from "request-promise";
+import ApiService from "../../common/ApiService";
 import { withStyles } from "@material-ui/core/styles";
 
 // TODO styles
@@ -44,22 +44,9 @@ class GameList extends React.Component<any, any> {
     );
   }
 
-  private onRoomClick = (gameTitle: string) => {
-    this.joinGame(gameTitle).then(this.handleJoinResponse);
-  }
-
-  // TODO implement service layer / redux
-  private joinGame = (title) => {
-    return request({
-        method: "POST",
-        url: window.location.origin + "/api/games/join",
-        body: {title},
-        json: true,
-    });
-  }
-
-  private handleJoinResponse = ({title}) => {
-    this.props.history.push(`/game/${title}`)
+  private onRoomClick = async (gameTitle: string) => {
+    const result = await ApiService.write.joinGame(gameTitle);
+    this.props.history.push(`/game/${result.title}`)
   }
 }
 

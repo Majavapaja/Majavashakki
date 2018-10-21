@@ -2,14 +2,11 @@ import * as React from "react";
 import { withRouter } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import GameList from "./GameList";
-import request from "request-promise";
 import ApiService from "../../common/ApiService";
 
 class LobbyView extends React.Component<any, any> {
     constructor(props: any) {
         super(props);
-
-        this.handleJoinResponse = this.handleJoinResponse.bind(this)
 
         this.state = {
             newRoomName: "",
@@ -42,7 +39,7 @@ class LobbyView extends React.Component<any, any> {
             this.setState({availableGames: [...this.state.availableGames, game] });
             // TODO don't join game immediatly, instead push to my-games?
             const result = await ApiService.write.joinGame(gameTitle);
-            this.handleJoinResponse(result)
+            this.props.history.push(`/game/${result.title}`)
         }
     }
 
@@ -52,10 +49,6 @@ class LobbyView extends React.Component<any, any> {
 
     public onInputChange({target}) {
         this.setState({[target.name]: target.value});
-    }
-
-    public handleJoinResponse({title}) {
-        this.props.history.push(`/game/${title}`)
     }
 
     public render() {
@@ -86,6 +79,4 @@ class LobbyView extends React.Component<any, any> {
         );
     }
 }
-
-
 export default withRouter(LobbyView);
