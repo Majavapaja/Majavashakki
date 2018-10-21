@@ -4,14 +4,14 @@ import {Game} from "../entities/GameRoom";
 import * as Majavashakki from "../../common/GamePieces"
 
 export interface IGameDocument extends Majavashakki.IGame, Document {
-  denormalize(): Majavashakki.IGameRef;
+  denormalize(): global.IGameRef;
 }
 
 export interface IGameModel extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<IGameDocument>;
   save(game: Majavashakki.IGame, isNew?: boolean): Promise<IGameDocument>;
   findByTitle(title: string): Promise<IGameDocument>;
-  getAvailableGames(userId: string): Promise<Majavashakki.IGameRef[]>;
+  getAvailableGames(userId: string): Promise<global.IGameRef[]>;
 }
 
 const options: SchemaOptions = {timestamps: true};
@@ -50,7 +50,7 @@ GameSchema.statics.findByTitle = async (title: string): Promise<IGameDocument> =
   return gameState;
 }
 
-GameSchema.statics.getAvailableGames = async (userId: string): Promise<Majavashakki.IGameRef[]> => {
+GameSchema.statics.getAvailableGames = async (userId: string): Promise<global.IGameRef[]> => {
   // Beautiful! Check for games that are neither full and doesn't contain active user already
   const games = await GameModel.find()
     .and([
@@ -62,7 +62,7 @@ GameSchema.statics.getAvailableGames = async (userId: string): Promise<Majavasha
 }
 
 // Methods are used for instance of items
-GameSchema.methods.denormalize = function(): Majavashakki.IGameRef {
+GameSchema.methods.denormalize = function(): global.IGameRef {
   const self = this as IGameDocument;
   return {ref: self._id, title: self.title, active: true};
 };

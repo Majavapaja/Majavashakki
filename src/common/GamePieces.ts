@@ -1,16 +1,9 @@
-import {Schema} from "mongoose";
 
 export interface IGame {
   title: string;
-  playerIdWhite: any; // TODO mongo object id or string or swha?
-  playerIdBlack: any;
+  playerIdWhite: string;
+  playerIdBlack: string;
   board: IBoard;
-}
-
-export interface IGameRef {
-  ref: Schema.Types.ObjectId;
-  title: string;
-  active: boolean;
 }
 
 export interface IBoard {

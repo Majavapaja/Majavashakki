@@ -3,6 +3,7 @@ import { withRouter } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import GameList from "./GameList";
 import request from "request-promise";
+import ApiService from "../../common/ApiService";
 
 class LobbyView extends React.Component<any, any> {
     constructor(props: any) {
@@ -24,18 +25,12 @@ class LobbyView extends React.Component<any, any> {
         });
     }
 
-    public componentDidMount() {
-        // TODO async plox and parallel Promise.All invokes.
-        getOpenGames().then((games) => {
-            this.setState({
-                availableGames: games,
-            });
-        });
-        getMyGames().then((games) => {
-            this.setState({
-                myGames: games
-            });
-        });
+    public async componentDidMount() {
+        const availableGames = await ApiService.read.availableGames();
+        this.setState({availableGames});
+
+        const myGames = await ApiService.read.myGames();
+        this.setState({myGames});
     }
 
     public onSubmitNewRoom(event) {
@@ -91,22 +86,6 @@ class LobbyView extends React.Component<any, any> {
             </div>
         );
     }
-}
-
-function getOpenGames() {
-    return request({
-        method: "GET",
-        url: window.location.origin + "/api/games",
-        json: true,
-    });
-}
-
-function getMyGames() {
-    return request({
-        method: "GET",
-        url: window.location.origin + "/api/games/my-games",
-        json: true
-    });
 }
 
 function createGame(title) {

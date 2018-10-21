@@ -86,9 +86,10 @@ const roomRepo = GameRoomsRepository.getInstance();
 
 app.get("/api/user", (req, res) => {
   const user = req.user;
-  const result = {
-    loggedIn: Boolean(user),
+  const result: global.IUserContract = {
     name: user ? user.name : "Anonymous",
+    email: user ? user.email : undefined,
+    loggedIn: Boolean(user)
   };
   res.set("Cache-Control", "no-cache");
   res.send(result);

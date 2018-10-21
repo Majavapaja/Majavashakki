@@ -1,17 +1,14 @@
 import * as React from "react";
-import request from "request-promise";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import Button from "@material-ui/core/Button";
 import AccountCircle from "@material-ui/icons/AccountCircle";
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-
 import { withRouter } from "react-router-dom";
 import MajavapajaLogo from "./MajavapajaLogo";
+import ApiService from "./ApiService";
 
 const styles = createStyles({
   grow: {
@@ -111,10 +108,9 @@ class NavigationBar extends React.Component<any, any> {
     );
   }
 
-  private init = () => {
-    request({ method: "GET", url: window.location.origin + "/api/user" }).then(user => {
-      this.setState({ logged: user.loggedIn });
-    });
+  private init = async () => {
+    const result = await ApiService.read.user();
+    this.setState({ logged: result.loggedIn });
   }
 }
 
