@@ -1,5 +1,5 @@
-import * as chai from "chai";
-import * as chaiAsPromised from "chai-as-promised";
+import chai from "chai";
+import chaiAsPromised from "chai-as-promised";
 import factory from "./KingFactory";
 import {moveSequence} from "./BoardHelper";
 chai.should();
@@ -31,8 +31,8 @@ describe("King", () => {
             promise.should.eventually.have.same.members(["error"]).notify(done);
         });
     });
-    
-    describe("Capturing", () => { 
+
+    describe("Capturing", () => {
         it("should allow king to capture sideways [c2, b2]", done => {
             const promise = factory.build("board-king-capture")
                 .then(board => moveSequence(board, [["c2", "b2"]]));

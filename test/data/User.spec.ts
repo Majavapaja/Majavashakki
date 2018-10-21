@@ -1,9 +1,7 @@
 import {UserSchema, IUserModel} from "../../src/server/data/User";
 import {GameSchema, IGameModel} from "../../src/server/data/GameModel";
-import {IGameDocument} from "../../src/server/data/GameModel";
-import * as mongoose from "mongoose";
-import * as assert from "assert";
-import * as Majavashakki from "../../src/common/GamePieces";
+import mongoose from "mongoose";
+import assert from "assert";
 
 const connectionString = "mongodb://localhost/test"
 const User = mongoose.model("User", UserSchema) as IUserModel;

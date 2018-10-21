@@ -1,5 +1,5 @@
-import * as chai from "chai";
-import * as chaiAsPromised from "chai-as-promised";
+import chai from "chai";
+import chaiAsPromised from "chai-as-promised";
 import factory from "./CastlingFactory";
 import {moveSequence} from "./BoardHelper";
 chai.should();
@@ -12,19 +12,19 @@ describe("Castling", () => {
                 .then(board => moveSequence(board, [["e1", "c1"]]));
             promise.should.eventually.have.same.members(["castling"]).notify(done);
         });
-        
+
         it("should allow castling with right rook", done => {
             const promise = factory.build("board-castling")
                 .then(board => moveSequence(board, [["e1", "g1"]]));
             promise.should.eventually.have.same.members(["castling"]).notify(done);
         });
-        
+
         it("should not allow castling if king has moved", done => {
             const promise = factory.build("board-castling")
                 .then(board => moveSequence(board, [["e1", "f1"], ["f1", "e1"], ["e1", "c1"]]));
             promise.should.eventually.have.same.members(["move", "move", "error"]).notify(done);
         });
-        
+
         it("should not allow castling if rook has moved", done => {
             const promise = factory.build("board-castling")
                 .then(board => moveSequence(board, [["a1", "a2"], ["a2", "a1"], ["e1", "c1"]]));
