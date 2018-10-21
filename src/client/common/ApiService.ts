@@ -7,4 +7,9 @@ export default class ApiService {
     availableGames: async (): Promise<global.IGameRef> => await request({ method: "GET", url: `${base}/api/games`,          json: true }),
     myGames: async (): Promise<global.IGameRef> =>        await request({ method: "GET", url: `${base}/api/games/my-games`, json: true }),
   };
+
+  public static write = {
+    game:     async (title: string): Promise<global.IGameRef> => await request({method: "POST", url: `${base}/api/games`,       body: {title}, json: true}),
+    joinGame: async (title: string): Promise<any> =>             await request({method: "POST", url: `${base}/api/games/join`,  body: {title}, json: true})
+  }
 }

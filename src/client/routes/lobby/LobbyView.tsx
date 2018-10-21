@@ -33,17 +33,16 @@ class LobbyView extends React.Component<any, any> {
         this.setState({availableGames, myGames});
     }
 
-    public onSubmitNewRoom(event) {
+    public async onSubmitNewRoom(event) {
         event.preventDefault();
+
         const gameTitle = this.cleanInput(this.state.newRoomName);
         if (gameTitle) {
-            createGame(gameTitle).then((game) => {
-                this.setState({
-                    availableGames: [...this.state.availableGames, game],
-                });
-                // TODO don't join game immediatly, instead push to my-games?
-                joinGame(game.title).then(this.handleJoinResponse)
-            });
+            const game = await ApiService.write.game(gameTitle);
+            this.setState({availableGames: [...this.state.availableGames, game] });
+            // TODO don't join game immediatly, instead push to my-games?
+            const result = await ApiService.write.joinGame(gameTitle);
+            this.handleJoinResponse(result)
         }
     }
 
@@ -88,22 +87,5 @@ class LobbyView extends React.Component<any, any> {
     }
 }
 
-function createGame(title) {
-    return request({
-        method: "POST",
-        url: window.location.origin + "/api/games",
-        body: {title},
-        json: true,
-    });
-}
-
-function joinGame(title) {
-    return request({
-        method: "POST",
-        url: window.location.origin + "/api/games/join",
-        body: {title},
-        json: true,
-    });
-}
 
 export default withRouter(LobbyView);
