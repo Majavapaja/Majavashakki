@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as request from "request-promise";
+import request from "request-promise";
 import { withStyles, createStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";

@@ -1,8 +1,8 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
-import * as request from "request-promise";
 import GameList from "./GameList";
+import request from "request-promise";
 
 class LobbyView extends React.Component<any, any> {
     constructor(props: any) {

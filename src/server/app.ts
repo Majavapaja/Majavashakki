@@ -1,12 +1,12 @@
-import * as http from "http";
+import http from "http";
 import {resolve} from "path";
 
-import * as bodyParser from "body-parser";
-import * as express from "express";
-import * as passport from "passport";
+import bodyParser from "body-parser";
+import express from "express";
+import passport from "passport";
 import {Strategy as FbStrategy} from "passport-facebook";
 import { Strategy as LocalStrategy } from "passport-local";
-import * as sio from "socket.io";
+import sio from "socket.io";
 import {MongooseClient} from "./data/MongooseClient";
 import {User, IUserDocument, IUser} from "./data/User";
 

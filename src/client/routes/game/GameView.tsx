@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as request from "request-promise";
+import request from "request-promise";
 import { withRouter } from "react-router-dom";
 import Board from "./Board";
 import * as Majavashakki from "../../../common/GamePieces"

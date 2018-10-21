@@ -1,5 +1,4 @@
 import * as React from "react";
-import PropTypes from "prop-types"
 import { withStyles, createStyles } from "@material-ui/core/styles";
 
 import * as logo from "../assets/logo.png";
@@ -49,7 +48,7 @@ class Majava extends React.Component<any, any> {
         const { classes } = this.props
         return (
             <img
-                src={String(logo)}
+                src={logo.default}
                 className={classes.logo}
                 style={inlineStyles}
             />

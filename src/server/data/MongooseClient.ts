@@ -1,6 +1,4 @@
-import * as mongoose from "mongoose";
-import {IDisposable} from "../components/disposable";
-import * as util from "util";
+import mongoose from "mongoose";
 
 let connectionString = "mongodb://localhost:27017"
 if (process.env.MajavashakkiMongoConnectionString) {

@@ -1,7 +1,7 @@
-import * as expressSession from "express-session";
-import * as ConnectMongo from "connect-mongo";
-import * as socketIoSession from "express-socket.io-session";
-import * as crypto from "crypto"
+import expressSession from "express-session";
+import ConnectMongo from "connect-mongo";
+import socketIoSession from "express-socket.io-session";
+import crypto from "crypto"
 import {MongooseClient} from "./data/MongooseClient";
 
 let MajavashakkiSessionSecret = process.env.MajavashakkiSessionSecret;

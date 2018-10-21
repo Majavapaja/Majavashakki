@@ -3,8 +3,8 @@
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
 import {IGameDocument} from "./GameModel";
 import * as Majavashakki from "../../common/GamePieces";
-import * as bcrypt from "bcryptjs";
 import * as _ from "lodash";
+import bcrypt from "bcryptjs";
 
 export interface IUser {
   email: string;
@@ -40,8 +40,11 @@ export let UserSchema: Schema = new Schema({
   },
   name: String,
   password: String,
-  facebookId: String,
-  games: {type: Array, default: []},
+  facebookId: {
+    type: String,
+    unique: true
+  },
+  games: Array,
 }, options);
 
 UserSchema.pre("save", (next) => {

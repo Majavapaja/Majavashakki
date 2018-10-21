@@ -43,9 +43,10 @@ class MajavapajaLogo extends React.Component<any, any> {
 
     public render() {
         const { classes } = this.props
+
         return (
             <a className={classes.root} href="/">
-                <img src={logo} className={classes.logo} />
+                <img src={logo.default} className={classes.logo} />
                 <Typography className={classes.title} component="div">
                     Majavapaja
                 </Typography>
