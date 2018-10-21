@@ -1,12 +1,13 @@
 import {UserSchema, IUserModel} from "../../src/server/data/User";
+import {GameSchema, IGameModel} from "../../src/server/data/GameModel";
 import {IGameDocument} from "../../src/server/data/GameModel";
 import * as mongoose from "mongoose";
 import * as assert from "assert";
-import * as TypeMoq from "typemoq";
 import * as Majavashakki from "../../src/common/GamePieces";
 
 const connectionString = "mongodb://localhost/test"
 const User = mongoose.model("User", UserSchema) as IUserModel;
+const GameModel = mongoose.model("GameModel", GameSchema) as IGameModel;
 
 describe("User", () => {
     beforeEach(async () => {
@@ -29,15 +30,15 @@ describe("User", () => {
 
     describe("addGame", () => {
         it("should add game for logged in user", async () => {
-            let user = await User.findOrCreate("M4T4L4");
+            const facebookId = "M4T4L4"
+
+            let user = await User.findOrCreate(facebookId);
             User.updateName(user._id, "HerraMatala");
 
-            const mockGameDoc = TypeMoq.Mock.ofType<IGameDocument>();
-            mockGameDoc.setup(d => d.denormalize()).returns(() => ({title: "P3L1"} as Majavashakki.IGameRef));
+            const game = await GameModel.findOrCreate("P3L1")
+            await User.addGame(user._id, game);
 
-            await User.addGame(user._id, mockGameDoc.object);
-            user = await User.findOrCreate("M4T4L4");
-
+            user = await User.findOne({facebookId}).exec();
             assert.equal(user.games.length, 1, "added game");
             assert.equal(user.games[0].title, "P3L1", "game title");
         });
