@@ -1,5 +1,5 @@
 import * as React from "react";
-import request from "request-promise";
+import ApiService from "../../common/ApiService";
 import { withRouter } from "react-router-dom";
 import Board from "./Board";
 import * as Majavashakki from "../../../common/GamePieces"
@@ -13,11 +13,10 @@ class GameView extends React.Component<any, any> {
     }
   }
 
-  public componentWillMount() {
-    fetchGame(this.state.gameName).then(game => {
-      this.setState({pieces: game.board.pieces})
-      this.props.socket.on("move_result", this.onMoveResult.bind(this));
-    })
+  public async componentWillMount() {
+    const game = await ApiService.read.game(this.state.gameName);
+    this.setState({pieces: game.board.pieces});
+    this.props.socket.on("move_result", this.onMoveResult.bind(this));
   }
 
   public render() {
@@ -39,14 +38,6 @@ class GameView extends React.Component<any, any> {
       this.setState({pieces: response.board})
     }
   }
-}
-
-function fetchGame(name) {
-    return request({
-        method: "GET",
-        url: `${window.location.origin}/api/games/get/${name}`,
-        json: true,
-    })
 }
 
 export default withRouter(GameView);

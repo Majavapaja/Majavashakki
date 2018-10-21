@@ -139,6 +139,7 @@ app.get("/api/games/get/:name", apiAuth, async (req, res) => {
 
   const game = await roomRepo.getGameRoom(name);
   socket.join(game.title)
+  // TODO Return lightweight interface instead?
   if (game) {
     res.send(game);
   } else {

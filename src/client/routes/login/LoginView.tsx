@@ -5,7 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import request from "request-promise";
+import ApiService from "../../common/ApiService";
 
 import Majava from "../../common/Majava";
 
@@ -105,31 +105,14 @@ class LoginView extends React.Component<any, any> {
         });
     }
 
-    private handleSubmit = () => {
-        login(this.state.email, this.state.password).then(() => {
+    private handleSubmit = async () => {
+        try {
+            await ApiService.write.login(this.state.email, this.state.password);
             this.props.history.push("/");
-        }).catch(error => {
-            this.setState({ error })
-        })
+        } catch (error) {
+            this.setState({ error: error.message })
+        }
     }
-}
-
-const login = (email, password) => {
-    return new Promise((resolve, reject) => {
-        return request({
-            method: "POST",
-            url: window.location.origin + "/login",
-            body: {
-                email,
-                password
-            },
-            json: true,
-        }).then((res) => {
-            setTimeout(resolve, 200)
-        }).catch(error => {
-            setTimeout(() => reject(error.message), 500)
-        })
-    })
 }
 
 export default withStyles(styles)(withRouter(LoginView));
