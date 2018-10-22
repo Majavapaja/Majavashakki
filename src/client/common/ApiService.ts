@@ -13,7 +13,8 @@ export default class ApiService {
   public static write = {
     game:     async (title: string) => await postIt<global.IGameRef>("api/games", {title}),
     joinGame: async (title: string) => await postIt<global.IGameRef>("api/games/join", {title}),
-    login:    async (email: string, password: string) => await postIt<any>("login", {email, password})
+    login:    async (email: string, password: string) => await postIt<void>("login", {email, password}),
+    user:     async (user: global.IUserContract) => await postIt<void>("api/user", user)
   }
 }
 

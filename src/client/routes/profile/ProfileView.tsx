@@ -1,7 +1,7 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
-import request from "request-promise";
+import ApiService from "../../common/ApiService";
 
 // TODO an actual view with some reasonable ui and more fields! email! password! whoa, very much data, so doge
 class ProfileView extends React.Component<any, any> {
@@ -27,30 +27,19 @@ class ProfileView extends React.Component<any, any> {
       this.setState({[target.name]: target.value});
   }
 
-  public onSubmitLogin = (event) => {
+  public onSubmitLogin = async (event) => {
     event.preventDefault();
-    const username = this.cleanInput(this.state.username);
-    if (username) {
+    const name = this.cleanInput(this.state.username);
+    if (name) {
       // Add separate button to navigate away from profile view? "back to lobby"
-      update(username).then(() => {
-        // User has logged in. Switch the page to room selection.
-        this.props.history.push("/");
-      })
+      await ApiService.write.user({name} as global.IUserContract);
+      this.props.history.push("/")
     }
   }
 
   public cleanInput(input: string): string {
     return input.trim().replace("<", "").replace(">", "");
   }
-}
-
-function update(name) {
-  return request({
-      method: "POST",
-      url: window.location.origin + "/api/user",
-      body: {name},
-      json: true,
-  })
 }
 
 export default withRouter(ProfileView);
