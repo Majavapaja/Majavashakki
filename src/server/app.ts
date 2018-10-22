@@ -96,22 +96,22 @@ app.get("/api/user", (req, res) => {
 });
 
 app.post("/api/user", apiAuth, (req, res) => {
-  const {session, body: {name}} = req
+  const session = getSession(req);
+  const user = req.body as global.IUserContract;
   if (!session) throw new Error("No session found, things are broken")
 
-  const currentUser: IUserDocument = session.passport.user;
+  const currentUser: IUserDocument = session.passport.user; // TODO is this wrong user ref?
   console.log("New user received :" + currentUser.facebookId);
-  User.updateName(currentUser._id, name);
-  currentUser.name = name;
+  User.updateName(currentUser._id, user.name);
+  currentUser.name = user.name;
   res.send("OK")
 })
 
 app.post("/api/user/register", async (req, res) => {
-  const { body: { name, password, email } } = req
-  const newUser: IUser = { name, email, password };
-  console.log("New user received :" + newUser);
+  const user = req.body as global.IUserContract;
+  console.log("New user received :" + JSON.stringify(user));
 
-  const result = await User.registerUser(newUser);
+  const result = await User.registerUser(user);
 
   if (result) res.send("OK")
   else res.status(500).send({ error: "Couldn't create user" })

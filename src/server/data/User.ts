@@ -26,7 +26,7 @@ export interface IUserModel extends Model<IUserDocument> {
   updateName(id: string|Schema.Types.ObjectId, name: string);
   addGame(userId: string, game: IGameDocument): Promise<global.IGameRef>;
   validProfile(user: IUserDocument): boolean;
-  registerUser(newUser: IUser): Promise<boolean>;
+  registerUser(newUser: global.IUserContract): Promise<boolean>;
   getMyGames(userId: string, active?: boolean): Promise<global.IGameRef[]>;
 }
 
@@ -78,7 +78,7 @@ UserSchema.statics.findOrCreate = async (facebookId: string): Promise<IUserDocum
 
 };
 
-UserSchema.statics.registerUser = async (user: IUser): Promise<boolean> => {
+UserSchema.statics.registerUser = async (user: global.IUserContract): Promise<boolean> => {
   console.log(`Find user by email '${user.email}'`);
 
   const userObj = new User();

@@ -13,7 +13,8 @@ export default class ApiService {
   public static write = {
     game:     async (title: string) => await postIt<global.IGameRef>("api/games", {title}),
     joinGame: async (title: string) => await postIt<global.IGameRef>("api/games/join", {title}),
-    login:    async (email: string, password: string) => await postIt<void>("login", {email, password}),
+    register: async (user: global.IUserContract) => await postIt<void>("api/user/register", user),
+    login:    async (user: global.IUserContract) => await postIt<void>("login", user), // TODO use api route instead?
     user:     async (user: global.IUserContract) => await postIt<void>("api/user", user)
   }
 }

@@ -3,6 +3,7 @@ declare namespace global {
     name: string;
     email: string;
     loggedIn: boolean;
+    password?: string;
   }
 
   export interface IGameRef {

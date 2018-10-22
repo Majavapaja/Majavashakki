@@ -5,7 +5,7 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
-import * as request from "request-promise";
+import ApiService from "../../common/ApiService";
 
 import Majava from "../../common/Majava";
 
@@ -92,27 +92,17 @@ class SignUpView extends React.Component<any, any> {
         );
     }
 
-    private handleSubmit = () => {
+    private handleSubmit = async () => {
         if (this.state.password !== this.state.passwordConfirm) {
-            this.setState({
-                error: "Passwords don't match D:"
-            })
+            this.setState({error: "Passwords don't match D:"})
         } else {
-            this.setState({
-                isLoading: true
-            })
-            registerUser(this.state).then(() => {
+            this.setState({isLoading: true});
+            try {
+                await ApiService.write.register({email: this.state.email, name: this.state.username, password: this.state.password} as global.IUserContract);
                 this.props.history.push("/login");
-                this.setState({
-                    isLoading: false
-                })
-            }).catch(error => {
-                console.error("Couldn't register user. ", error)
-                this.setState({
-                    isLoading: false,
-                    error: "Error when registering user. Please try again."
-                })
-            })
+            } catch (error) {
+                this.setState({isLoading: false, error: error.message})
+            }
         }
     }
 
@@ -125,25 +115,6 @@ class SignUpView extends React.Component<any, any> {
           [id]: value
         });
     }
-}
-
-const registerUser = (formData) => {
-    return new Promise((resolve, reject) => {
-        return request({
-            method: "POST",
-            url: window.location.origin + "/api/user/register",
-            body: {
-                name: formData.username,
-                email: formData.email,
-                password: formData.password
-            },
-            json: true,
-        }).then(() => {
-            setTimeout(resolve, 2000)
-        }).catch(error => {
-            setTimeout(() => reject(error), 5000)
-        })
-    })
 }
 
 export default withStyles(styles)(withRouter(SignUpView));

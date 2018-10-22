@@ -107,7 +107,7 @@ class LoginView extends React.Component<any, any> {
 
     private handleSubmit = async () => {
         try {
-            await ApiService.write.login(this.state.email, this.state.password);
+            await ApiService.write.login({email: this.state.email, password: this.state.password} as global.IUserContract);
             this.props.history.push("/");
         } catch (error) {
             this.setState({ error: error.message })
