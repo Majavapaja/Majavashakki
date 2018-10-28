@@ -1,6 +1,7 @@
 
 export interface IGame {
   title: string;
+  turn: PieceColor;
   playerIdWhite: string;
   playerIdBlack: string;
   board: IBoard;
