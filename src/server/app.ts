@@ -46,7 +46,7 @@ app.get("/authFacebook",
   })
 )
 
-app.post("/login", (req, res, next) => {
+app.post("/api/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return res.status(500).send("Authentication error")
@@ -150,17 +150,35 @@ function initSockets() {
     const session = getSession(socket.handshake);
     sessionSocketMap[session.id] = socket;
 
+    // TODO: Ensure that user is logged in before allowing socket connections
+
+    const user = session.passport.user;
+
     socket.on("move", async (data) => {
       // TODO: Check the player is allowed to make moves in the game
       const game = await roomRepo.getGameRoom(data.gameName);
-      const move = game.move(data.from, data.dest);
-      await roomRepo.saveGame(game);
 
-      if (move.status === Majavashakki.MoveStatus.Error) {
-        return socket.emit("move_result", move);
-      } else {
-        return io.to(game.title).emit("move_result", move);
+      if (!game.doesUserOwnPiece(user, data.from)) {
+        return socket.emit("move_result", {
+          status: Majavashakki.MoveStatus.Error,
+          error: "Error 13: This is not your piece!"
+        })
       }
+
+      if (!game.isUsersTurn(user)) {
+        return socket.emit("move_result", {
+          status: Majavashakki.MoveStatus.Error,
+          error: "Error 14: Not your turn!"
+        })
+      }
+
+      const move = game.move(data.from, data.dest);
+
+      if (move.status === Majavashakki.MoveStatus.Error) return socket.emit("move_result", move);
+
+      game.changeTurn()
+      await roomRepo.saveGame(game);
+      return io.to(game.title).emit("move_result", move);
     });
   });
 }

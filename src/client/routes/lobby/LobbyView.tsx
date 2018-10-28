@@ -13,19 +13,13 @@ class LobbyView extends React.Component<any, any> {
             availableGames: [],
             myGames: []
         };
-
-        // Remove game from list when it becomes full
-        this.props.socket.on("game-full", fullRoom => {
-            this.setState({
-                availableGames: this.state.availableGames.filter(room => room !== fullRoom),
-            });
-        });
     }
 
     public async componentDidMount() {
         const [availableGames, myGames] = await Promise.all([
             ApiService.read.availableGames(),
-            ApiService.read.myGames()]);
+            ApiService.read.myGames()
+        ]);
 
         this.setState({availableGames, myGames});
     }

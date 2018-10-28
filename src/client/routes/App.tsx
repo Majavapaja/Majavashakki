@@ -7,7 +7,7 @@ import * as React from "react";
 import { Route } from "react-router-dom";
 import SignUpView from "./signup/SignUpView";
 
-export default ({ socket }) => (
+export default () => (
   <div>
     <NavigationBar />
     <Route
@@ -25,17 +25,13 @@ export default ({ socket }) => (
     <Route
       exact
       path="/game/:gameName"
-      render={() => (
-        <GameView socket={socket} />
-      )}
+      render={() => ( <GameView /> )}
     />
 
     <Route
       exact
       path="/"
-      render={() => (
-        <LobbyView socket={socket} />
-      )}
+      render={() => ( <LobbyView /> )}
     />
 
     <Route

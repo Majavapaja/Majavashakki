@@ -14,7 +14,7 @@ export default class ApiService {
     game:     async (title: string) => await postIt<global.IGameRef>("api/games", {title}),
     joinGame: async (title: string) => await postIt<global.IGameRef>("api/games/join", {title}),
     register: async (user: global.IUserContract) => await postIt<void>("api/user/register", user),
-    login:    async (user: global.IUserContract) => await postIt<void>("login", user), // TODO use api route instead?
+    login:    async (user: global.IUserContract) => await postIt<void>("api/login", user),
     user:     async (user: global.IUserContract) => await postIt<void>("api/user", user)
   }
 }
