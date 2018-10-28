@@ -59,4 +59,19 @@ export class Game implements Majavashakki.IGame {
     public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
         return this.board.move(start, destination);
     }
+
+    public getUserColor(userId: any) {
+        if (this.playerIdWhite === userId) return Majavashakki.PieceColor.White
+        else if (this.playerIdBlack === userId) return Majavashakki.PieceColor.Black
+        throw Error(`User (ID: ${{userId}}) is not in this game!`)
+    }
+
+    public doesUserOwnPiece(userId: any, position: Majavashakki.IPosition) {
+        const piece = this.board.getPiece(position)
+        if (piece) {
+            return this.getUserColor(userId) === piece.color
+        }
+        return false
+    }
+
 }
