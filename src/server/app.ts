@@ -48,7 +48,7 @@ app.get("/authFacebook",
   })
 )
 
-app.post("/login", (req, res, next) => {
+app.post("/api/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       return res.status(500).send("Authentication error")
