@@ -153,21 +153,22 @@ function initSockets() {
     sessionSocketMap[session.id] = socket;
 
     // TODO: Ensure that user is logged in before allowing socket connections
-
-    const user = session.passport.user;
+    // HACK: Passport, sessions and Socket.io do not play too well together so we have to
+    // touch Passport internals  which might break if passport is updated. But whatever.
+    const userId = session.passport.user;
 
     socket.on("move", async (data) => {
       // TODO: Check the player is allowed to make moves in the game
       const game = await roomRepo.getGameRoom(data.gameName);
 
-      if (!game.doesUserOwnPiece(user, data.from)) {
+      if (!game.doesUserOwnPiece(userId, data.from)) {
         return socket.emit("move_result", {
           status: Majavashakki.MoveStatus.Error,
           error: "Error 13: This is not your piece!"
         })
       }
 
-      if (!game.isUsersTurn(user)) {
+      if (!game.isUsersTurn(userId)) {
         return socket.emit("move_result", {
           status: Majavashakki.MoveStatus.Error,
           error: "Error 14: Not your turn!"
