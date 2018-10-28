@@ -1,12 +1,7 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
-import { withStyles, createStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+import {TextField, Typography, withStyles, createStyles, Paper, Button} from "@material-ui/core";
 import ApiService from "../../common/ApiService";
-
 import Majava from "../../common/Majava";
 
 const styles = createStyles({
@@ -39,7 +34,9 @@ const styles = createStyles({
 })
 
 class LoginView extends React.Component<any, any> {
-    constructor(props: any) {
+  private readonly submitField: any = React.createRef();
+
+  constructor(props: any) {
         super(props);
         this.state = { }
     }
@@ -48,10 +45,14 @@ class LoginView extends React.Component<any, any> {
         const { classes } = this.props
         return (
             <div className={classes.root}>
-                <Paper className={classes.loginContainer}>
+                <Paper
+                  className={classes.loginContainer}
+                  onKeyPress={this.handleEnterKey}
+                >
                     <Majava />
                     <Typography color="error">{this.state.error}</Typography>
                     <TextField
+                        autoFocus
                         name="email"
                         label="Email"
                         margin="normal"
@@ -63,6 +64,7 @@ class LoginView extends React.Component<any, any> {
                         type="password"
                         margin="normal"
                         onChange={this.handleInputChange}
+                        inputRef={el => this.submitField = el}
                     />
 
                     <Button
@@ -93,6 +95,12 @@ class LoginView extends React.Component<any, any> {
                 </Paper>
             </div>
         );
+    }
+
+    private handleEnterKey = (event: any) => {
+      if (!(event.target instanceof HTMLInputElement) || event.key !== "Enter") return;
+
+      return (event.target.name === this.submitField.name) ? this.handleSubmit() : this.submitField.focus();
     }
 
     private handleInputChange = event => {

@@ -1,7 +1,6 @@
-import http from "http";
+import {createServer} from "http";
 import {resolve} from "path";
-
-import bodyParser from "body-parser";
+import {json} from "body-parser";
 import express from "express";
 import passport from "passport";
 import sio from "socket.io";
@@ -9,7 +8,6 @@ import {MongooseClient} from "./data/MongooseClient";
 import { User, IUserDocument } from "./data/User";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {enableSessions, getSession} from "./session";
-import {copy} from "../common/util";
 import * as Majavashakki from "../common/GamePieces"
 import { initPassport } from "./auth"
 
@@ -24,11 +22,11 @@ const io: SocketIO.Server = sio({transports: ["websocket"]});
 enableSessions(app, io);
 initSockets();
 
-app.use(bodyParser.json())
+app.use(json())
 app.use(passport.initialize());
 app.use(passport.session());
 
-const server = http.createServer(app);
+const server = createServer(app);
 io.attach(server);
 
 const uiAuth = requireAuth((req, res, next) =>
