@@ -1,4 +1,5 @@
 import * as React from "react";
+import { getSocket } from "../socket";
 
 const CELL_POSITIONS: string[] = (() => {
   const positions = [] as string[];
@@ -11,6 +12,8 @@ const CELL_POSITIONS: string[] = (() => {
 })();
 
 class Board extends React.Component<any, any> {
+  private socket: SocketIOClient.Socket
+
   constructor(props) {
     super(props);
     this.state = {
@@ -19,10 +22,11 @@ class Board extends React.Component<any, any> {
     };
 
     this.onMoveResult = this.onMoveResult.bind(this)
+    this.socket = getSocket()
   }
 
   public componentWillMount() {
-    this.props.socket.on("move_result", this.onMoveResult);
+    this.socket.on("move_result", this.onMoveResult);
   }
 
   public render() {
@@ -80,7 +84,7 @@ class Board extends React.Component<any, any> {
     }
 
     if (this.state.selectedCell) {
-      this.props.socket.emit("move", {
+      this.socket.emit("move", {
         gameName: this.props.gameName,
         from: this.posToJson(this.state.selectedCell),
         dest: this.posToJson(pos),
