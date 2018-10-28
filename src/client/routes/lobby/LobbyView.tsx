@@ -62,8 +62,8 @@ class LobbyView extends React.Component<any, any> {
                     Hello! Welcome to Majavashakki.
                     Please, join existing game or create a new one.
                 </h2>
-                <GameList games={this.state.availableGames} title="Avoimet pelit" />
-                <GameList games={this.state.myGames} title="Minnun pellit" />
+                <GameList games={this.state.availableGames} title="Available games" />
+                <GameList games={this.state.myGames} title="My games" />
                 {this.state.error && <p>Error: {this.state.error}</p>}
                 <div className="newRoomArea">
                     <form onSubmit={onSubmitNewRoom}>
