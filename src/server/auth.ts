@@ -4,8 +4,8 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { User, IUserDocument } from "./data/User";
 
 export function initPassport(appUrl: string) {
-  passport.serializeUser((user, done) => done(null, user))
-  passport.deserializeUser((obj, done) => done(null, obj))
+  passport.serializeUser(async (user: any, done) => done(null, user._id))
+  passport.deserializeUser(async (_id, done) => done(null, await User.findOne({_id})))
 
   // Get facebook authentication values from environment variables
   const facebookClientId = process.env.MajavashakkiFbClientId

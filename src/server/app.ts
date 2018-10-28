@@ -38,8 +38,7 @@ const apiAuth = requireAuth((req, res, next) =>
   res.status(401).send({error: "Login required"}))
 
 app.get("/", uiAuth, (req, res, next) => {
-  const session = getSession(req)
-  return User.validProfile(session.passport.user) ? next() : res.redirect("/profile");
+  return User.validProfile(req.user) ? next() : res.redirect("/profile");
 });
 
 app.get("/authFacebook",
@@ -82,7 +81,7 @@ app.post("/api/user", apiAuth, (req, res) => {
   const user = req.body as global.IUserContract;
   if (!session) throw new Error("No session found, things are broken")
 
-  const currentUser: IUserDocument = session.passport.user; // TODO is this wrong user ref?
+  const currentUser: IUserDocument = req.user
   console.log("New user received :" + currentUser.facebookId);
   User.updateName(currentUser._id, user.name);
   currentUser.name = user.name;
@@ -138,7 +137,7 @@ app.get("/api/games/my-games", apiAuth, async (req, res) => {
 app.post("/api/games/join", apiAuth, async (req, res) => {
   const {session, body: {title}} = req
   const socket = sessionSocketMap[session.id];
-  const userId = session.passport.user._id;
+  const userId = req.user._id
   const game = await roomRepo.joinRoom(socket, title, userId) // TODO: Handle full room exception
 
   socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
