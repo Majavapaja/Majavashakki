@@ -24,17 +24,6 @@ const io: SocketIO.Server = sio({transports: ["websocket"]});
 enableSessions(app, io);
 initSockets();
 
-const logSession = (path, session) => {
-  const withoutCookie = copy(session);
-  delete withoutCookie.cookie;
-  console.log(`[${session.id}] ${path} ${JSON.stringify(withoutCookie)}`);
-};
-
-app.use((req, res, next) => {
-  logSession(req.path, getSession(req));
-  next();
-});
-
 app.use(bodyParser.json())
 app.use(passport.initialize());
 app.use(passport.session());
@@ -162,7 +151,6 @@ const sessionSocketMap = {};
 function initSockets() {
   io.on("connection", (socket: SocketIO.Socket) => {
     const session = getSession(socket.handshake);
-    logSession("/socket.io", session);
     sessionSocketMap[session.id] = socket;
 
     socket.on("move", async (data) => {
