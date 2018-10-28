@@ -17,6 +17,7 @@ export interface IGameModel extends Model<IGameDocument> {
 const options: SchemaOptions = {timestamps: true};
 export let GameSchema: Schema = new Schema({
   title: String,
+  turn: String,
   playerIdWhite: String,
   playerIdBlack: String,
   board: Schema.Types.Mixed,
