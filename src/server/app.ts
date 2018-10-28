@@ -152,9 +152,21 @@ function initSockets() {
     const session = getSession(socket.handshake);
     sessionSocketMap[session.id] = socket;
 
+    // TODO: Ensure that user is logged in before allowing socket connections
+
+    const user = session.passport.user;
+
     socket.on("move", async (data) => {
       // TODO: Check the player is allowed to make moves in the game
       const game = await roomRepo.getGameRoom(data.gameName);
+
+      if (!game.doesUserOwnPiece(user, data.from)) {
+        return socket.emit("move_result", {
+          status: Majavashakki.MoveStatus.Error,
+          error: "Error 13: This is not your piece!"
+        })
+      }
+
       const move = game.move(data.from, data.dest);
       await roomRepo.saveGame(game);
 
