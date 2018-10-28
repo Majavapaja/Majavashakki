@@ -29,7 +29,7 @@ class LobbyView extends React.Component<any, any> {
         this.setState({availableGames, myGames});
     }
 
-    public async onSubmitNewRoom(event) {
+    public onSubmitNewRoom = async (event) => {
         event.preventDefault();
 
         const gameTitle = this.cleanInput(this.state.newRoomName);
@@ -53,7 +53,6 @@ class LobbyView extends React.Component<any, any> {
     public render() {
 
         const onInputChange = this.onInputChange.bind(this);
-        const onSubmitNewRoom = this.onSubmitNewRoom.bind(this);
 
         return (
             <div className="room page">
@@ -65,7 +64,7 @@ class LobbyView extends React.Component<any, any> {
                 <GameList games={this.state.myGames} title="My games" />
                 {this.state.error && <p>Error: {this.state.error}</p>}
                 <div className="newRoomArea">
-                    <form onSubmit={onSubmitNewRoom}>
+                    <form onSubmit={this.onSubmitNewRoom}>
                         Create new room:
                         <TextField
                             name="newRoomName"
