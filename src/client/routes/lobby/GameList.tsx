@@ -34,8 +34,8 @@ class GameList extends React.Component<any, any> {
         <List>
           {
             games.map(game => (
-              <React.Fragment key={game.ref}>
-                  <ListItem onClick={() => this.onRoomClick(game.ref)}>{game.title}</ListItem>
+              <React.Fragment key={game.title}>
+                  <ListItem onClick={() => this.onRoomClick(game.title)}>{game.title}</ListItem>
                   <Divider />
               </React.Fragment>
           ))}
@@ -44,8 +44,8 @@ class GameList extends React.Component<any, any> {
     );
   }
 
-  private onRoomClick = async (gameId: string) => {
-    const result = await ApiService.write.joinGame(gameId);
+  private onRoomClick = async (gameTitle: string) => {
+    const result = await ApiService.write.joinGame(gameTitle);
     this.props.history.push(`/game/${result.title}`)
   }
 }

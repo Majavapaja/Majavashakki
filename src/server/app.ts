@@ -135,13 +135,13 @@ app.get("/api/games/my-games", apiAuth, async (req, res) => {
 })
 
 app.post("/api/games/join", apiAuth, async (req, res) => {
-  const {session, body: {gameId}} = req
+  const {session, body: {title}} = req
   const socket = sessionSocketMap[session.id];
   const userId = req.user._id
-  const game = await roomRepo.joinRoom(socket, gameId, userId) // TODO: Handle full room exception
+  const game = await roomRepo.joinRoom(socket, title, userId) // TODO: Handle full room exception
 
   socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
-  socket.join(game.title); // TODO we should use game ids
+  socket.join(title); // TODO we should use game ids
   res.send(game);
 })
 
