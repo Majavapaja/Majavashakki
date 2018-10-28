@@ -9,13 +9,14 @@ export class Game implements Majavashakki.IGame {
         game.board.moveHistory = gameState.board.moveHistory;
         game.playerIdBlack = gameState.playerIdBlack;
         game.playerIdWhite = gameState.playerIdWhite;
+        game.currentTurn = gameState.currentTurn
         return game;
     }
 
     public static MapForDb(game: Game): Majavashakki.IGame {
         return {
             title: game.title,
-            turn: game.turn,
+            currentTurn: game.currentTurn,
             board: game.board,
             playerIdWhite: game.playerIdWhite,
             playerIdBlack: game.playerIdBlack
@@ -23,7 +24,7 @@ export class Game implements Majavashakki.IGame {
     }
 
     public title: string;
-    public turn: Majavashakki.PieceColor;
+    public currentTurn: Majavashakki.PieceColor;
     public playerIdWhite: string;
     public playerIdBlack: string;
     public board: Board;
@@ -33,7 +34,7 @@ export class Game implements Majavashakki.IGame {
         this.board = new Board();
 
         // White always starts in chess
-        this.turn = Majavashakki.PieceColor.White;
+        this.currentTurn = Majavashakki.PieceColor.White;
     }
 
     public isFull(): boolean {
