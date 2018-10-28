@@ -3,10 +3,15 @@ import { withRouter } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import GameList from "./GameList";
 import ApiService from "../../common/ApiService";
+import {getSocket} from "../socket"
 
 class LobbyView extends React.Component<any, any> {
+    private socket: SocketIOClient.Socket;
+
     constructor(props: any) {
         super(props);
+
+        this.socket = getSocket()
 
         this.state = {
             newRoomName: "",
