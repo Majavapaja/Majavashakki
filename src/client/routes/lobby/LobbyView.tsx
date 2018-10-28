@@ -9,7 +9,6 @@ class LobbyView extends React.Component<any, any> {
     private socket: SocketIOClient.Socket
 
     constructor(props: any) {
-        console.log("LOBBY VIEw rendered")
         super(props);
 
         this.state = {
