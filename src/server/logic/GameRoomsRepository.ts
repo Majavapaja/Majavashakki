@@ -40,9 +40,6 @@ export class GameRoomsRepository {
         await User.addGame(userId, doc);
         game.addPlayer(userId);
         doc = await GameModel.save(Game.MapForDb(game));
-        if (game.isFull()) {
-            socket.broadcast.to(this.MainRoom).emit("game-full");
-        }
         return doc.denormalize();
     }
 

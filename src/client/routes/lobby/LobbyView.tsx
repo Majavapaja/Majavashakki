@@ -3,11 +3,8 @@ import { withRouter } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import GameList from "./GameList";
 import ApiService from "../../common/ApiService";
-import { getSocket } from "../socket";
 
 class LobbyView extends React.Component<any, any> {
-    private socket: SocketIOClient.Socket
-
     constructor(props: any) {
         super(props);
 
@@ -16,15 +13,6 @@ class LobbyView extends React.Component<any, any> {
             availableGames: [],
             myGames: []
         };
-
-        this.socket = getSocket()
-
-        // Remove game from list when it becomes full
-        this.socket.on("game-full", fullRoom => {
-            this.setState({
-                availableGames: this.state.availableGames.filter(room => room !== fullRoom),
-            });
-        });
     }
 
     public async componentDidMount() {
