@@ -167,6 +167,13 @@ function initSockets() {
         })
       }
 
+      if (!game.isUsersTurn(user)) {
+        return socket.emit("move_result", {
+          status: Majavashakki.MoveStatus.Error,
+          error: "Error 14: Not your turn!"
+        })
+      }
+
       const move = game.move(data.from, data.dest);
       await roomRepo.saveGame(game);
 

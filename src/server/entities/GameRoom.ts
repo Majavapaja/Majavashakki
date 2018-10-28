@@ -74,4 +74,7 @@ export class Game implements Majavashakki.IGame {
         return false
     }
 
+    public isUsersTurn(userId: any) {
+        return this.currentTurn === this.getUserColor(userId)
+    }
 }
