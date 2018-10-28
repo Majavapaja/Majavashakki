@@ -1,10 +1,6 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
-import { withStyles, createStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+import {TextField, Typography, withStyles, createStyles, Paper, Button} from "@material-ui/core";
 import ApiService from "../../common/ApiService";
 
 import Majava from "../../common/Majava";
@@ -30,6 +26,11 @@ const styles = createStyles({
 })
 
 class SignUpView extends React.Component<any, any> {
+  private emailField: any = React.createRef();
+  private nameField: any = React.createRef();
+  private passwordField: any = React.createRef();
+  private submitField: any = React.createRef();
+
     constructor(props: any) {
         super(props);
         this.state = {
@@ -44,17 +45,20 @@ class SignUpView extends React.Component<any, any> {
         const form = (
             <React.Fragment>
                 <TextField
+                    autoFocus
                     id="email"
                     label="Email"
                     type="email"
                     margin="normal"
                     onChange={this.handleInputChange}
+                    inputRef={this.emailField}
                 />
                 <TextField
                     id="username"
                     label="Username"
                     margin="normal"
                     onChange={this.handleInputChange}
+                    inputRef={this.nameField}
                 />
                 <TextField
                     id="password"
@@ -62,6 +66,7 @@ class SignUpView extends React.Component<any, any> {
                     type="password"
                     margin="normal"
                     onChange={this.handleInputChange}
+                    inputRef={this.passwordField}
                 />
                 <TextField
                     id="passwordConfirm"
@@ -69,6 +74,7 @@ class SignUpView extends React.Component<any, any> {
                     type="password"
                     margin="normal"
                     onChange={this.handleInputChange}
+                    inputRef={this.submitField}
                 />
                 <Button
                     variant="raised"
@@ -83,13 +89,34 @@ class SignUpView extends React.Component<any, any> {
 
         return (
             <div className={classes.root}>
-                <Paper className={classes.formContainer}>
+                <Paper
+                  className={classes.formContainer}
+                  onKeyPress={this.handleEnterKey}
+                >
                     <Majava animation={this.state.isLoading && "spin"}/>
                     <Typography color="error">{this.state.error}</Typography>
                     {!this.state.isLoading && form}
                 </Paper>
             </div>
         );
+    }
+
+    private handleEnterKey = (event: any) => {
+      if (!(event.target instanceof HTMLInputElement) || event.key !== "Enter") return;
+      switch (event.target.id) {
+        case this.emailField.current.id:
+          return this.focusField(this.nameField);
+        case this.nameField.current.id:
+          return this.focusField(this.passwordField);
+        case this.passwordField.current.id:
+          return this.focusField(this.submitField);
+        default:
+          return this.handleSubmit();
+      }
+    }
+
+    private focusField(fieldRef: any) {
+      fieldRef.current.focus();
     }
 
     private handleSubmit = async () => {
