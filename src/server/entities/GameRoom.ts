@@ -77,4 +77,12 @@ export class Game implements Majavashakki.IGame {
     public isUsersTurn(userId: any) {
         return this.currentTurn === this.getUserColor(userId)
     }
+
+    public changeTurn() {
+        if (this.currentTurn === Majavashakki.PieceColor.White) {
+            this.currentTurn = Majavashakki.PieceColor.Black
+        } else {
+            this.currentTurn = Majavashakki.PieceColor.White
+        }
+    }
 }

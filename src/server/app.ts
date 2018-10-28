@@ -175,13 +175,12 @@ function initSockets() {
       }
 
       const move = game.move(data.from, data.dest);
-      await roomRepo.saveGame(game);
 
-      if (move.status === Majavashakki.MoveStatus.Error) {
-        return socket.emit("move_result", move);
-      } else {
-        return io.to(game.title).emit("move_result", move);
-      }
+      if (move.status === Majavashakki.MoveStatus.Error) return socket.emit("move_result", move);
+
+      game.changeTurn()
+      await roomRepo.saveGame(game);
+      return io.to(game.title).emit("move_result", move);
     });
   });
 }
