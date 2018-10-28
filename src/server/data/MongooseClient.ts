@@ -10,7 +10,7 @@ export class MongooseClient {
   public static InitMongoConnection() {
     console.log("MongooseClient connecting")
     mongoose.connect(connectionString, {dbName: "Majavashakki"});
-    mongoose.set("debug", true);
+    mongoose.set("debug", false);
 
     this.initDefaultHooks();
   }
