@@ -34,7 +34,7 @@ const styles = createStyles({
 })
 
 class LoginView extends React.Component<any, any> {
-  private readonly submitField: any = React.createRef();
+  private submitField: any = React.createRef();
 
   constructor(props: any) {
         super(props);
@@ -53,18 +53,18 @@ class LoginView extends React.Component<any, any> {
                     <Typography color="error">{this.state.error}</Typography>
                     <TextField
                         autoFocus
-                        name="email"
+                        id="email"
                         label="Email"
                         margin="normal"
                         onChange={this.handleInputChange}
                     />
                     <TextField
-                        name="password"
+                        id="password"
                         label="Password"
                         type="password"
                         margin="normal"
                         onChange={this.handleInputChange}
-                        inputRef={el => this.submitField = el}
+                        inputRef={this.submitField}
                     />
 
                     <Button
@@ -99,17 +99,16 @@ class LoginView extends React.Component<any, any> {
 
     private handleEnterKey = (event: any) => {
       if (!(event.target instanceof HTMLInputElement) || event.key !== "Enter") return;
-
-      return (event.target.name === this.submitField.name) ? this.handleSubmit() : this.submitField.focus();
+      return (event.target.id === this.submitField.current.id) ? this.handleSubmit() : this.submitField.current.focus();
     }
 
     private handleInputChange = event => {
         const target = event.target;
         const value = target.type === "checkbox" ? target.checked : target.value;
-        const name = target.name;
+        const id = target.id;
 
         this.setState({
-          [name]: value
+          [id]: value
         });
     }
 
