@@ -1,12 +1,8 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ApiService from "../../common/ApiService";
-import { withStyles } from "@material-ui/core/styles";
-import { Paper, WithStyles, createStyles, Theme, Typography, Button } from "@material-ui/core";
+import { List, ListItem, ListItemText, Paper, createStyles, Theme, Typography, Button, WithStyles, withStyles } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import ApiService from "../../common/ApiService";
 
 class GameList extends React.Component<IGameListProps, any> {
   constructor(props: any) {

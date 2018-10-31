@@ -1,8 +1,7 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import TextField from "@material-ui/core/TextField";
+import { Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField } from "@material-ui/core";
 import ApiService from "../../common/ApiService";
-import { Typography, Button, WithStyles, Dialog, DialogTitle, DialogActions, DialogContent } from "@material-ui/core";
 
 class NewGameForm extends React.Component<INewGameProps, INewGameState> {
   constructor(props: any) {
