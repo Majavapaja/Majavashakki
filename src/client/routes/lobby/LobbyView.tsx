@@ -4,7 +4,6 @@ import GameList from "./GameList";
 import NewGameForm from "./NewGameForm";
 import ApiService from "../../common/ApiService";
 import {connectSocket} from "../socket"
-import { Theme, createStyles, withStyles, Button, WithStyles } from "@material-ui/core";
 
 class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
   constructor(props: any) {
@@ -47,7 +46,7 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
   }
 }
 
-interface ILobbyViewProps extends RouteComponentProps<any>, WithStyles<typeof styles> {}
+interface ILobbyViewProps extends RouteComponentProps<any> {}
 interface ILobbyViewState {
   newRoomForm: any,
   availableGames: global.IGameRef[],
@@ -56,6 +55,4 @@ interface ILobbyViewState {
   dialogOpen: boolean,
 }
 
-const styles = (theme: Theme) => createStyles({ });
-
-export default withStyles(styles)(withRouter(LobbyView));
+export default withRouter(LobbyView);
