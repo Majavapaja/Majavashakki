@@ -36,10 +36,8 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
   public openNewForm = () => this.setState({ dialogOpen: true })
 
   public render() {
-    const { classes } = this.props
-
     return (
-      <div className={classes.root}>
+      <div>
         <NewGameForm open={this.state.dialogOpen} handleClose={this.closeNewForm}/>
 
         <GameList games={this.state.myGames} title="My games" openDialog={this.openNewForm} />
@@ -58,15 +56,6 @@ interface ILobbyViewState {
   dialogOpen: boolean,
 }
 
-const styles = (theme: Theme) => createStyles({
-  root: {
-    display: "flex",
-    flexDirection: "column"
-  },
-  newRoom: {
-    display: "flex",
-    alignItems: "center",
-  }
-});
+const styles = (theme: Theme) => createStyles({ });
 
 export default withStyles(styles)(withRouter(LobbyView));
