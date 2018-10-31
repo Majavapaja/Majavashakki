@@ -2,10 +2,10 @@ import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import Divider from "@material-ui/core/Divider";
+import ListItemText from "@material-ui/core/ListItemText";
 import ApiService from "../../common/ApiService";
 import { withStyles } from "@material-ui/core/styles";
-import { Paper, WithStyles, createStyles, Theme, Typography } from "@material-ui/core";
+import { Paper, WithStyles, createStyles, Theme, Typography, Button } from "@material-ui/core";
 
 class GameList extends React.Component<IGameListProps, any> {
   constructor(props: any) {
@@ -13,20 +13,23 @@ class GameList extends React.Component<IGameListProps, any> {
   }
 
   public render() {
-    const { classes } = this.props
-    const games: global.IGameRef[] = this.props.games;
+    const { classes, games } = this.props
+    const noGames = !games || games.length === 0
+
     return (
       <Paper className={classes.root}>
         <Typography variant="h5">{this.props.title}</Typography>
         <List>
-          {
-            games.map(game => (
-              <React.Fragment key={game.title}>
-                  <ListItem onClick={() => this.onRoomClick(game.title)}>{game.title}</ListItem>
-                  <Divider />
-              </React.Fragment>
+          {games.map(game => (
+            <ListItem
+              button
+              onClick={() => this.onRoomClick(game.title)}
+            >
+              <ListItemText primary={game.title} />
+            </ListItem>
           ))}
         </List>
+        {noGames && <Typography>No games available</Typography>}
       </Paper>
     );
   }
@@ -44,11 +47,11 @@ interface IGameListProps extends RouteComponentProps<any>, WithStyles<typeof sty
 
 const styles = (theme: Theme) => createStyles({
   root: {
-    width: "100%",
-
-    maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
-  }
+    width: 500,
+    margin: "20px auto",
+    padding: 10,
+  },
 });
 
 export default withStyles(styles)(withRouter(GameList));
