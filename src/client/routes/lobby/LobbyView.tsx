@@ -40,7 +40,6 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
 
     return (
       <div className={classes.root}>
-        <Button onClick={this.openNewForm}>OBEN</Button>
         <NewGameForm open={this.state.dialogOpen} handleClose={this.closeNewForm}/>
 
         <GameList games={this.state.myGames} title="My games" openDialog={this.openNewForm} />
