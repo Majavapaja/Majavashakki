@@ -1,10 +1,10 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import TextField from "@material-ui/core/TextField";
 import GameList from "./GameList";
+import NewGameForm from "./NewGameForm";
 import ApiService from "../../common/ApiService";
 import {connectSocket} from "../socket"
-import { Theme, createStyles, withStyles, Typography, Button, WithStyles } from "@material-ui/core";
+import { Theme, createStyles, withStyles, Button, WithStyles } from "@material-ui/core";
 
 class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
   constructor(props: any) {
@@ -18,7 +18,8 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
       },
       availableGames: [],
       myGames: [],
-      error: ""
+      error: "",
+      dialogOpen: false,
     };
   }
 
@@ -31,49 +32,19 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
     this.setState({ availableGames, myGames });
   }
 
-  public onSubmitNewRoom = async (event) => {
-    event.preventDefault();
-
-    const gameTitle = this.cleanInput(this.state.newRoomForm.name);
-    if (gameTitle) {
-      const game = await ApiService.write.game(gameTitle);
-      this.setState({availableGames: [...this.state.availableGames, game] });
-      // TODO don't join game immediatly, instead push to my-games?
-      const result = await ApiService.write.joinGame(gameTitle);
-      this.props.history.push(`/game/${result.title}`)
-    }
-  }
-
-  public cleanInput(input: string): string {
-    return input.trim().replace("<", "").replace(">", "");
-  }
-
-  public onInputChange = ({target}) => {
-    this.setState({
-      newRoomForm: {
-        ...this.state.newRoomForm,
-        [target.name]: target.value,
-      }
-    });
-  }
+  public closeNewForm = () => this.setState({ dialogOpen: false })
+  public openNewForm = () => this.setState({ dialogOpen: true })
 
   public render() {
     const { classes } = this.props
 
     return (
       <div className={classes.root}>
-        {this.state.error && <Typography color="error" variant="h2">Error: {this.state.error}</Typography>}
-        <form onSubmit={this.onSubmitNewRoom} className={classes.newRoom}>
-          <TextField
-            name="name"
-            label="Room name"
-            onChange={this.onInputChange}
-          />
-          <Button variant="raised" color="primary">Create</Button>
-        </form>
+        <Button onClick={this.openNewForm}>OBEN</Button>
+        <NewGameForm open={this.state.dialogOpen} handleClose={this.closeNewForm}/>
 
-        <GameList games={this.state.myGames} title="My games" />
-        <GameList games={this.state.availableGames} title="Available games" />
+        <GameList games={this.state.myGames} title="My games" openDialog={this.openNewForm} />
+        <GameList games={this.state.availableGames} title="Available games" openDialog={this.openNewForm} />
       </div>
     );
   }
@@ -85,6 +56,7 @@ interface ILobbyViewState {
   availableGames: global.IGameRef[],
   myGames: global.IGameRef[],
   error: string,
+  dialogOpen: boolean,
 }
 
 const styles = (theme: Theme) => createStyles({
