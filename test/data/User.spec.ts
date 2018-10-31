@@ -31,7 +31,6 @@ describe("User", () => {
             const facebookId = "M4T4L4"
 
             let user = await User.findOrCreate(facebookId);
-            User.updateName(user._id, "HerraMatala");
 
             const game = await GameModel.findOrCreate("P3L1")
             await User.addGame(user._id, game);
