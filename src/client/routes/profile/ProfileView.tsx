@@ -1,6 +1,6 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import {TextField, WithStyles, withStyles, createStyles, Theme, Button} from "@material-ui/core";
+import {TextField, WithStyles, withStyles, createStyles, Theme, Button, Typography} from "@material-ui/core";
 import ApiService from "../../common/ApiService";
 
 class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> {
@@ -37,6 +37,15 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
           onChange={this.onInputChange}
           margin="normal"
         />
+        <br/>
+        <Button
+          variant="raised"
+          color="primary"
+          className={this.props.classes.button}
+          onClick={this.handleSubmit}
+        >
+          <Typography color="inherit">Save</Typography>
+        </Button>
       </form>
     )
   }
@@ -45,21 +54,17 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
     this.setState({...this.state, [target.id]: target.value});
   }
 
-  public onSubmitLogin = async (event) => {
+  public handleSubmit = async (event) => {
     event.preventDefault();
-    const name = this.state.name;
-    if (name) {
-      // Add separate button to navigate away from profile view? "back to lobby"
-      await ApiService.write.user({name} as global.IUserContract);
+    if (this.state.name && this.state.email) {
+      await ApiService.write.user(this.state);
       this.props.history.push("/")
     }
   }
 }
 
 interface IProfileViewProps extends RouteComponentProps<any>, WithStyles<typeof styles> { }
-interface IProfileViewState extends global.IUserContract {
-  todo: boolean;
- }
+interface IProfileViewState extends global.IUserContract { }
 
 const styles = (theme: Theme) => createStyles({
   container: {
@@ -68,12 +73,9 @@ const styles = (theme: Theme) => createStyles({
   textField: {
     width: 350,
   },
-  dense: {
-    marginTop: 19,
-  },
-  menu: {
-    width: 200,
-  },
+  button: {
+    margin: "10px 0"
+  }
 });
 
 export default withStyles(styles)(withRouter(ProfileView));
