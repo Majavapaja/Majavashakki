@@ -4,6 +4,8 @@ import {TextField, WithStyles, withStyles, createStyles, Theme, Button, Typograp
 import ApiService from "../../common/ApiService";
 
 class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> {
+  private submitField: any = React.createRef();
+
   constructor(props: IProfileViewProps) {
     super(props);
     this.state = {} as IProfileViewState
@@ -17,8 +19,12 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
   public render() {
 
     return (
-      <form className={this.props.classes.container}>
+      <form
+        className={this.props.classes.container}
+        onKeyPress={this.handleEnterKey}
+      >
         <TextField
+          autoFocus
           required
           id="name"
           label="Name"
@@ -36,6 +42,7 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
           value={this.state.email || ""}
           onChange={this.onInputChange}
           margin="normal"
+          inputRef={this.submitField}
         />
         <br/>
         <Button
@@ -54,12 +61,16 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
     this.setState({...this.state, [target.id]: target.value});
   }
 
-  public handleSubmit = async (event) => {
-    event.preventDefault();
+  public handleSubmit = async () => {
     if (this.state.name && this.state.email) {
       await ApiService.write.user(this.state);
       this.props.history.push("/")
     }
+  }
+
+  private handleEnterKey = (event: any) => {
+    if (!(event.target instanceof HTMLInputElement) || event.key !== "Enter") return;
+    return (event.target.id === this.submitField.current.id) ? this.handleSubmit() : this.submitField.current.focus();
   }
 }
 
