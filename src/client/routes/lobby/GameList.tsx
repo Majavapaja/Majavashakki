@@ -43,7 +43,7 @@ class GameList extends React.Component<IGameListProps, any> {
 interface IGameListProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
   title: string,
   games: global.IGameRef[],
-  openDialog: any,
+  openDialog: () => void,
 }
 
 const styles = (theme: Theme) => createStyles({

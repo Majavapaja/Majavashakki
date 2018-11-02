@@ -70,7 +70,7 @@ class NewGameForm extends React.Component<INewGameProps, INewGameState> {
 
 interface INewGameProps extends RouteComponentProps<any> {
   open: boolean,
-  handleClose: any,
+  handleClose: () => void,
 }
 interface INewGameState {
   newRoomForm: any,
