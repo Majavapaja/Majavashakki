@@ -1,46 +1,36 @@
 import * as React from "react";
-import { withRouter } from "react-router-dom";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Divider from "@material-ui/core/Divider";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+import { List, ListItem, ListItemText, Paper, createStyles, Theme, Typography, Button, WithStyles, withStyles } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 import ApiService from "../../common/ApiService";
-import { withStyles } from "@material-ui/core/styles";
 
-// TODO styles
-const styles = theme => ({
-  root: {
-    width: "100%",
-    maxWidth: 360,
-    backgroundColor: theme.palette.background.paper,
-  },
-});
-
-class GameList extends React.Component<any, any> {
+class GameList extends React.Component<IGameListProps, any> {
   constructor(props: any) {
     super(props);
-
-    this.state = {
-      title: this.props.title,
-      games: this.props.games
-    };
   }
 
   public render() {
-    const { classes } = this.props
-    const games: global.IGameRef[] = this.props.games;
+    const { classes, games } = this.props
+    const noGames = !games || games.length === 0
+
     return (
-      <div className={classes.root}>
-        <h2>{this.state.title}</h2>
+      <Paper className={classes.root}>
+        <div className={classes.header}>
+          <Typography variant="h5">{this.props.title}</Typography>
+          <Button onClick={this.props.openDialog}><AddIcon /> new room</Button>
+        </div>
         <List>
-          {
-            games.map(game => (
-              <React.Fragment key={game.title}>
-                  <ListItem onClick={() => this.onRoomClick(game.title)}>{game.title}</ListItem>
-                  <Divider />
-              </React.Fragment>
+          {games.map(game => (
+            <ListItem
+              button
+              onClick={() => this.onRoomClick(game.title)}
+            >
+              <ListItemText primary={game.title} />
+            </ListItem>
           ))}
         </List>
-      </div>
+        {noGames && <Typography>No games available</Typography>}
+      </Paper>
     );
   }
 
@@ -49,5 +39,24 @@ class GameList extends React.Component<any, any> {
     this.props.history.push(`/game/${result.title}`)
   }
 }
+
+interface IGameListProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
+  title: string,
+  games: global.IGameRef[],
+  openDialog: () => void,
+}
+
+const styles = (theme: Theme) => createStyles({
+  root: {
+    backgroundColor: theme.palette.background.paper,
+    width: 500,
+    margin: "20px auto",
+    padding: 10,
+  },
+  header: {
+    display: "flex",
+    justifyContent: "space-between"
+  }
+});
 
 export default withStyles(styles)(withRouter(GameList));

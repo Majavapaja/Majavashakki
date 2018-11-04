@@ -1,80 +1,58 @@
 import * as React from "react";
-import { withRouter } from "react-router-dom";
-import TextField from "@material-ui/core/TextField";
+import { withRouter, RouteComponentProps } from "react-router-dom";
 import GameList from "./GameList";
+import NewGameForm from "./NewGameForm";
 import ApiService from "../../common/ApiService";
-import {getSocket} from "../socket"
+import {connectSocket} from "../socket"
 
-class LobbyView extends React.Component<any, any> {
-    private socket: SocketIOClient.Socket;
+class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
+  constructor(props: any) {
+    super(props);
 
-    constructor(props: any) {
-        super(props);
+    connectSocket()
 
-        this.socket = getSocket()
+    this.state = {
+      newRoomForm: {
+        name: ""
+      },
+      availableGames: [],
+      myGames: [],
+      error: "",
+      dialogOpen: false,
+    };
+  }
 
-        this.state = {
-            newRoomName: "",
-            availableGames: [],
-            myGames: []
-        };
-    }
+  public async componentDidMount() {
+    const [availableGames, myGames] = await Promise.all([
+      ApiService.read.availableGames(),
+      ApiService.read.myGames()
+    ]);
 
-    public async componentDidMount() {
-        const [availableGames, myGames] = await Promise.all([
-            ApiService.read.availableGames(),
-            ApiService.read.myGames()
-        ]);
+    this.setState({ availableGames, myGames });
+  }
 
-        this.setState({availableGames, myGames});
-    }
+  public closeNewForm = () => this.setState({ dialogOpen: false })
+  public openNewForm = () => this.setState({ dialogOpen: true })
 
-    public onSubmitNewRoom = async (event) => {
-        event.preventDefault();
+  public render() {
+    return (
+      <div>
+        <NewGameForm open={this.state.dialogOpen} handleClose={this.closeNewForm}/>
 
-        const gameTitle = this.cleanInput(this.state.newRoomName);
-        if (gameTitle) {
-            const game = await ApiService.write.game(gameTitle);
-            this.setState({availableGames: [...this.state.availableGames, game] });
-            // TODO don't join game immediatly, instead push to my-games?
-            const result = await ApiService.write.joinGame(gameTitle);
-            this.props.history.push(`/game/${result.title}`)
-        }
-    }
-
-    public cleanInput(input: string): string {
-        return input.trim().replace("<", "").replace(">", "");
-    }
-
-    public onInputChange({target}) {
-        this.setState({[target.name]: target.value});
-    }
-
-    public render() {
-
-        const onInputChange = this.onInputChange.bind(this);
-
-        return (
-            <div className="room page">
-                <h2 id="roomWelcome">
-                    Hello! Welcome to Majavashakki.
-                    Please, join existing game or create a new one.
-                </h2>
-                <GameList games={this.state.availableGames} title="Available games" />
-                <GameList games={this.state.myGames} title="My games" />
-                {this.state.error && <p>Error: {this.state.error}</p>}
-                <div className="newRoomArea">
-                    <form onSubmit={this.onSubmitNewRoom}>
-                        Create new room:
-                        <TextField
-                            name="newRoomName"
-                            label="Room name"
-                            onChange={onInputChange}
-                        />
-                    </form>
-                </div>
-            </div>
-        );
-    }
+        <GameList games={this.state.myGames} title="My games" openDialog={this.openNewForm} />
+        <GameList games={this.state.availableGames} title="Available games" openDialog={this.openNewForm} />
+      </div>
+    );
+  }
 }
+
+interface ILobbyViewProps extends RouteComponentProps<any> {}
+interface ILobbyViewState {
+  newRoomForm: any,
+  availableGames: global.IGameRef[],
+  myGames: global.IGameRef[],
+  error: string,
+  dialogOpen: boolean,
+}
+
 export default withRouter(LobbyView);
