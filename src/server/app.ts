@@ -148,6 +148,7 @@ function initSockets() {
     // TODO: Ensure that user is logged in before allowing socket connections
     // HACK: Passport, sessions and Socket.io do not play too well together so we have to
     // touch Passport internals  which might break if passport is updated. But whatever.
+    if (!session.passport) return
     const userId = session.passport.user;
 
     socket.on("move", async (data) => {

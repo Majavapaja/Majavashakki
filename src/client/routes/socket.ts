@@ -2,7 +2,7 @@ import io from "socket.io-client"
 
 let socket: SocketIOClient.Socket
 
-const connectSocket = () => {
+export const connectSocket = () => {
     socket = io()
 }
 

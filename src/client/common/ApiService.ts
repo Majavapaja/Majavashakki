@@ -5,8 +5,8 @@ const base = window.location.origin;
 export default class ApiService {
   public static read = {
     user:           async () => await getIt<global.IUserContract>("api/user"),
-    availableGames: async () => await getIt<global.IGameRef>("api/games"),
-    myGames:        async () => await getIt<global.IGameRef>("api/games/my-games"),
+    availableGames: async () => await getIt<global.IGameRef[]>("api/games"),
+    myGames:        async () => await getIt<global.IGameRef[]>("api/games/my-games"),
     game:           async (title: string) => await getIt<GamePieces.IGame>(`api/games/get/${title}`)
   };
 
