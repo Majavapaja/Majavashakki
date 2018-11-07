@@ -8,12 +8,12 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
 
   constructor(props: IProfileViewProps) {
     super(props);
-    this.state = {} as IProfileViewState
+    this.state = {name: "", email: ""} as IProfileViewState;
   }
 
   public async componentDidMount() {
     const user = await ApiService.read.user();
-    this.setState(user);
+    this.setState({...user});
   }
 
   public render() {
@@ -29,7 +29,7 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
           id="name"
           label="Name"
           className={this.props.classes.textField}
-          value={this.state.name || ""}
+          value={this.state.name}
           onChange={this.onInputChange}
           margin="normal"
         />
@@ -39,7 +39,7 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
           id="email"
           label="Email"
           className={this.props.classes.textField}
-          value={this.state.email || ""}
+          value={this.state.email}
           onChange={this.onInputChange}
           margin="normal"
           inputRef={this.submitField}
@@ -58,7 +58,7 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
   }
 
   public onInputChange = ({target}) => {
-    this.setState({...this.state, [target.id]: target.value});
+    this.setState({[target.id]: target.value} as IProfileViewState);
   }
 
   public handleSubmit = async () => {
