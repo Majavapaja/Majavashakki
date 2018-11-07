@@ -110,7 +110,7 @@ class NavigationBar extends React.Component<any, any> {
 
   private init = async () => {
     const result = await ApiService.read.user();
-    this.setState({ logged: result.loggedIn });
+    this.setState({ logged: !!result });
   }
 }
 

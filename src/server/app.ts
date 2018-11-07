@@ -65,24 +65,19 @@ const roomRepo = GameRoomsRepository.getInstance();
 
 app.get("/api/user", (req, res) => {
   const user = req.user;
-  const result: global.IUserContract = {
-    name: user ? user.name : "Anonymous",
-    email: user ? user.email : undefined,
-    loggedIn: Boolean(user)
-  };
   res.set("Cache-Control", "no-cache");
-  res.send(result);
+  res.send(!user ? null : {id: user._id, name: user.name, email: user.email} as global.IUserContract)
 });
 
-app.post("/api/user", apiAuth, (req, res) => {
-  const session = getSession(req);
+app.post("/api/user", apiAuth, async (req, res) => {
   const user = req.body as global.IUserContract;
-  if (!session) throw new Error("No session found, things are broken")
-
-  const currentUser: IUserDocument = req.user
-  console.log("New user received :" + currentUser.facebookId);
-  User.updateName(currentUser._id, user.name);
-  currentUser.name = user.name;
+  const loggedUser: IUserDocument = req.user
+  if (String(loggedUser._id) !== user.id) {
+    throw new Error("Identity theft error!")
+  }
+  console.log(`Updating user : ${loggedUser._id} - ${loggedUser.name} `);
+  await User.save(user);
+  req.user = user; // TODO get rid of this or maybe don't fetch user to passport state in every request...
   res.send("OK")
 })
 

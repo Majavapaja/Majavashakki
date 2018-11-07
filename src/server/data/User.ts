@@ -23,7 +23,7 @@ export interface IUserDocument extends IUser, Document {
 
 export interface IUserModel extends Model<IUserDocument> {
   findOrCreate(facebookId: string): Promise<IUserDocument>;
-  updateName(id: string|Schema.Types.ObjectId, name: string);
+  save(user: global.IUserContract): Promise<IUserDocument>;
   addGame(userId: string, game: IGameDocument): Promise<global.IGameRef>;
   validProfile(user: IUserDocument): boolean;
   registerUser(newUser: global.IUserContract): Promise<boolean>;
@@ -102,12 +102,9 @@ UserSchema.statics.registerUser = async (user: global.IUserContract): Promise<bo
 
 }
 
-UserSchema.statics.updateName = (_id: string|Schema.Types.ObjectId, name: string) => {
-  User.findOneAndUpdate({_id}, {name}, (err, doc, res) => {
-    if (err) {
-      console.log(`Updating username for ${_id} failed with_ ${err}`);
-    }
-  });
+UserSchema.statics.save = async (user: global.IUserContract) => {
+  const doc = await User.findOneAndUpdate({_id: user.id}, {name: user.name, email: user.email}).exec();
+  return doc;
 };
 
 UserSchema.statics.addGame = async (_id: string, game: IGameDocument) => {

@@ -1,12 +1,12 @@
 declare namespace global {
-  export interface IUserContract {
+  export interface IUserContract { // TODO unify with IUser?
+    id: string;
     name: string;
     email: string;
-    loggedIn: boolean;
     password?: string;
   }
 
-  export interface IGameRef {
+  export interface IGameRef { // TODO Unify with IGame?
     ref: string;
     title: string;
     active: boolean;
