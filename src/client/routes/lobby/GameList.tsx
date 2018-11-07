@@ -16,12 +16,13 @@ class GameList extends React.Component<IGameListProps, any> {
     return (
       <Paper className={classes.root}>
         <div className={classes.header}>
-          <Typography variant="h5">{this.props.title}</Typography>
+          <Typography variant="headline">{this.props.title}</Typography>
           <Button onClick={this.props.openDialog}><AddIcon /> new room</Button>
         </div>
         <List>
           {games.map(game => (
             <ListItem
+              key={game.ref}
               button
               onClick={() => this.onRoomClick(game.title)}
             >
