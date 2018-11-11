@@ -2,7 +2,7 @@ import Board from "../../server/entities/Board";
 import * as Majavashakki from "../GamePieces"
 import {doesMoveCauseCheck, isCheck} from "./Checkmate";
 
-export const isValidKingMovement = (board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition) => {
+export const isValidKingMovement = (startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition) => {
     const start = this.positionToNumbers(startPiece.position);
     const dest = this.positionToNumbers(destination);
 

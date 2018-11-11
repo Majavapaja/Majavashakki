@@ -1,5 +1,5 @@
 import Board from "../../server/entities/Board";
-import {doesMoveCauseCheck, isCheck} from "./Checkmate";
+import {doesMoveCauseCheck } from "./Checkmate";
 import * as Majavashakki from "../../common/GamePieces"
 import { isValidPawnMovement, isEnPassant } from "./pawn"
 import { isValidKingMovement, isCastling } from "./king"
@@ -63,7 +63,7 @@ class MovementValidator {
             case "pawn":
                 return isValidPawnMovement(board, startPiece, destination);
             case "knight":
-                return isValidKnightMovement(board, startPiece, destination);
+                return isValidKnightMovement(startPiece, destination);
             case "rook":
                 return isValidRookMovement(board, startPiece, destination);
             case "bishop":
@@ -71,7 +71,7 @@ class MovementValidator {
             case "queen":
                 return isValidQueenMovement(board, startPiece, destination);
             case "king":
-                return isValidKingMovement(board, startPiece, destination);
+                return isValidKingMovement(startPiece, destination);
         }
     }
 }

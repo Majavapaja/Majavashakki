@@ -1,7 +1,6 @@
-import Board from "../../server/entities/Board";
 import * as Majavashakki from "../GamePieces"
 
-export const isValidKnightMovement = (board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean => {
+export const isValidKnightMovement = (startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean => {
     const start = this.positionToNumbers(startPiece.position);
     const dest = this.positionToNumbers(destination);
 
