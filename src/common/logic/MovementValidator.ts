@@ -1,4 +1,4 @@
-import Board from "../entities/Board";
+import Board from "../../server/entities/Board";
 import {doesMoveCauseCheck, isCheck} from "./Checkmate";
 import * as Majavashakki from "../../common/GamePieces"
 

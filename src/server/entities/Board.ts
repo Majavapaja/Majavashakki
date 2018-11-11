@@ -1,6 +1,6 @@
 import makeInitialState from "../../common/initial-state";
-import MovementValidator from "../logic/MovementValidator";
-import {isCheck, isCheckMate} from "../logic/Checkmate";
+import MovementValidator from "../../common/logic/MovementValidator";
+import {isCheck, isCheckMate} from "../../common/logic/Checkmate";
 import * as Majavashakki from "../../common/GamePieces"
 
 export default class Board implements Majavashakki.IBoard {

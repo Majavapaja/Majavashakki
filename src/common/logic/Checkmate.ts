@@ -1,4 +1,4 @@
-import Board from "../entities/Board";
+import Board from "../../server/entities/Board";
 import {copy} from "../../common/util";
 import MovementValidator from "./MovementValidator";
 import * as Majavashakki from "../../common/GamePieces"
