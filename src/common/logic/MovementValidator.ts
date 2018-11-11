@@ -4,6 +4,7 @@ import * as Majavashakki from "../../common/GamePieces"
 import { isValidPawnMovement, isEnPassant } from "./pawn"
 import { isValidKingMovement, isCastling } from "./king"
 import { isValidBishopMovement } from "./bishop"
+import { isValidRookMovement } from "./rook"
 
 class MovementValidator {
     public isValidMove(board: Board, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
@@ -62,7 +63,7 @@ class MovementValidator {
             case "knight":
                 return this.knightMovement(board, startPiece, destination);
             case "rook":
-                return this.rookMovement(board, startPiece, destination);
+                return isValidRookMovement(board, startPiece, destination);
             case "bishop":
                 return isValidBishopMovement(board, startPiece, destination);
             case "queen":
@@ -86,28 +87,8 @@ class MovementValidator {
         return false;
     }
 
-    private rookMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
-        const start = this.positionToNumbers(startPiece.position);
-        const dest = this.positionToNumbers(destination);
-
-        if (dest.col !== start.col && dest.row !== start.row) return false;
-
-        while (start.col !== dest.col || start.row !== dest.row) {
-            if (dest.col > start.col) dest.col --;
-            else if (dest.col < start.col) dest.col ++;
-            else if (dest.row > start.row) dest.row --;
-            else if (dest.row < start.row) dest.row ++;
-
-            if (start.col === dest.col && start.row === dest.row) break;
-
-            if (board.getPiece(this.numbersToPosition(dest))) return false;
-        }
-
-        return true;
-    }
-
     private queenMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
-        return this.rookMovement(board, startPiece, destination) || isValidBishopMovement(board, startPiece, destination);
+        return isValidRookMovement(board, startPiece, destination) || isValidBishopMovement(board, startPiece, destination);
     }
 }
 
