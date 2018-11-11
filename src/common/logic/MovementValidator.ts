@@ -5,6 +5,7 @@ import { isValidPawnMovement, isEnPassant } from "./pawn"
 import { isValidKingMovement, isCastling } from "./king"
 import { isValidBishopMovement } from "./bishop"
 import { isValidRookMovement } from "./rook"
+import { isValidKnightMovement } from "./knight"
 
 class MovementValidator {
     public isValidMove(board: Board, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
@@ -61,7 +62,7 @@ class MovementValidator {
             case "pawn":
                 return isValidPawnMovement(board, startPiece, destination);
             case "knight":
-                return this.knightMovement(board, startPiece, destination);
+                return isValidKnightMovement(board, startPiece, destination);
             case "rook":
                 return isValidRookMovement(board, startPiece, destination);
             case "bishop":
@@ -71,20 +72,6 @@ class MovementValidator {
             case "king":
                 return isValidKingMovement(board, startPiece, destination);
         }
-    }
-
-    private knightMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
-        const start = this.positionToNumbers(startPiece.position);
-        const dest = this.positionToNumbers(destination);
-
-        const rowDiff = Math.abs(dest.row - start.row);
-        const colDiff = Math.abs(dest.col - start.col);
-
-        if ((rowDiff === 2 && colDiff === 1) || (rowDiff === 1 && colDiff === 2)) {
-            return true;
-        }
-
-        return false;
     }
 
     private queenMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
