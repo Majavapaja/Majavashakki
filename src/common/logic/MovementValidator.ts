@@ -6,6 +6,7 @@ import { isValidKingMovement, isCastling } from "./king"
 import { isValidBishopMovement } from "./bishop"
 import { isValidRookMovement } from "./rook"
 import { isValidKnightMovement } from "./knight"
+import { isValidQueenMovement } from "./queen";
 
 class MovementValidator {
     public isValidMove(board: Board, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
@@ -68,14 +69,10 @@ class MovementValidator {
             case "bishop":
                 return isValidBishopMovement(board, startPiece, destination);
             case "queen":
-                return this.queenMovement(board, startPiece, destination);
+                return isValidQueenMovement(board, startPiece, destination);
             case "king":
                 return isValidKingMovement(board, startPiece, destination);
         }
-    }
-
-    private queenMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
-        return isValidRookMovement(board, startPiece, destination) || isValidBishopMovement(board, startPiece, destination);
     }
 }
 
