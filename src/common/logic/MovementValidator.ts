@@ -3,6 +3,7 @@ import {doesMoveCauseCheck, isCheck} from "./Checkmate";
 import * as Majavashakki from "../../common/GamePieces"
 import { isValidPawnMovement, isEnPassant } from "./pawn"
 import { isValidKingMovement, isCastling } from "./king"
+import { isValidBishopMovement } from "./bishop"
 
 class MovementValidator {
     public isValidMove(board: Board, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
@@ -63,7 +64,7 @@ class MovementValidator {
             case "rook":
                 return this.rookMovement(board, startPiece, destination);
             case "bishop":
-                return this.bishopMovement(board, startPiece, destination);
+                return isValidBishopMovement(board, startPiece, destination);
             case "queen":
                 return this.queenMovement(board, startPiece, destination);
             case "king":
@@ -105,34 +106,8 @@ class MovementValidator {
         return true;
     }
 
-    private bishopMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
-        const start = this.positionToNumbers(startPiece.position);
-        const dest = this.positionToNumbers(destination);
-
-        let rowDiff = Math.abs(dest.row - start.row);
-        let colDiff = Math.abs(dest.col - start.col);
-
-        if (rowDiff !== colDiff) return false;
-
-        while (rowDiff > 0 && colDiff > 0) {
-            if (dest.col > start.col) dest.col --;
-            else if (dest.col < start.col) dest.col ++;
-            if (dest.row > start.row) dest.row --;
-            else if (dest.row < start.row) dest.row ++;
-
-            rowDiff--;
-            colDiff--;
-
-            if (rowDiff === 0 && colDiff === 0) break;
-
-            if (board.getPiece(this.numbersToPosition(dest))) return false;
-        }
-
-        return true;
-    }
-
     private queenMovement(board: Board, startPiece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
-        return this.rookMovement(board, startPiece, destination) || this.bishopMovement(board, startPiece, destination);
+        return this.rookMovement(board, startPiece, destination) || isValidBishopMovement(board, startPiece, destination);
     }
 }
 
