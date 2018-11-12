@@ -39,10 +39,7 @@ export let UserSchema: Schema = new Schema({
   },
   name: String,
   password: String,
-  facebookId: {
-    type: String,
-    unique: true
-  },
+  facebookId: String,
   games: Array,
 }, options);
 

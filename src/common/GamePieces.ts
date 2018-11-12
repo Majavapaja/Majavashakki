@@ -1,10 +1,11 @@
+import Board from "./Board";
 
 export interface IGame {
   title: string;
   currentTurn: PieceColor;
   playerIdWhite: string;
   playerIdBlack: string;
-  board: IBoard;
+  board: Board;
 }
 
 export interface IBoard {
@@ -26,8 +27,9 @@ export interface IPiece {
 
 export interface IMoveResponse {
   status: MoveStatus;
-  result: MoveResult
-  board: IPiece[];
+  result: MoveResult;
+  start: IPosition;
+  destination: IPosition;
   error: string;
 }
 

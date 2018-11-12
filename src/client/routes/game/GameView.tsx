@@ -19,7 +19,7 @@ class GameView extends React.Component<any, any> {
 
   public async componentWillMount() {
     const game = await ApiService.read.game(this.state.gameName);
-    this.setState({pieces: game.board.pieces});
+    this.setState({ pieces: game.pieces });
     this.socket.on("move_result", this.onMoveResult.bind(this));
   }
 
@@ -39,8 +39,21 @@ class GameView extends React.Component<any, any> {
     if (response.status === Majavashakki.MoveStatus.Error) {
       this.setState({error: response.error})
     } else {
-      this.setState({pieces: response.board})
+      this.movePiece(response.start, response.destination)
     }
+  }
+
+  private movePiece(start: Majavashakki.IPosition, destination: Majavashakki.IPosition) {
+    const endPiece = this.findPiece(destination)
+    const pieces = this.state.pieces.filter(piece => piece !== endPiece)
+    const startPiece = this.findPiece(start)
+    startPiece.position = destination
+    this.setState({ pieces: [ ...pieces ]})
+  }
+
+  private findPiece(position: Majavashakki.IPosition): Majavashakki.IPiece {
+    // TODO: Replace compare with board.comparePos
+    return this.state.pieces.find(piece => piece.position.col === position.col && piece.position.row === position.row)
   }
 }
 

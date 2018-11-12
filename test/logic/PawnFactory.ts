@@ -1,6 +1,7 @@
 import { factory } from "factory-girl";
-import Board from "../../src/server/entities/Board";
-import makeInitialState from "../../src/common/initial-state";
+import Board from "../../src/common/Board";
+import { PieceColor, PieceType } from "../../src/common/GamePieces"
+import { createPiece } from "./BoardHelper"
 
 factory.define("board", Board, {});
 
@@ -17,12 +18,12 @@ factory.define("board", Board, {});
 factory.define("board-pawn-capture", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "white", type: "pawn", position: {col: "c", row: "5"}, hasMoved: true},
-            {color: "black", type: "pawn", position: {col: "d", row: "5"}, hasMoved: true},
-            {color: "black", type: "pawn", position: {col: "e", row: "5"}, hasMoved: true},
-            {color: "white", type: "pawn", position: {col: "d", row: "4"}, hasMoved: true},
-            {color: "white", type: "pawn", position: {col: "e", row: "4"}, hasMoved: true},
-            {color: "black", type: "pawn", position: {col: "f", row: "4"}, hasMoved: true},
+            createPiece("c5", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("d5", PieceType.Pawn, PieceColor.Black, true, model),
+            createPiece("e5", PieceType.Pawn, PieceColor.Black, true, model),
+            createPiece("d4", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("e4", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("f4", PieceType.Pawn, PieceColor.Black, true, model),
         ];
 
         return model;
@@ -42,16 +43,16 @@ factory.define("board-pawn-capture", Board, {}, {
 factory.define("board-pawn-double-move", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "black", type: "pawn", position: {col: "a", row: "7"}, hasMoved: false},
-            {color: "black", type: "pawn", position: {col: "b", row: "7"}, hasMoved: false},
-            {color: "black", type: "pawn", position: {col: "c", row: "7"}, hasMoved: false},
-            {color: "black", type: "pawn", position: {col: "a", row: "6"}, hasMoved: true},
-            {color: "white", type: "pawn", position: {col: "d", row: "5"}, hasMoved: false},
-            {color: "white", type: "pawn", position: {col: "a", row: "2"}, hasMoved: false},
-            {color: "white", type: "pawn", position: {col: "b", row: "2"}, hasMoved: false},
-            {color: "white", type: "pawn", position: {col: "c", row: "2"}, hasMoved: false},
-            {color: "white", type: "pawn", position: {col: "a", row: "3"}, hasMoved: true},
-            {color: "black", type: "pawn", position: {col: "d", row: "4"}, hasMoved: false},
+            createPiece("a7", PieceType.Pawn, PieceColor.Black, false, model),
+            createPiece("b7", PieceType.Pawn, PieceColor.Black, false, model),
+            createPiece("c7", PieceType.Pawn, PieceColor.Black, false, model),
+            createPiece("a6", PieceType.Pawn, PieceColor.Black, true, model),
+            createPiece("d5", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("a2", PieceType.Pawn, PieceColor.White, false, model),
+            createPiece("b2", PieceType.Pawn, PieceColor.White, false, model),
+            createPiece("c2", PieceType.Pawn, PieceColor.White, false, model),
+            createPiece("a3", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("d4", PieceType.Pawn, PieceColor.Black, true, model),
         ];
 
         return model;

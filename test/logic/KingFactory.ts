@@ -1,6 +1,7 @@
 import { factory } from "factory-girl";
-import Board from "../../src/server/entities/Board";
-import makeInitialState from "../../src/common/initial-state";
+import Board from "../../src/common/Board";
+import { PieceColor, PieceType } from "../../src/common/GamePieces"
+import { createPiece } from "./BoardHelper"
 
 /*  Board Description ♔♚
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -15,7 +16,7 @@ import makeInitialState from "../../src/common/initial-state";
 factory.define("board-king-movement", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "white", type: "king", position: {col: "c", row: "2"}, hasMoved: true},
+            createPiece("c2", PieceType.King, PieceColor.White, true, model),
         ];
 
         return model;
@@ -35,10 +36,10 @@ factory.define("board-king-movement", Board, {}, {
 factory.define("board-king-capture", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "white", type: "king", position: {col: "c", row: "2"}, hasMoved: true},
-            {color: "white", type: "pawn", position: {col: "c", row: "1"}, hasMoved: true},
-            {color: "black", type: "pawn", position: {col: "b", row: "2"}, hasMoved: true},
-            {color: "black", type: "pawn", position: {col: "b", row: "3"}, hasMoved: true},
+            createPiece("c2", PieceType.King, PieceColor.White, true, model),
+            createPiece("c1", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("b2", PieceType.Pawn, PieceColor.Black, true, model),
+            createPiece("b3", PieceType.Pawn, PieceColor.Black, true, model),
         ];
 
         return model;

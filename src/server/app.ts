@@ -10,6 +10,7 @@ import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {enableSessions, getSession} from "./session";
 import * as Majavashakki from "../common/GamePieces"
 import { initPassport } from "./auth"
+import { Game } from "./entities/Game";
 
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";
@@ -115,7 +116,7 @@ app.get("/api/games/get/:name", apiAuth, async (req, res) => {
   socket.join(game.title)
   // TODO Return lightweight interface instead?
   if (game) {
-    res.send(game);
+    res.send(Game.MapForDb(game));
   } else {
     res.status(404).send({error: "Game not found"})
   }

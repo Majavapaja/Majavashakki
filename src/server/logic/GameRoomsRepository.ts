@@ -1,7 +1,7 @@
-import {Game} from "../entities/GameRoom";
+import {Game} from "../entities/Game";
 import {User} from "../data/User";
 import {GameModel} from "../data/GameModel";
-import * as Majavashakki from "../../common/GamePieces"
+import * as Entity from "../entities/DatabaseEntities"
 
 export class GameRoomsRepository {
     public static getInstance(): GameRoomsRepository {
@@ -18,7 +18,7 @@ export class GameRoomsRepository {
     }
 
     public async saveGame(game: Game) {
-        const state: Majavashakki.IGame = Game.MapForDb(game);
+        const state: Entity.IGame = Game.MapForDb(game);
         await GameModel.save(state)
     }
 

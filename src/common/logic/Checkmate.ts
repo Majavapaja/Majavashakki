@@ -1,9 +1,9 @@
-import Board from "../../server/entities/Board";
-import {copy} from "../../common/util";
-import MovementValidator from "./MovementValidator";
+import Board from "../Board";
 import * as Majavashakki from "../../common/GamePieces"
+import King from "../pieces/King";
+import Piece from "../pieces/Piece";
 
-export function isCheck(board: Board, color): boolean {
+export function isCheck(board: Board, color: Majavashakki.PieceColor): boolean {
     // Get current players king
     const king = board.getKing(color);
 
@@ -15,10 +15,10 @@ export function isCheck(board: Board, color): boolean {
 
 export function doesMoveCauseCheck(board: Board, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): boolean {
     const boardCopy: Board = new Board();
-    boardCopy.pieces = copy(board.pieces);
+    boardCopy.pieces = board.pieces.map(piece => piece.clone(boardCopy));
 
+    const startPieceCopy = boardCopy.getPiece(start);
     boardCopy.removePiece(destination);
-    const startPieceCopy: Majavashakki.IPiece = boardCopy.getPiece(start);
     startPieceCopy.position = destination;
     startPieceCopy.hasMoved = true;
 
@@ -26,17 +26,16 @@ export function doesMoveCauseCheck(board: Board, start: Majavashakki.IPosition, 
     return isCheck(boardCopy, startPieceCopy.color);
 }
 
-export function isCheckMate(board: Board, color): boolean {
+export function isCheckMate(board: Board, color: Majavashakki.PieceColor): boolean {
     // This is only checked if king is in check
-    console.log("Checking checkmate");
 
     // 1. Can king move?
     const king = board.getKing(color);
-    console.log(king.color);
+
     const kingRow = Board.rows.indexOf(king.position.row);
     const kingCol = Board.cols.indexOf(king.position.col);
 
-    // Loop through all adjacent squares to king
+    // Loop through all adjacent squares to king and check if king can move there
     for (let i = -1; i < 2; i++) {
         for (let j = -1; j < 2; j++) {
             const pos: Majavashakki.IPosition = {
@@ -46,88 +45,78 @@ export function isCheckMate(board: Board, color): boolean {
 
             if (!pos.col || !pos.row) continue;
 
-            const result = MovementValidator.isValidMove(board, king.position, pos);
-            if (result.status === "success") {
+            const result = board.isValidMove(king.position, pos);
+            if (result.status === Majavashakki.MoveStatus.Success) {
                 return false;
             }
         }
     }
 
-    console.log("King can't move :(");
-
     // If king is in double check, it is checkmate as king can only escape double check by moving himself
     if (isDoubleCheck(board, king)) return true;
 
-    console.log("Wasn't double check");
-
     const checkingPiece = getCheckingPiece(board, king);
 
-    // Check if anyone capture the treathening piece
+    // Check if anyone can capture the treathening piece
     for (const piece of board.pieces) {
         if (piece.color === king.color) {
-            const result = MovementValidator.isValidMove(board, piece.position, checkingPiece.position);
-            if (result.status === "success") return false;
+            const result = board.isValidMove(piece.position, checkingPiece.position);
+            if (result.status === Majavashakki.MoveStatus.Success) return false;
         }
     }
 
-    console.log("Mr. Check cannot be captured");
-
     // Check if anyone can somehow block the treathening piece
-
     const pathToKing = getPiecePathToKing(board, king, checkingPiece);
 
     // If checking piece is next to king, no one can block it
     if (pathToKing.length === 0) return true;
 
-    console.log("There is path to king, can anyone block it?");
-
     for (const piece of board.pieces) {
         if (piece.color === king.color) {
             for (const pos of pathToKing) {
-                const result = MovementValidator.isValidMove(board, piece.position, pos);
-                if (result.status === "success") return false;
+                const result = board.isValidMove(piece.position, pos);
+                if (result.status === Majavashakki.MoveStatus.Success) return false;
             }
         }
     }
 
-    console.log("Nope, its mate, mate");
-
     return true;
 }
 
-function getCheckingPiece(board: Board, king: Majavashakki.IPiece): Majavashakki.IPiece {
+function getCheckingPiece(board: Board, king: King): Piece {
+    // This is here because tests boards dont have kings
     if (!king) return null;
 
     for (const piece of board.pieces) {
         if (piece.color !== king.color) {
-            const result = MovementValidator.isValidMove(board, piece.position, king.position);
-            if (result.status === "success") return piece;
+            const result = board.isValidMove(piece.position, king.position);
+            if (result.status === Majavashakki.MoveStatus.Success) return piece;
         }
     }
 
     return null;
 }
 
-function isDoubleCheck(board: Board, king: Majavashakki.IPiece): boolean {
+function isDoubleCheck(board: Board, king: King): boolean {
     let checkingPieces = 0;
 
     for (const piece of board.pieces) {
         if (piece.color !== king.color) {
-            const result = MovementValidator.isValidMove(board, piece.position, king.position);
-            if (result.status === "success") checkingPieces ++;
+            const result = board.isValidMove(piece.position, king.position);
+            if (result.status === Majavashakki.MoveStatus.Success) checkingPieces ++;
         }
     }
 
     return checkingPieces >= 2;
 }
 
-function getPiecePathToKing(board: Board, king: Majavashakki.IPiece, piece: Majavashakki.IPiece): Majavashakki.IPosition[] {
+function getPiecePathToKing(board: Board, king: King, piece: Piece): Majavashakki.IPosition[] {
     if (piece.type === "king" || piece.type === "pawn" || piece.type === "knight") return [];
 
     const pathToKing = [];
 
-    const start = MovementValidator.positionToNumbers(piece.position);
-    const dest = MovementValidator.positionToNumbers(king.position);
+    const start = piece.positionToNumbers(piece.position);
+    const dest = king.positionToNumbers(king.position);
 
     let rowDiff = Math.abs(dest.row - start.row);
     let colDiff = Math.abs(dest.col - start.col);
@@ -143,9 +132,9 @@ function getPiecePathToKing(board: Board, king: Majavashakki.IPiece, piece: Maja
 
         if (rowDiff <= 0 && colDiff <= 0) break;
 
-        const result = MovementValidator.isValidMove(board, piece.position, MovementValidator.numbersToPosition(dest));
-        if (result.status === "success") {
-            pathToKing.push(MovementValidator.numbersToPosition(dest));
+        const result = board.isValidMove(piece.position, king.numbersToPosition(dest));
+        if (result.status === Majavashakki.MoveStatus.Success) {
+            pathToKing.push(king.numbersToPosition(dest));
         }
     }
 

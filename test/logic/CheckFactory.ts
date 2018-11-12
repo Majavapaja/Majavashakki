@@ -1,6 +1,7 @@
 import { factory } from "factory-girl";
-import Board from "../../src/server/entities/Board";
-import makeInitialState from "../../src/common/initial-state";
+import Board from "../../src/common/Board";
+import { PieceColor, PieceType } from "../../src/common/GamePieces"
+import { createPiece } from "./BoardHelper"
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -15,8 +16,8 @@ import makeInitialState from "../../src/common/initial-state";
 factory.define("board-check", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "black", type: "rook", position: {col: "b", row: "3"}, hasMoved: false},
-            {color: "white", type: "king", position: {col: "c", row: "1"}, hasMoved: false},
+            createPiece("b3", PieceType.Rook, PieceColor.Black, false, model),
+            createPiece("c1", PieceType.King, PieceColor.White, false, model),
         ];
 
         return model;
@@ -36,10 +37,10 @@ factory.define("board-check", Board, {}, {
 factory.define("board-king-in-check", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "black", type: "rook", position: {col: "c", row: "1"}, hasMoved: true},
-            {color: "black", type: "knight", position: {col: "d", row: "3"}, hasMoved: true},
-            {color: "white", type: "king", position: {col: "d", row: "1"}, hasMoved: true},
-            {color: "white", type: "rook", position: {col: "a", row: "1"}, hasMoved: true},
+            createPiece("c1", PieceType.Rook, PieceColor.Black, true, model),
+            createPiece("d3", PieceType.Knight, PieceColor.Black, true, model),
+            createPiece("d1", PieceType.King, PieceColor.White, true, model),
+            createPiece("a1", PieceType.Rook, PieceColor.White, true, model),
         ];
 
         return model;
@@ -59,9 +60,9 @@ factory.define("board-king-in-check", Board, {}, {
 factory.define("board-check-from-own-move", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "white", type: "king", position: {col: "d", row: "1"}, hasMoved: true},
-            {color: "white", type: "rook", position: {col: "c", row: "1"}, hasMoved: true},
-            {color: "black", type: "rook", position: {col: "a", row: "1"}, hasMoved: true},
+            createPiece("d1", PieceType.King, PieceColor.White, true, model),
+            createPiece("c1", PieceType.Rook, PieceColor.White, true, model),
+            createPiece("a1", PieceType.Rook, PieceColor.Black, true, model),
         ];
 
         return model;
