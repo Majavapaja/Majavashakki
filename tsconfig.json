@@ -7,5 +7,11 @@
         "sourceMap":true,
         "rootDirs": ["src", "test"],
         "esModuleInterop": true,
+        "baseUrl": ".",
+        "paths": {
+            "common/*": ["./src/common/*"],
+            "server/*": ["./src/server/*"],
+            "client/*": ["./src/client/*"],
+        },
     }
 }
