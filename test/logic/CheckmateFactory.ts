@@ -189,4 +189,30 @@ factory.define("board-checkmate-enpassant", Board, {}, {
     },
 });
 
+/*  Board Description
+    ⚊⚊♜♚♜⚊⚊⚊
+    ⚊⚊♟⚊♟⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ♖⚊⚊⚊♔⚊⚊⚊
+*/
+factory.define("board-checkmate-castling", Board, {}, {
+    afterBuild: (model, attrs, buildOptions) => {
+        model.pieces = [
+            createPiece("a1", PieceType.Rook, PieceColor.White, false, model),
+            createPiece("e1", PieceType.King, PieceColor.White, false, model),
+            createPiece("d8", PieceType.King, PieceColor.Black, true, model),
+            createPiece("c8", PieceType.Rook, PieceColor.Black, true, model),
+            createPiece("e8", PieceType.Rook, PieceColor.Black, true, model),
+            createPiece("c7", PieceType.Pawn, PieceColor.Black, false, model),
+            createPiece("e7", PieceType.Pawn, PieceColor.Black, false, model),
+        ];
+
+        return model;
+    },
+});
+
 export default factory;

@@ -41,10 +41,17 @@ describe("Checkmate", () => {
         });
     })
     describe("Enpassant causes checkmate", () => {
-        it("should be able to check with enpassant", done => {
+        it("should be able to checkmate with enpassant", done => {
             const promise = factory.build("board-checkmate-enpassant")
                 .then(board => moveSequence(board, [["a7", "a5"], ["b5", "a6"]]));
             promise.should.eventually.have.same.members(["move", "enpassant|checkmate"]).notify(done);
+        })
+    })
+    describe("Castling causes checkmate", () => {
+        it("should be able to checkmate with castling", done => {
+            const promise = factory.build("board-checkmate-castling")
+                .then(board => moveSequence(board, [["e1", "c1"]]));
+            promise.should.eventually.have.same.members(["castling|checkmate"]).notify(done);
         })
     })
 });
