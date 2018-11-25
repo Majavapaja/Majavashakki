@@ -19,8 +19,8 @@ const app = express();
 MongooseClient.InitMongoConnection();
 initPassport(appRootUrl);
 
-const io: SocketIO.Server = sio({transports: ["websocket"]});
-enableSessions(app, io);
+const socketServer: SocketIO.Server = sio({transports: ["websocket"]});
+enableSessions(app, socketServer);
 initSockets();
 
 app.use(json())
@@ -28,7 +28,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const server = createServer(app);
-io.attach(server);
+socketServer.attach(server);
 
 const uiAuth = requireAuth((req, res, next) =>
   res.redirect("/login"))
@@ -142,7 +142,7 @@ app.post("/api/games/join", apiAuth, async (req, res) => {
 const sessionSocketMap = {};
 
 function initSockets() {
-  io.on("connection", (socket: SocketIO.Socket) => {
+  socketServer.on("connection", (socket: SocketIO.Socket) => {
     const session = getSession(socket.handshake);
     sessionSocketMap[session.id] = socket;
 
@@ -176,7 +176,7 @@ function initSockets() {
 
       game.changeTurn()
       await roomRepo.saveGame(game);
-      return io.to(game.title).emit("move_result", move);
+      return socket.to(game.title).emit("move_result", move);
     });
   });
 }
