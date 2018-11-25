@@ -61,4 +61,11 @@ describe("Check", () => {
             promise.should.eventually.have.same.members(["move", "enpassant|check"]).notify(done);
         })
     })
+    describe("Castling causes check", () => {
+        it("should be able to check with castling", done => {
+            const promise = factory.build("board-check-castling")
+                .then(board => moveSequence(board, [["e1", "c1"]]));
+            promise.should.eventually.have.same.members(["castling|check"]).notify(done);
+        })
+    })
 });

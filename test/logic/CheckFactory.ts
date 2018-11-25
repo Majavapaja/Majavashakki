@@ -91,4 +91,26 @@ factory.define("board-check-enpassant", Board, {}, {
     },
 });
 
+/*  Board Description
+    ⚊⚊⚊♚⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ♖⚊⚊⚊♔⚊⚊⚊
+*/
+factory.define("board-check-castling", Board, {}, {
+    afterBuild: (model, attrs, buildOptions) => {
+        model.pieces = [
+            createPiece("a1", PieceType.Rook, PieceColor.White, false, model),
+            createPiece("e1", PieceType.King, PieceColor.White, false, model),
+            createPiece("d8", PieceType.King, PieceColor.Black, true, model),
+        ];
+
+        return model;
+    },
+});
+
 export default factory;
