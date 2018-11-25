@@ -13,8 +13,15 @@ export function moveSequence(board: Board, moves: string[][]) {
 
     for (const move of moves) {
         const action = board.move(stringToPosition(move[0]), stringToPosition(move[1]));
-        if (action.status === MoveStatus.Success) results.push(action.result);
-        else results.push(action.status);
+        if (action.status === MoveStatus.Success) {
+            let result: string = action.result
+            if (action.isCheckmate) result += "|checkmate"
+            else if (action.isCheck) result += "|check"
+
+            results.push(result);
+        } else {
+            results.push(action.status);
+        }
     }
 
     return results;

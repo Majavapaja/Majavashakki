@@ -78,13 +78,13 @@ export default class Board implements Majavashakki.IBoard {
             if (startPiece.type === Majavashakki.PieceType.Pawn) {
                 const pawn = startPiece as Pawn
                 if (pawn.isEnPassant(destination)) {
-                    move.result = Majavashakki.MoveResult.Enpassant
+                    move.result = Majavashakki.MoveType.Enpassant
                     return move
                 }
             } else if (startPiece.type === Majavashakki.PieceType.King) {
                 const king = startPiece as King
                 if (king.isCastling(destination)) {
-                    move.result = Majavashakki.MoveResult.Castling
+                    move.result = Majavashakki.MoveType.Castling
                     return move
                 }
             }
@@ -97,8 +97,8 @@ export default class Board implements Majavashakki.IBoard {
         }
 
         // Piece movement was valid
-        if (destinationPiece) move.result = Majavashakki.MoveResult.Capture
-        else move.result = Majavashakki.MoveResult.Move
+        if (destinationPiece) move.result = Majavashakki.MoveType.Capture
+        else move.result = Majavashakki.MoveType.Move
 
         return move
     }
@@ -113,7 +113,7 @@ export default class Board implements Majavashakki.IBoard {
 
         const startPiece = this.getPiece(start);
 
-        if (move.result === Majavashakki.MoveResult.Castling) {
+        if (move.result === Majavashakki.MoveType.Castling) {
             startPiece.hasMoved = true;
 
             const rookPosition: Majavashakki.IPosition = {
@@ -138,12 +138,13 @@ export default class Board implements Majavashakki.IBoard {
             return move;
         }
 
+        move.isCheck = true
+
         if (isCheckMate(this, nextPlayerColor)) {
-            move.result = Majavashakki.MoveResult.Checkmate
+            move.isCheckmate = true
             return move
         }
 
-        move.result = Majavashakki.MoveResult.Check
         return move
     }
 

@@ -10,7 +10,7 @@ describe("Check", () => {
         it("should check", done => {
             const promise = factory.build("board-check")
                 .then(board => moveSequence(board, [["b3", "b1"]]));
-            promise.should.eventually.have.same.members(["check"]).notify(done);
+            promise.should.eventually.have.same.members(["move|check"]).notify(done);
         });
         it("should not allow king to move into check", done => {
             const promise = factory.build("board-check")
@@ -20,12 +20,12 @@ describe("Check", () => {
         it("should not allow king to move from check to check", done => {
             const promise = factory.build("board-check")
                 .then(board => moveSequence(board, [["b3", "b1"], ["c1", "d1"]]));
-            promise.should.eventually.have.same.members(["check", "error"]).notify(done);
+            promise.should.eventually.have.same.members(["move|check", "error"]).notify(done);
         });
         it("should allow king to capture checking piece", done => {
             const promise = factory.build("board-check")
                 .then(board => moveSequence(board, [["b3", "b1"], ["c1", "b1"]]));
-            promise.should.eventually.have.same.members(["check", "capture"]).notify(done);
+            promise.should.eventually.have.same.members(["move|check", "capture"]).notify(done);
         });
     }),
     describe("King in check", () => {

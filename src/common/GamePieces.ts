@@ -27,10 +27,12 @@ export interface IPiece {
 
 export interface IMoveResponse {
   status: MoveStatus;
-  result: MoveResult;
+  result: MoveType;
   start: IPosition;
   destination: IPosition;
   error: string;
+  isCheck: boolean;
+  isCheckmate: boolean;
 }
 
 export enum PieceType {
@@ -52,11 +54,9 @@ export enum MoveStatus {
   Success = "success"
 }
 
-export enum MoveResult {
+export enum MoveType {
   Move = "move",
   Capture = "capture",
-  Check = "check",
-  Checkmate = "checkmate",
   Enpassant = "enpassant",
   Castling = "castling"
 }
