@@ -1,80 +1,56 @@
 import * as React from "react";
-import { getSocket } from "../socket";
+import { observer } from "mobx-react"
+import * as Majavashakki from "../../../common/GamePieces"
 
-const CELL_POSITIONS: string[] = (() => {
-  const positions = [] as string[];
+const CELL_POSITIONS: Majavashakki.IPosition[] = (() => {
+  const positions = [] as Majavashakki.IPosition[];
   for (let y = 8; y > 0; y--) {
     for (let x = 0; x < 8; x++) {
-      positions.push("abcdefgh"[x] + String(y));
+      const position = {
+        col: "abcdefgh"[x],
+        row: String(y),
+      } as Majavashakki.IPosition
+
+      positions.push(position)
     }
   }
   return positions;
-})();
+})()
 
+@observer
 class Board extends React.Component<any, any> {
-  private socket: SocketIOClient.Socket
-
   constructor(props) {
     super(props);
     this.state = {
       selectedCell: null,
       moveTarget: null,
     };
-
-    this.onMoveResult = this.onMoveResult.bind(this)
-    this.socket = getSocket()
-  }
-
-  public componentWillMount() {
-    this.socket.on("move_result", this.onMoveResult);
   }
 
   public render() {
-    return <div className="board">{this.makeCells()}</div>;
+    const board = this.props.game.board
+
+    return (
+      <div className="board">
+        {CELL_POSITIONS.map(pos => (
+            <Cell
+              piece={board.getPiece(pos)}
+              onClick={() => this.onCellClick(pos)}
+              selected={board.comparePos(this.state.selectedCell, pos)}
+              targeted={board.comparePos(this.state.moveTarget, pos)}
+              key={pos.col + pos.row}
+            />
+        ))}
+      </div>
+    )
   }
 
-  private onMoveResult() {
-    this.setState({
-      selectedCell: null,
-      moveTarget: null,
-    });
-  }
-
-  private makePieceMap() {
-    return this.props.pieces.reduce((map, piece) => {
-      const pos = piece.position.col + piece.position.row;
-      map[pos] = piece;
-      return map;
-    }, {});
-  }
-
-  private makeCells() {
-    const pieceMap = this.makePieceMap();
-    const onCellClick = (pos) => this.onCellClick.bind(this, pos);
-    return CELL_POSITIONS.map((pos: string) => (
-      <Cell
-        piece={pieceMap[pos.toLowerCase()]}
-        selected={this.state.selectedCell === pos}
-        targeted={this.state.moveTarget === pos}
-        onClick={onCellClick(pos)}
-        key={pos}
-      />
-    ));
-  }
-
-  private posToJson(pos: string) {
-    return {
-      col: pos.charAt(0),
-      row: pos.charAt(1),
-    };
-  }
-
-  private onCellClick(pos) {
+  private onCellClick = (pos: Majavashakki.IPosition) => {
     if (this.state.moveTarget) {
       return;
     }
 
-    if (!this.state.selectedCell && this.makePieceMap()[pos]) {
+    if (!this.state.selectedCell && this.props.game.board.getPiece(pos)) {
       return this.setState({selectedCell: pos});
     }
 
@@ -84,15 +60,13 @@ class Board extends React.Component<any, any> {
     }
 
     if (this.state.selectedCell) {
-      this.socket.emit("move", {
-        gameName: this.props.gameName,
-        from: this.posToJson(this.state.selectedCell),
-        dest: this.posToJson(pos),
-      });
+      this.props.game.move(this.state.selectedCell, pos)
       this.setState({
-        moveTarget: pos,
-      });
+        moveTarget: null,
+        selectedCell: null
+      })
     }
+
   }
 }
 

@@ -7,7 +7,7 @@ import * as React from "react";
 import { Route } from "react-router-dom";
 import SignUpView from "./signup/SignUpView";
 
-export default () => (
+export default props => (
   <div>
     <NavigationBar />
     <Route
@@ -25,13 +25,13 @@ export default () => (
     <Route
       exact
       path="/game/:gameName"
-      render={() => ( <GameView /> )}
+      render={() => ( <GameView game={props.game} /> )}
     />
 
     <Route
       exact
       path="/"
-      render={() => ( <LobbyView /> )}
+      render={() => ( <LobbyView game={props.game} /> )}
     />
 
     <Route

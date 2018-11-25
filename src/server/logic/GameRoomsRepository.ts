@@ -1,4 +1,4 @@
-import {Game} from "../entities/Game";
+import Game from "../entities/Game";
 import {User} from "../data/User";
 import {GameModel} from "../data/GameModel";
 import * as Entity from "../entities/DatabaseEntities"

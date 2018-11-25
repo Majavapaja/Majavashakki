@@ -10,7 +10,7 @@ import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {enableSessions, getSession} from "./session";
 import * as Majavashakki from "../common/GamePieces"
 import { initPassport } from "./auth"
-import { Game } from "./entities/Game";
+import Game from "./entities/Game";
 
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";

@@ -3,7 +3,7 @@ import * as Majavashakki from "../../common/GamePieces"
 import * as Entity from "./DatabaseEntities"
 import PieceEntity from "./PieceEntity"
 
-export class Game implements Majavashakki.IGame {
+export default class Game implements Majavashakki.IGame {
     public static MapFromDb(gameState: Entity.IGame): Game {
         const game = new Game(gameState.title);
         game.board.pieces = gameState.pieces.map(piece => PieceEntity.MapFromDb(piece, game.board));

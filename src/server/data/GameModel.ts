@@ -1,6 +1,6 @@
 /* Defines user schema and model */
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
-import {Game} from "../entities/Game";
+import Game from "../entities/Game";
 import * as Entity from "../entities/DatabaseEntities"
 
 export interface IGameDocument extends Entity.IGame, Document {
