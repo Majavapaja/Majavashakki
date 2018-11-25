@@ -69,4 +69,26 @@ factory.define("board-check-from-own-move", Board, {}, {
     },
 });
 
+/*  Board Description
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ♟♚⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊♙⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+*/
+factory.define("board-check-enpassant", Board, {}, {
+    afterBuild: (model, attrs, buildOptions) => {
+        model.pieces = [
+            createPiece("b5", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("a7", PieceType.Pawn, PieceColor.Black, false, model),
+            createPiece("b7", PieceType.King, PieceColor.Black, true, model),
+        ];
+
+        return model;
+    },
+});
+
 export default factory;
