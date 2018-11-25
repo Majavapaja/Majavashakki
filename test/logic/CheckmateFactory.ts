@@ -164,4 +164,29 @@ factory.define("board-checkmate-piececanblock", Board, {}, {
     },
 });
 
+/*  Board Description
+    ⚊⚊⚊⚊⚊⚊⚊♖
+    ♟♚⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊♖
+    ⚊♙♕⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+*/
+factory.define("board-checkmate-enpassant", Board, {}, {
+    afterBuild: (model, attrs, buildOptions) => {
+        model.pieces = [
+            createPiece("b5", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("h6", PieceType.Rook, PieceColor.White, true, model),
+            createPiece("h8", PieceType.Rook, PieceColor.White, true, model),
+            createPiece("c5", PieceType.Queen, PieceColor.White, true, model),
+            createPiece("a7", PieceType.Pawn, PieceColor.Black, false, model),
+            createPiece("b7", PieceType.King, PieceColor.Black, true, model),
+        ];
+
+        return model;
+    },
+});
+
 export default factory;
