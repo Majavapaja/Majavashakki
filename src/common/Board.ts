@@ -113,7 +113,10 @@ export default class Board implements Majavashakki.IBoard {
 
         const startPiece = this.getPiece(start);
 
-        if (move.result === Majavashakki.MoveType.Castling) {
+        if (move.result === Majavashakki.MoveType.Enpassant) {
+            // Remove target of en passant, which is in the destination of the previous move
+            this.removePiece(this.moveHistory[this.moveHistory.length - 1][1]);
+        } else if (move.result === Majavashakki.MoveType.Castling) {
             startPiece.hasMoved = true;
 
             const rookPosition: Majavashakki.IPosition = {
