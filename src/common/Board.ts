@@ -26,6 +26,7 @@ export default class Board implements Majavashakki.IBoard {
     }
 
     public comparePos(a: Majavashakki.IPosition, b: Majavashakki.IPosition): boolean {
+        if (!a || !b) return false
         return a.row === b.row && a.col === b.col
     }
 
