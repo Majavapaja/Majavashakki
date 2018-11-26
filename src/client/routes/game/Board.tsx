@@ -2,21 +2,6 @@ import * as React from "react";
 import { observer } from "mobx-react"
 import * as Majavashakki from "../../../common/GamePieces"
 
-const CELL_POSITIONS: Majavashakki.IPosition[] = (() => {
-  const positions = [] as Majavashakki.IPosition[];
-  for (let y = 8; y > 0; y--) {
-    for (let x = 0; x < 8; x++) {
-      const position = {
-        col: "abcdefgh"[x],
-        row: String(y),
-      } as Majavashakki.IPosition
-
-      positions.push(position)
-    }
-  }
-  return positions;
-})()
-
 @observer
 class Board extends React.Component<any, any> {
   constructor(props) {
@@ -31,17 +16,19 @@ class Board extends React.Component<any, any> {
     const board = this.props.game.board
 
     return (
+      <React.Fragment>
       <div className="board">
-        {CELL_POSITIONS.map(pos => (
+        {board.cells.map(({position, piece}) => (
             <Cell
-              piece={board.getPiece(pos)}
-              onClick={() => this.onCellClick(pos)}
-              selected={board.comparePos(this.state.selectedCell, pos)}
-              targeted={board.comparePos(this.state.moveTarget, pos)}
-              key={pos.col + pos.row}
+              piece={piece}
+              onClick={() => this.onCellClick(position)}
+              selected={board.comparePos(this.state.selectedCell, position)}
+              targeted={board.comparePos(this.state.moveTarget, position)}
+              key={position.col + position.row}
             />
         ))}
       </div>
+      </React.Fragment>
     )
   }
 

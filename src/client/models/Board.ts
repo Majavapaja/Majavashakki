@@ -8,7 +8,7 @@ export default class Board extends LogicBoard {
     @observable
     public moveHistory: Majavashakki.IPosition[][]
 
-    constructor(pieces?: Piece[], moveHistory?: Majavashakki.IPosition[][]) {
+    constructor(pieces: Piece[], moveHistory: Majavashakki.IPosition[][]) {
         super(pieces, moveHistory)
         // Decorate position in pieces, so it's changes will be noticed.
         // TODO: Understand what happens if new pieces are added to the array.
@@ -19,5 +19,27 @@ export default class Board extends LogicBoard {
     @action
     public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
         return super.move(start, destination)
+    }
+
+    @computed.struct
+    get cells() {
+        const cells = []
+        for (let y = 8; y > 0; y--) {
+            for (let x = 0; x < 8; x++) {
+                const position = {
+                    col: "abcdefgh"[x],
+                    row: String(y),
+                } as Majavashakki.IPosition
+
+                const piece = this.getPiece(position)
+
+                cells.push({
+                    position,
+                    piece
+                })
+            }
+        }
+
+        return cells
     }
 }
