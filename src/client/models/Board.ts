@@ -9,7 +9,9 @@ export default class Board extends LogicBoard {
     @observable
     public moveHistory: Majavashakki.IPosition[][]
 
-    constructor() { super() }
+    constructor(pieces: Piece[], moveHistory: Majavashakki.IPosition[][]) {
+        super(pieces, moveHistory)
+    }
 
     @action
     public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
