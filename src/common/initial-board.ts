@@ -1,6 +1,6 @@
 import * as Majavashakki from "./GamePieces"
 import Piece from "./pieces/Piece"
-import King from "./pieces/Knight"
+import King from "./pieces/King"
 import Bishop from "./pieces/Bishop"
 import Board from "./Board"
 import Knight from "./pieces/Knight";
