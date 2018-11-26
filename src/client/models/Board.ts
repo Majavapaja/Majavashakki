@@ -4,10 +4,6 @@ import Piece from "../../common/pieces/Piece"
 import LogicBoard from "../../common/Board"
 
 export default class Board extends LogicBoard {
-    public pieces: Piece[]
-    @observable
-    public moveHistory: Majavashakki.IPosition[][]
-
     constructor(pieces?: Piece[], moveHistory?: Majavashakki.IPosition[][]) {
         super(pieces, moveHistory)
         // Decorate position in pieces, so it's changes will be noticed.
