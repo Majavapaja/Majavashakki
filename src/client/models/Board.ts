@@ -8,7 +8,7 @@ export default class Board extends LogicBoard {
     @observable
     public moveHistory: Majavashakki.IPosition[][]
 
-    constructor(pieces: Piece[], moveHistory: Majavashakki.IPosition[][]) {
+    constructor(pieces?: Piece[], moveHistory?: Majavashakki.IPosition[][]) {
         super(pieces, moveHistory)
         // Decorate position in pieces, so it's changes will be noticed.
         // TODO: Understand what happens if new pieces are added to the array.
