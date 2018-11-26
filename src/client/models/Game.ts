@@ -2,7 +2,7 @@ import socketIO from "socket.io-client"
 import { observable, action} from "mobx";
 import * as Majavashakki from "../../common/GamePieces"
 import GameEntity from "../../server/entities/Game"
-import Board from "../models/Board";
+import BoardModel from "./Board";
 import ApiService from "../common/ApiService";
 
 // TODO: Extend /src/common/Game
@@ -11,12 +11,7 @@ export default class Game implements Majavashakki.IGame {
     public title: string
     @observable
     public currentTurn: Majavashakki.PieceColor
-    @observable
-    public playerIdWhite: string
-    @observable
-    public playerIdBlack: string
-    @observable
-    public board: Board
+
     @observable
     public isLoading: boolean
     @observable
@@ -24,6 +19,9 @@ export default class Game implements Majavashakki.IGame {
     @observable
     public error: string
 
+    public playerIdWhite: string
+    public playerIdBlack: string
+    public board: BoardModel
     private socket: SocketIOClient.Socket
 
     constructor() {
@@ -42,7 +40,7 @@ export default class Game implements Majavashakki.IGame {
         this.currentTurn = game.currentTurn
         this.playerIdBlack = game.playerIdBlack
         this.playerIdWhite = game.playerIdWhite
-        this.board = game.board as Board
+        this.board = new BoardModel(game.board.pieces, game.board.moveHistory)
 
         this.isLoading = false
     }
