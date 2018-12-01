@@ -44,7 +44,9 @@ class GameList extends React.Component<IGameListProps, any> {
       <Paper className={classes.root}>
         <AppBar position='static' className={classes.header}>
           <Typography className={classes.contrastText} variant="headline">{this.props.title}</Typography>
-          <Button onClick={this.props.openDialog} className={classes.contrastText}><AddIcon /> new room</Button>
+          <Button onClick={this.props.openDialog} className={classes.contrastText}>
+            <AddIcon /> Game
+          </Button>
         </AppBar>
         <div className={classes.content}>
           <FormControl>
