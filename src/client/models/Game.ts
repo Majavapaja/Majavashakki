@@ -52,7 +52,7 @@ export default class Game implements Majavashakki.IGame {
     }
 
     @action
-    public move = (start, destination): void => {
+    public move = (start: Majavashakki.IPosition, destination: Majavashakki.IPosition): void => {
         if (!this.doesUserOwnPiece(start)) {
             this.error = "Oi! This is not your piece!"
             return
@@ -110,7 +110,6 @@ export default class Game implements Majavashakki.IGame {
     @action
     private onMoveResult = (move: Majavashakki.IMoveResponse) => {
         if (move.status === Majavashakki.MoveStatus.Success) {
-            console.log("Server sent successfull move")
             this.board.move(move.start, move.destination)
             this.error = ""
             this.changeTurn()
