@@ -1,14 +1,14 @@
 /* Defines user schema and model */
 
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
-import {IGameDocument} from "./GameModel";
+import Game from "../entities/Game"
 import * as _ from "lodash";
 import bcrypt from "bcryptjs";
 
 export interface IUser {
   email: string;
   name: string;
-  games?: global.IGameRef[];
+  games?: string[];
   password: string;
 }
 
@@ -24,7 +24,7 @@ export interface IUserDocument extends IUser, Document {
 export interface IUserModel extends Model<IUserDocument> {
   findOrCreate(facebookId: string): Promise<IUserDocument>;
   save(user: global.IUserContract): Promise<IUserDocument>;
-  addGame(userId: string, game: IGameDocument): Promise<global.IGameRef>;
+  addGame(userId: string, game: Game): Promise<void>;
   validProfile(user: IUserDocument): boolean;
   registerUser(newUser: global.IUserContract): Promise<boolean>;
   getMyGames(userId: string, active?: boolean): Promise<global.IGameRef[]>;
@@ -110,28 +110,27 @@ UserSchema.statics.save = async (user: global.IUserContract) => {
   return doc;
 };
 
-UserSchema.statics.addGame = async (_id: string, game: IGameDocument) => {
+UserSchema.statics.addGame = async (_id: string, gameName: Game) => {
   const user = await User.findById(_id).exec();
   if (!user) {
     console.log(`No user found by ID ${_id}`);
     throw new Error(`Cannot add game because user was not found with ID ${_id}`)
   }
 
-  console.log(`Adding game '${game.title}' for user ${user.name} (ID ${user._id})`);
-  const gameRef = game.denormalize();
-  if (_.includes(user.games, gameRef)) {
+  console.log(`Adding game '${gameName.title}' for user ${user.name} (ID ${user._id})`);
+  if (_.includes(user.games, gameName.title)) {
     console.log("Game already added, go on with your business");
     return;
   }
-  user.games.push(gameRef);
+  user.games.push(gameName.title);
   await user.save();
   console.log("Added game");
 }
 
-UserSchema.statics.getMyGames = async (_id: string, active: boolean = true): Promise<global.IGameRef[]> => {
+UserSchema.statics.getMyGames = async (_id: string): Promise<string[]> => {
   const user = await User.findOne({_id}).exec();
   if (!user) throw new Error(`Invalid user id '${_id}' for fetching my games`);
-  return user.games.filter(gameref => gameref.active);
+  return user.games;
 }
 
 // Methods are used for instance of items

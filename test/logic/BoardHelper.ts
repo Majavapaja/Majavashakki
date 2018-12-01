@@ -1,4 +1,4 @@
-import BoardBase from "../common/BoardBase";
+import BoardBase from "../../src/common/BoardBase";
 import { PieceColor, PieceType, MoveStatus, IPosition } from "../../src/common/GamePieces"
 import Piece from "../../src/common/pieces/Piece";
 import Pawn from "../../src/common/pieces/Pawn";

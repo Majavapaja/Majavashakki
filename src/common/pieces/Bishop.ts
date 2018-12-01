@@ -7,7 +7,7 @@ export default class Bishop extends Piece {
         super(color, position, board, Majavashakki.PieceType.Bishop)
     }
 
-    public isValidMove(destination: Majavashakki.IPosition): boolean {
+    public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
         const start = this.positionToNumbers(this.position);
         const dest = this.positionToNumbers(destination);
 
@@ -27,7 +27,7 @@ export default class Bishop extends Piece {
 
             if (rowDiff === 0 && colDiff === 0) break;
 
-            if (this.board.getPiece(this.numbersToPosition(dest))) return false;
+            if (board.getPiece(this.numbersToPosition(dest))) return false;
         }
 
         return true;

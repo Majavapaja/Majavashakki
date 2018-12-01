@@ -1,13 +1,13 @@
 import request from "request-promise";
-import * as Entity from "../../server/entities/DatabaseEntities";
+import * as Majavashakki from "../../common/GamePieces";
 
 const base = window.location.origin;
 export default class ApiService {
   public static read = {
     user:           async () => await getIt<global.IUserContract>("api/user"),
-    availableGames: async () => await getIt<global.IGameRef[]>("api/games"),
-    myGames:        async () => await getIt<global.IGameRef[]>("api/games/my-games"),
-    game:           async (title: string) => await getIt<Entity.IGame>(`api/games/get/${title}`)
+    availableGames: async () => await getIt<string[]>("api/games"),
+    myGames:        async () => await getIt<string[]>("api/games/my-games"),
+    game:           async (title: string) => await getIt<Majavashakki.IGame>(`api/games/get/${title}`)
   };
 
   public static write = {

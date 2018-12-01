@@ -52,13 +52,13 @@ export default abstract class GameBase implements Majavashakki.IGame {
     return this.board.move(start, destination)
   }
 
-  public getUserColor(userId: any) {
+  public getUserColor(userId: string) {
     if (this.playerIdWhite === userId) return Majavashakki.PieceColor.White
     else if (this.playerIdBlack === userId) return Majavashakki.PieceColor.Black
     throw Error(`User (ID: ${{ userId }}) is not in this game!`)
   }
 
-  public doesUserOwnPiece(userId: any, position: Majavashakki.IPosition) {
+  public doesUserOwnPiece(userId: string, position: Majavashakki.IPosition) {
     const piece = this.board.getPiece(position)
     if (piece) {
       return this.getUserColor(userId) === piece.color
@@ -66,7 +66,7 @@ export default abstract class GameBase implements Majavashakki.IGame {
     return false
   }
 
-  public isUsersTurn(userId: any) {
+  public isUsersTurn(userId: string) {
     return this.currentTurn === this.getUserColor(userId)
   }
 

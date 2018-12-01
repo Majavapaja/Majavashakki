@@ -7,7 +7,7 @@ export default class Rook extends Piece {
         super(color, position, board, Majavashakki.PieceType.Rook)
     }
 
-    public isValidMove(destination: Majavashakki.IPosition): boolean {
+    public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
         const start = this.positionToNumbers(this.position);
         const dest = this.positionToNumbers(destination);
 
@@ -21,7 +21,7 @@ export default class Rook extends Piece {
 
             if (start.col === dest.col && start.row === dest.row) break;
 
-            if (this.board.getPiece(this.numbersToPosition(dest))) return false;
+            if (board.getPiece(this.numbersToPosition(dest))) return false;
         }
 
         return true;

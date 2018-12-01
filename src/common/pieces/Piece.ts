@@ -5,18 +5,18 @@ export default class Piece implements Majavashakki.IPiece {
     public type: Majavashakki.PieceType
     public color: Majavashakki.PieceColor
     public position: Majavashakki.IPosition
-    public board: BoardBase
+    //public board: BoardBase
     public hasMoved: boolean
 
     constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase, type: Majavashakki.PieceType) {
-        this.board = board
+        //this.board = board
         this.color = color
         this.position = position
         this.type = type
         this.hasMoved = false
     }
 
-    public isValidMove(_destination: Majavashakki.IPosition): boolean {
+    public isValidMove(board: BoardBase, _destination: Majavashakki.IPosition): boolean {
         return false
     }
 
