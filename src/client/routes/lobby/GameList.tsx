@@ -15,11 +15,17 @@ import {
   InputLabel,
   Input,
   InputAdornment,
-  AppBar
+  AppBar,
+  ListItemAvatar,
+  Avatar
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import FilterIcon from "@material-ui/icons/Search"
 import ApiService from "../../common/ApiService";
+
+import Player1Avatar from '../../assets/player1.jpg'
+import Player2Avatar from '../../assets/player2.jpg'
+
 
 class GameList extends React.Component<IGameListProps, any> {
   constructor(props: any) {
@@ -73,7 +79,14 @@ class GameList extends React.Component<IGameListProps, any> {
                   button
                   onClick={() => this.onRoomClick(game.title)}
                 >
-                  <ListItemText primary={game.title} />
+                  <div className={classes.playerAvatarsContainer}>
+                    <Avatar alt="Player 1" src={Player1Avatar} title="Player 1 username" />
+                    <Avatar alt="Player 2" src={Player2Avatar} title='Player 2 username' />
+                  </div>
+                  <ListItemText
+                    primary={game.title}
+                    secondary={'123 turns'}
+                  />
                 </ListItem>
               ))
             }
@@ -113,6 +126,9 @@ const styles = (theme: Theme) => createStyles({
   },
   contrastText: {
     color: theme.palette.primary.contrastText
+  },
+  playerAvatarsContainer: {
+    display: 'flex'
   }
 });
 
