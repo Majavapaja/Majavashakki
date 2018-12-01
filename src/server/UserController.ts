@@ -48,6 +48,11 @@ export default {
   loginFacebook: passport.authenticate("facebook", {
     successRedirect: "/",
     failureRedirect: "/login",
-  })
+  }),
+
+  logout: (req, res) => {
+    req.logout()
+    res.redirect("/login")
+  },
 
 }
