@@ -1,11 +1,9 @@
-import Board from "./Board";
-
 export interface IGame {
   title: string;
   currentTurn: PieceColor;
   playerIdWhite: string;
   playerIdBlack: string;
-  board: Board;
+  board: IBoard;
 }
 
 export interface IBoard {
