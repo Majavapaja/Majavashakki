@@ -9,7 +9,7 @@ export default class Board extends LogicBoard {
         // Decorate position in pieces, so it's changes will be noticed.
         // TODO: Understand what happens if new pieces are added to the array.
         // Will they be observed and is there even any case in chess where new objects are added to pieces
-        pieces.map(piece => decorate(piece, { position: observable }))
+        pieces.forEach(piece => decorate(piece, { position: observable }))
     }
 
     @action
