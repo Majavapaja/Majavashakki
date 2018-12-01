@@ -1,12 +1,45 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import { List, ListItem, ListItemText, Paper, createStyles, Theme, Typography, Button, WithStyles, withStyles } from "@material-ui/core";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Paper,
+  createStyles,
+  Theme,
+  Typography,
+  Button,
+  WithStyles,
+  withStyles,
+  FormControl,
+  InputLabel,
+  Input,
+  InputAdornment,
+  AppBar,
+  ListItemAvatar,
+  Avatar
+} from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import FilterIcon from "@material-ui/icons/Search"
 import ApiService from "../../common/ApiService";
+
+import Player1Avatar from '../../assets/player1.jpg'
+import Player2Avatar from '../../assets/player2.jpg'
+
 
 class GameList extends React.Component<IGameListProps, any> {
   constructor(props: any) {
     super(props);
+
+    this.state = {
+      filter: ''
+    }
+  }
+
+  private handleFilterChange = (event) => {
+    this.setState({
+      filter: event.target.value.toLowerCase()
+    })
   }
 
   public render() {
@@ -15,22 +48,51 @@ class GameList extends React.Component<IGameListProps, any> {
 
     return (
       <Paper className={classes.root}>
-        <div className={classes.header}>
-          <Typography variant="headline">{this.props.title}</Typography>
-          <Button onClick={this.props.openDialog}><AddIcon /> new room</Button>
+        <AppBar position='static' className={classes.header}>
+          <Typography className={classes.contrastText} variant="headline">{this.props.title}</Typography>
+          <Button onClick={this.props.openDialog} className={classes.contrastText}>
+            <AddIcon /> Game
+          </Button>
+        </AppBar>
+        <div className={classes.content}>
+          <FormControl>
+            <InputLabel htmlFor="game-filter">Filter</InputLabel>
+            <Input
+              id="game-filter"
+              type="text"
+              value={this.state.filter}
+              onChange={this.handleFilterChange}
+              endAdornment={
+                <InputAdornment position="end">
+                  <FilterIcon />
+                </InputAdornment>
+              }
+            />
+          </FormControl>
+          <List>
+            {
+              games
+              .filter(game => game.title.toLowerCase().includes(this.state.filter))
+              .map(game => (
+                <ListItem
+                  key={game.ref}
+                  button
+                  onClick={() => this.onRoomClick(game.title)}
+                >
+                  <div className={classes.playerAvatarsContainer}>
+                    <Avatar alt="Player 1" src={Player1Avatar} title="Player 1 username" />
+                    <Avatar alt="Player 2" src={Player2Avatar} title='Player 2 username' />
+                  </div>
+                  <ListItemText
+                    primary={game.title}
+                    secondary={'123 turns'}
+                  />
+                </ListItem>
+              ))
+            }
+          </List>
+          {noGames && <Typography>No games available</Typography>}
         </div>
-        <List>
-          {games.map(game => (
-            <ListItem
-              key={game.ref}
-              button
-              onClick={() => this.onRoomClick(game.title)}
-            >
-              <ListItemText primary={game.title} />
-            </ListItem>
-          ))}
-        </List>
-        {noGames && <Typography>No games available</Typography>}
       </Paper>
     );
   }
@@ -52,11 +114,21 @@ const styles = (theme: Theme) => createStyles({
     backgroundColor: theme.palette.background.paper,
     width: 500,
     margin: "20px auto",
-    padding: 10,
   },
   header: {
     display: "flex",
-    justifyContent: "space-between"
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: theme.spacing.unit
+  },
+  content: {
+    padding: theme.spacing.unit
+  },
+  contrastText: {
+    color: theme.palette.primary.contrastText
+  },
+  playerAvatarsContainer: {
+    display: 'flex'
   }
 });
 
