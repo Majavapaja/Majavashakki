@@ -1,9 +1,9 @@
-import * as React from "react";
-import { withRouter } from "react-router-dom";
-import { withStyles, createStyles } from "@material-ui/core/styles";
-import Board from "./Board";
+import * as React from "react"
+import { withRouter } from "react-router-dom"
+import { withStyles, createStyles } from "@material-ui/core/styles"
+import Board from "./Board"
 import { observer } from "mobx-react"
-import { Paper } from "@material-ui/core";
+import { Paper, Typography } from "@material-ui/core"
 
 @observer
 class GameView extends React.Component<any, any> {
@@ -15,6 +15,7 @@ class GameView extends React.Component<any, any> {
   }
 
   public render() {
+    const { classes } = this.props
     if (this.props.game.isLoading) {
       return <div>>Loading...</div>
     }
@@ -22,23 +23,36 @@ class GameView extends React.Component<any, any> {
     let errorContainer = null
     if (this.props.game.error) {
       errorContainer = (
-        <Paper className={this.props.classes.error}>
+        <Paper className={classes.error}>
           {this.props.game.error}
         </Paper>
       )
     }
 
     return (
-      <div className="game page">
-        <div>{this.props.game.isUsersTurn() ? "Its your turn" : "Its not your turn"} (current turn: {this.props.game.currentTurn})</div>
-        <Board game={this.props.game} gameName={this.props.game.title}/>
-        {errorContainer}
+      <div className={classes.root}>
+        <Paper className={classes.gameContainer}>
+          <Typography>
+            {this.props.game.isUsersTurn() ? "Its your turn" : "Its not your turn"} (current turn: {this.props.game.currentTurn})
+          </Typography>
+          <Board game={this.props.game} gameName={this.props.game.title}/>
+          {errorContainer}
+        </Paper>
       </div>
     );
   }
 }
 
-const styles = createStyles({
+const styles = theme => ({
+  root: {
+    display: "flex",
+    height: "100vh",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  gameContainer: {
+    padding: theme.spacing.unit
+  },
   error: {
       width: "60vmin",
       color: "#4C0000",
