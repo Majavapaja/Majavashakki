@@ -9,13 +9,11 @@ import Game from "./models/Game"
 
 const game = new Game();
 
-(() => {
-  ReactDOM.render(
-    <BrowserRouter>
-      <MuiThemeProvider theme={theme}>
-        <App game={game} />
-      </MuiThemeProvider>
-    </BrowserRouter>,
-    document.querySelector("#app"),
-  )
-})()
+ReactDOM.render(
+  <BrowserRouter>
+    <MuiThemeProvider theme={theme}>
+      <App game={game} />
+    </MuiThemeProvider>
+  </BrowserRouter>,
+  document.querySelector("#app"),
+)
