@@ -80,16 +80,16 @@ export default class BoardBase implements Majavashakki.IBoard {
         } as Majavashakki.IMoveResponse
 
         // Check that piece movement is valid
-        if (!startPiece.isValidMove(destination)) {
+        if (!startPiece.isValidMove(this, destination)) {
             if (startPiece.type === Majavashakki.PieceType.Pawn) {
                 const pawn = startPiece as Pawn
-                if (pawn.isEnPassant(destination)) {
+                if (pawn.isEnPassant(this, destination)) {
                     move.result = Majavashakki.MoveType.Enpassant
                     return move
                 }
             } else if (startPiece.type === Majavashakki.PieceType.King) {
                 const king = startPiece as King
-                if (king.isCastling(destination)) {
+                if (king.isCastling(this, destination)) {
                     move.result = Majavashakki.MoveType.Castling
                     return move
                 }

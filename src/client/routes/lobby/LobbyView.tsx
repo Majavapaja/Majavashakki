@@ -39,8 +39,8 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
       <div>
         <NewGameForm open={this.state.dialogOpen} handleClose={this.closeNewForm}/>
 
-        <GameList games={this.state.myGames} title="My games" openDialog={this.openNewForm} />
-        <GameList games={this.state.availableGames} title="Available games" openDialog={this.openNewForm} />
+        <GameList gameNames={this.state.myGames} title="My games" openDialog={this.openNewForm} />
+        <GameList gameNames={this.state.availableGames} title="Available games" openDialog={this.openNewForm} />
       </div>
     );
   }
@@ -49,8 +49,8 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
 interface ILobbyViewProps extends RouteComponentProps<any> {}
 interface ILobbyViewState {
   newRoomForm: any,
-  availableGames: global.IGameRef[],
-  myGames: global.IGameRef[],
+  availableGames: string[],
+  myGames: string[],
   error: string,
   dialogOpen: boolean,
 }

@@ -16,7 +16,7 @@ export default class Piece implements Majavashakki.IPiece {
         this.hasMoved = false
     }
 
-    public isValidMove(_destination: Majavashakki.IPosition): boolean {
+    public isValidMove(board: BoardBase, _destination: Majavashakki.IPosition): boolean {
         return false
     }
 

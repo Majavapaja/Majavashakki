@@ -7,7 +7,7 @@ export default class Knight extends Piece {
         super(color, position, board, Majavashakki.PieceType.Knight)
     }
 
-    public isValidMove(destination: Majavashakki.IPosition): boolean {
+    public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
         const start = this.positionToNumbers(this.position);
         const dest = this.positionToNumbers(destination);
 

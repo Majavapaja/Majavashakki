@@ -7,14 +7,14 @@ export default class Pawn extends Piece {
         super(color, position, board, Majavashakki.PieceType.Pawn)
     }
 
-    public isValidMove(destination: Majavashakki.IPosition): boolean {
+    public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
         const start = this.positionToNumbers(this.position)
         const dest = this.positionToNumbers(destination)
 
         const rowDiff = dest.row - start.row
         const colDiff = dest.col - start.col
 
-        const destinationPiece = this.board.getPiece(destination)
+        const destinationPiece = board.getPiece(destination)
 
         const movementDirection = this.color === Majavashakki.PieceColor.White ? 1 : -1
 
@@ -25,7 +25,7 @@ export default class Pawn extends Piece {
             if (!this.hasMoved && rowDiff === movementDirection * 2) {
                 // Ensure that double move is not blocked by piece
                 dest.row -= movementDirection
-                if (!this.board.getPiece(this.numbersToPosition(dest))) return true
+                if (!board.getPiece(this.numbersToPosition(dest))) return true
             }
 
             if (rowDiff === movementDirection) return true
@@ -34,7 +34,7 @@ export default class Pawn extends Piece {
         return false
     }
 
-    public isEnPassant(destination: Majavashakki.IPosition): boolean {
+    public isEnPassant(board: BoardBase, destination: Majavashakki.IPosition): boolean {
         const start = this.positionToNumbers(this.position)
         const dest = this.positionToNumbers(destination)
 
@@ -47,16 +47,16 @@ export default class Pawn extends Piece {
         if (rowDiff === movementDirection && (colDiff === 1 || colDiff === -1)) {
             // Check if there is a piece below destination and that piece is enemy pawn
             dest.row -= movementDirection
-            const targetPiece = this.board.getPiece(this.numbersToPosition(dest))
+            const targetPiece = board.getPiece(this.numbersToPosition(dest))
 
             if (targetPiece && targetPiece.type === "pawn" && targetPiece.color !== this.color) {
                 // Check if last move was double move and that its destination was targetPiece
-                const lastMove: Majavashakki.IPosition[] = this.board.moveHistory[this.board.moveHistory.length - 1]
+                const lastMove: Majavashakki.IPosition[] = board.moveHistory[board.moveHistory.length - 1]
                 const lastStart = this.positionToNumbers(lastMove[0])
                 const lastDest = this.positionToNumbers(lastMove[1])
 
                 const lastMoveDiff: number = Math.abs(lastDest.row - lastStart.row)
-                if (lastMoveDiff === 2 && this.board.comparePos(lastMove[1], targetPiece.position)) return true
+                if (lastMoveDiff === 2 && board.comparePos(lastMove[1], targetPiece.position)) return true
             }
         }
     }

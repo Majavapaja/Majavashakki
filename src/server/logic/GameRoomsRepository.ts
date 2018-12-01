@@ -40,7 +40,7 @@ export class GameRoomsRepository {
         return await GameModel.save(game);
     }
 
-    public async getAvailableGames(userId: string): Promise<global.IGameRef[]> {
+    public async getAvailableGames(userId: string): Promise<string[]> {
         return await GameModel.getAvailableGames(userId);
     }
 

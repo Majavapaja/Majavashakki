@@ -9,10 +9,10 @@ export default class Queen extends Piece {
         super(color, position, board, Majavashakki.PieceType.Queen)
     }
 
-    public isValidMove(destination: Majavashakki.IPosition): boolean {
-        const bishop = new Bishop(this.color, this.position, this.board)
-        const rook = new Rook(this.color, this.position, this.board)
-        return bishop.isValidMove(destination) || rook.isValidMove(destination)
+    public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
+        const bishop = new Bishop(this.color, this.position, board)
+        const rook = new Rook(this.color, this.position, board)
+        return bishop.isValidMove(board, destination) || rook.isValidMove(board, destination)
     }
 
     public clone(board: BoardBase): Queen {

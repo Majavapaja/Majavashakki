@@ -43,8 +43,8 @@ class GameList extends React.Component<IGameListProps, any> {
   }
 
   public render() {
-    const { classes, games } = this.props
-    const noGames = !games || games.length === 0
+    const { classes, gameNames } = this.props
+    const noGames = !gameNames || gameNames.length === 0
 
     return (
       <Paper className={classes.root}>
@@ -71,20 +71,20 @@ class GameList extends React.Component<IGameListProps, any> {
           </FormControl>
           <List>
             {
-              games
-              .filter(game => game.title.toLowerCase().includes(this.state.filter))
-              .map(game => (
+              gameNames
+              .filter(gameName => gameName.toLowerCase().includes(this.state.filter))
+              .map(gameName => (
                 <ListItem
-                  key={game.ref}
+                  key={gameName}
                   button
-                  onClick={() => this.onRoomClick(game.title)}
+                  onClick={() => this.onRoomClick(gameName)}
                 >
                   <div className={classes.playerAvatarsContainer}>
                     <Avatar alt="Player 1" src={Player1Avatar} title="Player 1 username" />
                     <Avatar alt="Player 2" src={Player2Avatar} title='Player 2 username' />
                   </div>
                   <ListItemText
-                    primary={game.title}
+                    primary={gameName}
                     secondary={'123 turns'}
                   />
                 </ListItem>
@@ -105,7 +105,7 @@ class GameList extends React.Component<IGameListProps, any> {
 
 interface IGameListProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
   title: string,
-  games: global.IGameRef[],
+  gameNames: string[],
   openDialog: () => void,
 }
 

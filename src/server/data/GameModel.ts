@@ -11,7 +11,7 @@ export interface IGameModel extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<Game>;
   save(game: Game, isNew?: boolean): Promise<Game>;
   findByTitle(title: string): Promise<Game>;
-  getAvailableGames(userId: string): Promise<global.IGameRef[]>;
+  getAvailableGames(userId: string): Promise<string[]>;
 }
 
 const options: SchemaOptions = {timestamps: true};
@@ -53,7 +53,7 @@ GameSchema.statics.findByTitle = async (title: string): Promise<Game> => {
   return Game.MapFromDb(gameState.toObject());
 }
 
-GameSchema.statics.getAvailableGames = async (userId: string): Promise<global.IGameRef[]> => {
+GameSchema.statics.getAvailableGames = async (userId: string): Promise<string[]> => {
   // Beautiful! Check for games that are neither full and doesn't contain active user already
   const games = await GameModel.find()
     .and([
@@ -61,7 +61,7 @@ GameSchema.statics.getAvailableGames = async (userId: string): Promise<global.IG
       {playerIdWhite: { $ne: userId }},
       {playerIdBlack: { $ne: userId }}
     ]).exec();
-  return games.map((doc) => doc.denormalize());
+  return games.map((doc) => doc.title);
 }
 
 // Methods are used for instance of items
