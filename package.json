@@ -47,7 +47,8 @@
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "build": "parcel build src/client/index.html --public-url /",
     "start": "node app.js",
-    "test": "mocha --timeout 999999 --require mocha_tsnode_hax.js test/**/*.spec.ts"
+    "test": "mocha --timeout 999999 --require mocha_tsnode_hax.js test/**/*.spec.ts",
+    "test:watch": "mocha --watch --timeout 999999 --require mocha_tsnode_hax.js test/**/*.spec.ts"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
