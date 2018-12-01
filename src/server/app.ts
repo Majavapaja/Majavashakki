@@ -156,21 +156,7 @@ function initSockets() {
       // TODO: Check the player is allowed to make moves in the game
       const game = await roomRepo.getGameRoom(data.gameName);
 
-      if (!game.doesUserOwnPiece(userId, data.from)) {
-        return socket.emit("move_result", {
-          status: Majavashakki.MoveStatus.Error,
-          error: "Error 13: This is not your piece!"
-        })
-      }
-
-      if (!game.isUsersTurn(userId)) {
-        return socket.emit("move_result", {
-          status: Majavashakki.MoveStatus.Error,
-          error: "Error 14: Not your turn!"
-        })
-      }
-
-      const move = game.move(data.from, data.dest);
+      const move = game.move(userId, data.from, data.dest);
 
       if (move.status === Majavashakki.MoveStatus.Error) return socket.emit("move_result", move);
 
@@ -181,7 +167,6 @@ function initSockets() {
   });
 }
 
-// XXX: Not yet accessible in UI
 app.get("/logout", (req, res) => {
   req.logout()
   res.redirect("/login")
