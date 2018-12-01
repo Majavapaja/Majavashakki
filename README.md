@@ -39,13 +39,13 @@ storage:
 
 ## Environment variables
 ### Required
-MajavashakkiFbClientId
-
-MajavashakkiFbSecret
-
 MajavashakkiSessionSecret
 
 ### Optional
 MajavashakkiMongoConnectionString
 
 MajavaMongoPassword
+
+MajavashakkiFbClientId
+
+MajavashakkiFbSecret

@@ -6,8 +6,7 @@ import {MongooseClient} from "./data/MongooseClient";
 
 let MajavashakkiSessionSecret = process.env.MajavashakkiSessionSecret;
 if (!MajavashakkiSessionSecret) {
-  console.warn("[WARNING] Environment variable 'MajavashakkiSessionSecret' missing!")
-  MajavashakkiSessionSecret = "asd" // crypto.randomBytes(20).toString("hex");
+  throw Error("Majavashakki session secret is missing")
 }
 
 export const getSession = (x: any): any =>
