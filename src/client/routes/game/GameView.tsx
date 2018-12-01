@@ -5,6 +5,8 @@ import Board from "./Board"
 import { observer } from "mobx-react"
 import { Paper, Typography } from "@material-ui/core"
 
+import PlayerBadge from './PlayerBadge'
+
 @observer
 class GameView extends React.Component<any, any> {
   constructor(props) {
@@ -15,16 +17,16 @@ class GameView extends React.Component<any, any> {
   }
 
   public render() {
-    const { classes } = this.props
-    if (this.props.game.isLoading) {
+    const { classes, game } = this.props
+    if (game.isLoading) {
       return <div>>Loading...</div>
     }
 
     let errorContainer = null
-    if (this.props.game.error) {
+    if (game.error) {
       errorContainer = (
         <Paper className={classes.error}>
-          {this.props.game.error}
+          {game.error}
         </Paper>
       )
     }
@@ -32,10 +34,23 @@ class GameView extends React.Component<any, any> {
     return (
       <div className={classes.root}>
         <Paper className={classes.gameContainer}>
-          <Typography>
-            {this.props.game.isUsersTurn() ? "Its your turn" : "Its not your turn"} (current turn: {this.props.game.currentTurn})
-          </Typography>
-          <Board game={this.props.game} gameName={this.props.game.title}/>
+          <div className={classes.playersContainer}>
+            <PlayerBadge
+              player={{
+                name: 'Matti',
+                color: 'white'
+              }}
+              isCurrentPlayer={game.currentTurn == 'white'}
+            />
+            <PlayerBadge
+              player={{
+                name: 'Teppo',
+                color: 'black'
+              }}
+              isCurrentPlayer={game.currentTurn == 'black'}
+            />
+          </div>
+          <Board game={this.props.game} gameName={game.title}/>
           {errorContainer}
         </Paper>
       </div>
@@ -48,10 +63,13 @@ const styles = theme => ({
     display: "flex",
     height: "100vh",
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "flex-start"
   },
   gameContainer: {
-    padding: theme.spacing.unit
+    marginTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit,
+    paddingRight: theme.spacing.unit
   },
   error: {
       width: "60vmin",
@@ -59,6 +77,11 @@ const styles = theme => ({
       background: "#D44040",
       padding: 10
   },
+  playersContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    padding: theme.spacing.unit * 4
+  }
 })
 
 export default withStyles(styles)(withRouter(GameView));
