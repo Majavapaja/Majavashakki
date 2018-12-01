@@ -3,7 +3,11 @@ import GameBase from "../../common/GameBase";
 import PieceEntity from "./PieceEntity"
 
 export default class Game extends GameBase {
+    constructor(title: string) {
+        super(title)
+    }
     public static MapFromDb(gameState: Majavashakki.IGame): Game {
+        console.log(gameState)
         const game = new Game(gameState.title);
         game.board.pieces = gameState.board.pieces.map(piece => PieceEntity.MapFromDb(piece, game.board));
         game.board.moveHistory = gameState.board.moveHistory;

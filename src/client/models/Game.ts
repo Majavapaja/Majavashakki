@@ -53,7 +53,8 @@ export default class Game extends GameBase {
 
   @action
   public move = (userId: string = this.currentUser.id, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse => {
-
+    console.log(1, userId)
+    console.log(2, this.currentUser.id)
     const result = super.move(userId, start, destination);
 
     if (result.status === Majavashakki.MoveStatus.Success) {

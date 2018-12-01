@@ -8,47 +8,49 @@ export interface IGameDocument extends Majavashakki.IGame, Document {
 }
 
 export interface IGameModel extends Model<IGameDocument> {
-  findOrCreate(title: string): Promise<IGameDocument>;
-  save(game: Majavashakki.IGame, isNew?: boolean): Promise<IGameDocument>;
-  findByTitle(title: string): Promise<IGameDocument>;
+  findOrCreate(title: string): Promise<Game>;
+  save(game: Game, isNew?: boolean): Promise<Game>;
+  findByTitle(title: string): Promise<Game>;
   getAvailableGames(userId: string): Promise<global.IGameRef[]>;
 }
 
 const options: SchemaOptions = {timestamps: true};
 export let GameSchema: Schema = new Schema({
   createdAt: Date,
-  title: String,
+  title: {type: String, unique: true},
   currentTurn: String,
   playerIdWhite: String,
   playerIdBlack: String,
-  pieces: Schema.Types.Mixed,
-  moveHistory: Schema.Types.Mixed,
+  board: Schema.Types.Mixed,
 }, options);
 
-GameSchema.statics.findOrCreate = async (title: string): Promise<IGameDocument> => {
+GameSchema.statics.findOrCreate = async (title: string): Promise<Game> => {
   const result = await GameModel.findOne({title}).exec();
 
   if (!result) {
     console.log(`CREATING NEW GAME ${title}`);
     const game = new Game(title);
-    const gameState: Majavashakki.IGame = Game.MapForDb(game);
-    return await GameModel.save(gameState, true);
+    return await GameModel.save(game, true);
   } else {
+    console.log(result.toObject())
     console.log(`FOUND EXISTING GAME ${result.id} NAME: ${result.title}, ID: ${result._id}`);
-    return result;
+    return Game.MapFromDb(result.toObject());
   }
 };
 
-GameSchema.statics.save = async (game: Majavashakki.IGame, isNew: boolean = false): Promise<IGameDocument> => {
+GameSchema.statics.save = async (game: Game, isNew: boolean = false): Promise<Game> => {
   console.log(`SAVING GAME ${game.title}`)
-  return await GameModel.findOneAndUpdate({title: game.title}, game, {new: true, upsert: isNew}).exec();
+  const gameAsJson = Game.MapForDb(game)
+  console.log("gameAsJson", gameAsJson)
+  const doc = await GameModel.findOneAndUpdate({title: game.title}, gameAsJson, {new: true, upsert: isNew}).exec();
+  return Game.MapFromDb(doc.toObject())
 };
 
-GameSchema.statics.findByTitle = async (title: string): Promise<IGameDocument> => {
+GameSchema.statics.findByTitle = async (title: string): Promise<Game> => {
   console.log("Find by title: " + title)
   const gameState = await GameModel.findOne({title}).exec();
   if (!gameState) throw new Error("Peliä ei löywy!");
-  return gameState;
+  return Game.MapFromDb(gameState.toObject());
 }
 
 GameSchema.statics.getAvailableGames = async (userId: string): Promise<global.IGameRef[]> => {

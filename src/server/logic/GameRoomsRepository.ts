@@ -18,29 +18,26 @@ export class GameRoomsRepository {
     }
 
     public async saveGame(game: Game) {
-        const state: Majavashakki.IGame = Game.MapForDb(game);
-        await GameModel.save(state)
+        await GameModel.save(game)
     }
 
-    public async createRoom(title: string): Promise<global.IGameRef> {
-        const doc = await GameModel.findOrCreate(title);
-        return doc.denormalize();
+    public async createRoom(title: string): Promise<Game> {
+        return await GameModel.findOrCreate(title);
     }
 
     // TODO make sense into different game interfaces (one too many? move some of the Game class logic into IGameDocument?)
     // also don't pass around sockets, too late too lazy
-    public async joinRoom(socket: any, title: string, userId: string): Promise<global.IGameRef> {
+    public async joinRoom(socket: any, title: string, userId: string): Promise<Game> {
         console.log("joining room : " + title)
-        let doc = await GameModel.findByTitle(title);
-        const game = Game.MapFromDb(doc);
-        if (game.containsUser(userId)) return doc.denormalize();
+        const game: Game = await GameModel.findByTitle(title);
+        console.log("1", game)
+        if (game.containsUser(userId)) return game;
 
         if (game.isFull()) throw new Error(`User '${userId}' is trying to join game '${title}' which is already full!`);
 
-        await User.addGame(userId, doc);
+        await User.addGame(userId, game);
         game.addPlayer(userId);
-        doc = await GameModel.save(Game.MapForDb(game));
-        return doc.denormalize();
+        return await GameModel.save(game);
     }
 
     public async getAvailableGames(userId: string): Promise<global.IGameRef[]> {
