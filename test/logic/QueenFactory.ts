@@ -1,6 +1,7 @@
 import { factory } from "factory-girl";
-import Board from "../../src/server/entities/Board";
-import makeInitialState from "../../src/common/initial-state";
+import Board from "../../src/common/Board";
+import { PieceColor, PieceType } from "../../src/common/GamePieces"
+import { createPiece } from "./BoardHelper"
 
 /*  Board Description ♛♕
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -15,9 +16,9 @@ import makeInitialState from "../../src/common/initial-state";
 factory.define("board-queen-movement", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "white", type: "queen", position: {col: "e", row: "2"}, hasMoved: true},
-            {color: "white", type: "queen", position: {col: "c", row: "1"}, hasMoved: true},
-            {color: "white", type: "queen", position: {col: "c", row: "2"}, hasMoved: true},
+            createPiece("e2", PieceType.Queen, PieceColor.White, true, model),
+            createPiece("c1", PieceType.Queen, PieceColor.White, true, model),
+            createPiece("c2", PieceType.Queen, PieceColor.White, true, model),
         ];
 
         return model;
@@ -37,11 +38,11 @@ factory.define("board-queen-movement", Board, {}, {
 factory.define("board-queen-capture", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "white", type: "queen", position: {col: "e", row: "2"}, hasMoved: true},
-            {color: "white", type: "queen", position: {col: "e", row: "1"}, hasMoved: true},
-            {color: "black", type: "queen", position: {col: "e", row: "5"}, hasMoved: true},
-            {color: "black", type: "queen", position: {col: "a", row: "6"}, hasMoved: true},
-            {color: "black", type: "queen", position: {col: "b", row: "5"}, hasMoved: true},
+            createPiece("e2", PieceType.Queen, PieceColor.White, true, model),
+            createPiece("e1", PieceType.Queen, PieceColor.White, true, model),
+            createPiece("e5", PieceType.Queen, PieceColor.Black, true, model),
+            createPiece("a6", PieceType.Queen, PieceColor.Black, true, model),
+            createPiece("b5", PieceType.Queen, PieceColor.Black, true, model),
         ];
 
         return model;

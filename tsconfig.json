@@ -13,5 +13,6 @@
             "server/*": ["./src/server/*"],
             "client/*": ["./src/client/*"],
         },
+        "experimentalDecorators": true,
     }
 }

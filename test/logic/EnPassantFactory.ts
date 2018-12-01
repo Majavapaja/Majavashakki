@@ -1,6 +1,7 @@
 import { factory } from "factory-girl";
-import Board from "../../src/server/entities/Board";
-import makeInitialState from "../../src/common/initial-state";
+import Board from "../../src/common/Board";
+import { PieceColor, PieceType } from "../../src/common/GamePieces"
+import { createPiece } from "./BoardHelper"
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -15,9 +16,9 @@ import makeInitialState from "../../src/common/initial-state";
 factory.define("board-enpassant", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "white", type: "pawn", position: {col: "c", row: "2"}, hasMoved: false},
-            {color: "black", type: "pawn", position: {col: "d", row: "4"}, hasMoved: true},
-            {color: "black", type: "pawn", position: {col: "a", row: "7"}, hasMoved: false},
+            createPiece("c2", PieceType.Pawn, PieceColor.White, false, model),
+            createPiece("d4", PieceType.Pawn, PieceColor.Black, true, model),
+            createPiece("a7", PieceType.Pawn, PieceColor.Black, false, model),
         ];
 
         return model;

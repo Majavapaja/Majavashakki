@@ -1,0 +1,166 @@
+import { createInitialPieces } from "./initial-board"
+import * as Majavashakki from "./GamePieces"
+import Piece from "./pieces/Piece"
+import { doesMoveCauseCheck } from "./logic/Checkmate"
+import Pawn from "./pieces/Pawn"
+import King from "./pieces/King"
+import { isCheck, isCheckMate } from "./logic/Checkmate";
+
+export default class Board implements Majavashakki.IBoard {
+    public static cols: string = "abcdefgh"
+    public static rows: string = "12345678"
+    public pieces: Piece[]
+    public moveHistory: Majavashakki.IPosition[][]
+
+    constructor(pieces?: Piece[], moveHistory?: Majavashakki.IPosition[][]) {
+        if (pieces && moveHistory) {
+            this.pieces = pieces
+            this.moveHistory = moveHistory
+        } else {
+            this.pieces = createInitialPieces(this)
+            this.moveHistory = []
+        }
+    }
+
+    public getPiece(pos: Majavashakki.IPosition): Piece {
+        return this.pieces.find((piece) => this.comparePos(piece.position, pos))
+    }
+
+    public getKing(color): King {
+        return this.pieces.find(piece => piece.color === color && piece.type === Majavashakki.PieceType.King) as King
+    }
+
+    public comparePos(a: Majavashakki.IPosition, b: Majavashakki.IPosition): boolean {
+        if (!a || !b) return false
+        return a.row === b.row && a.col === b.col
+    }
+
+    public isWithinBoard(pos: Majavashakki.IPosition) {
+        return Board.cols.indexOf(pos.col) !== -1 && Board.rows.indexOf(pos.row) !== -1
+    }
+
+    public getCoordinateByIndex(type: "col"|"row", index): string {
+        if (index < 0 || index >= Board.rows.length) return null
+
+        return type === "col" ? Board.cols[index] : Board.rows[index]
+    }
+
+    public removePiece(pos: Majavashakki.IPosition): void {
+        const index: number = this.pieces.indexOf(this.getPiece(pos));
+        if (index !== -1) this.pieces.splice(index, 1);
+    }
+
+    public isValidMove(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
+        // Check that start and destination are not the same
+        if (this.comparePos(start, destination)) {
+            return this.createError("The piece is already where you are moving it. https://i.imgur.com/ITZImjj.png")
+        }
+
+        // Check that start and destination are within board
+        if (!this.isWithinBoard(start) || !this.isWithinBoard(destination)) {
+            return this.createError("Fun fact: Size of a chessboard is 8x8 squares.")
+        }
+
+        // Check that there is a piece at start position
+        const startPiece = this.getPiece(start)
+        if (!startPiece) {
+            return this.createError("You might need to get your eyes checked, there is no piece there.")
+        }
+
+        // Check that destination is valid (different color or empty)
+        const destinationPiece: Majavashakki.IPiece = this.getPiece(destination)
+        if (destinationPiece && destinationPiece.color === startPiece.color) {
+            return this.createError("Even though the piece might be a spy, I don't recommend capturing it.")
+        }
+
+        const move = {
+            status: Majavashakki.MoveStatus.Success,
+            start,
+            destination,
+        } as Majavashakki.IMoveResponse
+
+        // Check that piece movement is valid
+        if (!startPiece.isValidMove(destination)) {
+            if (startPiece.type === Majavashakki.PieceType.Pawn) {
+                const pawn = startPiece as Pawn
+                if (pawn.isEnPassant(destination)) {
+                    move.result = Majavashakki.MoveType.Enpassant
+                    return move
+                }
+            } else if (startPiece.type === Majavashakki.PieceType.King) {
+                const king = startPiece as King
+                if (king.isCastling(destination)) {
+                    move.result = Majavashakki.MoveType.Castling
+                    return move
+                }
+            }
+            return this.createError("I see you are new at chess, you might check the rules first https://en.wikipedia.org/wiki/Chess#Rules")
+        }
+
+        // Check if move causes check for the player
+        if (doesMoveCauseCheck(this, start, destination)) {
+            return this.createError("Good thing chess rules prevents you from making this move, you would have lost otherwise.")
+        }
+
+        // Piece movement was valid
+        if (destinationPiece) move.result = Majavashakki.MoveType.Capture
+        else move.result = Majavashakki.MoveType.Move
+
+        return move
+    }
+
+    public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
+        if (!start || !destination) return this.createError("Ah, movement without start or destination, philosophical.");
+
+        const move = this.isValidMove(start, destination);
+        if (move.status !== Majavashakki.MoveStatus.Success) {
+            return move;
+        }
+
+        const startPiece = this.getPiece(start);
+
+        if (move.result === Majavashakki.MoveType.Enpassant) {
+            // Remove target of en passant, which is in the destination of the previous move
+            this.removePiece(this.moveHistory[this.moveHistory.length - 1][1]);
+        } else if (move.result === Majavashakki.MoveType.Castling) {
+            startPiece.hasMoved = true;
+
+            const rookPosition: Majavashakki.IPosition = {
+                col: destination.col === "c" ? "a" : "h", // If king moved to c, get rook from left corner.
+                row: startPiece.color === Majavashakki.PieceColor.White ? "1" : "8",
+            };
+
+            const rook = this.getPiece(rookPosition);
+            rook.position.col = destination.col === "c" ? "d" : "f"; // If king moved to c, move rook to d
+            rook.hasMoved = true;
+        } else {
+            this.removePiece(destination);
+            startPiece.hasMoved = true;
+        }
+
+        // Move piece
+        startPiece.position = destination;
+        this.moveHistory.push([start, destination]);
+
+        const nextPlayerColor = startPiece.color === Majavashakki.PieceColor.White ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White;
+        if (!isCheck(this, nextPlayerColor)) {
+            return move;
+        }
+
+        move.isCheck = true
+
+        if (isCheckMate(this, nextPlayerColor)) {
+            move.isCheckmate = true
+            return move
+        }
+
+        return move
+    }
+
+    private createError(msg: string): Majavashakki.IMoveResponse {
+        return {
+            status: Majavashakki.MoveStatus.Error,
+            error: msg,
+        } as Majavashakki.IMoveResponse
+    }
+}

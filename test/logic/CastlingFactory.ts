@@ -1,6 +1,7 @@
 import { factory } from "factory-girl";
-import Board from "../../src/server/entities/Board";
-import makeInitialState from "../../src/common/initial-state";
+import Board from "../../src/common/Board";
+import { PieceColor, PieceType } from "../../src/common/GamePieces"
+import { createPiece } from "./BoardHelper"
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -15,11 +16,11 @@ import makeInitialState from "../../src/common/initial-state";
 factory.define("board-castling", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "white", type: "rook", position: {col: "a", row: "1"}, hasMoved: false},
-            {color: "white", type: "queen", position: {col: "d", row: "2"}, hasMoved: false},
-            {color: "white", type: "king", position: {col: "e", row: "1"}, hasMoved: false},
-            {color: "white", type: "bishop", position: {col: "e", row: "2"}, hasMoved: false},
-            {color: "white", type: "rook", position: {col: "h", row: "1"}, hasMoved: false},
+            createPiece("a1", PieceType.Rook, PieceColor.White, false, model),
+            createPiece("d2", PieceType.Queen, PieceColor.White, false, model),
+            createPiece("e1", PieceType.King, PieceColor.White, false, model),
+            createPiece("e2", PieceType.Bishop, PieceColor.White, false, model),
+            createPiece("h1", PieceType.Rook, PieceColor.White, false, model),
         ];
 
         return model;
@@ -39,9 +40,9 @@ factory.define("board-castling", Board, {}, {
 factory.define("board-castling-threat", Board, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
-            {color: "white", type: "rook", position: {col: "a", row: "1"}, hasMoved: false},
-            {color: "black", type: "rook", position: {col: "a", row: "2"}, hasMoved: false},
-            {color: "white", type: "king", position: {col: "e", row: "1"}, hasMoved: false},
+            createPiece("a1", PieceType.Rook, PieceColor.White, false, model),
+            createPiece("a2", PieceType.Rook, PieceColor.Black, false, model),
+            createPiece("e1", PieceType.King, PieceColor.White, false, model),
         ];
 
         return model;

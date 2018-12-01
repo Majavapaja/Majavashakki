@@ -1,10 +1,11 @@
+import Board from "./Board";
 
 export interface IGame {
   title: string;
   currentTurn: PieceColor;
   playerIdWhite: string;
   playerIdBlack: string;
-  board: IBoard;
+  board: Board;
 }
 
 export interface IBoard {
@@ -26,9 +27,12 @@ export interface IPiece {
 
 export interface IMoveResponse {
   status: MoveStatus;
-  result: MoveResult
-  board: IPiece[];
+  result: MoveType;
+  start: IPosition;
+  destination: IPosition;
   error: string;
+  isCheck: boolean;
+  isCheckmate: boolean;
 }
 
 export enum PieceType {
@@ -50,11 +54,9 @@ export enum MoveStatus {
   Success = "success"
 }
 
-export enum MoveResult {
+export enum MoveType {
   Move = "move",
   Capture = "capture",
-  Check = "check",
-  Checkmate = "checkmate",
   Enpassant = "enpassant",
   Castling = "castling"
 }

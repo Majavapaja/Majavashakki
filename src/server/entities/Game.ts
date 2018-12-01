@@ -1,26 +1,28 @@
-import Board from "./Board";
+import Board from "../../common/Board"
 import * as Majavashakki from "../../common/GamePieces"
+import * as Entity from "./DatabaseEntities"
+import PieceEntity from "./PieceEntity"
 
-export class Game implements Majavashakki.IGame {
-
-    public static MapFromDb(gameState: Majavashakki.IGame): Game {
+export default class Game implements Majavashakki.IGame {
+    public static MapFromDb(gameState: Entity.IGame): Game {
         const game = new Game(gameState.title);
-        game.board.pieces = gameState.board.pieces;
-        game.board.moveHistory = gameState.board.moveHistory;
+        game.board.pieces = gameState.pieces.map(piece => PieceEntity.MapFromDb(piece, game.board));
+        game.board.moveHistory = gameState.moveHistory;
         game.playerIdBlack = gameState.playerIdBlack;
         game.playerIdWhite = gameState.playerIdWhite;
         game.currentTurn = gameState.currentTurn
         return game;
     }
 
-    public static MapForDb(game: Game): Majavashakki.IGame {
+    public static MapForDb(game: Game): Entity.IGame {
         return {
             title: game.title,
             currentTurn: game.currentTurn,
-            board: game.board,
+            pieces: game.board.pieces.map(PieceEntity.MapToDb),
+            moveHistory: game.board.moveHistory,
             playerIdWhite: game.playerIdWhite,
             playerIdBlack: game.playerIdBlack
-        };
+        } as Entity.IGame
     }
 
     public title: string;
@@ -57,7 +59,7 @@ export class Game implements Majavashakki.IGame {
     }
 
     public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
-        return this.board.move(start, destination);
+        return this.board.move(start, destination)
     }
 
     public getUserColor(userId: any) {

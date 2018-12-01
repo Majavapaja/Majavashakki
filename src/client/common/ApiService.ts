@@ -1,5 +1,5 @@
 import request from "request-promise";
-import * as GamePieces from "../../common/GamePieces"
+import * as Entity from "../../server/entities/DatabaseEntities";
 
 const base = window.location.origin;
 export default class ApiService {
@@ -7,7 +7,7 @@ export default class ApiService {
     user:           async () => await getIt<global.IUserContract>("api/user"),
     availableGames: async () => await getIt<global.IGameRef[]>("api/games"),
     myGames:        async () => await getIt<global.IGameRef[]>("api/games/my-games"),
-    game:           async (title: string) => await getIt<GamePieces.IGame>(`api/games/get/${title}`)
+    game:           async (title: string) => await getIt<Entity.IGame>(`api/games/get/${title}`)
   };
 
   public static write = {

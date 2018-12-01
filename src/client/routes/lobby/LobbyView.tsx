@@ -3,13 +3,10 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import GameList from "./GameList";
 import NewGameForm from "./NewGameForm";
 import ApiService from "../../common/ApiService";
-import {connectSocket} from "../socket"
 
 class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
   constructor(props: any) {
     super(props);
-
-    connectSocket()
 
     this.state = {
       newRoomForm: {
@@ -20,6 +17,9 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
       error: "",
       dialogOpen: false,
     };
+
+    // Need to create socket here, otherwise server crashes on game join, because api/game/join needs socket
+    props.game.connectSocket()
   }
 
   public async componentDidMount() {

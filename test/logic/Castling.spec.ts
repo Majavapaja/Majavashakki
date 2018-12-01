@@ -48,7 +48,7 @@ describe("Castling", () => {
         it("should not allow castling if king is in check", done => {
             const promise = factory.build("board-castling-threat")
                 .then(board => moveSequence(board, [["a2", "e2"], ["e1", "c1"]]));
-            promise.should.eventually.have.same.members(["check", "error"]).notify(done);
+            promise.should.eventually.have.same.members(["move|check", "error"]).notify(done);
         });
 
         it("should not allow king to move through square that are under attack", done => {

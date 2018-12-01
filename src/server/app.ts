@@ -10,6 +10,7 @@ import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {enableSessions, getSession} from "./session";
 import * as Majavashakki from "../common/GamePieces"
 import { initPassport } from "./auth"
+import Game from "./entities/Game";
 
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";
@@ -18,8 +19,8 @@ const app = express();
 MongooseClient.InitMongoConnection();
 initPassport(appRootUrl);
 
-const io: SocketIO.Server = sio({transports: ["websocket"]});
-enableSessions(app, io);
+const socketServer: SocketIO.Server = sio({transports: ["websocket"]});
+enableSessions(app, socketServer);
 initSockets();
 
 app.use(json())
@@ -27,7 +28,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 const server = createServer(app);
-io.attach(server);
+socketServer.attach(server);
 
 const uiAuth = requireAuth((req, res, next) =>
   res.redirect("/login"))
@@ -115,7 +116,7 @@ app.get("/api/games/get/:name", apiAuth, async (req, res) => {
   socket.join(game.title)
   // TODO Return lightweight interface instead?
   if (game) {
-    res.send(game);
+    res.send(Game.MapForDb(game));
   } else {
     res.status(404).send({error: "Game not found"})
   }
@@ -141,7 +142,7 @@ app.post("/api/games/join", apiAuth, async (req, res) => {
 const sessionSocketMap = {};
 
 function initSockets() {
-  io.on("connection", (socket: SocketIO.Socket) => {
+  socketServer.on("connection", (socket: SocketIO.Socket) => {
     const session = getSession(socket.handshake);
     sessionSocketMap[session.id] = socket;
 
@@ -175,7 +176,7 @@ function initSockets() {
 
       game.changeTurn()
       await roomRepo.saveGame(game);
-      return io.to(game.title).emit("move_result", move);
+      return socket.to(game.title).emit("move_result", move);
     });
   });
 }

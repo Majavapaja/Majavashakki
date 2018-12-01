@@ -35,13 +35,16 @@ export let UserSchema: Schema = new Schema({
   createdAt: Date,
   email: {
     type: String,
-    unique: true
+    unique: true,
+    index: true,
   },
   name: String,
   password: String,
   facebookId: {
     type: String,
-    unique: true
+    index: true,
+    unique: true,
+    sparse: true,
   },
   games: Array,
 }, options);
