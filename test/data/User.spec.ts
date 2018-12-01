@@ -37,7 +37,7 @@ describe("User", () => {
 
             user = await User.findOne({facebookId}).exec();
             assert.equal(user.games.length, 1, "added game");
-            assert.equal(user.games[0].title, "P3L1", "game title");
+            assert.equal(user.games[0], "P3L1", "game title");
         });
     });
 });

@@ -110,19 +110,19 @@ UserSchema.statics.save = async (user: global.IUserContract) => {
   return doc;
 };
 
-UserSchema.statics.addGame = async (_id: string, game: Game) => {
+UserSchema.statics.addGame = async (_id: string, gameName: Game) => {
   const user = await User.findById(_id).exec();
   if (!user) {
     console.log(`No user found by ID ${_id}`);
     throw new Error(`Cannot add game because user was not found with ID ${_id}`)
   }
 
-  console.log(`Adding game '${game.title}' for user ${user.name} (ID ${user._id})`);
-  if (_.includes(user.games, game.title)) {
+  console.log(`Adding game '${gameName.title}' for user ${user.name} (ID ${user._id})`);
+  if (_.includes(user.games, gameName.title)) {
     console.log("Game already added, go on with your business");
     return;
   }
-  user.games.push(game.title);
+  user.games.push(gameName.title);
   await user.save();
   console.log("Added game");
 }
