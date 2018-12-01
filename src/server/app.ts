@@ -156,7 +156,7 @@ function initSockets() {
       // TODO: Check the player is allowed to make moves in the game
       const game = await roomRepo.getGameRoom(data.gameName);
 
-      const move = game.move(userId, data.from, data.dest);
+      const move = game.move(data.from, data.dest, userId);
 
       if (move.status === Majavashakki.MoveStatus.Error) return socket.emit("move_result", move);
 
