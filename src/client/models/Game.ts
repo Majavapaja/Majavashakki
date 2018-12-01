@@ -20,8 +20,6 @@ export default class Game extends GameBase {
   @observable
   public error: string
 
-  public playerIdWhite: string
-  public playerIdBlack: string
   public board: BoardModel
   private socket: SocketIOClient.Socket
 
@@ -54,19 +52,9 @@ export default class Game extends GameBase {
   }
 
   @action
-  public move = (start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse => {
+  public move = (userId: string = this.currentUser.id, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse => {
 
-    if (!super.doesUserOwnPiece(this.currentUser.id, start)) {
-      this.error = "Oi! This is not your piece!"
-      return
-    }
-
-    if (!super.isUsersTurn(this.currentUser.id)) {
-      this.error = "Wait for your turn."
-      return
-    }
-
-    const result = super.move(start, destination);
+    const result = super.move(userId, start, destination);
 
     if (result.status === Majavashakki.MoveStatus.Success) {
       this.socket.emit("move", {
@@ -79,6 +67,8 @@ export default class Game extends GameBase {
     } else {
       this.error = result.error
     }
+
+    return result;
   }
 
   ///
