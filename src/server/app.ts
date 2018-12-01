@@ -3,14 +3,12 @@ import {resolve} from "path";
 import {json} from "body-parser";
 import express from "express";
 import passport from "passport";
-import sio from "socket.io";
-import {MongooseClient} from "./data/MongooseClient";
+import { MongooseClient } from "./data/MongooseClient";
 import { User } from "./data/User";
-import {GameRoomsRepository} from "./logic/GameRoomsRepository";
-import {enableSessions, getSession} from "./session";
-import * as Majavashakki from "../common/GamePieces"
-import { initPassport, uiAuth, apiAuth } from "./auth"
-import Game from "./entities/Game";
+import { enableSessions } from "./session";
+import { SocketServer, initSockets} from "./Sockets";
+import { initPassport, uiAuth } from "./auth"
+
 import Routes from "./Routes";
 
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
@@ -19,111 +17,19 @@ const app = express();
 
 MongooseClient.InitMongoConnection();
 initPassport(appRootUrl);
-
-const socketServer: SocketIO.Server = sio({transports: ["websocket"]});
-enableSessions(app, socketServer);
+enableSessions(app, SocketServer);
 initSockets();
-
 app.use(json())
 app.use(passport.initialize());
 app.use(passport.session());
-
 const server = createServer(app);
-socketServer.attach(server);
+SocketServer.attach(server);
 
 app.get("/", uiAuth, (req, res, next) => {
   return User.validProfile(req.user) ? next() : res.redirect("/profile");
 });
 
 app.use("/api", Routes);
-
-app.get("/authFacebook",
-  passport.authenticate("facebook", {
-    successRedirect: "/",
-    failureRedirect: "/login",
-  })
-)
-
-app.post("/api/login", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) {
-      return res.status(500).send("Authentication error")
-    } else if (!user) {
-      return res.status(401).send(info.message)
-    } else {
-      req.login(user, loginError => {
-        if (loginError) return next(loginError)
-        return res.redirect("/")
-      })
-    }
-  })(req, res, next)
-})
-
-const roomRepo = GameRoomsRepository.getInstance();
-
-app.post("/api/games", apiAuth, async (req, res) => {
-  const {session, body: {title}} = req
-  const game = await roomRepo.createRoom(title)
-  const socket = sessionSocketMap[session.id];
-  // TODO this broadcast is not supported anymore? Does other users see new games when created?? Check if this is "oopsies".
-  socket.broadcast.to(this.MainRoom).emit("game-created", game.title);
-  res.send(game);
-})
-
-app.get("/api/games/get/:name", apiAuth, async (req, res) => {
-  const {session, params: {name}} = req
-  const socket = sessionSocketMap[session.id];
-
-  // TODO: Check the user has permissions to the game
-
-  const game = await roomRepo.getGameRoom(name);
-  socket.join(game.title)
-  // TODO Return lightweight interface instead?
-  if (game) {
-    res.send(Game.MapForDb(game));
-  } else {
-    res.status(404).send({error: "Game not found"})
-  }
-})
-
-app.post("/api/games/join", apiAuth, async (req, res) => {
-  const {session, body: {title}} = req
-  const socket = sessionSocketMap[session.id];
-  const userId = req.user._id
-  const game = await roomRepo.joinRoom(socket, title, String(userId)) // TODO: Handle full room exception
-
-  socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
-  socket.join(title); // TODO we should use game ids
-  res.send(game);
-})
-
-const sessionSocketMap = {};
-
-function initSockets() {
-  socketServer.on("connection", (socket: SocketIO.Socket) => {
-    const session = getSession(socket.handshake);
-    sessionSocketMap[session.id] = socket;
-
-    // TODO: Ensure that user is logged in before allowing socket connections
-    // HACK: Passport, sessions and Socket.io do not play too well together so we have to
-    // touch Passport internals  which might break if passport is updated. But whatever.
-    if (!session.passport) return
-    const userId = session.passport.user;
-
-    socket.on("move", async (data) => {
-      // TODO: Check the player is allowed to make moves in the game
-      const game = await roomRepo.getGameRoom(data.gameName);
-
-      const move = game.move(userId, data.from, data.dest);
-
-      if (move.status === Majavashakki.MoveStatus.Error) return socket.emit("move_result", move);
-
-      game.changeTurn()
-      await roomRepo.saveGame(game);
-      return socket.to(game.title).emit("move_result", move);
-    });
-  });
-}
 
 app.get("/logout", (req, res) => {
   req.logout()

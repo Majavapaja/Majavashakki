@@ -1,4 +1,5 @@
 import { User, IUserDocument } from "./data/User";
+import passport from "passport";
 
 export default {
   getUser: async (req, res) => {
@@ -28,4 +29,25 @@ export default {
     if (result) res.send("OK")
     else res.status(500).send({ error: "Couldn't create user" })
   },
+
+  loginUser: async (req, res, next) => {
+    passport.authenticate("local", (err, user, info) => {
+      if (err) {
+        return res.status(500).send("Authentication error")
+      } else if (!user) {
+        return res.status(401).send(info.message)
+      } else {
+        req.login(user, loginError => {
+          if (loginError) return next(loginError)
+          return res.redirect("/")
+        })
+      }
+    })(req, res, next)
+  },
+
+  loginFacebook: passport.authenticate("facebook", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+  })
+
 }

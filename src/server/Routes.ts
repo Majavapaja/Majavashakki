@@ -1,15 +1,19 @@
 import express from "express";
-import { uiAuth, apiAuth } from "./auth";
+import { apiAuth } from "./auth";
 import UserController from "./UserController";
 import GameController from "./GameController";
 
 const router = express.Router();
 
-router.route("/user").get(UserController.getUser);
-router.route("/user").post(UserController.postUser);
-router.route("/user/register").post(UserController.registerUser);
+router.get("/user",           UserController.getUser);
+router.post("/user",          UserController.postUser);
+router.post("/user/register", UserController.registerUser);
+router.post("/login",         UserController.loginUser);
+router.get("/authFacebook",   UserController.loginFacebook);
 
-router.route("/games").get(apiAuth, GameController.getAvailableGames);
-router.route("/games/my-games").get(apiAuth, GameController.getMyGames);
+router.get("/games",           apiAuth, GameController.getAvailableGames);
+router.get("/games/my-games",  apiAuth, GameController.getMyGames);
+router.get("/games/get/:name", apiAuth, GameController.getGame)
+router.post("/games",          apiAuth, GameController.postGame)
 
 export default router;
