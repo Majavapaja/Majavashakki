@@ -5,7 +5,7 @@ import express from "express";
 import passport from "passport";
 import sio from "socket.io";
 import {MongooseClient} from "./data/MongooseClient";
-import { User, IUserDocument } from "./data/User";
+import { User } from "./data/User";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {enableSessions, getSession} from "./session";
 import * as Majavashakki from "../common/GamePieces"
@@ -61,11 +61,6 @@ app.post("/api/login", (req, res, next) => {
 
 const roomRepo = GameRoomsRepository.getInstance();
 
-app.get("/api/games", apiAuth, async (req, res) => {
- const openGames = await roomRepo.getAvailableGames(req.user._id);
- res.send(openGames);
-});
-
 app.post("/api/games", apiAuth, async (req, res) => {
   const {session, body: {title}} = req
   const game = await roomRepo.createRoom(title)
@@ -89,12 +84,6 @@ app.get("/api/games/get/:name", apiAuth, async (req, res) => {
   } else {
     res.status(404).send({error: "Game not found"})
   }
-})
-
-app.get("/api/games/my-games", apiAuth, async (req, res) => {
-  const {session, user} = req;
-  const myGames = await User.getMyGames(user._id); // TODO active rule for fetch
-  res.send(myGames);
 })
 
 app.post("/api/games/join", apiAuth, async (req, res) => {
