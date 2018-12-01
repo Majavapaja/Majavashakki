@@ -52,8 +52,8 @@ export default class Game extends GameBase {
   }
 
   @action
-  public move = (userId: string = this.currentUser.id, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse => {
-    const result = super.move(userId, start, destination);
+  public move = (start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string = this.currentUser.id): Majavashakki.IMoveResponse => {
+    const result = super.move(start, destination, userId);
 
     if (result.status === Majavashakki.MoveStatus.Success) {
       this.socket.emit("move", {
