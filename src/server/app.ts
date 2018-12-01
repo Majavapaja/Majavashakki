@@ -9,8 +9,9 @@ import { User, IUserDocument } from "./data/User";
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import {enableSessions, getSession} from "./session";
 import * as Majavashakki from "../common/GamePieces"
-import { initPassport } from "./auth"
+import { initPassport, uiAuth, apiAuth } from "./auth"
 import Game from "./entities/Game";
+import Routes from "./Routes";
 
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : "http://localhost:3000";
@@ -30,15 +31,11 @@ app.use(passport.session());
 const server = createServer(app);
 socketServer.attach(server);
 
-const uiAuth = requireAuth((req, res, next) =>
-  res.redirect("/login"))
-
-const apiAuth = requireAuth((req, res, next) =>
-  res.status(401).send({error: "Login required"}))
-
 app.get("/", uiAuth, (req, res, next) => {
   return User.validProfile(req.user) ? next() : res.redirect("/profile");
 });
+
+app.use("/api", Routes);
 
 app.get("/authFacebook",
   passport.authenticate("facebook", {
@@ -63,34 +60,6 @@ app.post("/api/login", (req, res, next) => {
 })
 
 const roomRepo = GameRoomsRepository.getInstance();
-
-app.get("/api/user", (req, res) => {
-  const user = req.user;
-  res.set("Cache-Control", "no-cache");
-  res.send(!user ? null : {id: user._id, name: user.name, email: user.email} as global.IUserContract)
-});
-
-app.post("/api/user", apiAuth, async (req, res) => {
-  const user = req.body as global.IUserContract;
-  const loggedUser: IUserDocument = req.user
-  if (String(loggedUser._id) !== user.id) {
-    throw new Error("Identity theft error!")
-  }
-  console.log(`Updating user : ${loggedUser._id} - ${loggedUser.name} `);
-  await User.save(user);
-  req.user = user; // TODO get rid of this or maybe don't fetch user to passport state in every request...
-  res.send("OK")
-})
-
-app.post("/api/user/register", async (req, res) => {
-  const user = req.body as global.IUserContract;
-  console.log("New user received :" + JSON.stringify(user));
-
-  const result = await User.registerUser(user);
-
-  if (result) res.send("OK")
-  else res.status(500).send({ error: "Couldn't create user" })
-})
 
 app.get("/api/games", apiAuth, async (req, res) => {
  const openGames = await roomRepo.getAvailableGames(req.user._id);
@@ -179,16 +148,6 @@ app.get("*", uiAuth, serveUI)
 
 function serveUI(req, res) {
   res.sendFile(resolve(__dirname, "../../dist/index.html"));
-}
-
-function requireAuth(onFailure) {
-  return (req, res, next) => {
-    if (req.isAuthenticated()) {
-      next()
-    } else {
-      onFailure(req, res, next)
-    }
-  }
 }
 
 export const start = port => {
