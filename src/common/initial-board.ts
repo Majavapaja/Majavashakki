@@ -1,14 +1,14 @@
 import * as Majavashakki from "./GamePieces"
+import BoardBase from "./BoardBase"
 import Piece from "./pieces/Piece"
 import King from "./pieces/King"
 import Bishop from "./pieces/Bishop"
-import Board from "./Board"
 import Knight from "./pieces/Knight";
 import Pawn from "./pieces/Pawn";
 import Queen from "./pieces/Queen";
 import Rook from "./pieces/Rook";
 
-export const createInitialPieces = (board: Board): Piece[] => {
+export const createInitialPieces = (board: BoardBase): Piece[] => {
   const black = Majavashakki.PieceColor.Black
   const white = Majavashakki.PieceColor.White
 

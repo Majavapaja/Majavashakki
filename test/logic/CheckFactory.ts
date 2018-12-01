@@ -1,5 +1,5 @@
 import { factory } from "factory-girl";
-import Board from "../../src/common/Board";
+import BoardBase from "../common/BoardBase";
 import { PieceColor, PieceType } from "../../src/common/GamePieces"
 import { createPiece } from "./BoardHelper"
 
@@ -13,7 +13,7 @@ import { createPiece } from "./BoardHelper"
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊♔⚊⚊⚊⚊⚊
 */
-factory.define("board-check", Board, {}, {
+factory.define("board-check", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("b3", PieceType.Rook, PieceColor.Black, false, model),
@@ -34,7 +34,7 @@ factory.define("board-check", Board, {}, {
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ♖⚊♜♔⚊⚊⚊⚊
 */
-factory.define("board-king-in-check", Board, {}, {
+factory.define("board-king-in-check", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("c1", PieceType.Rook, PieceColor.Black, true, model),
@@ -57,7 +57,7 @@ factory.define("board-king-in-check", Board, {}, {
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ♜⚊♖♔⚊⚊⚊⚊
 */
-factory.define("board-check-from-own-move", Board, {}, {
+factory.define("board-check-from-own-move", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("d1", PieceType.King, PieceColor.White, true, model),
@@ -79,7 +79,7 @@ factory.define("board-check-from-own-move", Board, {}, {
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
 */
-factory.define("board-check-enpassant", Board, {}, {
+factory.define("board-check-enpassant", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("b5", PieceType.Pawn, PieceColor.White, true, model),
@@ -101,7 +101,7 @@ factory.define("board-check-enpassant", Board, {}, {
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ♖⚊⚊⚊♔⚊⚊⚊
 */
-factory.define("board-check-castling", Board, {}, {
+factory.define("board-check-castling", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("a1", PieceType.Rook, PieceColor.White, false, model),

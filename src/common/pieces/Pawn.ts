@@ -1,9 +1,9 @@
 import * as Majavashakki from "../GamePieces"
 import Piece from "./Piece"
-import Board from "../Board"
+import BoardBase from "../BoardBase"
 
 export default class Pawn extends Piece {
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: Board) {
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase) {
         super(color, position, board, Majavashakki.PieceType.Pawn)
     }
 
@@ -61,7 +61,7 @@ export default class Pawn extends Piece {
         }
     }
 
-    public clone(board: Board): Pawn {
+    public clone(board: BoardBase): Pawn {
         const pawn = new Pawn(this.color, this.position, board)
         pawn.hasMoved = this.hasMoved
         return pawn

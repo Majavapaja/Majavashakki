@@ -1,5 +1,5 @@
 import { factory } from "factory-girl";
-import Board from "../../src/common/Board";
+import BoardBase from "../common/BoardBase";
 import { PieceColor, PieceType } from "../../src/common/GamePieces"
 import { createPiece } from "./BoardHelper"
 
@@ -13,7 +13,7 @@ import { createPiece } from "./BoardHelper"
     ⚊⚊⚊♕♗⚊⚊⚊
     ♖⚊⚊⚊♔⚊⚊♖
 */
-factory.define("board-castling", Board, {}, {
+factory.define("board-castling", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("a1", PieceType.Rook, PieceColor.White, false, model),
@@ -37,7 +37,7 @@ factory.define("board-castling", Board, {}, {
     ♜⚊⚊⚊⚊⚊⚊⚊
     ♖⚊⚊⚊♔⚊⚊♖
 */
-factory.define("board-castling-threat", Board, {}, {
+factory.define("board-castling-threat", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("a1", PieceType.Rook, PieceColor.White, false, model),

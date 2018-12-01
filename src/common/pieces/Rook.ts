@@ -1,9 +1,9 @@
 import * as Majavashakki from "../GamePieces"
 import Piece from "./Piece"
-import Board from "../Board"
+import BoardBase from "../BoardBase"
 
 export default class Rook extends Piece {
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: Board) {
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase) {
         super(color, position, board, Majavashakki.PieceType.Rook)
     }
 
@@ -27,7 +27,7 @@ export default class Rook extends Piece {
         return true;
     }
 
-    public clone(board: Board): Rook {
+    public clone(board: BoardBase): Rook {
         const rook = new Rook(this.color, this.position, board)
         rook.hasMoved = this.hasMoved
         return rook

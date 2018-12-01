@@ -1,9 +1,9 @@
-import Board from "../Board";
+import BoardBase from "../BoardBase";
 import * as Majavashakki from "../../common/GamePieces"
 import King from "../pieces/King";
 import Piece from "../pieces/Piece";
 
-export function isCheck(board: Board, color: Majavashakki.PieceColor): boolean {
+export function isCheck(board: BoardBase, color: Majavashakki.PieceColor): boolean {
     // Get current players king
     const king = board.getKing(color);
 
@@ -13,8 +13,8 @@ export function isCheck(board: Board, color: Majavashakki.PieceColor): boolean {
     return false;
 }
 
-export function doesMoveCauseCheck(board: Board, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): boolean {
-    const boardCopy: Board = new Board();
+export function doesMoveCauseCheck(board: BoardBase, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): boolean {
+    const boardCopy: BoardBase = new BoardBase();
     boardCopy.pieces = board.pieces.map(piece => piece.clone(boardCopy));
 
     const startPieceCopy = boardCopy.getPiece(start);
@@ -26,14 +26,14 @@ export function doesMoveCauseCheck(board: Board, start: Majavashakki.IPosition, 
     return isCheck(boardCopy, startPieceCopy.color);
 }
 
-export function isCheckMate(board: Board, color: Majavashakki.PieceColor): boolean {
+export function isCheckMate(board: BoardBase, color: Majavashakki.PieceColor): boolean {
     // This is only checked if king is in check
 
     // 1. Can king move?
     const king = board.getKing(color);
 
-    const kingRow = Board.rows.indexOf(king.position.row);
-    const kingCol = Board.cols.indexOf(king.position.col);
+    const kingRow = BoardBase.rows.indexOf(king.position.row);
+    const kingCol = BoardBase.cols.indexOf(king.position.col);
 
     // Loop through all adjacent squares to king and check if king can move there
     for (let i = -1; i < 2; i++) {
@@ -83,7 +83,7 @@ export function isCheckMate(board: Board, color: Majavashakki.PieceColor): boole
     return true;
 }
 
-function getCheckingPiece(board: Board, king: King): Piece {
+function getCheckingPiece(board: BoardBase, king: King): Piece {
     // This is here because tests boards dont have kings
     if (!king) return null;
 
@@ -97,7 +97,7 @@ function getCheckingPiece(board: Board, king: King): Piece {
     return null;
 }
 
-function isDoubleCheck(board: Board, king: King): boolean {
+function isDoubleCheck(board: BoardBase, king: King): boolean {
     let checkingPieces = 0;
 
     for (const piece of board.pieces) {
@@ -110,7 +110,7 @@ function isDoubleCheck(board: Board, king: King): boolean {
     return checkingPieces >= 2;
 }
 
-function getPiecePathToKing(board: Board, king: King, piece: Piece): Majavashakki.IPosition[] {
+function getPiecePathToKing(board: BoardBase, king: King, piece: Piece): Majavashakki.IPosition[] {
     if (piece.type === "king" || piece.type === "pawn" || piece.type === "knight") return [];
 
     const pathToKing = [];

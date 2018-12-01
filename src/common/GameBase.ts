@@ -1,16 +1,16 @@
-import Board from "./Board"
+import BoardBase from "./BoardBase"
 import * as Majavashakki from "./GamePieces"
 
-export default class GameBase implements Majavashakki.IGame {
+export default abstract class GameBase implements Majavashakki.IGame {
   public title: string;
   public currentTurn: Majavashakki.PieceColor;
   public playerIdWhite: string;
   public playerIdBlack: string;
-  public board: Board;
+  public board: BoardBase;
 
   constructor(title: string) {
     this.title = title;
-    this.board = new Board();
+    this.board = new BoardBase();
 
     // White always starts in chess
     this.currentTurn = Majavashakki.PieceColor.White;

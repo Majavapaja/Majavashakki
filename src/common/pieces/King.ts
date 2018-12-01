@@ -1,10 +1,10 @@
 import * as Majavashakki from "../../common/GamePieces"
 import Piece from "./Piece"
-import Board from "../Board"
+import BoardBase from "../BoardBase"
 import { isCheck, doesMoveCauseCheck } from "../logic/Checkmate"
 
 export default class King extends Piece {
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: Board) {
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase) {
         super(color, position, board, Majavashakki.PieceType.King)
     }
 
@@ -71,7 +71,7 @@ export default class King extends Piece {
         return true;
     }
 
-    public clone(board: Board): King {
+    public clone(board: BoardBase): King {
         const king = new King(this.color, this.position, board)
         king.hasMoved = this.hasMoved
         return king

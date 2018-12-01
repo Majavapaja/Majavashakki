@@ -1,5 +1,5 @@
 import { factory } from "factory-girl";
-import Board from "../../src/common/Board";
+import BoardBase from "../common/BoardBase";
 import { PieceColor, PieceType } from "../../src/common/GamePieces"
 import { createPiece } from "./BoardHelper"
 
@@ -13,7 +13,7 @@ import { createPiece } from "./BoardHelper"
     ⚊⚊♝⚊♝⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
 */
-factory.define("board-bishop-movement", Board, {}, {
+factory.define("board-bishop-movement", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("c2", PieceType.Bishop, PieceColor.White, true, model),
@@ -34,7 +34,7 @@ factory.define("board-bishop-movement", Board, {}, {
     ⚊⚊⚊⚊♝⚊⚊⚊
     ⚊⚊⚊♝⚊⚊⚊⚊
 */
-factory.define("board-bishop-capture", Board, {}, {
+factory.define("board-bishop-capture", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("e2", PieceType.Bishop, PieceColor.White, true, model),

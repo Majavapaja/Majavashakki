@@ -1,4 +1,4 @@
-import Board from "../../src/common/Board";
+import BoardBase from "../common/BoardBase";
 import { PieceColor, PieceType, MoveStatus, IPosition } from "../../src/common/GamePieces"
 import Piece from "../../src/common/pieces/Piece";
 import Pawn from "../../src/common/pieces/Pawn";
@@ -8,7 +8,7 @@ import Queen from "../../src/common/pieces/Queen";
 import King from "../../src/common/pieces/King";
 import Knight from "../../src/common/pieces/Knight";
 
-export function moveSequence(board: Board, moves: string[][]) {
+export function moveSequence(board: BoardBase, moves: string[][]) {
     const results = [];
 
     for (const move of moves) {
@@ -30,18 +30,18 @@ export function moveSequence(board: Board, moves: string[][]) {
 function stringToPosition(str): IPosition {
     if (!str || str.length !== 2) return null;
 
-    const colIndex = Board.cols.indexOf(str.charAt(0));
-    const rowIndex = Board.rows.indexOf(str.charAt(1));
+    const colIndex = BoardBase.cols.indexOf(str.charAt(0));
+    const rowIndex = BoardBase.rows.indexOf(str.charAt(1));
 
     if ( colIndex === -1 || rowIndex === -1 ) return null;
 
     return {
-        col: Board.cols[colIndex],
-        row: Board.rows[rowIndex],
+        col: BoardBase.cols[colIndex],
+        row: BoardBase.rows[rowIndex],
     };
 }
 
-export function createPiece(pos: string, type: PieceType, color: PieceColor, hasMoved: boolean, board: Board): Piece {
+export function createPiece(pos: string, type: PieceType, color: PieceColor, hasMoved: boolean, board: BoardBase): Piece {
     let piece: Piece
 
     if (type === PieceType.Pawn) piece = new Pawn(color, stringToPosition(pos), board)

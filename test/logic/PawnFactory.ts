@@ -1,9 +1,9 @@
 import { factory } from "factory-girl";
-import Board from "../../src/common/Board";
+import BoardBase from "../common/BoardBase";
 import { PieceColor, PieceType } from "../../src/common/GamePieces"
 import { createPiece } from "./BoardHelper"
 
-factory.define("board", Board, {});
+factory.define("board", BoardBase, {});
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -15,7 +15,7 @@ factory.define("board", Board, {});
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
 */
-factory.define("board-pawn-capture", Board, {}, {
+factory.define("board-pawn-capture", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("c5", PieceType.Pawn, PieceColor.White, true, model),
@@ -40,7 +40,7 @@ factory.define("board-pawn-capture", Board, {}, {
     ♙♙♙⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
 */
-factory.define("board-pawn-double-move", Board, {}, {
+factory.define("board-pawn-double-move", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("a7", PieceType.Pawn, PieceColor.Black, false, model),

@@ -1,14 +1,14 @@
 import * as Majavashakki from "../../common/GamePieces"
-import Board from "../Board";
+import BoardBase from "../BoardBase";
 
 export default class Piece implements Majavashakki.IPiece {
     public type: Majavashakki.PieceType
     public color: Majavashakki.PieceColor
     public position: Majavashakki.IPosition
-    public board: Board
+    public board: BoardBase
     public hasMoved: boolean
 
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: Board, type: Majavashakki.PieceType) {
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase, type: Majavashakki.PieceType) {
         this.board = board
         this.color = color
         this.position = position
@@ -20,7 +20,7 @@ export default class Piece implements Majavashakki.IPiece {
         return false
     }
 
-    public clone(board: Board): Piece {
+    public clone(board: BoardBase): Piece {
         const piece = new Piece(this.color, this.position, board, this.type)
         piece.hasMoved = piece.hasMoved
 
@@ -29,11 +29,11 @@ export default class Piece implements Majavashakki.IPiece {
 
     // TODO: Refactor this so it doesn't need parameters or if not possible make it static
     public positionToNumbers(pos: Majavashakki.IPosition) {
-        return {col: Board.cols.indexOf(pos.col), row: Board.rows.indexOf(pos.row)};
+        return {col: BoardBase.cols.indexOf(pos.col), row: BoardBase.rows.indexOf(pos.row)};
     }
 
     // TODO: Refactor this so it doesn't need parameters or if not possible make it static
     public numbersToPosition(pos): Majavashakki.IPosition {
-        return {col: Board.cols.charAt(pos.col), row: Board.rows.charAt(pos.row)};
+        return {col: BoardBase.cols.charAt(pos.col), row: BoardBase.rows.charAt(pos.row)};
     }
 }

@@ -1,9 +1,9 @@
 import { observable, action, computed, decorate } from "mobx"
 import * as Majavashakki from "../../common/GamePieces"
 import Piece from "../../common/pieces/Piece"
-import LogicBoard from "../../common/Board"
+import BoardBase from "../../common/BoardBase"
 
-export default class Board extends LogicBoard {
+export default class Board extends BoardBase {
     constructor(pieces?: Piece[], moveHistory?: Majavashakki.IPosition[][]) {
         super(pieces, moveHistory)
         // Decorate position in pieces, so it's changes will be noticed.

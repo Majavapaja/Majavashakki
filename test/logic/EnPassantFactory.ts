@@ -1,5 +1,5 @@
 import { factory } from "factory-girl";
-import Board from "../../src/common/Board";
+import BoardBase from "../common/BoardBase";
 import { PieceColor, PieceType } from "../../src/common/GamePieces"
 import { createPiece } from "./BoardHelper"
 
@@ -13,7 +13,7 @@ import { createPiece } from "./BoardHelper"
     ⚊⚊♟⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
 */
-factory.define("board-enpassant", Board, {}, {
+factory.define("board-enpassant", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("c2", PieceType.Pawn, PieceColor.White, false, model),

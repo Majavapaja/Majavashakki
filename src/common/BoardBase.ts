@@ -6,9 +6,9 @@ import Pawn from "./pieces/Pawn"
 import King from "./pieces/King"
 import { isCheck, isCheckMate } from "./logic/Checkmate";
 
-export default class Board implements Majavashakki.IBoard {
-    public static cols: string = "abcdefgh"
-    public static rows: string = "12345678"
+export default class BoardBase implements Majavashakki.IBoard {
+    public static readonly cols: string = "abcdefgh"
+    public static readonly rows: string = "12345678"
     public pieces: Piece[]
     public moveHistory: Majavashakki.IPosition[][]
 
@@ -36,13 +36,13 @@ export default class Board implements Majavashakki.IBoard {
     }
 
     public isWithinBoard(pos: Majavashakki.IPosition) {
-        return Board.cols.indexOf(pos.col) !== -1 && Board.rows.indexOf(pos.row) !== -1
+        return BoardBase.cols.indexOf(pos.col) !== -1 && BoardBase.rows.indexOf(pos.row) !== -1
     }
 
     public getCoordinateByIndex(type: "col"|"row", index): string {
-        if (index < 0 || index >= Board.rows.length) return null
+        if (index < 0 || index >= BoardBase.rows.length) return null
 
-        return type === "col" ? Board.cols[index] : Board.rows[index]
+        return type === "col" ? BoardBase.cols[index] : BoardBase.rows[index]
     }
 
     public removePiece(pos: Majavashakki.IPosition): void {

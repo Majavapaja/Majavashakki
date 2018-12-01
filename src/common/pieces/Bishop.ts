@@ -1,9 +1,9 @@
 import * as Majavashakki from "../GamePieces"
 import Piece from "./Piece"
-import Board from "../Board"
+import BoardBase from "../BoardBase"
 
 export default class Bishop extends Piece {
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: Board) {
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase) {
         super(color, position, board, Majavashakki.PieceType.Bishop)
     }
 
@@ -33,7 +33,7 @@ export default class Bishop extends Piece {
         return true;
     }
 
-    public clone(board: Board): Bishop {
+    public clone(board: BoardBase): Bishop {
         const bishop = new Bishop(this.color, this.position, board)
         bishop.hasMoved = this.hasMoved
         return bishop

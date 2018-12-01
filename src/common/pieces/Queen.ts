@@ -2,10 +2,10 @@ import * as Majavashakki from "../GamePieces"
 import Piece from "./Piece"
 import Bishop from "./Bishop"
 import Rook from "./Rook"
-import Board from "../Board"
+import BoardBase from "../BoardBase"
 
 export default class Queen extends Piece {
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: Board) {
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase) {
         super(color, position, board, Majavashakki.PieceType.Queen)
     }
 
@@ -15,7 +15,7 @@ export default class Queen extends Piece {
         return bishop.isValidMove(destination) || rook.isValidMove(destination)
     }
 
-    public clone(board: Board): Queen {
+    public clone(board: BoardBase): Queen {
         const queen = new Queen(this.color, this.position, board)
         queen.hasMoved = this.hasMoved
         return queen

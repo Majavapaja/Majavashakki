@@ -1,5 +1,5 @@
 import { factory } from "factory-girl";
-import Board from "../../src/common/Board";
+import BoardBase from "../common/BoardBase";
 import { PieceColor, PieceType } from "../../src/common/GamePieces"
 import { createPiece } from "./BoardHelper"
 
@@ -13,7 +13,7 @@ import { createPiece } from "./BoardHelper"
     ♙♙♙♙♙⚊⚊♙
     ⚊⚊⚊♕♔♗⚊⚊
 */
-factory.define("board-foolsmate", Board, {}, {
+factory.define("board-foolsmate", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("a2", PieceType.Pawn, PieceColor.White, false, model),
@@ -45,7 +45,7 @@ factory.define("board-foolsmate", Board, {}, {
     ♜⚊⚊⚊⚊⚊♙⚊
     ⚊⚊♔⚊⚊⚊⚊⚊
 */
-factory.define("board-gameofcentury", Board, {}, {
+factory.define("board-gameofcentury", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("b8", PieceType.Queen, PieceColor.White, true, model),
@@ -80,7 +80,7 @@ factory.define("board-gameofcentury", Board, {}, {
     ⚊⚊♜⚊⚊⚊⚊⚊
     ⚊⚊⚊♔⚊⚊⚊⚊
 */
-factory.define("board-doublecheck", Board, {}, {
+factory.define("board-doublecheck", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("d1", PieceType.King, PieceColor.White, true, model),
@@ -104,7 +104,7 @@ factory.define("board-doublecheck", Board, {}, {
     ⚊⚊♜⚊⚊⚊⚊⚊
     ⚊⚊⚊♔⚊⚊⚊⚊
 */
-factory.define("board-kingcanmove", Board, {}, {
+factory.define("board-kingcanmove", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("d1", PieceType.King, PieceColor.White, true, model),
@@ -125,7 +125,7 @@ factory.define("board-kingcanmove", Board, {}, {
 ⚊⚊♜⚊⚊⚊⚊⚊
 ⚊⚊⚊♔♕⚊⚊⚊
 */
-factory.define("board-checkmate-piececancapture", Board, {}, {
+factory.define("board-checkmate-piececancapture", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("d1", PieceType.King, PieceColor.White, true, model),
@@ -149,7 +149,7 @@ factory.define("board-checkmate-piececancapture", Board, {}, {
 ♜⚊⚊⚊⚊♕⚊♜
 ⚊⚊⚊♔⚊⚊⚊⚊
 */
-factory.define("board-checkmate-piececanblock", Board, {}, {
+factory.define("board-checkmate-piececanblock", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("d1", PieceType.King, PieceColor.White, true, model),
@@ -174,7 +174,7 @@ factory.define("board-checkmate-piececanblock", Board, {}, {
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
 */
-factory.define("board-checkmate-enpassant", Board, {}, {
+factory.define("board-checkmate-enpassant", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("b5", PieceType.Pawn, PieceColor.White, true, model),
@@ -199,7 +199,7 @@ factory.define("board-checkmate-enpassant", Board, {}, {
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ♖⚊⚊⚊♔⚊⚊⚊
 */
-factory.define("board-checkmate-castling", Board, {}, {
+factory.define("board-checkmate-castling", BoardBase, {}, {
     afterBuild: (model, attrs, buildOptions) => {
         model.pieces = [
             createPiece("a1", PieceType.Rook, PieceColor.White, false, model),
