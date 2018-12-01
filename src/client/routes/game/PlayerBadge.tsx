@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom"
 import { withStyles, createStyles } from "@material-ui/core/styles"
 import Board from "./Board"
 import { observer } from "mobx-react"
-import { Chip, Typography } from "@material-ui/core"
+import { Chip, Typography, Avatar } from "@material-ui/core"
 import classNames from 'classnames'
 
 @observer
@@ -20,7 +20,7 @@ class PlayerBadge extends React.Component<any, any> {
             <Chip
                 className={rootClasses}
                 avatar={
-                    <div className={[classes.playerColor, player.color].join(' ')}></div>
+                    <Avatar className={[classes.playerColor, player.color].join(' ')}></Avatar>
                 }
                 label={player.name}
             />
