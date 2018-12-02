@@ -1,6 +1,7 @@
 {
     "version": "^3.0.1",
     "compilerOptions": {
+        "strictFunctionTypes": true,
         "target": "es6",
         "moduleResolution":"node",
         "jsx": "preserve",

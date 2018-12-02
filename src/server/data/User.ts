@@ -2,6 +2,7 @@
 
 import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
 import Game from "../entities/Game"
+import {RegisterRequest} from "../../common/types"
 import * as _ from "lodash";
 import bcrypt from "bcryptjs";
 
@@ -14,11 +15,7 @@ export interface IUser {
 
 export interface IUserDocument extends IUser, Document {
   facebookId?: string;
-  // Insert user methods etc
-  // get games?
-  // join sockets?
-  // do the twist?
-  isCorrectPassword(password: string);
+  isCorrectPassword(password: string): Promise<boolean>;
 }
 
 export interface IUserModel extends Model<IUserDocument> {
@@ -26,8 +23,8 @@ export interface IUserModel extends Model<IUserDocument> {
   save(user: global.IUserContract): Promise<IUserDocument>;
   addGame(userId: string, game: Game): Promise<void>;
   validProfile(user: IUserDocument): boolean;
-  registerUser(newUser: global.IUserContract): Promise<boolean>;
-  getMyGames(userId: string, active?: boolean): Promise<global.IGameRef[]>;
+  registerUser(user: RegisterRequest): Promise<boolean>;
+  getMyGames(userId: string, active?: boolean): Promise<string[]>;
 }
 
 const options: SchemaOptions = {timestamps: true};
@@ -81,7 +78,7 @@ UserSchema.statics.findOrCreate = async (facebookId: string): Promise<IUserDocum
 
 };
 
-UserSchema.statics.registerUser = async (user: global.IUserContract): Promise<boolean> => {
+UserSchema.statics.registerUser = async (user: RegisterRequest): Promise<boolean> => {
   console.log(`Find user by email '${user.email}'`);
 
   const userObj = new User();
@@ -102,7 +99,6 @@ UserSchema.statics.registerUser = async (user: global.IUserContract): Promise<bo
     console.log(`User already exists ${result.email} name: ${result.name}, id: ${result._id}`);
     return false;
   }
-
 }
 
 UserSchema.statics.save = async (user: global.IUserContract) => {

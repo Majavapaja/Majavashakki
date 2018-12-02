@@ -2,22 +2,22 @@ import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import {TextField, WithStyles, withStyles, createStyles, Theme, Button, Typography} from "@material-ui/core";
 import ApiService from "../../common/ApiService";
+import { UserUpdateRequest } from "../../../common/types";
 
 class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> {
   private submitField: any = React.createRef();
 
   constructor(props: IProfileViewProps) {
     super(props);
-    this.state = {name: "", email: ""} as IProfileViewState;
+    this.state = {name: "", email: ""}
   }
 
   public async componentDidMount() {
-    const user = await ApiService.read.user();
-    this.setState({...user});
+    const {name, email} = await ApiService.read.user();
+    this.setState({name, email});
   }
 
   public render() {
-
     return (
       <form
         className={this.props.classes.container}
@@ -63,7 +63,11 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
 
   public handleSubmit = async () => {
     if (this.state.name && this.state.email) {
-      await ApiService.write.user(this.state);
+      const payload: UserUpdateRequest = {
+        name: this.state.name,
+        email: this.state.email,
+      }
+      await ApiService.write.user(payload);
       this.props.history.push("/")
     }
   }
@@ -75,7 +79,11 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
 }
 
 interface IProfileViewProps extends RouteComponentProps<any>, WithStyles<typeof styles> { }
-interface IProfileViewState extends global.IUserContract { }
+
+interface IProfileViewState  {
+  name: string
+  email: string
+}
 
 const styles = (theme: Theme) => createStyles({
   container: {
