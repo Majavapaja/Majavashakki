@@ -8,7 +8,7 @@ html {
   font-weight: 300;
   -webkit-font-smoothing: antialiased;
   height: 100%;
-  background: no-repeat url(/assets/bg1.svg);
+  background: no-repeat fixed url(/assets/bg1.svg);
   background-size: cover;
 }
 
