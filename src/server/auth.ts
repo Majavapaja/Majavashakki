@@ -3,6 +3,19 @@ import { Strategy as FbStrategy } from "passport-facebook";
 import { Strategy as LocalStrategy } from "passport-local";
 import { User, IUserDocument } from "./data/User";
 
+export function requireAuth(onFailure) {
+  return (req, res, next) => {
+    if (req.isAuthenticated()) {
+      next()
+    } else {
+      onFailure(req, res, next)
+    }
+  }
+}
+
+export const uiAuth = requireAuth((req, res, next) => res.redirect("/login"))
+export const apiAuth = requireAuth((req, res, next) => res.status(401).send({error: "Login required"}))
+
 export function initPassport(appUrl: string) {
   passport.serializeUser(async (user: any, done) => done(null, user._id))
   passport.deserializeUser(async (_id, done) => done(null, await User.findOne({_id})))

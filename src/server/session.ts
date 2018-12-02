@@ -1,10 +1,9 @@
 import expressSession from "express-session";
 import ConnectMongo from "connect-mongo";
 import socketIoSession from "express-socket.io-session";
-import crypto from "crypto"
 import {MongooseClient} from "./data/MongooseClient";
 
-let MajavashakkiSessionSecret = process.env.MajavashakkiSessionSecret;
+const MajavashakkiSessionSecret = process.env.MajavashakkiSessionSecret;
 if (!MajavashakkiSessionSecret) {
   throw Error("Majavashakki session secret is missing")
 }
