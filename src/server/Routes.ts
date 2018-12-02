@@ -7,17 +7,19 @@ import { User } from "./data/User";
 
 const router = express.Router();
 
-// Root
-router.get("/", uiAuth, (req, res, next) => {
-  return User.validProfile(req.user) ? next() : res.redirect("/profile");
-});
+// Root with first level authentication
+router.get("/", uiAuth, (req, res, next) => User.validProfile(req.user) ? next() : res.redirect("/profile"));
+
+// Important!! Resolve serving of static files before catch-a-fish *
+// but only after authentication has been resolved by root
+router.use(express.static(resolve(__dirname, "../../dist")));
 
 router.get("/api/user",           UserController.getUser);
 router.post("/api/user",          UserController.postUser);
 router.post("/api/user/register", UserController.registerUser);
 router.post("/api/login",         UserController.loginUser);
-router.get("/authFacebook",   UserController.loginFacebook);
-router.get("/logout",         UserController.logout)
+router.get("/authFacebook",       UserController.loginFacebook);
+router.get("/logout",             UserController.logout)
 
 router.get("/api/games",           apiAuth, GameController.getAvailableGames);
 router.get("/api/games/my-games",  apiAuth, GameController.getMyGames);

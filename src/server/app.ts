@@ -23,8 +23,6 @@ app.use(passport.session());
 const server = createServer(app);
 SocketServer.attach(server);
 
-// Important!! Resolve serving of static files before catch-em-all serve *
-app.use(express.static(resolve(__dirname, "../../dist")));
 app.use(Routes);
 
 export const start = port => {
