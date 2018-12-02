@@ -42,7 +42,7 @@
   },
   "scripts": {
     "npm-check": "npm-check --skip-unused",
-    "dev": "npm-run-all --parallel watch:client watch:server",
+    "dev": "better-npm-run dev",
     "watch:client": "parcel watch src/client/index.html --public-url /",
     "watch:server": "nodemon --watch src --watch public --ext ts,tsx app.js",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
@@ -50,6 +50,14 @@
     "start": "node app.js",
     "test": "mocha --timeout 999999 --require mocha_tsnode_hax.js test/**/*.spec.ts",
     "test:watch": "mocha --watch --timeout 999999 --require mocha_tsnode_hax.js test/**/*.spec.ts"
+  },
+  "betterScripts": {
+    "dev": {
+      "command": "npm-run-all --parallel watch:client watch:server",
+      "env": {
+        "MajavashakkiSessionSecret": "majestetic"
+      }
+    }
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
@@ -72,6 +80,7 @@
     "@types/request-promise": "4.1.42",
     "@types/socket.io": "1.4.36",
     "@types/socket.io-client": "1.4.32",
+    "better-npm-run": "0.1.1",
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "factory-girl": "5.0.2",
