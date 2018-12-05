@@ -44,12 +44,12 @@ function stringToPosition(str): IPosition {
 export function createPiece(pos: string, type: PieceType, color: PieceColor, hasMoved: boolean, board: BoardBase): Piece {
     let piece: Piece
 
-    if (type === PieceType.Pawn) piece = new Pawn(color, stringToPosition(pos), board)
-    else if (type === PieceType.Rook) piece = new Rook(color, stringToPosition(pos), board)
-    else if (type === PieceType.Bishop) piece = new Bishop(color, stringToPosition(pos), board)
-    else if (type === PieceType.Knight) piece = new Knight(color, stringToPosition(pos), board)
-    else if (type === PieceType.Queen) piece = new Queen(color, stringToPosition(pos), board)
-    else if (type === PieceType.King) piece = new King(color, stringToPosition(pos), board)
+    if (type === PieceType.Pawn) piece = new Pawn(color, stringToPosition(pos))
+    else if (type === PieceType.Rook) piece = new Rook(color, stringToPosition(pos))
+    else if (type === PieceType.Bishop) piece = new Bishop(color, stringToPosition(pos))
+    else if (type === PieceType.Knight) piece = new Knight(color, stringToPosition(pos))
+    else if (type === PieceType.Queen) piece = new Queen(color, stringToPosition(pos))
+    else if (type === PieceType.King) piece = new King(color, stringToPosition(pos))
 
     piece.hasMoved = hasMoved
 

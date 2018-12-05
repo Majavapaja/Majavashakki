@@ -3,8 +3,8 @@ import Piece from "./Piece"
 import BoardBase from "../BoardBase"
 
 export default class Bishop extends Piece {
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase) {
-        super(color, position, board, Majavashakki.PieceType.Bishop)
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition) {
+        super(color, position, Majavashakki.PieceType.Bishop)
     }
 
     public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
@@ -33,8 +33,8 @@ export default class Bishop extends Piece {
         return true;
     }
 
-    public clone(board: BoardBase): Bishop {
-        const bishop = new Bishop(this.color, this.position, board)
+    public clone(): Bishop {
+        const bishop = new Bishop(this.color, this.position)
         bishop.hasMoved = this.hasMoved
         return bishop
     }

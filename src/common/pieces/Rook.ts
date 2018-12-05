@@ -3,8 +3,8 @@ import Piece from "./Piece"
 import BoardBase from "../BoardBase"
 
 export default class Rook extends Piece {
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase) {
-        super(color, position, board, Majavashakki.PieceType.Rook)
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition) {
+        super(color, position, Majavashakki.PieceType.Rook)
     }
 
     public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
@@ -27,8 +27,8 @@ export default class Rook extends Piece {
         return true;
     }
 
-    public clone(board: BoardBase): Rook {
-        const rook = new Rook(this.color, this.position, board)
+    public clone(): Rook {
+        const rook = new Rook(this.color, this.position)
         rook.hasMoved = this.hasMoved
         return rook
     }

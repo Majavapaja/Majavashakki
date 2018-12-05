@@ -3,8 +3,8 @@ import Piece from "./Piece"
 import BoardBase from "../BoardBase"
 
 export default class Pawn extends Piece {
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase) {
-        super(color, position, board, Majavashakki.PieceType.Pawn)
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition) {
+        super(color, position, Majavashakki.PieceType.Pawn)
     }
 
     public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
@@ -61,8 +61,8 @@ export default class Pawn extends Piece {
         }
     }
 
-    public clone(board: BoardBase): Pawn {
-        const pawn = new Pawn(this.color, this.position, board)
+    public clone(): Pawn {
+        const pawn = new Pawn(this.color, this.position)
         pawn.hasMoved = this.hasMoved
         return pawn
     }

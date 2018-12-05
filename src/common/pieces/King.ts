@@ -4,8 +4,8 @@ import BoardBase from "../BoardBase"
 import { isCheck, doesMoveCauseCheck } from "../logic/Checkmate"
 
 export default class King extends Piece {
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase) {
-        super(color, position, board, Majavashakki.PieceType.King)
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition) {
+        super(color, position, Majavashakki.PieceType.King)
     }
 
     public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
@@ -71,8 +71,8 @@ export default class King extends Piece {
         return true;
     }
 
-    public clone(board: BoardBase): King {
-        const king = new King(this.color, this.position, board)
+    public clone(): King {
+        const king = new King(this.color, this.position)
         king.hasMoved = this.hasMoved
         return king
     }

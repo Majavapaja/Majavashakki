@@ -5,11 +5,9 @@ export default class Piece implements Majavashakki.IPiece {
     public type: Majavashakki.PieceType
     public color: Majavashakki.PieceColor
     public position: Majavashakki.IPosition
-    //public board: BoardBase
     public hasMoved: boolean
 
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase, type: Majavashakki.PieceType) {
-        //this.board = board
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, type: Majavashakki.PieceType) {
         this.color = color
         this.position = position
         this.type = type
@@ -20,10 +18,9 @@ export default class Piece implements Majavashakki.IPiece {
         return false
     }
 
-    public clone(board: BoardBase): Piece {
-        const piece = new Piece(this.color, this.position, board, this.type)
+    public clone(): Piece {
+        const piece = new Piece(this.color, this.position, this.type)
         piece.hasMoved = piece.hasMoved
-
         return piece
     }
 

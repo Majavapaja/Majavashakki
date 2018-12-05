@@ -3,8 +3,8 @@ import Piece from "./Piece"
 import BoardBase from "../BoardBase"
 
 export default class Knight extends Piece {
-    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition, board: BoardBase) {
-        super(color, position, board, Majavashakki.PieceType.Knight)
+    constructor(color: Majavashakki.PieceColor, position: Majavashakki.IPosition) {
+        super(color, position, Majavashakki.PieceType.Knight)
     }
 
     public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
@@ -21,8 +21,8 @@ export default class Knight extends Piece {
         return false;
     }
 
-    public clone(board: BoardBase): Knight {
-        const knight = new Knight(this.color, this.position, board)
+    public clone(): Knight {
+        const knight = new Knight(this.color, this.position)
         knight.hasMoved = this.hasMoved
         return knight
     }
