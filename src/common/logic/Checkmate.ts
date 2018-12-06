@@ -15,7 +15,7 @@ export function isCheck(board: BoardBase, color: Majavashakki.PieceColor): boole
 
 export function doesMoveCauseCheck(board: BoardBase, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): boolean {
     const boardCopy: BoardBase = new BoardBase();
-    boardCopy.pieces = board.pieces.map(piece => piece.clone(boardCopy));
+    boardCopy.pieces = board.pieces.map(piece => piece.clone());
 
     const startPieceCopy = boardCopy.getPiece(start);
     boardCopy.removePiece(destination);
