@@ -18,27 +18,27 @@ export default class PieceEntity {
         } as Majavashakki.IPiece
     }
 
-    public static MapFromDb(dbPiece: Majavashakki.IPiece, board: BoardBase): Piece {
+    public static MapFromDb(dbPiece: Majavashakki.IPiece): Piece {
         let piece: Piece
 
         switch (dbPiece.type) {
             case Majavashakki.PieceType.Pawn:
-                piece = new Pawn(dbPiece.color, dbPiece.position, board)
+                piece = new Pawn(dbPiece.color, dbPiece.position)
                 break
             case Majavashakki.PieceType.Rook:
-                piece = new Rook(dbPiece.color, dbPiece.position, board)
+                piece = new Rook(dbPiece.color, dbPiece.position)
                 break
             case Majavashakki.PieceType.Bishop:
-                piece = new Bishop(dbPiece.color, dbPiece.position, board)
+                piece = new Bishop(dbPiece.color, dbPiece.position)
                 break
             case Majavashakki.PieceType.Knight:
-                piece = new Knight(dbPiece.color, dbPiece.position, board)
+                piece = new Knight(dbPiece.color, dbPiece.position)
                 break
             case Majavashakki.PieceType.Queen:
-                piece = new Queen(dbPiece.color, dbPiece.position, board)
+                piece = new Queen(dbPiece.color, dbPiece.position)
                 break
             case Majavashakki.PieceType.King:
-                piece = new King(dbPiece.color, dbPiece.position, board)
+                piece = new King(dbPiece.color, dbPiece.position)
         }
 
         piece.hasMoved = dbPiece.hasMoved

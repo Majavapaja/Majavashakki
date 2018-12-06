@@ -9,7 +9,7 @@ export default class Game extends GameBase {
     public static MapFromDb(gameState: Majavashakki.IGame): Game {
         console.log(gameState)
         const game = new Game(gameState.title);
-        game.board.pieces = gameState.board.pieces.map(piece => PieceEntity.MapFromDb(piece, game.board));
+        game.board.pieces = gameState.board.pieces.map(piece => PieceEntity.MapFromDb(piece));
         game.board.moveHistory = gameState.board.moveHistory;
         game.playerIdBlack = gameState.playerIdBlack;
         game.playerIdWhite = gameState.playerIdWhite;
