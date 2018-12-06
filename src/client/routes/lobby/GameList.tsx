@@ -26,7 +26,6 @@ import ApiService from "../../common/ApiService";
 import Player1Avatar from '../../assets/player1.jpg'
 import Player2Avatar from '../../assets/player2.jpg'
 
-
 class GameList extends React.Component<IGameListProps, any> {
   constructor(props: any) {
     super(props);

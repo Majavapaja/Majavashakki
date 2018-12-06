@@ -19,9 +19,7 @@ class PlayerBadge extends React.Component<any, any> {
         return (
             <Chip
                 className={rootClasses}
-                avatar={
-                    <Avatar className={[classes.playerColor, player.color].join(' ')}></Avatar>
-                }
+                avatar={<Avatar className={[classes.playerColor, player.color].join(' ')} />}
                 label={player.name}
             />
         )

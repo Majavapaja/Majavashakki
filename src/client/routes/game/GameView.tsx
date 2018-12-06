@@ -19,7 +19,7 @@ class GameView extends React.Component<any, any> {
   public render() {
     const { classes, game } = this.props
     if (game.isLoading) {
-      return <div>>Loading...</div>
+      return <div>Loading...</div>
     }
 
     let errorContainer = null
@@ -40,14 +40,14 @@ class GameView extends React.Component<any, any> {
                 name: 'Matti',
                 color: 'white'
               }}
-              isCurrentPlayer={game.currentTurn == 'white'}
+              isCurrentPlayer={game.currentTurn === 'white'}
             />
             <PlayerBadge
               player={{
                 name: 'Teppo',
                 color: 'black'
               }}
-              isCurrentPlayer={game.currentTurn == 'black'}
+              isCurrentPlayer={game.currentTurn === 'black'}
             />
           </div>
           <Board game={this.props.game} gameName={game.title}/>
