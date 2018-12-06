@@ -63,4 +63,5 @@ export enum MoveType {
   Capture = "capture",
   Enpassant = "enpassant",
   Castling = "castling",
+  Promotion = "promotion",
 }
