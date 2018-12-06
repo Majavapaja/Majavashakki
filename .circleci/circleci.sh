@@ -16,10 +16,6 @@ apt-get install -y git gnupg python3-pip python3-venv curl
 curl -sL https://deb.nodesource.com/setup_10.x | bash -
 apt-get install -y nodejs
 
-# Run tests
-npm ci
-TS_NODE_FILES=true npm test
-
 echo $DEPLOYER_PRIVATE_GPG_KEY_BASE64 | base64 --decode > private.key
 gpg --import private.key
 rm -f private.key

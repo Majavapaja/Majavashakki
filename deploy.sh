@@ -4,6 +4,10 @@ set -o errexit -o nounset -o pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+npm ci
+npm run lint
+TS_NODE_FILES=true npm test
+
 if [ ! -d "$repo/deployment/.venv" ]; then
   python3 -m venv "$repo/deployment/.venv"
 fi
