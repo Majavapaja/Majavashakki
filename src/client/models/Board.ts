@@ -31,7 +31,7 @@ export default class Board extends BoardBase {
 
                 cells.push({
                     position,
-                    piece
+                    piece,
                 })
             }
         }

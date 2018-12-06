@@ -23,10 +23,10 @@ export default class Game extends GameBase {
             currentTurn: game.currentTurn,
             board: {
               pieces: game.board.pieces.map(PieceEntity.MapToDb),
-              moveHistory: game.board.moveHistory
+              moveHistory: game.board.moveHistory,
             },
             playerIdWhite: game.playerIdWhite,
-            playerIdBlack: game.playerIdBlack
+            playerIdBlack: game.playerIdBlack,
         } as Majavashakki.IGame
     }
 }

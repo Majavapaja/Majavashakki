@@ -12,8 +12,8 @@ import ApiService from "./ApiService";
 
 const styles = createStyles({
   grow: {
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 })
 
 class LoginMenu extends React.Component<any, any> {

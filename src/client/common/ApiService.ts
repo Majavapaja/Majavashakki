@@ -8,7 +8,7 @@ export default class ApiService {
     user:           async () => await getIt<ApiUser>("api/user"),
     availableGames: async () => await getIt<string[]>("api/games"),
     myGames:        async () => await getIt<string[]>("api/games/my-games"),
-    game:           async (title: string) => await getIt<Majavashakki.IGame>(`api/games/get/${title}`)
+    game:           async (title: string) => await getIt<Majavashakki.IGame>(`api/games/get/${title}`),
   };
 
   public static write = {
@@ -17,14 +17,14 @@ export default class ApiService {
     // TODO smarter responses from api?
     register: async (user: global.IUserContract) => await postIt<global.IUserContract, void>("api/user/register", user),
     login:    async (user: global.IUserContract) => await postIt<global.IUserContract, void>("api/login", user),
-    user:     async (user: UserUpdateRequest) => await postIt<UserUpdateRequest, ApiUser>("api/user", user)
+    user:     async (user: UserUpdateRequest) => await postIt<UserUpdateRequest, ApiUser>("api/user", user),
   }
 }
 
-export const postIt = async <RequestT, ResponseT>(api: string, body: RequestT): Promise<ResponseT> => {
+export const postIt = async <RequestT, ResponseT> (api: string, body: RequestT): Promise<ResponseT> => {
   return await request({method: "POST", url: `${base}/${api}`, body, json: true})
 }
 
-export const getIt = async <T>(api: string): Promise<T> => {
+export const getIt = async <T> (api: string): Promise<T> => {
   return await request({method: "GET", url: `${base}/${api}`, json: true})
 }

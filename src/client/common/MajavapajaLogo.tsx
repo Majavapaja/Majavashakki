@@ -9,8 +9,8 @@ const styles = createStyles({
         flexGrow: 1,
         display: "block",
         "&:hover $logo": {
-            transform: "rotate(45deg)"
-        }
+            transform: "rotate(45deg)",
+        },
     },
     logo: {
         width: 50,
@@ -32,8 +32,8 @@ const styles = createStyles({
         position: "absolute",
         bottom: "5px",
         left: "75px",
-        whiteSpace: "nowrap"
-    }
+        whiteSpace: "nowrap",
+    },
 })
 
 class MajavapajaLogo extends React.Component<any, any> {

@@ -39,14 +39,14 @@ export default abstract class GameBase implements Majavashakki.IGame {
     if (!this.doesUserOwnPiece(userId, start)) {
       return {
         status: Majavashakki.MoveStatus.Error,
-        error: "Error 13: This is not your piece!"
+        error: "Error 13: This is not your piece!",
       } as Majavashakki.IMoveResponse
     }
 
     if (!this.isUsersTurn(userId)) {
       return {
         status: Majavashakki.MoveStatus.Error,
-        error: "Error 14: Not your turn!"
+        error: "Error 14: Not your turn!",
       } as Majavashakki.IMoveResponse
     }
     return this.board.move(start, destination)

@@ -10,7 +10,7 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
 
     this.state = {
       newRoomForm: {
-        name: ""
+        name: "",
       },
       availableGames: [],
       myGames: [],
@@ -25,7 +25,7 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
   public async componentDidMount() {
     const [availableGames, myGames] = await Promise.all([
       ApiService.read.availableGames(),
-      ApiService.read.myGames()
+      ApiService.read.myGames(),
     ]);
 
     this.setState({ availableGames, myGames });
@@ -46,6 +46,7 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
   }
 }
 
+// tslint:disable-next-line no-empty-interface
 interface ILobbyViewProps extends RouteComponentProps<any> {}
 interface ILobbyViewState {
   newRoomForm: any,

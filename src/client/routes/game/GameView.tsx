@@ -5,7 +5,7 @@ import Board from "./Board"
 import { observer } from "mobx-react"
 import { Paper, Typography } from "@material-ui/core"
 
-import PlayerBadge from './PlayerBadge'
+import PlayerBadge from "./PlayerBadge"
 
 @observer
 class GameView extends React.Component<any, any> {
@@ -37,17 +37,17 @@ class GameView extends React.Component<any, any> {
           <div className={classes.playersContainer}>
             <PlayerBadge
               player={{
-                name: 'Matti',
-                color: 'white'
+                name: "Matti",
+                color: "white",
               }}
-              isCurrentPlayer={game.currentTurn === 'white'}
+              isCurrentPlayer={game.currentTurn === "white"}
             />
             <PlayerBadge
               player={{
-                name: 'Teppo',
-                color: 'black'
+                name: "Teppo",
+                color: "black",
               }}
-              isCurrentPlayer={game.currentTurn === 'black'}
+              isCurrentPlayer={game.currentTurn === "black"}
             />
           </div>
           <Board game={this.props.game} gameName={game.title}/>
@@ -63,25 +63,25 @@ const styles = theme => ({
     display: "flex",
     height: "100vh",
     justifyContent: "center",
-    alignItems: "flex-start"
+    alignItems: "flex-start",
   },
   gameContainer: {
     marginTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit
+    paddingRight: theme.spacing.unit,
   },
   error: {
       width: "60vmin",
       color: "#4C0000",
       background: "#D44040",
-      padding: 10
+      padding: 10,
   },
   playersContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    padding: theme.spacing.unit * 4
-  }
+    display: "flex",
+    justifyContent: "space-between",
+    padding: theme.spacing.unit * 4,
+  },
 })
 
 export default withStyles(styles)(withRouter(GameView));

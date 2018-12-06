@@ -39,22 +39,22 @@ export enum PieceType {
   Bishop = "bishop",
   Rook = "rook",
   Queen = "queen",
-  King = "king"
+  King = "king",
 }
 
 export enum PieceColor {
   Black = "black",
-  White = "white"
+  White = "white",
 }
 
 export enum MoveStatus {
   Error = "error",
-  Success = "success"
+  Success = "success",
 }
 
 export enum MoveType {
   Move = "move",
   Capture = "capture",
   Enpassant = "enpassant",
-  Castling = "castling"
+  Castling = "castling",
 }

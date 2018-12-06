@@ -5,32 +5,32 @@ import * as logo from "../assets/logo.png";
 
 const styles = createStyles({
     logo: {
-        width: 100
+        width: 100,
     },
     "@keyframes spin": {
         from: {
-            transform: "rotate(0deg)"
+            transform: "rotate(0deg)",
         },
         to: {
-            transform: "rotate(360deg)"
-        }
+            transform: "rotate(360deg)",
+        },
     },
     "@keyframes bounce": {
         from: {
-            transform: "translateY(0)"
+            transform: "translateY(0)",
         },
         to: {
-            transform: "translateY(-20%)"
-        }
+            transform: "translateY(-20%)",
+        },
     },
     "@keyframes pulse": {
         from: {
-            transform: "scale(1)"
+            transform: "scale(1)",
         },
         to: {
-            transform: "scale(1.5)"
-        }
-    }
+            transform: "scale(1.5)",
+        },
+    },
 })
 
 class Majava extends React.Component<any, any> {

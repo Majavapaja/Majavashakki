@@ -15,6 +15,7 @@ export const RegisterRequestType = t.exact(t.type({
   password: PasswordType,
 }))
 
+// tslint:disable-next-line no-empty-interface
 export interface RegisterRequest extends t.TypeOf<typeof RegisterRequestType> {}
 
 export const UserUpdateRequestType = t.exact(t.type({
@@ -22,12 +23,14 @@ export const UserUpdateRequestType = t.exact(t.type({
   email: EmailType,
 }))
 
+// tslint:disable-next-line no-empty-interface
 export interface UserUpdateRequest extends t.TypeOf<typeof UserUpdateRequestType> {}
 
 export const CreateGameRequestType = t.exact(t.type({
   title: GameNameType,
 }))
 
+// tslint:disable-next-line no-empty-interface
 export interface CreateGameRequest extends t.TypeOf<typeof CreateGameRequestType> {}
 
 export interface ApiUser {

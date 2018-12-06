@@ -50,7 +50,7 @@ class Board extends React.Component<any, any> {
       this.props.game.move(this.state.selectedCell, pos)
       this.setState({
         moveTarget: null,
-        selectedCell: null
+        selectedCell: null,
       })
     }
 

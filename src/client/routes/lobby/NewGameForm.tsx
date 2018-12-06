@@ -9,7 +9,7 @@ class NewGameForm extends React.Component<INewGameProps, INewGameState> {
 
     this.state = {
       newRoomForm: {
-        name: ""
+        name: "",
       },
     };
   }
@@ -35,7 +35,7 @@ class NewGameForm extends React.Component<INewGameProps, INewGameState> {
       newRoomForm: {
         ...this.state.newRoomForm,
         [target.name]: target.value,
-      }
+      },
     });
   }
 

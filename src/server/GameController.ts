@@ -51,5 +51,5 @@ export default {
     socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
     socket.join(body.title); // TODO we should use game ids
     return game
-  })
+  }),
 }

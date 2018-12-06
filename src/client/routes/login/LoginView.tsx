@@ -9,7 +9,7 @@ const styles = createStyles({
         display: "flex",
         height: "100vh",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     loginContainer: {
         width: 500,
@@ -17,20 +17,20 @@ const styles = createStyles({
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
-        alignItems: "center"
+        alignItems: "center",
     },
     facebookButton: {
         backgroundColor: "#3B5998",
-        color: "#fff"
+        color: "#fff",
     },
     divider: {
         border: "1px solid rgba(0,0,0,.1)",
         width: "100%",
-        margin: "25px 0"
+        margin: "25px 0",
     },
     button: {
-        margin: "10px 0"
-    }
+        margin: "10px 0",
+    },
 })
 
 class LoginView extends React.Component<any, any> {
@@ -108,7 +108,7 @@ class LoginView extends React.Component<any, any> {
         const id = target.id;
 
         this.setState({
-          [id]: value
+          [id]: value,
         });
     }
 

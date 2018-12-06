@@ -39,7 +39,7 @@ export function initPassport(appUrl: string) {
           } catch (err) {
             done(err)
           }
-      }
+      },
     ))
   } else {
       console.warn("[WARNING] Facebook authentication was not enabled. Missing environment variables 'MajavashakkiFbClientId' or 'MajavashakkiFbSecret'")

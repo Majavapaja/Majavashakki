@@ -59,7 +59,7 @@ GameSchema.statics.getAvailableGames = async (userId: string): Promise<string[]>
     .and([
       {$or: [{playerIdWhite: null}, {playerIdBlack: null}]},
       {playerIdWhite: { $ne: userId }},
-      {playerIdBlack: { $ne: userId }}
+      {playerIdBlack: { $ne: userId }},
     ]).exec();
   return games.map((doc) => doc.title);
 }

@@ -87,14 +87,14 @@ interface IProfileViewState  {
 
 const styles = (theme: Theme) => createStyles({
   container: {
-    margin: "10px"
+    margin: "10px",
   },
   textField: {
     width: 350,
   },
   button: {
-    margin: "10px 0"
-  }
+    margin: "10px 0",
+  },
 });
 
 export default withStyles(styles)(withRouter(ProfileView));

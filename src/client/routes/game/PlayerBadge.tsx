@@ -4,7 +4,7 @@ import { withStyles, createStyles } from "@material-ui/core/styles"
 import Board from "./Board"
 import { observer } from "mobx-react"
 import { Chip, Typography, Avatar } from "@material-ui/core"
-import classNames from 'classnames'
+import classNames from "classnames"
 
 @observer
 class PlayerBadge extends React.Component<any, any> {
@@ -13,13 +13,13 @@ class PlayerBadge extends React.Component<any, any> {
 
         const rootClasses = classNames(
             classes.root,
-            { active: isCurrentPlayer }
+            { active: isCurrentPlayer },
         )
 
         return (
             <Chip
                 className={rootClasses}
-                avatar={<Avatar className={[classes.playerColor, player.color].join(' ')} />}
+                avatar={<Avatar className={[classes.playerColor, player.color].join(" ")} />}
                 label={player.name}
             />
         )
@@ -28,22 +28,22 @@ class PlayerBadge extends React.Component<any, any> {
 
 const styles = theme => ({
     root: {
-        '&.active': {
+        "&.active": {
             backgroundColor: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText
-        }
+            color: theme.palette.primary.contrastText,
+        },
     },
     playerColor: {
         width: 50,
         height: 50,
-        border: '1px solid rgba(0,0,0,0.5)',
-        borderRadius: '50%',
-        '&.white': {
-            backgroundColor: '#FFF'
+        border: "1px solid rgba(0,0,0,0.5)",
+        borderRadius: "50%",
+        "&.white": {
+            backgroundColor: "#FFF",
         },
-        '&.black': {
-            backgroundColor: '#000'
-        }
+        "&.black": {
+            backgroundColor: "#000",
+        },
     },
 })
 

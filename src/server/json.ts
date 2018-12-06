@@ -32,14 +32,14 @@ export function jsonAPI<ResponseT>(handler: (req: Request) => Promise<ResponseT>
         console.log("Validation errors:", errors)
         writeJSON(res, 400, isProd()
           ? {error: "Bad Request"}
-          : {error: "Bad Request", errors}
+          : {error: "Bad Request", errors},
         )
       } else if (e instanceof NotFoundError) {
         writeJSON(res, 404, {error: "Not Found", message: e.message})
       } else {
         writeJSON(res, 500, isProd()
           ? {error: "Internal Server Error"}
-          : {error: "Internal Server Error", message: e.message}
+          : {error: "Internal Server Error", message: e.message},
         )
       }
     }
