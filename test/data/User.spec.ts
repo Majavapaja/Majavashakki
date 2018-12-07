@@ -32,8 +32,8 @@ describe("User", () => {
 
             let user = await User.findOrCreate(facebookId);
 
-            const game = await GameModel.findOrCreate("P3L1")
-            await User.addGame(user._id, game);
+            const doc = await GameModel.findOrCreate("P3L1")
+            await User.addGame(user._id, doc.title);
 
             user = await User.findOne({facebookId}).exec();
             assert.equal(user.games.length, 1, "added game");

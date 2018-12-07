@@ -21,7 +21,7 @@ export interface IUserDocument extends IUser, Document {
 export interface IUserModel extends Model<IUserDocument> {
   findOrCreate(facebookId: string): Promise<IUserDocument>;
   save(user: global.IUserContract): Promise<IUserDocument>;
-  addGame(userId: string, game: Game): Promise<void>;
+  addGame(userId: string, gameTitle: string): Promise<void>;
   validProfile(user: IUserDocument): boolean;
   registerUser(user: RegisterRequest): Promise<boolean>;
   getMyGames(userId: string, active?: boolean): Promise<string[]>;
@@ -106,19 +106,19 @@ UserSchema.statics.save = async (user: global.IUserContract) => {
   return doc;
 };
 
-UserSchema.statics.addGame = async (_id: string, gameName: Game) => {
+UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
   const user = await User.findById(_id).exec();
   if (!user) {
     console.log(`No user found by ID ${_id}`);
     throw new Error(`Cannot add game because user was not found with ID ${_id}`)
   }
 
-  console.log(`Adding game '${gameName.title}' for user ${user.name} (ID ${user._id})`);
-  if (_.includes(user.games, gameName.title)) {
+  console.log(`Adding game '${gameTitle}' for user ${user.name} (ID ${user._id})`);
+  if (_.includes(user.games, gameTitle)) {
     console.log("Game already added, go on with your business");
     return;
   }
-  user.games.push(gameName.title);
+  user.games.push(gameTitle);
   await user.save();
   console.log("Added game");
 }

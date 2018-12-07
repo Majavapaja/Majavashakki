@@ -1,5 +1,8 @@
 export interface IGame {
-  id: string;
+  // error TS2320: Interface 'IGameDocument' cannot simultaneously extend types 'IGame' and 'Document'.
+  // Named property 'id' of types 'IGame' and 'Document' are not identical.
+  id?: any;
+
   title: string;
   currentTurn: PieceColor;
   playerIdWhite?: string;
