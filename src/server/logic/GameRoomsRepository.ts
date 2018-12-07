@@ -17,10 +17,6 @@ export class GameRoomsRepository {
         GameRoomsRepository.instance = this;
     }
 
-    public async saveGame(game: Game) {
-        await GameModel.save(game)
-    }
-
     // TODO make sense into different game interfaces (one too many? move some of the Game class logic into IGameDocument?)
     // also don't pass around sockets, too late too lazy
     public async joinRoom(doc: IGameDocument, socket: any, userId: string): Promise<IGameDocument> {
@@ -33,11 +29,5 @@ export class GameRoomsRepository {
         await User.addGame(userId, game);
         game.addPlayer(userId);
         return await GameModel.save(game);
-    }
-
-    public async getGameRoom(title: string): Promise<Game> {
-        console.log("Get game '" + title + "'");
-        const doc = await GameModel.findByTitle(title);
-        return Game.MapFromDb(doc);
     }
 }

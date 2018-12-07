@@ -22,6 +22,7 @@ export default class Game extends GameBase {
 
   public board: BoardModel
   private socket: SocketIOClient.Socket
+  private gameId: string
 
   constructor(title: string) {
     super(title);
@@ -37,6 +38,7 @@ export default class Game extends GameBase {
 
     const game = GameEntity.MapFromDb(gameEntity)
     this.title = game.title
+    this.gameId = gameId
     this.currentTurn = game.currentTurn
     this.playerIdBlack = game.playerIdBlack
     this.playerIdWhite = game.playerIdWhite
@@ -57,7 +59,7 @@ export default class Game extends GameBase {
 
     if (result.status === Majavashakki.MoveStatus.Success) {
       this.socket.emit("move", {
-        gameName: this.title,
+        gameId: this.gameId,
         from: start,
         dest: destination,
       });
