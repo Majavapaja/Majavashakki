@@ -22,6 +22,7 @@ import {
 import AddIcon from "@material-ui/icons/Add";
 import FilterIcon from "@material-ui/icons/Search"
 import ApiService from "../../common/ApiService";
+import { ApiGameInfo } from "../../../common/types";
 
 import Player1Avatar from "../../assets/player1.jpg"
 import Player2Avatar from "../../assets/player2.jpg"
@@ -42,8 +43,8 @@ class GameList extends React.Component<IGameListProps, any> {
   }
 
   public render() {
-    const { classes, gameNames } = this.props
-    const noGames = !gameNames || gameNames.length === 0
+    const { classes, games } = this.props
+    const noGames = !games || games.length === 0
 
     return (
       <Paper className={classes.root}>
@@ -70,20 +71,20 @@ class GameList extends React.Component<IGameListProps, any> {
           </FormControl>
           <List>
             {
-              gameNames
-              .filter(gameName => gameName.toLowerCase().includes(this.state.filter))
-              .map(gameName => (
+              games
+              .filter(game => game.title.toLowerCase().includes(this.state.filter))
+              .map(game => (
                 <ListItem
-                  key={gameName}
+                  key={game.title}
                   button
-                  onClick={() => this.onRoomClick(gameName)}
+                  onClick={() => this.onRoomClick(game)}
                 >
                   <div className={classes.playerAvatarsContainer}>
                     <Avatar alt="Player 1" src={Player1Avatar} title="Player 1 username" />
                     <Avatar alt="Player 2" src={Player2Avatar} title="Player 2 username" />
                   </div>
                   <ListItemText
-                    primary={gameName}
+                    primary={game.title}
                     secondary={"123 turns"}
                   />
                 </ListItem>
@@ -96,15 +97,15 @@ class GameList extends React.Component<IGameListProps, any> {
     );
   }
 
-  private onRoomClick = async (gameTitle: string) => {
-    const result = await ApiService.write.joinGame(gameTitle);
+  private onRoomClick = async (game: ApiGameInfo) => {
+    const result = await ApiService.write.joinGame(game.title);
     this.props.history.push(`/game/${result.title}`)
   }
 }
 
 interface IGameListProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
   title: string,
-  gameNames: string[],
+  games: ApiGameInfo[],
   openDialog: () => void,
 }
 

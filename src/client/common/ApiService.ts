@@ -1,13 +1,13 @@
 import request from "request-promise";
 import * as Majavashakki from "../../common/GamePieces";
-import { ApiUser, UserUpdateRequest, CreateGameRequest } from "../../common/types";
+import { ApiGameInfo, ApiUser, UserUpdateRequest, CreateGameRequest } from "../../common/types";
 
 const base = window.location.origin;
 export default class ApiService {
   public static read = {
     user:           async () => await getIt<ApiUser>("api/user"),
-    availableGames: async () => await getIt<string[]>("api/games"),
-    myGames:        async () => await getIt<string[]>("api/games/my-games"),
+    availableGames: async () => await getIt<ApiGameInfo[]>("api/games"),
+    myGames:        async () => await getIt<ApiGameInfo[]>("api/games/my-games"),
     game:           async (title: string) => await getIt<Majavashakki.IGame>(`api/games/get/${title}`),
   };
 

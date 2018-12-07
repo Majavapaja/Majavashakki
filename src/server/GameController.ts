@@ -7,16 +7,19 @@ import {
   CreateGameRequestType, CreateGameRequest,
 } from "../common/types"
 import { IGame } from "../common/GamePieces"
+import { ApiGameInfo } from "../common/types"
 
 const roomRepo = GameRoomsRepository.getInstance();
 
 export default {
-  getAvailableGames: jsonAPI<string[]>(async req => {
-    return await roomRepo.getAvailableGames(req.user._id);
+  getAvailableGames: jsonAPI<ApiGameInfo[]>(async req => {
+    const titles = await roomRepo.getAvailableGames(req.user._id);
+    return titles.map(title => ({title}))
   }),
 
-  getMyGames: jsonAPI<string[]>(async req => {
-    return await User.getMyGames(req.user._id); // TODO active rule for fetch
+  getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
+    const titles = await User.getMyGames(req.user._id); // TODO active rule for fetch
+    return titles.map(title => ({title}))
   }),
 
   getGame: jsonAPI<any>(async req => {

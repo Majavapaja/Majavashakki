@@ -3,6 +3,7 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import GameList from "./GameList";
 import NewGameForm from "./NewGameForm";
 import ApiService from "../../common/ApiService";
+import { ApiGameInfo } from "../../../common/types";
 
 class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
   constructor(props: any) {
@@ -39,8 +40,8 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
       <div>
         <NewGameForm open={this.state.dialogOpen} handleClose={this.closeNewForm}/>
 
-        <GameList gameNames={this.state.myGames} title="My games" openDialog={this.openNewForm} />
-        <GameList gameNames={this.state.availableGames} title="Available games" openDialog={this.openNewForm} />
+        <GameList games={this.state.myGames} title="My games" openDialog={this.openNewForm} />
+        <GameList games={this.state.availableGames} title="Available games" openDialog={this.openNewForm} />
       </div>
     );
   }
@@ -50,8 +51,8 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
 interface ILobbyViewProps extends RouteComponentProps<any> {}
 interface ILobbyViewState {
   newRoomForm: any,
-  availableGames: string[],
-  myGames: string[],
+  availableGames: ApiGameInfo[],
+  myGames: ApiGameInfo[],
   error: string,
   dialogOpen: boolean,
 }

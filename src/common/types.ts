@@ -38,3 +38,7 @@ export interface ApiUser {
   name: string
   email: string
 }
+
+export interface ApiGameInfo {
+  title: string
+}
