@@ -28,7 +28,7 @@ export default {
     const {session, params: {id}} = req
     const socket = SessionSocketMap[session.id];
 
-    const game = await GameModel.findByIdOrTitle(id)
+    const game = await GameModel.findGame(id)
     if (!game) throw new NotFoundError(`Game '${id}' not found`)
 
     if (!isPartOfTheGame(game, req.user.id)) {
@@ -54,7 +54,7 @@ export default {
     const socket = SessionSocketMap[session.id];
     const userId = req.user._id
 
-    let doc = await GameModel.findByIdOrTitle(id);
+    let doc = await GameModel.findGame(id);
     if (!doc) throw new NotFoundError(`Game '${id}' not found`)
 
     doc = await roomRepo.joinRoom(doc, socket, String(userId)) // TODO: Handle full room exception

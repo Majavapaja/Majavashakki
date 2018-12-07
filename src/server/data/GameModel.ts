@@ -10,8 +10,8 @@ export interface IGameDocument extends Majavashakki.IGame, Document {
 export interface IGameModel extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<IGameDocument>;
   save(game: Game, isNew?: boolean): Promise<IGameDocument>;
+  findGame(id: string): Promise<IGameDocument>;
   findByTitle(title: string): Promise<IGameDocument>;
-  findByIdOrTitle(idOrTitle: string): Promise<IGameDocument>;
   getAvailableGames(userId: string): Promise<IGameDocument[]>;
   getGamesWithTitles(titles: string[]): Promise<IGameDocument[]>;
 }
@@ -51,13 +51,10 @@ GameSchema.statics.findByTitle = async (title: string): Promise<IGameDocument> =
   return await GameModel.findOne({title}).exec();
 }
 
-GameSchema.statics.findByIdOrTitle = async (idOrTitle: string): Promise<IGameDocument> => {
-  if (Types.ObjectId.isValid(idOrTitle)) {
-    const game = await await GameModel.findById(idOrTitle);
-    if (game) return game
+GameSchema.statics.findGame = async (id: string): Promise<IGameDocument> => {
+  if (Types.ObjectId.isValid(id)) {
+    return await await GameModel.findById(id);
   }
-
-  return await GameModel.findByTitle(idOrTitle);
 }
 
 GameSchema.statics.getAvailableGames = async (userId: string): Promise<IGameDocument[]> => {
