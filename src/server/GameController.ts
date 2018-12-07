@@ -33,11 +33,12 @@ export default {
     const socket = SessionSocketMap[session.id];
 
     const game = await GameModel.findByIdOrTitle(name)
-    if (!game) {
+    if (!game) throw new NotFoundError(`Game '${name}' not found`)
+
+    if (!isPartOfTheGame(game, req.user.id)) {
+      console.log(`Player attempted to look at a game he is not part of (userId: ${req.user.id}, gameId: ${game.id})`)
       throw new NotFoundError(`Game '${name}' not found`)
     }
-
-    // TODO: Check the user has permissions to the game
 
     socket.join(game.title)
     return gameDocumentToApiResult(game)
@@ -63,6 +64,10 @@ export default {
     socket.join(body.title); // TODO we should use game ids
     return game
   }),
+}
+
+function isPartOfTheGame(game: IGameDocument, userId: string): boolean {
+  return [game.playerIdBlack, game.playerIdWhite].indexOf(userId) !== -1
 }
 
 // XXX: This is nearly identical with Game.MapForDb
