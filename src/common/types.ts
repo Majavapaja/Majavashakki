@@ -40,5 +40,6 @@ export interface ApiUser {
 }
 
 export interface ApiGameInfo {
+  id: string
   title: string
 }

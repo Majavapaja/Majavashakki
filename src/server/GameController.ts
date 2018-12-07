@@ -1,5 +1,6 @@
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import { User } from "./data/User";
+import { GameModel, IGameDocument } from "./data/GameModel";
 import { SessionSocketMap } from "./Sockets";
 import Game from "./entities/Game";
 import { jsonAPI, NotFoundError, validate } from "./json"
@@ -11,15 +12,20 @@ import { ApiGameInfo } from "../common/types"
 
 const roomRepo = GameRoomsRepository.getInstance();
 
+function formatAPIResponse(game: IGameDocument): ApiGameInfo {
+  const {_id, title} = game
+  return {id: _id, title}
+}
 export default {
   getAvailableGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const titles = await roomRepo.getAvailableGames(req.user._id);
-    return titles.map(title => ({title}))
+    const games = await GameModel.getAvailableGames(req.user._id);
+    return games.map(formatAPIResponse)
   }),
 
   getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
     const titles = await User.getMyGames(req.user._id); // TODO active rule for fetch
-    return titles.map(title => ({title}))
+    const games = await GameModel.getGamesWithTitles(titles)
+    return games.map(formatAPIResponse)
   }),
 
   getGame: jsonAPI<any>(async req => {

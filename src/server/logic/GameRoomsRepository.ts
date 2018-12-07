@@ -40,10 +40,6 @@ export class GameRoomsRepository {
         return await GameModel.save(game);
     }
 
-    public async getAvailableGames(userId: string): Promise<string[]> {
-        return await GameModel.getAvailableGames(userId);
-    }
-
     public async getGameRoom(title: string): Promise<Game> {
         console.log("Get game '" + title + "'");
         const doc = await GameModel.findByTitle(title);
