@@ -25,15 +25,15 @@ export default {
   }),
 
   getGame: jsonAPI<any>(async req => {
-    const {session, params: {name}} = req
+    const {session, params: {id}} = req
     const socket = SessionSocketMap[session.id];
 
-    const game = await GameModel.findByIdOrTitle(name)
-    if (!game) throw new NotFoundError(`Game '${name}' not found`)
+    const game = await GameModel.findByIdOrTitle(id)
+    if (!game) throw new NotFoundError(`Game '${id}' not found`)
 
     if (!isPartOfTheGame(game, req.user.id)) {
       console.log(`Player attempted to look at a game he is not part of (userId: ${req.user.id}, gameId: ${game.id})`)
-      throw new NotFoundError(`Game '${name}' not found`)
+      throw new NotFoundError(`Game '${id}' not found`)
     }
 
     socket.join(game.title)
@@ -43,7 +43,7 @@ export default {
   postGame: jsonAPI<IGame>(async req => {
     const body = validate<CreateGameRequest>(CreateGameRequestType, req.body)
     const socket = SessionSocketMap[req.session.id];
-    const game = await roomRepo.createRoom(body.title)
+    const game = await GameModel.findOrCreate(body.title)
     // TODO this broadcast is not supported anymore? Does other users see new games when created?? Check if this is "oopsies".
     socket.broadcast.to(this.MainRoom).emit("game-created", game.title);
     return game

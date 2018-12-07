@@ -8,7 +8,7 @@ export default class ApiService {
     user:           async () => await getIt<ApiUser>("api/user"),
     availableGames: async () => await getIt<ApiGameInfo[]>("api/games"),
     myGames:        async () => await getIt<ApiGameInfo[]>("api/games/my-games"),
-    game:           async (title: string) => await getIt<Majavashakki.IGame>(`api/games/get/${title}`),
+    game:           async (id: string) => await getIt<Majavashakki.IGame>(`api/games/get/${id}`),
   };
 
   public static write = {

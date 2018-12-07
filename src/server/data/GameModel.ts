@@ -8,8 +8,8 @@ export interface IGameDocument extends Majavashakki.IGame, Document {
 }
 
 export interface IGameModel extends Model<IGameDocument> {
-  findOrCreate(title: string): Promise<Game>;
-  save(game: Game, isNew?: boolean): Promise<Game>;
+  findOrCreate(title: string): Promise<IGameDocument>;
+  save(game: Game, isNew?: boolean): Promise<IGameDocument>;
   findByTitle(title: string): Promise<IGameDocument>;
   findByIdOrTitle(idOrTitle: string): Promise<IGameDocument>;
   getAvailableGames(userId: string): Promise<IGameDocument[]>;
@@ -26,7 +26,7 @@ export let GameSchema: Schema = new Schema({
   board: Schema.Types.Mixed,
 }, options);
 
-GameSchema.statics.findOrCreate = async (title: string): Promise<Game> => {
+GameSchema.statics.findOrCreate = async (title: string): Promise<IGameDocument> => {
   const result = await GameModel.findOne({title}).exec();
 
   if (!result) {
@@ -36,16 +36,15 @@ GameSchema.statics.findOrCreate = async (title: string): Promise<Game> => {
   } else {
     console.log(result.toObject())
     console.log(`FOUND EXISTING GAME ${result.id} NAME: ${result.title}, ID: ${result._id}`);
-    return Game.MapFromDb(result.toObject());
+    return result
   }
 };
 
-GameSchema.statics.save = async (game: Game, isNew: boolean = false): Promise<Game> => {
+GameSchema.statics.save = async (game: Game, isNew: boolean = false): Promise<IGameDocument> => {
   console.log(`SAVING GAME ${game.title}`)
   const gameAsJson = Game.MapForDb(game)
   console.log("gameAsJson", gameAsJson)
-  const doc = await GameModel.findOneAndUpdate({title: game.title}, gameAsJson, {new: true, upsert: isNew}).exec();
-  return Game.MapFromDb(doc.toObject())
+  return await GameModel.findOneAndUpdate({title: game.title}, gameAsJson, {new: true, upsert: isNew}).exec();
 };
 
 GameSchema.statics.findByTitle = async (title: string): Promise<IGameDocument> => {

@@ -29,11 +29,11 @@ export default class Game extends GameBase {
   }
 
   @action
-  public loadGame = async (gameName: string) => {
+  public loadGame = async (gameId: string) => {
     this.isLoading = true
 
     this.currentUser = await ApiService.read.user();
-    const gameEntity = await ApiService.read.game(gameName);
+    const gameEntity = await ApiService.read.game(gameId);
 
     const game = GameEntity.MapFromDb(gameEntity)
     this.title = game.title

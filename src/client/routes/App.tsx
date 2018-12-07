@@ -24,7 +24,7 @@ export default props => (
 
     <Route
       exact
-      path="/game/:gameName"
+      path="/game/:gameId"
       render={() => ( <GameView game={props.game} /> )}
     />
 

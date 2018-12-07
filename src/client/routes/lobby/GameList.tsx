@@ -99,7 +99,7 @@ class GameList extends React.Component<IGameListProps, any> {
 
   private onRoomClick = async (game: ApiGameInfo) => {
     const result = await ApiService.write.joinGame(game.title);
-    this.props.history.push(`/game/${result.title}`)
+    this.props.history.push(`/game/${game.id}`)
   }
 }
 
