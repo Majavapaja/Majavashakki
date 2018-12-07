@@ -1,5 +1,5 @@
 /* Defines user schema and model */
-import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
+import {Document, Schema, SchemaOptions, Model, model, Types} from "mongoose";
 import Game from "../entities/Game";
 import * as Majavashakki from "../../common/GamePieces";
 
@@ -10,7 +10,8 @@ export interface IGameDocument extends Majavashakki.IGame, Document {
 export interface IGameModel extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<Game>;
   save(game: Game, isNew?: boolean): Promise<Game>;
-  findByTitle(title: string): Promise<Game>;
+  findByTitle(title: string): Promise<IGameDocument>;
+  findByIdOrTitle(idOrTitle: string): Promise<IGameDocument>;
   getAvailableGames(userId: string): Promise<IGameDocument[]>;
   getGamesWithTitles(titles: string[]): Promise<IGameDocument[]>;
 }
@@ -47,11 +48,17 @@ GameSchema.statics.save = async (game: Game, isNew: boolean = false): Promise<Ga
   return Game.MapFromDb(doc.toObject())
 };
 
-GameSchema.statics.findByTitle = async (title: string): Promise<Game> => {
-  console.log("Find by title: " + title)
-  const gameState = await GameModel.findOne({title}).exec();
-  if (!gameState) throw new Error("Peliä ei löywy!");
-  return Game.MapFromDb(gameState.toObject());
+GameSchema.statics.findByTitle = async (title: string): Promise<IGameDocument> => {
+  return await GameModel.findOne({title}).exec();
+}
+
+GameSchema.statics.findByIdOrTitle = async (idOrTitle: string): Promise<IGameDocument> => {
+  if (Types.ObjectId.isValid(idOrTitle)) {
+    const game = await await GameModel.findById(idOrTitle);
+    if (game) return game
+  }
+
+  return await GameModel.findByTitle(idOrTitle);
 }
 
 GameSchema.statics.getAvailableGames = async (userId: string): Promise<IGameDocument[]> => {

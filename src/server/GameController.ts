@@ -32,13 +32,15 @@ export default {
     const {session, params: {name}} = req
     const socket = SessionSocketMap[session.id];
 
-    // TODO: Check the user has permissions to the game
-    const game = await roomRepo.getGameRoom(name);
+    const game = await GameModel.findByIdOrTitle(name)
     if (!game) {
-      throw new NotFoundError("Game not found")
+      throw new NotFoundError(`Game '${name}' not found`)
     }
+
+    // TODO: Check the user has permissions to the game
+
     socket.join(game.title)
-    return Game.MapForDb(game)
+    return gameDocumentToApiResult(game)
   }),
 
   postGame: jsonAPI<IGame>(async req => {
@@ -61,4 +63,16 @@ export default {
     socket.join(body.title); // TODO we should use game ids
     return game
   }),
+}
+
+// XXX: This is nearly identical with Game.MapForDb
+function gameDocumentToApiResult(game: IGameDocument): any {
+  return {
+    id: game._id,
+    title: game.title,
+    board: game.board,
+    currentTurn: game.currentTurn,
+    playerIdBlack: game.playerIdBlack,
+    playerIdWhite: game.playerIdWhite,
+  }
 }

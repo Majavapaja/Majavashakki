@@ -29,7 +29,9 @@ export class GameRoomsRepository {
     // also don't pass around sockets, too late too lazy
     public async joinRoom(socket: any, title: string, userId: string): Promise<Game> {
         console.log("joining room : " + title)
-        const game: Game = await GameModel.findByTitle(title);
+        const doc = await GameModel.findByTitle(title);
+        if (!doc) throw new Error("Peliä ei löywy!");
+        const game = Game.MapFromDb(doc.toObject());
         console.log("1", game)
         if (game.containsUser(userId)) return game;
 
