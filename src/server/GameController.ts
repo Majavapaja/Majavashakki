@@ -12,20 +12,16 @@ import { ApiGameInfo } from "../common/types"
 
 const roomRepo = GameRoomsRepository.getInstance();
 
-function formatAPIResponse(game: IGameDocument): ApiGameInfo {
-  const {_id, title} = game
-  return {id: _id, title}
-}
 export default {
   getAvailableGames: jsonAPI<ApiGameInfo[]>(async req => {
     const games = await GameModel.getAvailableGames(req.user._id);
-    return games.map(formatAPIResponse)
+    return games.map(formatGamesListResponse)
   }),
 
   getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
     const titles = await User.getMyGames(req.user._id); // TODO active rule for fetch
     const games = await GameModel.getGamesWithTitles(titles)
-    return games.map(formatAPIResponse)
+    return games.map(formatGamesListResponse)
   }),
 
   getGame: jsonAPI<any>(async req => {
@@ -68,6 +64,11 @@ export default {
 
 function isPartOfTheGame(game: IGameDocument, userId: string): boolean {
   return [game.playerIdBlack, game.playerIdWhite].indexOf(userId) !== -1
+}
+
+function formatGamesListResponse(game: IGameDocument): ApiGameInfo {
+  const {_id, title} = game
+  return {id: _id, title}
 }
 
 // XXX: This is nearly identical with Game.MapForDb
