@@ -3,13 +3,13 @@ import {GameSchema, IGameModel} from "../../src/server/data/GameModel";
 import mongoose from "mongoose";
 import assert from "assert";
 
-const connectionString = "mongodb://localhost/test"
+const connectionString = "mongodb://localhost:27017/test"
 const User = mongoose.model("User", UserSchema) as IUserModel;
 const GameModel = mongoose.model("GameModel", GameSchema) as IGameModel;
 
 describe("User", () => {
     beforeEach(async () => {
-        await mongoose.connect(connectionString);
+        await mongoose.connect(connectionString, {useNewUrlParser: true});
         await mongoose.connection.db.dropDatabase()
     });
 
