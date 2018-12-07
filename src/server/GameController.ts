@@ -46,19 +46,22 @@ export default {
     const game = await GameModel.findOrCreate(body.title)
     // TODO this broadcast is not supported anymore? Does other users see new games when created?? Check if this is "oopsies".
     socket.broadcast.to(this.MainRoom).emit("game-created", game.title);
-    return game
+    return gameDocumentToApiResult(game)
   }),
 
   joinGame: jsonAPI<IGame>(async req => {
-    const body = validate<CreateGameRequest>(CreateGameRequestType, req.body)
-    const {session} = req
+    const {session, params: {id}} = req
     const socket = SessionSocketMap[session.id];
     const userId = req.user._id
-    const game = await roomRepo.joinRoom(socket, body.title, String(userId)) // TODO: Handle full room exception
+
+    let doc = await GameModel.findByIdOrTitle(id);
+    if (!doc) throw new NotFoundError(`Game '${id}' not found`)
+
+    doc = await roomRepo.joinRoom(doc, socket, String(userId)) // TODO: Handle full room exception
 
     socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
-    socket.join(body.title); // TODO we should use game ids
-    return game
+    socket.join(`game:${doc.id}`)
+    return gameDocumentToApiResult(doc)
   }),
 }
 
@@ -72,7 +75,7 @@ function formatGamesListResponse(game: IGameDocument): ApiGameInfo {
 }
 
 // XXX: This is nearly identical with Game.MapForDb
-function gameDocumentToApiResult(game: IGameDocument): any {
+function gameDocumentToApiResult(game: IGameDocument): IGame {
   return {
     id: game._id,
     title: game.title,

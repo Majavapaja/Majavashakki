@@ -20,8 +20,8 @@ class NewGameForm extends React.Component<INewGameProps, INewGameState> {
     const gameTitle = this.cleanInput(this.state.newRoomForm.name);
 
     if (gameTitle) {
-      await ApiService.write.game(gameTitle);
-      const result = await ApiService.write.joinGame(gameTitle);
+      const game = await ApiService.write.game(gameTitle);
+      const result = await ApiService.write.joinGame(game.id);
       this.props.history.push(`/game/${result.title}`)
     }
   }

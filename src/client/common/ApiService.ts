@@ -13,7 +13,7 @@ export default class ApiService {
 
   public static write = {
     game:     async (title: string) => await postIt<CreateGameRequest, Majavashakki.IGame>("api/games", {title}),
-    joinGame: async (title: string) => await postIt<CreateGameRequest, Majavashakki.IGame>("api/games/join", {title}),
+    joinGame: async (id: string) => await postIt<CreateGameRequest, Majavashakki.IGame>(`api/games/${id}/join`),
     // TODO smarter responses from api?
     register: async (user: global.IUserContract) => await postIt<global.IUserContract, void>("api/user/register", user),
     login:    async (user: global.IUserContract) => await postIt<global.IUserContract, void>("api/login", user),
@@ -21,7 +21,7 @@ export default class ApiService {
   }
 }
 
-export const postIt = async <RequestT, ResponseT> (api: string, body: RequestT): Promise<ResponseT> => {
+export const postIt = async <RequestT, ResponseT> (api: string, body: RequestT = undefined): Promise<ResponseT> => {
   return await request({method: "POST", url: `${base}/${api}`, body, json: true})
 }
 

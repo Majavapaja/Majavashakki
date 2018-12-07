@@ -25,7 +25,7 @@ router.get("/api/games",           apiAuth, GameController.getAvailableGames);
 router.get("/api/games/my-games",  apiAuth, GameController.getMyGames);
 router.get("/api/games/get/:id",   apiAuth, GameController.getGame)
 router.post("/api/games",          apiAuth, GameController.postGame)
-router.post("/api/games/join",     apiAuth, GameController.joinGame)
+router.post("/api/games/:id/join", apiAuth, GameController.joinGame)
 
 router.get("/login", serveUI)
 router.get("/signup", serveUI)
