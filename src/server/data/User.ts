@@ -5,6 +5,7 @@ import Game from "../entities/Game"
 import {RegisterRequest} from "../../common/types"
 import * as _ from "lodash";
 import bcrypt from "bcryptjs";
+import { schemaOptions } from "../mongo"
 
 const PASSWORD_SALT_ROUNDS = 10
 
@@ -29,7 +30,6 @@ export interface IUserModel extends Model<IUserDocument> {
   getMyGames(userId: string, active?: boolean): Promise<string[]>;
 }
 
-const options: SchemaOptions = {timestamps: true};
 export let UserSchema: Schema = new Schema({
   createdAt: Date,
   email: {
@@ -46,7 +46,7 @@ export let UserSchema: Schema = new Schema({
     sparse: true,
   },
   games: {type: Array, default: []},
-}, options);
+}, schemaOptions());
 
 UserSchema.pre("save", (next) => {
   // Hash / Salt 'n' shit?

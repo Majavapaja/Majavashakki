@@ -2,6 +2,7 @@
 import {Document, Schema, SchemaOptions, Model, model, Types} from "mongoose";
 import Game from "../entities/Game";
 import * as Majavashakki from "../../common/GamePieces";
+import { schemaOptions } from "../mongo"
 
 export interface IGameDocument extends Majavashakki.IGame, Document {}
 
@@ -13,7 +14,6 @@ export interface IGameModel extends Model<IGameDocument> {
   getGamesWithTitles(titles: string[]): Promise<IGameDocument[]>;
 }
 
-const options: SchemaOptions = {timestamps: true};
 export let GameSchema: Schema = new Schema({
   createdAt: Date,
   title: {type: String, unique: true},
@@ -21,7 +21,7 @@ export let GameSchema: Schema = new Schema({
   playerIdWhite: String,
   playerIdBlack: String,
   board: Schema.Types.Mixed,
-}, options);
+}, schemaOptions());
 
 GameSchema.statics.findOrCreate = async (title: string): Promise<IGameDocument> => {
   const result = await GameModel.findOne({title}).exec();
