@@ -30,8 +30,7 @@ export default {
     const user = validate<RegisterRequest>(RegisterRequestType, req.body)
     console.log("New user received :" + JSON.stringify(user));
 
-    const result = await User.registerUser(user);
-    if (!result) {
+    if (!await User.registerUser(user)) {
       throw new Error("Couldn't create user")
     }
 

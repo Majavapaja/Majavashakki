@@ -6,6 +6,8 @@ import {RegisterRequest} from "../../common/types"
 import * as _ from "lodash";
 import bcrypt from "bcryptjs";
 
+const PASSWORD_SALT_ROUNDS = 10
+
 export interface IUser {
   email: string;
   name: string;
@@ -23,7 +25,7 @@ export interface IUserModel extends Model<IUserDocument> {
   save(user: global.IUserContract): Promise<IUserDocument>;
   addGame(userId: string, gameTitle: string): Promise<void>;
   validProfile(user: IUserDocument): boolean;
-  registerUser(user: RegisterRequest): Promise<boolean>;
+  registerUser(user: RegisterRequest): Promise<IUserDocument | undefined>;
   getMyGames(userId: string, active?: boolean): Promise<string[]>;
 }
 
@@ -60,7 +62,6 @@ UserSchema.statics.validProfile = (user: IUserDocument): boolean => {
 }
 
 UserSchema.statics.findOrCreate = async (facebookId: string): Promise<IUserDocument> => {
-
   console.log(`Find user by FBID '${facebookId}'`);
 
   const userObj = new User();
@@ -75,10 +76,9 @@ UserSchema.statics.findOrCreate = async (facebookId: string): Promise<IUserDocum
     console.log(`FOUND EXISTING USER ${result.facebookId} NAME: ${result.name}, ID: ${result._id}`);
     return result;
   }
-
 };
 
-UserSchema.statics.registerUser = async (user: RegisterRequest): Promise<boolean> => {
+UserSchema.statics.registerUser = async (user: RegisterRequest): Promise<IUserDocument | undefined> => {
   console.log(`Find user by email '${user.email}'`);
 
   const userObj = new User();
@@ -88,22 +88,15 @@ UserSchema.statics.registerUser = async (user: RegisterRequest): Promise<boolean
     console.log(`Registering user ${user}`);
     userObj.name = user.name
     userObj.email = user.email
-
-    const saltRounds = 10
-    userObj.password = await bcrypt.hash(user.password, saltRounds)
-
-    await userObj.save();
-
-    return true;
+    userObj.password = await bcrypt.hash(user.password, PASSWORD_SALT_ROUNDS)
+    return await userObj.save();
   } else {
     console.log(`User already exists ${result.email} name: ${result.name}, id: ${result._id}`);
-    return false;
   }
 }
 
-UserSchema.statics.save = async (user: global.IUserContract) => {
-  const doc = await User.findOneAndUpdate({_id: user.id}, {name: user.name, email: user.email}).exec();
-  return doc;
+UserSchema.statics.save = async (user: global.IUserContract): Promise<IUserDocument> => {
+  return await User.findOneAndUpdate({_id: user.id}, {name: user.name, email: user.email}).exec();
 };
 
 UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
