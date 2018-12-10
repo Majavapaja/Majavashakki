@@ -21,7 +21,9 @@ export let GameSchema: Schema = new Schema({
   playerIdWhite: String,
   playerIdBlack: String,
   board: Schema.Types.Mixed,
-}, schemaOptions());
+}, schemaOptions({
+  collection: "gamemodels",
+}));
 
 GameSchema.statics.findOrCreate = async (title: string): Promise<IGameDocument> => {
   const result = await GameModel.findOne({title}).exec();

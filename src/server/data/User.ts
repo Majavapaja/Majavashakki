@@ -46,7 +46,9 @@ export let UserSchema: Schema = new Schema({
     sparse: true,
   },
   games: {type: Array, default: []},
-}, schemaOptions());
+}, schemaOptions({
+  collection: "users",
+}));
 
 UserSchema.pre("save", (next) => {
   // Hash / Salt 'n' shit?
