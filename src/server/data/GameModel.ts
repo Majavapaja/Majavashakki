@@ -3,15 +3,12 @@ import {Document, Schema, SchemaOptions, Model, model, Types} from "mongoose";
 import Game from "../entities/Game";
 import * as Majavashakki from "../../common/GamePieces";
 
-export interface IGameDocument extends Majavashakki.IGame, Document {
-  denormalize(): global.IGameRef;
-}
+export interface IGameDocument extends Majavashakki.IGame, Document {}
 
 export interface IGameModel extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<IGameDocument>;
   save(game: Game, isNew?: boolean): Promise<IGameDocument>;
   findGame(id: string): Promise<IGameDocument>;
-  findByTitle(title: string): Promise<IGameDocument>;
   getAvailableGames(userId: string): Promise<IGameDocument[]>;
   getGamesWithTitles(titles: string[]): Promise<IGameDocument[]>;
 }
@@ -47,10 +44,6 @@ GameSchema.statics.save = async (game: Game, isNew: boolean = false): Promise<IG
   return await GameModel.findOneAndUpdate({title: game.title}, gameAsJson, {new: true, upsert: isNew}).exec();
 };
 
-GameSchema.statics.findByTitle = async (title: string): Promise<IGameDocument> => {
-  return await GameModel.findOne({title}).exec();
-}
-
 GameSchema.statics.findGame = async (id: string): Promise<IGameDocument> => {
   if (Types.ObjectId.isValid(id)) {
     return await await GameModel.findById(id);
@@ -70,11 +63,5 @@ GameSchema.statics.getAvailableGames = async (userId: string): Promise<IGameDocu
 GameSchema.statics.getGamesWithTitles = async (titles: string[]): Promise<IGameDocument[]> => {
   return await GameModel.find({title: {$in: titles}}).exec()
 }
-
-// Methods are used for instance of items
-GameSchema.methods.denormalize = function(): global.IGameRef {
-  const self = this as IGameDocument;
-  return {ref: self._id, title: self.title, active: true};
-};
 
 export const GameModel: IGameModel = model<IGameDocument, IGameModel>("GameModel", GameSchema);
