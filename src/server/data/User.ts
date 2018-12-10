@@ -9,7 +9,7 @@ import bcrypt from "bcryptjs";
 export interface IUser {
   email: string;
   name: string;
-  games?: string[];
+  games: string[];
   password: string;
 }
 
@@ -43,7 +43,7 @@ export let UserSchema: Schema = new Schema({
     unique: true,
     sparse: true,
   },
-  games: Array,
+  games: {type: Array, default: []},
 }, options);
 
 UserSchema.pre("save", (next) => {
