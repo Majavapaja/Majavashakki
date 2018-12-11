@@ -8,15 +8,15 @@ import {
 } from "../common/types"
 
 export default {
-  getUser: jsonAPI<ApiUser>(async req => {
+  getUser: jsonAPI<ApiUser | undefined>(async req => {
     const user = req.user;
-    const response: ApiUser = {
-      id: user._id,
-      name: user.name,
-      email: user.email,
+    if (user) {
+      return {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+      }
     }
-
-    return !user ? null : response
   }),
 
   postUser: jsonAPI<void>(async req => {

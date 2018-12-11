@@ -22,6 +22,10 @@ export class MongooseClient {
     return mongoose.connection;
   }
 
+  public static async disconnect(): Promise<void> {
+    await mongoose.disconnect()
+  }
+
   private static initDefaultHooks() {
     // https://medium.com/@vsvaibhav2016/best-practice-of-mongoose-connection-with-mongodb-c470608483f0
     mongoose.connection.on("connected", () => {
