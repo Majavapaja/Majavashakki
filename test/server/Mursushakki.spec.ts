@@ -32,6 +32,16 @@ describe("Mursushakki API", () => {
     assert.strictEqual(user.email, "mikko.mallikas@example.com")
   })
 
+  it("should return 401 on invalid login", async () => {
+    try {
+      await req("POST", "/api/login", { email: "doesnotexist@example.com", password: "password123" })
+      assert.fail("Login should have thrown because of invalid credentials")
+    } catch (e) {
+      assert.strictEqual(e.name, "StatusCodeError")
+      assert.strictEqual(e.statusCode, 401)
+    }
+  })
+
   async function registerAndLogin(name: string, email: string, password: string): Promise<any> {
     const registerResult = await req("POST", "/api/user/register", { name, email, password })
     assert.strictEqual(registerResult.status, "OK")
