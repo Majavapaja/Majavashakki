@@ -41,6 +41,36 @@ describe("Mursushakki API", () => {
       assert.strictEqual(e.statusCode, 401)
     }
   })
+
+  it("should show only games available for joining", async () => {
+    const player1 = mkHttpClient()
+    const player2 = mkHttpClient()
+
+    // All players see 0 games
+    await registerAndLogin(http, "Spede Spectator", "spede@example.com", "pissakakka123")
+    await registerAndLogin(player1, "Matti", "matti@example.com", "password123")
+    await registerAndLogin(player2, "Teppo", "teppo@example.com", "s4l4s4n4")
+    assert.strictEqual((await http("GET", "/api/games")).length, 0)
+    assert.strictEqual((await player1("GET", "/api/games")).length, 0)
+    assert.strictEqual((await player2("GET", "/api/games")).length, 0)
+
+    // Player 1 creates and joins a game
+    const game = await player1("POST", "/api/games", { title: "A Game of Matti and Shakki" })
+    assert.strictEqual(game.title, "A Game of Matti and Shakki")
+    await player1("POST", `/api/games/${game.id}/join`)
+
+    // Other players see the game
+    assert.strictEqual((await http("GET", "/api/games")).length, 1)
+    const games = await player2("GET", "/api/games")
+    assert.strictEqual(games.length, 1)
+
+    // Player 2 joins the game
+    assert.strictEqual(games[0].id, game.id)
+    const fullGame = await player2("POST", `/api/games/${games[0].id}/join`)
+
+    // Spectator no longer sees the game
+    assert.strictEqual((await http("GET", "/api/games")).length, 0)
+  })
 })
 
 type HttpClient = (method: "GET" | "POST", path: string, body?: any) => Promise<any>

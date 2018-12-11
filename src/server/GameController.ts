@@ -44,8 +44,10 @@ export default {
     const body = validate<CreateGameRequest>(CreateGameRequestType, req.body)
     const socket = SessionSocketMap[req.session.id];
     const game = await GameModel.findOrCreate(body.title)
-    // TODO this broadcast is not supported anymore? Does other users see new games when created?? Check if this is "oopsies".
-    socket.broadcast.to(this.MainRoom).emit("game-created", game.title);
+    if (socket) {
+      // Socket connection might not always be active e.g. from network error or during tests.
+      socket.broadcast.to(this.MainRoom).emit("game-created", game.title);
+    }
     return gameDocumentToApiResult(game)
   }),
 
@@ -59,8 +61,12 @@ export default {
 
     doc = await roomRepo.joinRoom(doc, socket, String(userId)) // TODO: Handle full room exception
 
-    socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
-    socket.join(`game:${doc.id}`)
+    if (socket) {
+      // Socket connection might not always be active e.g. from network error or during tests.
+      // TODO: How does the player join the socket.io "room" of the game after reconnecting?
+      socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
+      socket.join(`game:${doc.id}`)
+    }
     return gameDocumentToApiResult(doc)
   }),
 }
