@@ -49,12 +49,18 @@
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "build": "parcel build src/client/index.html --public-url /",
     "start": "node app.js",
-    "test": "mocha --timeout 999999 --require mocha_tsnode_hax.js test/**/*.spec.ts",
+    "test": "better-npm-run test",
     "test:watch": "mocha --watch --timeout 999999 --require mocha_tsnode_hax.js test/**/*.spec.ts"
   },
   "betterScripts": {
     "dev": {
       "command": "npm-run-all --parallel watch:client watch:server",
+      "env": {
+        "MajavashakkiSessionSecret": "majestetic"
+      }
+    },
+    "test": {
+      "command": "mocha --timeout 999999 --require mocha_tsnode_hax.js test/**/*.spec.ts",
       "env": {
         "MajavashakkiSessionSecret": "majestetic"
       }
