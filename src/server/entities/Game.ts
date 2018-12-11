@@ -7,7 +7,6 @@ export default class Game extends GameBase {
         super(title)
     }
     public static MapFromDb(gameState: Majavashakki.IGame): Game {
-        console.log(gameState)
         const game = new Game(gameState.title);
         game.board.pieces = gameState.board.pieces.map(piece => PieceEntity.MapFromDb(piece));
         game.board.moveHistory = gameState.board.moveHistory;

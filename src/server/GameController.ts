@@ -42,6 +42,8 @@ export default {
 
   postGame: jsonAPI<IGame>(async req => {
     const body = validate<CreateGameRequest>(CreateGameRequestType, req.body)
+    console.log(`Creating a new game '${body.title}'`);
+
     const socket = SessionSocketMap[req.session.id];
     const game = await GameModel.findOrCreate(body.title)
     if (socket) {
@@ -58,6 +60,8 @@ export default {
 
     let doc = await GameModel.findGame(id);
     if (!doc) throw new NotFoundError(`Game '${id}' not found`)
+
+    console.log(`User '${req.user.email}' is joining game '${doc.title}'`)
 
     doc = await roomRepo.joinRoom(doc, socket, String(userId)) // TODO: Handle full room exception
 

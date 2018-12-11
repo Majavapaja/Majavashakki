@@ -7,6 +7,8 @@ if (process.env.MajavashakkiMongoConnectionString) {
 }
 
 export class MongooseClient {
+  private static hooksInitialized: boolean = false
+
   public static InitMongoConnection() {
     console.log("MongooseClient connecting")
     mongoose.connect(connectionString, {
@@ -15,7 +17,10 @@ export class MongooseClient {
     });
     mongoose.set("debug", false);
 
-    this.initDefaultHooks();
+    if (!this.hooksInitialized) {
+      this.initDefaultHooks();
+      this.hooksInitialized = true
+    }
   }
 
   public static getConnection(): mongoose.Connection {

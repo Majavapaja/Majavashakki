@@ -46,24 +46,25 @@ export function initPassport(appUrl: string) {
   }
 
   passport.use(new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
-    console.log(`User '${email}' trying to login.`)
     try {
       const user: IUserDocument = await User.findOne({ email })
 
       if (!user) {
+        console.log(`User '${email}' tried to log in with invalid email`)
         return done(null, false, { message: "There is no account with this email. :O" });
       }
 
       const isValidPassword = await user.isCorrectPassword(password)
 
       if (!isValidPassword) {
+        console.log(`User '${email}' tried to log in with invalid password`)
         return done(null, false, { message: "Invalid password, did you try 'salasana1'?" });
       }
 
-      console.log("User logged in successfully")
+      console.log(`User '${email}' logged in successfully`)
       return done(null, user);
     } catch (error) {
-        return done(error)
+      return done(error)
     }
   }));
 }

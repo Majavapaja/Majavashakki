@@ -28,6 +28,7 @@ export default {
 
   registerUser: jsonAPI<any>(async req => {
     const user = validate<RegisterRequest>(RegisterRequestType, req.body)
+    console.log(`Registering user: ${user.email}`);
 
     if (!await User.registerUser(user)) {
       throw new Error("Couldn't create user")

@@ -81,13 +81,10 @@ UserSchema.statics.findOrCreate = async (facebookId: string): Promise<IUserDocum
 };
 
 UserSchema.statics.registerUser = async (user: RegisterRequest): Promise<IUserDocument | undefined> => {
-  console.log(`Find user by email '${user.email}'`);
-
   const userObj = new User();
   const result = await User.findOne({ email: user.email }).exec();
 
   if (!result) {
-    console.log(`Registering user ${user}`);
     userObj.name = user.name
     userObj.email = user.email
     userObj.password = await bcrypt.hash(user.password, PASSWORD_SALT_ROUNDS)
@@ -108,14 +105,12 @@ UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
     throw new Error(`Cannot add game because user was not found with ID ${_id}`)
   }
 
-  console.log(`Adding game '${gameTitle}' for user ${user.name} (ID ${user._id})`);
   if (_.includes(user.games, gameTitle)) {
     console.log("Game already added, go on with your business");
     return;
   }
   user.games.push(gameTitle);
   await user.save();
-  console.log("Added game");
 }
 
 UserSchema.statics.getMyGames = async (_id: string): Promise<string[]> => {

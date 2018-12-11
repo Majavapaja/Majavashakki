@@ -29,21 +29,20 @@ GameSchema.statics.findOrCreate = async (title: string): Promise<IGameDocument> 
   const result = await GameModel.findOne({title}).exec();
 
   if (!result) {
-    console.log(`CREATING NEW GAME ${title}`);
     const game = new Game(title);
     return await GameModel.save(game, true);
   } else {
-    console.log(result.toObject())
     console.log(`FOUND EXISTING GAME ${result.id} NAME: ${result.title}, ID: ${result._id}`);
     return result
   }
 };
 
 GameSchema.statics.save = async (game: Game, isNew: boolean = false): Promise<IGameDocument> => {
-  console.log(`SAVING GAME ${game.title}`)
-  const gameAsJson = Game.MapForDb(game)
-  console.log("gameAsJson", gameAsJson)
-  return await GameModel.findOneAndUpdate({title: game.title}, gameAsJson, {new: true, upsert: isNew}).exec();
+  return await GameModel.findOneAndUpdate(
+    {title: game.title},
+    Game.MapForDb(game),
+    {new: true, upsert: isNew},
+  ).exec();
 };
 
 GameSchema.statics.findGame = async (id: string): Promise<IGameDocument> => {
