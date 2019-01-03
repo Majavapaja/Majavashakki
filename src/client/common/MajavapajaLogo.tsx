@@ -1,7 +1,7 @@
-import * as React from "react";
-import { withStyles, createStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import * as logo from "../assets/majavapajalogo.png";
+import * as React from "react"
+import { withStyles, createStyles } from "@material-ui/core/styles"
+import Typography from "@material-ui/core/Typography"
+import * as logo from "../assets/majavapajalogo.png"
 
 const styles = createStyles({
     root: {
@@ -38,7 +38,7 @@ const styles = createStyles({
 
 class MajavapajaLogo extends React.Component<any, any> {
     constructor(props: any) {
-        super(props);
+        super(props)
     }
 
     public render() {
@@ -51,11 +51,21 @@ class MajavapajaLogo extends React.Component<any, any> {
                     Majavapaja
                 </Typography>
                 <Typography className={classes.description} component="div">
-                    Exactly as programmed
+                    {this.getSlogan()}
                 </Typography>
             </a>
         );
     }
+
+    private getSlogan = () => {
+        const slogans = [
+            "Exactly as programmed",
+            "Hard work is money",
+            "Hard code is money",
+        ]
+        const randomIndex = Math.floor(Math.random() * slogans.length)
+        return slogans[randomIndex]
+    }
 }
 
-export default withStyles(styles)(MajavapajaLogo);
+export default withStyles(styles)(MajavapajaLogo)
