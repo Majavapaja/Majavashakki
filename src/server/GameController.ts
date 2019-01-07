@@ -1,12 +1,15 @@
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import { User } from "./data/User";
 import { GameModel, IGameDocument } from "./data/GameModel";
-import { SessionSocketMap } from "./Sockets";
+import { SessionSocketMap, notifyGame } from "./Sockets";
 import Game from "./entities/Game";
 import { jsonAPI, NotFoundError, validate } from "./json"
 import {
   CreateGameRequestType, CreateGameRequest,
+  MoveRequest, MoveRequestType,
 } from "../common/types"
+import * as Majavashakki from "../common/GamePieces"
+import { IMoveResponse } from "../common/GamePieces"
 import { IGame } from "../common/GamePieces"
 import { ApiGameInfo } from "../common/types"
 
@@ -68,11 +71,40 @@ export default {
     if (socket) {
       // Socket connection might not always be active e.g. from network error or during tests.
       // TODO: How does the player join the socket.io "room" of the game after reconnecting?
-      socket.leaveAll(); // TODO Move room data into some smart structure inside session when its needed (not yet)
       socket.join(`game:${doc.id}`)
     }
     return gameDocumentToApiResult(doc)
   }),
+
+  makeMove: jsonAPI<IMoveResponse>(async req => {
+    const {session, params: {id}} = req
+    const data = validate<MoveRequest>(MoveRequestType, req.body)
+    const userId = String(req.user._id)
+
+    const doc = await GameModel.findGame(id);
+    const [game, move] = await applyMove(doc, userId, data)
+
+    if (move.status === Majavashakki.MoveStatus.Error) {
+      const socket = SessionSocketMap[session.id];
+      if (socket) socket.emit("move_result", move)
+      return move
+    }
+
+    await GameModel.save(game)
+    notifyGame(doc.id, "move_result", move)
+    return move
+  }),
+}
+
+// Wraps game document from database into Game class, tries to apply the given
+// move and returns the new game state and the result of the move
+async function applyMove(doc: IGameDocument, userId: string, data: any): Promise<[Game, Majavashakki.IMoveResponse]> {
+  const game = Game.MapFromDb(doc)
+  const moveResult = await game.move(data.from, data.dest, userId)
+  if (moveResult.status !== Majavashakki.MoveStatus.Error) {
+    game.changeTurn()
+  }
+  return [game, moveResult]
 }
 
 function isPartOfTheGame(game: IGameDocument, userId: string): boolean {

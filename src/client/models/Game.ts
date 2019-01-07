@@ -49,22 +49,15 @@ export default class Game extends GameBase {
 
   public connectSocket = () => {
     this.socket = socketIO()
-
     this.socket.on("move_result", this.onMoveResult)
   }
 
   @action
-  public move = (start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string = this.currentUser.id): Majavashakki.IMoveResponse => {
-    const result = super.move(start, destination, userId);
+  public async move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string = this.currentUser.id): Promise<Majavashakki.IMoveResponse> {
+    const result = await super.move(start, destination, userId);
 
     if (result.status === Majavashakki.MoveStatus.Success) {
-      this.socket.emit("move", {
-        gameId: this.gameId,
-        from: start,
-        dest: destination,
-      });
-      this.error = ""
-      this.changeTurn()
+      await ApiService.write.makeMove(this.gameId, start, destination)
     } else {
       this.error = result.error
     }

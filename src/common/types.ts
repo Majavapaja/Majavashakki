@@ -33,6 +33,19 @@ export const CreateGameRequestType = t.exact(t.type({
 // tslint:disable-next-line no-empty-interface
 export interface CreateGameRequest extends t.TypeOf<typeof CreateGameRequestType> {}
 
+const PositionType = t.exact(t.type({
+  row: t.string,
+  col: t.string,
+}))
+
+export const MoveRequestType = t.exact(t.type({
+  from: PositionType,
+  dest: PositionType,
+}))
+
+// tslint:disable-next-line no-empty-interface
+export interface MoveRequest extends t.TypeOf<typeof MoveRequestType> {}
+
 export interface ApiUser {
   id: string
   name: string

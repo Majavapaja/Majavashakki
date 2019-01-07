@@ -35,7 +35,7 @@ export default abstract class GameBase implements Majavashakki.IGame {
     return true;
   }
 
-  public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string): Majavashakki.IMoveResponse {
+  public async move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string): Promise<Majavashakki.IMoveResponse> {
     if (!this.doesUserOwnPiece(userId, start)) {
       return {
         status: Majavashakki.MoveStatus.Error,
