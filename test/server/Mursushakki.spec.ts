@@ -1,10 +1,10 @@
-import * as assert from "assert";
+import assert from "assert";
 import request from "request-promise"
 import mongoose from "mongoose";
 
 import { start } from "../../src/server/app"
 
-const PORT = 3000
+const PORT = 3001
 
 describe("Mursushakki API", () => {
   let closeServer
@@ -71,7 +71,42 @@ describe("Mursushakki API", () => {
     // Spectator no longer sees the game
     assert.strictEqual((await http("GET", "/api/games")).length, 0)
   })
+
+  it("should allow making moves in game", async () => {
+    const player1 = mkHttpClient()
+    const player2 = mkHttpClient()
+
+    // Join players to the game
+    await registerAndLogin(player1, "Matti", "matti@example.com", "password123")
+    await registerAndLogin(player2, "Teppo", "teppo@example.com", "s4l4s4n4")
+    const game = await player1("POST", "/api/games", { title: "A Game of Matti and Shakki" })
+    await player1("POST", `/api/games/${game.id}/join`)
+    await player2("POST", `/api/games/${game.id}/join`)
+
+    // Make way for the queen!
+    assert.strictEqual((await player1("POST", `/api/games/${game.id}/move`, {from: {col: "g", row: "2"}, dest: {col: "g", row: "4"}})).status, "success")
+    assert.strictEqual((await player2("POST", `/api/games/${game.id}/move`, {from: {col: "e", row: "7"}, dest: {col: "e", row: "6"}})).status, "success")
+    assert.strictEqual((await player1("POST", `/api/games/${game.id}/move`, {from: {col: "f", row: "2"}, dest: {col: "f", row: "3"}})).status, "success")
+    assert.strictEqual((await player2("POST", `/api/games/${game.id}/move`, {from: {col: "d", row: "8"}, dest: {col: "h", row: "4"}})).status, "success")
+
+    // TODO: Properly indicate that checkmate has happened
+    const err = await player2("POST", `/api/games/${game.id}/move`, {from: {col: "e", row: "1"}, dest: {col: "f", row: "2"}})
+    assert.strictEqual(err.status, "error")
+  })
 })
+
+async function registerAndLogin(http: HttpClient, name: string, email: string, password: string): Promise<any> {
+  const registerResult = await http("POST", "/api/user/register", { name, email, password })
+  assert.strictEqual(registerResult.status, "OK")
+
+  try {
+    await http("POST", "/api/login", { email, password })
+    assert.fail("Login should have thrown because of redirect")
+  } catch (e) {
+    assert.strictEqual(e.name, "StatusCodeError")
+    assert.strictEqual(e.statusCode, 302)
+  }
+}
 
 type HttpClient = (method: "GET" | "POST", path: string, body?: any) => Promise<any>
 
@@ -86,18 +121,5 @@ function mkHttpClient(): HttpClient {
       json: true,
       jar,
     })
-  }
-}
-
-async function registerAndLogin(http: HttpClient, name: string, email: string, password: string): Promise<any> {
-  const registerResult = await http("POST", "/api/user/register", { name, email, password })
-  assert.strictEqual(registerResult.status, "OK")
-
-  try {
-    await http("POST", "/api/login", { email, password })
-    assert.fail("Login should have thrown because of redirect")
-  } catch (e) {
-    assert.strictEqual(e.name, "StatusCodeError")
-    assert.strictEqual(e.statusCode, 302)
   }
 }
