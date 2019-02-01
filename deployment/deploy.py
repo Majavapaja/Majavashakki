@@ -27,9 +27,7 @@ async def main():
   secrets = load_secrets()
   web_client, cosmosdb_client = setup_azure(secrets)
 
-  db, keys, connection_strings = setup_cosmosdb(cosmosdb_client, Azure.cosmosdb_name)
-  assert len(connection_strings) == 1, f"Expected 1 connection string for mongodb, got {len(connection_strings)}"
-  assert keys.primary_master_key
+  db, keys, connection_string = setup_cosmosdb(cosmosdb_client, Azure.cosmosdb_name)
 
   configure_collections(
     Mongo.database_name,
@@ -39,7 +37,7 @@ async def main():
   )
 
   app_env = deepcopy(secrets["appEnvironment"])
-  app_env["MajavashakkiMongoConnectionString"] = connection_strings[0].connection_string
+  app_env["MajavashakkiMongoConnectionString"] = connection_string
   app_env["MajavaMongoPassword"] = keys.primary_master_key
 
   log.info("Creating App Service Plan")
@@ -103,8 +101,11 @@ def setup_cosmosdb(cosmosdb_client, database_account_name):
   log.info("Fetching CosmosDB connection details")
   keys = cosmosdb_client.database_accounts.list_keys(Azure.resource_group, database_account_name)
   connection_strings = cosmosdb_client.database_accounts.list_connection_strings(Azure.resource_group, database_account_name).connection_strings
+  connection_string = head(cs for cs in connection_strings if cs.description == "Primary MongoDB Connection String").connection_string
+  return mongo, keys, connection_string
 
-  return mongo, keys, connection_strings
+def head(xs):
+  return next(iter(xs))
 
 def mk_git_url(site_name, pub_cred):
     return f"https://{pub_cred.publishing_user_name}:{pub_cred.publishing_password}@{site_name.lower()}.scm.azurewebsites.net/{site_name}.git"
