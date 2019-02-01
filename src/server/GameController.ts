@@ -22,8 +22,8 @@ export default {
   }),
 
   getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const titles = await User.getMyGames(req.user._id); // TODO active rule for fetch
-    const games = await GameModel.getGamesWithTitles(titles)
+    const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
+    const games = await GameModel.getGames(gameIds)
     return games.map(formatGamesListResponse)
   }),
 

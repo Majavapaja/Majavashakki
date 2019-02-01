@@ -33,11 +33,11 @@ describe("User", () => {
             let user = await User.findOrCreate(facebookId);
 
             const doc = await GameModel.findOrCreate("P3L1")
-            await User.addGame(user._id, doc.title);
+            await User.addGame(user._id, doc._id);
 
             user = await User.findOne({facebookId}).exec();
-            assert.equal(user.games.length, 1, "added game");
-            assert.equal(user.games[0], "P3L1", "game title");
+            assert.equal(user.gameIds.length, 1, "added game");
+            assert.equal(user.gameIds[0], String(doc._id), "game title");
         });
     });
 });

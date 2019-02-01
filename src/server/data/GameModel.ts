@@ -11,7 +11,7 @@ export interface IGameModel extends Model<IGameDocument> {
   save(game: Game, isNew?: boolean): Promise<IGameDocument>;
   findGame(id: string): Promise<IGameDocument>;
   getAvailableGames(userId: string): Promise<IGameDocument[]>;
-  getGamesWithTitles(titles: string[]): Promise<IGameDocument[]>;
+  getGames(ids: string[]): Promise<IGameDocument[]>;
 }
 
 export let GameSchema: Schema = new Schema({
@@ -61,8 +61,8 @@ GameSchema.statics.getAvailableGames = async (userId: string): Promise<IGameDocu
     ]).exec();
 }
 
-GameSchema.statics.getGamesWithTitles = async (titles: string[]): Promise<IGameDocument[]> => {
-  return await GameModel.find({title: {$in: titles}}).exec()
+GameSchema.statics.getGames = async (ids: string[]): Promise<IGameDocument[]> => {
+  return await GameModel.find({_id: {$in: ids}}).exec()
 }
 
 export const GameModel: IGameModel = model<IGameDocument, IGameModel>("GameModel", GameSchema);

@@ -12,7 +12,7 @@ const PASSWORD_SALT_ROUNDS = 10
 export interface IUser {
   email: string;
   name: string;
-  games: string[];
+  gameIds: string[];
   password: string;
 }
 
@@ -24,7 +24,7 @@ export interface IUserDocument extends IUser, Document {
 export interface IUserModel extends Model<IUserDocument> {
   findOrCreate(facebookId: string): Promise<IUserDocument>;
   save(user: global.IUserContract): Promise<IUserDocument>;
-  addGame(userId: string, gameTitle: string): Promise<void>;
+  addGame(userId: string, gameId: string): Promise<void>;
   validProfile(user: IUserDocument): boolean;
   registerUser(user: RegisterRequest): Promise<IUserDocument | undefined>;
   getMyGames(userId: string, active?: boolean): Promise<string[]>;
@@ -45,7 +45,7 @@ export let UserSchema: Schema = new Schema({
     unique: true,
     sparse: true,
   },
-  games: {type: Array, default: []},
+  gameIds: {type: Array, default: []},
 }, schemaOptions({
   collection: "users",
 }));
@@ -98,25 +98,25 @@ UserSchema.statics.save = async (user: global.IUserContract): Promise<IUserDocum
   return await User.findOneAndUpdate({_id: user.id}, {name: user.name, email: user.email}).exec();
 };
 
-UserSchema.statics.addGame = async (_id: string, gameTitle: string) => {
+UserSchema.statics.addGame = async (_id: string, gameId: string) => {
   const user = await User.findById(_id).exec();
   if (!user) {
     console.log(`No user found by ID ${_id}`);
     throw new Error(`Cannot add game because user was not found with ID ${_id}`)
   }
 
-  if (_.includes(user.games, gameTitle)) {
+  if (_.includes(user.gameIds, gameId)) {
     console.log("Game already added, go on with your business");
     return;
   }
-  user.games.push(gameTitle);
+  user.gameIds.push(gameId)
   await user.save();
 }
 
 UserSchema.statics.getMyGames = async (_id: string): Promise<string[]> => {
   const user = await User.findOne({_id}).exec();
   if (!user) throw new Error(`Invalid user id '${_id}' for fetching my games`);
-  return user.games;
+  return user.gameIds
 }
 
 // Methods are used for instance of items
