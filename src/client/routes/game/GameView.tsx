@@ -6,6 +6,7 @@ import { observer } from "mobx-react"
 import { Paper, Typography } from "@material-ui/core"
 
 import PlayerBadge from "./PlayerBadge"
+import EndScreen from "./EndScreen"
 
 @observer
 class GameView extends React.Component<any, any> {
@@ -69,7 +70,11 @@ class GameView extends React.Component<any, any> {
       let content
       if (game.isCheckmate) {
         const winner = game.currentTurn === "white" ? "black" : "white"
-        content = <Typography variant="display2">The winner is {winner}</Typography>
+        content = <React.Fragment>
+          <Typography variant="display2">The winner is {winner}</Typography>
+          <EndScreen />
+        </React.Fragment>
+
       } else if (game.isCheck) {
         content = <Typography variant="display2">Check!</Typography>
       }
