@@ -42,7 +42,7 @@ class GameView extends React.Component<any, any> {
                 color: "white",
               }}
               isCurrentPlayer={game.currentTurn === "white"}
-              isWinner={game.isCheckmate && game.currentTurn === "white"}
+              isWinner={game.isCheckmate && game.currentTurn === "black"}
             />
             <PlayerBadge
               player={{
@@ -50,7 +50,7 @@ class GameView extends React.Component<any, any> {
                 color: "black",
               }}
               isCurrentPlayer={game.currentTurn === "black"}
-              isWinner={game.isCheckmate && game.currentTurn === "black"}
+              isWinner={game.isCheckmate && game.currentTurn === "white"}
             />
           </div>
           <Board game={this.props.game} gameName={game.title}/>
@@ -68,7 +68,7 @@ class GameView extends React.Component<any, any> {
     if (game.isCheckmate || game.isCheck) {
       let content
       if (game.isCheckmate) {
-        const winner = game.currentTurn === "white" ? "white" : "black"
+        const winner = game.currentTurn === "white" ? "black" : "white"
         content = <Typography variant="display2">The winner is {winner}</Typography>
       } else if (game.isCheck) {
         content = <Typography variant="display2">Check!</Typography>
