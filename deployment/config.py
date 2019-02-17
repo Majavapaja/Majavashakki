@@ -7,6 +7,6 @@ class Azure:
 
 class Mongo:
   database_name = "Majavashakki"
-  collection_throughput = 500
+  collection_throughput = 400
   system_indexes_collection = "undefined" # https://github.com/Automattic/mongoose/issues/6989
   collections = ["gamemodels", "sessions", "users", system_indexes_collection]
