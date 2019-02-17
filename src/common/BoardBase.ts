@@ -50,6 +50,16 @@ export default class BoardBase implements Majavashakki.IBoard {
         if (index !== -1) this.pieces.splice(index, 1);
     }
 
+    public isPromotion(dest: Majavashakki.IPosition, piece: Majavashakki.IPiece): boolean {
+        if (!piece || piece.type !== Majavashakki.PieceType.Pawn) return false
+
+        const pawn = piece as Pawn
+        if (pawn.isWhite() && dest.row === '1') return true
+        if (pawn.isBlack() && dest.row === '8') return true
+
+        return false
+    }
+
     public isValidMove(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
         // Check that start and destination are not the same
         if (this.comparePos(start, destination)) {
