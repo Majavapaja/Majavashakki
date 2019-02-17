@@ -44,7 +44,7 @@ class LoginView extends React.Component<any, any> {
     public render() {
         const { classes } = this.props
         return (
-            <div className={classes.root}>
+            <form className={classes.root} onSubmit={this.handleSubmit}>
                 <Paper
                   className={classes.loginContainer}
                   onKeyPress={this.handleEnterKey}
@@ -55,7 +55,9 @@ class LoginView extends React.Component<any, any> {
                         autoFocus
                         id="email"
                         label="Email"
+                        type="email"
                         margin="normal"
+                        required
                         onChange={this.handleInputChange}
                     />
                     <TextField
@@ -63,6 +65,7 @@ class LoginView extends React.Component<any, any> {
                         label="Password"
                         type="password"
                         margin="normal"
+                        required
                         onChange={this.handleInputChange}
                         inputRef={this.submitField}
                     />
@@ -71,7 +74,7 @@ class LoginView extends React.Component<any, any> {
                         variant="raised"
                         color="primary"
                         className={classes.button}
-                        onClick={this.handleSubmit}
+                        type="submit"
                     >
                         <Typography color="inherit">Sign in</Typography>
                     </Button>
@@ -93,13 +96,15 @@ class LoginView extends React.Component<any, any> {
                         Sign in with Facebook
                     </Button>
                 </Paper>
-            </div>
+            </form>
         );
     }
 
-    private handleEnterKey = (event: any) => {
+    private handleEnterKey = (event: React.KeyboardEvent) => {
       if (!(event.target instanceof HTMLInputElement) || event.key !== "Enter") return;
-      return (event.target.id === this.submitField.current.id) ? this.handleSubmit() : this.submitField.current.focus();
+      if (event.target.id !== this.submitField.current.id) {
+        this.submitField.current.focus();
+      }
     }
 
     private handleInputChange = event => {
@@ -112,7 +117,8 @@ class LoginView extends React.Component<any, any> {
         });
     }
 
-    private handleSubmit = async () => {
+    private handleSubmit = async (event: React.FormEvent) => {
+        event.preventDefault();
         try {
             await ApiService.write.login({email: this.state.email, password: this.state.password} as global.IUserContract);
             this.props.history.push("/");
