@@ -18,6 +18,14 @@ export default class Piece implements Majavashakki.IPiece {
         return false
     }
 
+    public isBlack() {
+        return this.color === Majavashakki.PieceColor.Black
+    }
+
+    public isWhite() {
+        return this.color === Majavashakki.PieceColor.White
+    }
+
     public clone(): Piece {
         const piece = new Piece(this.color, this.position, this.type)
         piece.hasMoved = piece.hasMoved
