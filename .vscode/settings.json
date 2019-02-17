@@ -1,4 +1,7 @@
 {
     "files.trimTrailingWhitespace": true,
-    "editor.tabSize": 2
+    "editor.tabSize": 2,
+    "typescript.preferences.quoteStyle": "double",
+    "typescript.format.enable": true,
+    "typescript.validate.enable": true
 }
