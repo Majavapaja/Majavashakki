@@ -23,6 +23,18 @@ html, input {
     sans-serif;
 }
 
+@keyframes timangi {
+  0% {
+    transform: translateY(0vh);
+  }
+  75% {
+    transform: translateY(95vh);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
 html, body {
   height: 100%;
   margin: 0;
