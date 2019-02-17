@@ -5,6 +5,10 @@ import { doesMoveCauseCheck } from "./logic/Checkmate"
 import Pawn from "./pieces/Pawn"
 import King from "./pieces/King"
 import { isCheck, isCheckMate } from "./logic/Checkmate";
+import Queen from "./pieces/Queen";
+import Knight from "./pieces/Knight";
+import Bishop from "./pieces/Bishop";
+import Rook from "./pieces/Rook";
 
 export default class BoardBase implements Majavashakki.IBoard {
     public static readonly cols: string = "abcdefgh"
@@ -50,12 +54,40 @@ export default class BoardBase implements Majavashakki.IBoard {
         if (index !== -1) this.pieces.splice(index, 1);
     }
 
-    public isPromotion(dest: Majavashakki.IPosition, piece: Majavashakki.IPiece): boolean {
-        if (!piece || piece.type !== Majavashakki.PieceType.Pawn) return false
+    public promotePiece(pos: Majavashakki.IPosition, pieceType: Majavashakki.PieceType): Piece {
+        const piece = this.getPiece(pos)
+        this.removePiece(pos)
 
-        const pawn = piece as Pawn
-        if (pawn.isWhite() && dest.row === '1') return true
-        if (pawn.isBlack() && dest.row === '8') return true
+        if (pieceType === Majavashakki.PieceType.Queen) {
+            const queen = new Queen(piece.color, piece.position)
+            this.pieces.push(queen)
+            return queen
+        } else if (pieceType === Majavashakki.PieceType.Knight) {
+            const knight = new Knight(piece.color, piece.position)
+            this.pieces.push(knight)
+            return knight
+        } else if (pieceType === Majavashakki.PieceType.Rook) {
+            const rook = new Rook(piece.color, piece.position)
+            this.pieces.push(rook)
+            return rook
+        } else if (pieceType === Majavashakki.PieceType.Bishop) {
+            const bishop = new Bishop(piece.color, piece.position)
+            this.pieces.push(bishop)
+            return bishop
+        }
+    }
+
+    public isPromotion(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): boolean {
+        const piece = this.getPiece(start)
+
+        function isPawn(piece: Majavashakki.IPiece): piece is Pawn {
+            return piece.type === Majavashakki.PieceType.Pawn
+        }
+
+        if (!isPawn(piece)) return false
+
+        if (piece.isWhite() && destination.row === '8') return true
+        if (piece.isBlack() && destination.row === '1') return true
 
         return false
     }
@@ -112,6 +144,11 @@ export default class BoardBase implements Majavashakki.IBoard {
             return this.createError("Good thing chess rules prevents you from making this move, you would have lost otherwise.")
         }
 
+        if (this.isPromotion(start, destination)) {
+            move.result = Majavashakki.MoveType.Promotion
+            return move
+        }
+
         // Piece movement was valid
         if (destinationPiece) move.result = Majavashakki.MoveType.Capture
         else move.result = Majavashakki.MoveType.Move
@@ -119,7 +156,7 @@ export default class BoardBase implements Majavashakki.IBoard {
         return move
     }
 
-    public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
+    public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, promotionPiece?: Majavashakki.PieceType): Majavashakki.IMoveResponse {
         if (!start || !destination) return this.createError("Ah, movement without start or destination, philosophical.");
 
         const move = this.isValidMove(start, destination);
@@ -127,7 +164,7 @@ export default class BoardBase implements Majavashakki.IBoard {
             return move;
         }
 
-        const startPiece = this.getPiece(start);
+        let startPiece = this.getPiece(start);
 
         if (move.result === Majavashakki.MoveType.Enpassant) {
             // Remove target of en passant, which is in the destination of the previous move
@@ -144,6 +181,11 @@ export default class BoardBase implements Majavashakki.IBoard {
             rook.position.col = destination.col === "c" ? "d" : "f"; // If king moved to c, move rook to d
             rook.hasMoved = true;
         } else {
+            if (move.result === Majavashakki.MoveType.Promotion) {
+                if (!promotionPiece) return this.createError('You got a promotion, you should promote to something!')
+                startPiece = this.promotePiece(start, promotionPiece)
+            }
+
             this.removePiece(destination);
             startPiece.hasMoved = true;
         }

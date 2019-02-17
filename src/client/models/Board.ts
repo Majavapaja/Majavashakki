@@ -4,6 +4,9 @@ import Piece from "../../common/pieces/Piece"
 import BoardBase from "../../common/BoardBase"
 
 export default class Board extends BoardBase {
+    @observable
+    public pieces: Piece[]
+
     constructor(pieces?: Piece[], moveHistory?: Majavashakki.IPosition[][]) {
         super(pieces, moveHistory)
         // Decorate position in pieces, so it's changes will be noticed.
@@ -13,8 +16,15 @@ export default class Board extends BoardBase {
     }
 
     @action
-    public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): Majavashakki.IMoveResponse {
-        return super.move(start, destination)
+    public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, promotionPiece: Majavashakki.PieceType): Majavashakki.IMoveResponse {
+        return super.move(start, destination, promotionPiece)
+    }
+
+    @action
+    public promotePiece (start: Majavashakki.IPosition, pieceType: Majavashakki.PieceType): Piece {
+        const piece = super.promotePiece(start, pieceType)
+        decorate(piece, { position: observable })
+        return piece
     }
 
     @computed.struct

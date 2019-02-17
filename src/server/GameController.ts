@@ -99,7 +99,7 @@ export default {
 // move and returns the new game state and the result of the move
 async function applyMove(doc: IGameDocument, userId: string, data: any): Promise<[Game, Majavashakki.IMoveResponse]> {
   const game = Game.MapFromDb(doc)
-  const moveResult = await game.move(data.from, data.dest, userId)
+  const moveResult = await game.move(data.from, data.dest, userId, data.promotionType)
   if (moveResult.status !== Majavashakki.MoveStatus.Error) {
     game.changeTurn()
   }

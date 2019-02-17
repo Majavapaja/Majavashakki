@@ -38,10 +38,15 @@ const PositionType = t.exact(t.type({
   col: t.string,
 }))
 
-export const MoveRequestType = t.exact(t.type({
-  from: PositionType,
-  dest: PositionType,
-}))
+export const MoveRequestType = t.exact(t.intersection([
+  t.type({
+    from: PositionType,
+    dest: PositionType,
+  }),
+  t.partial({
+    promotionType: t.string,
+  }),
+]))
 
 // tslint:disable-next-line no-empty-interface
 export interface MoveRequest extends t.TypeOf<typeof MoveRequestType> {}

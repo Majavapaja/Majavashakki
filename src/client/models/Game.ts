@@ -60,10 +60,44 @@ export default class Game extends GameBase {
 
   @action
   public async move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string = this.currentUser.id): Promise<Majavashakki.IMoveResponse> {
-    const result = await super.move(start, destination, userId);
+    // :thinking:
+    const piece = this.board.getPiece(start)
+    let promotionPieceType
+
+    if (this.board.isPromotion(start, destination)) {
+        // Do temporary move so it looks good
+        piece.position = destination
+
+        // Wait a while so the pawn movement updates to UI before alerts stop code execution
+        await new Promise((resolve) => setTimeout(resolve, 200))
+
+        await new Promise((resolve) => {
+          const piises = piece.isWhite() ? '♕♘♖♗' : '♛♞♜♝'
+
+          while(!promotionPieceType) {
+            if (confirm(`Pawn promotion! Promote to Queen ${piises[0]}?`)) {
+              promotionPieceType = Majavashakki.PieceType.Queen
+            } else if (confirm(`Pawn promotion! Promote to Knight ${piises[1]}?`)) {
+              promotionPieceType = Majavashakki.PieceType.Knight
+            } else if (confirm(`Pawn promotion! Promote to Rook ${piises[2]}?`)) {
+              promotionPieceType = Majavashakki.PieceType.Rook
+            } else if (confirm(`Pawn promotion! Promote to Bishop ${piises[3]}?`)) {
+              promotionPieceType = Majavashakki.PieceType.Bishop
+            }
+          }
+
+          resolve()
+        })
+
+        alert(`You chose ${promotionPieceType}`)
+
+        piece.position = start
+    }
+
+    const result = await super.move(start, destination, userId, promotionPieceType);
 
     if (result.status === Majavashakki.MoveStatus.Success) {
-      await ApiService.write.makeMove(this.gameId, start, destination)
+      await ApiService.write.makeMove(this.gameId, start, destination, promotionPieceType)
     } else {
       this.error = result.error
     }
@@ -78,7 +112,7 @@ export default class Game extends GameBase {
   @action
   private onMoveResult = (move: Majavashakki.IMoveResponse) => {
     if (move.status === Majavashakki.MoveStatus.Success) {
-      this.board.move(move.start, move.destination)
+      this.board.move(move.start, move.destination, move.promotionType)
       this.error = ""
       this.changeTurn()
       this.isCheck = move.isCheck

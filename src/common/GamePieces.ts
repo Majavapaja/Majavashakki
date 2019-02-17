@@ -37,6 +37,7 @@ export interface IMoveResponse {
   error?: string;
   isCheck: boolean;
   isCheckmate: boolean;
+  promotionType: PieceType;
 }
 
 export enum PieceType {

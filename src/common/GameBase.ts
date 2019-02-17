@@ -37,7 +37,7 @@ export default abstract class GameBase implements Majavashakki.IGame {
     return true;
   }
 
-  public async move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string): Promise<Majavashakki.IMoveResponse> {
+  public async move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string, promotionPiece?: Majavashakki.PieceType): Promise<Majavashakki.IMoveResponse> {
     if (!this.doesUserOwnPiece(userId, start)) {
       return {
         status: Majavashakki.MoveStatus.Error,
@@ -51,7 +51,8 @@ export default abstract class GameBase implements Majavashakki.IGame {
         error: "Error 14: Not your turn!",
       } as Majavashakki.IMoveResponse
     }
-    return this.board.move(start, destination)
+
+    return this.board.move(start, destination, promotionPiece)
   }
 
   public getUserColor(userId: string) {
