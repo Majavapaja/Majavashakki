@@ -50,6 +50,7 @@ class SignUpView extends React.Component<any, any> {
                     label="Email"
                     type="email"
                     margin="normal"
+                    required={true}
                     onChange={this.handleInputChange}
                     inputRef={this.emailField}
                 />
@@ -57,6 +58,7 @@ class SignUpView extends React.Component<any, any> {
                     id="username"
                     label="Username"
                     margin="normal"
+                    required={true}
                     onChange={this.handleInputChange}
                     inputRef={this.nameField}
                 />
@@ -65,6 +67,8 @@ class SignUpView extends React.Component<any, any> {
                     label="Password"
                     type="password"
                     margin="normal"
+                    inputProps={{ minlength: 4 }}
+                    required={true}
                     onChange={this.handleInputChange}
                     inputRef={this.passwordField}
                 />
@@ -73,13 +77,15 @@ class SignUpView extends React.Component<any, any> {
                     label="Confirm password"
                     type="password"
                     margin="normal"
+                    inputProps={{ minlength: 4 }}
+                    required={true}
                     onChange={this.handleInputChange}
                     inputRef={this.submitField}
                 />
                 <Button
                     variant="raised"
                     color="primary"
-                    onClick={this.handleSubmit}
+                    type="submit"
                     className={classes.button}
                 >
                     <Typography color="inherit">Register</Typography>
@@ -88,7 +94,7 @@ class SignUpView extends React.Component<any, any> {
         )
 
         return (
-            <div className={classes.root}>
+            <form className={classes.root} onSubmit={this.handleSubmit}>
                 <Paper
                   className={classes.formContainer}
                   onKeyPress={this.handleEnterKey}
@@ -97,11 +103,11 @@ class SignUpView extends React.Component<any, any> {
                     <Typography color="error">{this.state.error}</Typography>
                     {!this.state.isLoading && form}
                 </Paper>
-            </div>
+            </form>
         );
     }
 
-    private handleEnterKey = (event: any) => {
+    private handleEnterKey = (event: React.KeyboardEvent) => {
       if (!(event.target instanceof HTMLInputElement) || event.key !== "Enter") return;
       switch (event.target.id) {
         case this.emailField.current.id:
@@ -110,8 +116,6 @@ class SignUpView extends React.Component<any, any> {
           return this.focusField(this.passwordField);
         case this.passwordField.current.id:
           return this.focusField(this.submitField);
-        default:
-          return this.handleSubmit();
       }
     }
 
@@ -119,7 +123,8 @@ class SignUpView extends React.Component<any, any> {
       fieldRef.current.focus();
     }
 
-    private handleSubmit = async () => {
+    private handleSubmit = async (event: React.SyntheticEvent) => {
+        event.preventDefault();
         if (this.state.password !== this.state.passwordConfirm) {
             this.setState({error: "Passwords don't match D:"})
         } else {
@@ -133,7 +138,7 @@ class SignUpView extends React.Component<any, any> {
         }
     }
 
-    private handleInputChange = event => {
+    private handleInputChange = (event: any) => {
         const target = event.target;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const id = target.id;
