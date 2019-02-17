@@ -47,12 +47,7 @@ export default {
     const body = validate<CreateGameRequest>(CreateGameRequestType, req.body)
     console.log(`Creating a new game '${body.title}'`);
 
-    const socket = SessionSocketMap[req.session.id];
     const game = await GameModel.findOrCreate(body.title)
-    if (socket) {
-      // Socket connection might not always be active e.g. from network error or during tests.
-      socket.broadcast.to(this.MainRoom).emit("game-created", game.title);
-    }
     return gameDocumentToApiResult(game)
   }),
 
