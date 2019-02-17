@@ -1,8 +1,9 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 import {TextField, Typography, withStyles, createStyles, Paper, Button} from "@material-ui/core";
-import ApiService from "../../common/ApiService";
 import Majava from "../../common/Majava";
+import { inject } from "mobx-react";
+import { IAppStore } from "client/models/AppContainer";
 
 const styles = createStyles({
     root: {
@@ -33,6 +34,7 @@ const styles = createStyles({
     },
 })
 
+@inject((stores: IAppStore) => ({api: stores.app.api}))
 class LoginView extends React.Component<any, any> {
   private submitField: any = React.createRef();
 
@@ -119,12 +121,8 @@ class LoginView extends React.Component<any, any> {
 
     private handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        try {
-            await ApiService.write.login({email: this.state.email, password: this.state.password} as global.IUserContract);
-            this.props.history.push("/");
-        } catch (error) {
-            this.setState({ error: error.message })
-        }
+        await this.props.api.write.login({email: this.state.email, password: this.state.password} as global.IUserContract);
+        this.props.history.push("/");
     }
 }
 

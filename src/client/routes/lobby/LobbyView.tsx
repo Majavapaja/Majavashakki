@@ -7,7 +7,7 @@ import { ApiGameInfo } from "../../../common/types";
 import { inject } from "mobx-react";
 import {IAppStore} from "../../models/AppContainer"
 
-@inject((stores: IAppStore) => ({game: stores.app.game}))
+@inject((stores: IAppStore) => ({game: stores.app.game, api: stores.app.api}))
 class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
   constructor(props: any) {
     super(props);
@@ -28,8 +28,8 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
 
   public async componentDidMount() {
     const [availableGames, myGames] = await Promise.all([
-      ApiService.read.availableGames(),
-      ApiService.read.myGames(),
+      this.props.api.read.availableGames(),
+      this.props.api.read.myGames(),
     ]);
 
     this.setState({ availableGames, myGames });
@@ -51,7 +51,9 @@ class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
 }
 
 // tslint:disable-next-line no-empty-interface
-interface ILobbyViewProps extends RouteComponentProps<any> {}
+interface ILobbyViewProps extends RouteComponentProps<any> {
+  api?: ApiService;
+}
 interface ILobbyViewState {
   newRoomForm: any,
   availableGames: ApiGameInfo[],

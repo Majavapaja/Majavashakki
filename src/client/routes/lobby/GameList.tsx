@@ -26,7 +26,10 @@ import { ApiGameInfo } from "../../../common/types";
 
 import Player1Avatar from "../../assets/player1.jpg"
 import Player2Avatar from "../../assets/player2.jpg"
+import { inject } from "mobx-react";
+import { IAppStore } from "client/models/AppContainer";
 
+@inject((stores: IAppStore) => ({game: stores.app.game, api: stores.app.api}))
 class GameList extends React.Component<IGameListProps, any> {
   constructor(props: any) {
     super(props);
@@ -98,7 +101,7 @@ class GameList extends React.Component<IGameListProps, any> {
   }
 
   private onRoomClick = async (game: ApiGameInfo) => {
-    await ApiService.write.joinGame(game.id)
+    await this.props.api.write.joinGame(game.id)
     this.props.history.push(`/game/${game.id}`)
   }
 }
@@ -106,6 +109,7 @@ class GameList extends React.Component<IGameListProps, any> {
 interface IGameListProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
   title: string,
   games: ApiGameInfo[],
+  api?: ApiService,
   openDialog: () => void,
 }
 

@@ -3,7 +3,10 @@ import { withRouter, RouteComponentProps } from "react-router-dom";
 import {TextField, WithStyles, withStyles, createStyles, Theme, Button, Typography} from "@material-ui/core";
 import ApiService from "../../common/ApiService";
 import { UserUpdateRequest } from "../../../common/types";
+import { inject } from "mobx-react";
+import { IAppStore } from "client/models/AppContainer";
 
+@inject((stores: IAppStore) => ({api: stores.app.api}))
 class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> {
   private submitField: any = React.createRef();
 
@@ -13,7 +16,7 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
   }
 
   public async componentDidMount() {
-    const {name, email} = await ApiService.read.user();
+    const {name, email} = await this.props.api.read.user();
     this.setState({name, email});
   }
 
@@ -67,7 +70,7 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
         name: this.state.name,
         email: this.state.email,
       }
-      await ApiService.write.user(payload);
+      await this.props.api.write.user(payload);
       this.props.history.push("/")
     }
   }
@@ -78,7 +81,9 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
   }
 }
 
-interface IProfileViewProps extends RouteComponentProps<any>, WithStyles<typeof styles> { }
+interface IProfileViewProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
+  api?: ApiService;
+}
 
 interface IProfileViewState  {
   name: string

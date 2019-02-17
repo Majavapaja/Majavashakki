@@ -2,7 +2,10 @@ import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField } from "@material-ui/core";
 import ApiService from "../../common/ApiService";
+import { inject } from "mobx-react";
+import { IAppStore } from "client/models/AppContainer";
 
+@inject((stores: IAppStore) => ({api: stores.app.api}))
 class NewGameForm extends React.Component<INewGameProps, INewGameState> {
   constructor(props: any) {
     super(props);
@@ -20,8 +23,8 @@ class NewGameForm extends React.Component<INewGameProps, INewGameState> {
     const gameTitle = this.cleanInput(this.state.newRoomForm.name);
 
     if (gameTitle) {
-      const game = await ApiService.write.game(gameTitle);
-      await ApiService.write.joinGame(game.id);
+      const game = await this.props.api.write.game(gameTitle);
+      await this.props.api.write.joinGame(game.id);
       this.props.history.push(`/game/${game.id}`)
     }
   }
@@ -70,6 +73,7 @@ class NewGameForm extends React.Component<INewGameProps, INewGameState> {
 
 interface INewGameProps extends RouteComponentProps<any> {
   open: boolean,
+  api?: ApiService,
   handleClose: () => void,
 }
 interface INewGameState {

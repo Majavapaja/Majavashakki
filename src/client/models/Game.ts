@@ -27,18 +27,20 @@ export default class Game extends GameBase {
   public board: BoardModel
   private socket: SocketIOClient.Socket
   private gameId: string
+  private readonly _api: ApiService;
 
-  constructor(title: string) {
+  constructor(title: string, api: ApiService) {
     super(title);
     this.isLoading = true
+    this._api = api;
   }
 
   @action
   public loadGame = async (gameId: string) => {
     this.isLoading = true
 
-    this.currentUser = await ApiService.read.user();
-    const gameEntity = await ApiService.read.game(gameId);
+    this.currentUser = await this._api.read.user();
+    const gameEntity = await this._api.read.game(gameId);
 
     const game = GameEntity.MapFromDb(gameEntity)
     this.title = game.title
@@ -97,7 +99,7 @@ export default class Game extends GameBase {
     const result = await super.move(start, destination, userId, promotionPieceType);
 
     if (result.status === Majavashakki.MoveStatus.Success) {
-      await ApiService.write.makeMove(this.gameId, start, destination, promotionPieceType)
+      await this._api.write.makeMove(this.gameId, start, destination, promotionPieceType)
     } else {
       this.error = result.error
     }

@@ -1,9 +1,9 @@
-import { observable, action, computed, decorate } from "mobx"
 import Game from "./Game"
+import ApiService from "../common/ApiService";
 
 export default class AppContainer {
-  public game = new Game("");
-  public notification
+  public api = new ApiService();
+  public game = new Game("", this.api);
 }
 
 export interface IAppStore {

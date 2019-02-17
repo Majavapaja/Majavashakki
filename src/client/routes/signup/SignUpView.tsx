@@ -1,9 +1,10 @@
 import * as React from "react";
 import { withRouter } from "react-router-dom";
 import {TextField, Typography, withStyles, createStyles, Paper, Button} from "@material-ui/core";
-import ApiService from "../../common/ApiService";
 
 import Majava from "../../common/Majava";
+import { inject } from "mobx-react";
+import { IAppStore } from "client/models/AppContainer";
 
 const styles = createStyles({
     root: {
@@ -25,6 +26,7 @@ const styles = createStyles({
     },
 })
 
+@inject((stores: IAppStore) => ({api: stores.app.api}))
 class SignUpView extends React.Component<any, any> {
   private emailField: any = React.createRef();
   private nameField: any = React.createRef();
@@ -67,7 +69,7 @@ class SignUpView extends React.Component<any, any> {
                     label="Password"
                     type="password"
                     margin="normal"
-                    inputProps={{ minlength: 4 }}
+                    inputProps={{ minLength: 4 }}
                     required={true}
                     onChange={this.handleInputChange}
                     inputRef={this.passwordField}
@@ -77,7 +79,7 @@ class SignUpView extends React.Component<any, any> {
                     label="Confirm password"
                     type="password"
                     margin="normal"
-                    inputProps={{ minlength: 4 }}
+                    inputProps={{ minLength: 4 }}
                     required={true}
                     onChange={this.handleInputChange}
                     inputRef={this.submitField}
@@ -129,12 +131,8 @@ class SignUpView extends React.Component<any, any> {
             this.setState({error: "Passwords don't match D:"})
         } else {
             this.setState({isLoading: true});
-            try {
-                await ApiService.write.register({email: this.state.email, name: this.state.username, password: this.state.password} as global.IUserContract);
-                this.props.history.push("/");
-            } catch (error) {
-                this.setState({isLoading: false, error: error.message})
-            }
+            await this.props.api.write.register({email: this.state.email, name: this.state.username, password: this.state.password} as global.IUserContract);
+            this.props.history.push("/");
         }
     }
 

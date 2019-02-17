@@ -6,7 +6,7 @@ const theme: Theme = createMuiTheme({
       main: "#B8733E",
       contrastText: "#FFF",
     },
-  }
+  },
   overrides: {
     MuiPaper: {
       elevation2: {

@@ -8,7 +8,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { withRouter } from "react-router-dom";
 import MajavapajaLogo from "./MajavapajaLogo";
-import ApiService from "./ApiService";
+import {IAppStore} from "../models/AppContainer"
+import { inject } from "mobx-react";
 
 const styles = createStyles({
   grow: {
@@ -70,6 +71,7 @@ class LoginMenu extends React.Component<any, any> {
   }
 }
 
+@inject((stores: IAppStore) => ({api: stores.app.api}))
 class NavigationBar extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -109,7 +111,7 @@ class NavigationBar extends React.Component<any, any> {
   }
 
   private init = async () => {
-    const result = await ApiService.read.user();
+    const result = await this.props.api.read.user();
     this.setState({ logged: !!result });
   }
 }
