@@ -15,7 +15,7 @@ from azure.mgmt.cosmosdb.models import DatabaseAccountKind, DatabaseAccountCreat
 from azure.mgmt.web import WebSiteManagementClient
 from azure.mgmt.web.models import AppServicePlan, SkuDescription, SkuName, Site, SiteConfig, ScmType, NameValuePair
 
-from cosmosdb import configure_collections, configure_database_with_shared_throughput
+from cosmosdb import configure_database_with_shared_throughput, configure_collections, delete_db
 
 from config import Mongo, Azure
 
@@ -29,15 +29,17 @@ async def main():
 
   db, keys, connection_string = setup_cosmosdb(cosmosdb_client, Azure.cosmosdb_name)
 
-  configure_collections(
+  delete_db(Mongo.new_database_name, keys.primary_master_key, db.document_endpoint)
+  delete_db(Mongo.database_name, keys.primary_master_key, db.document_endpoint)
+
+  configure_database_with_shared_throughput(
     Mongo.database_name,
-    Mongo.collections,
     keys.primary_master_key,
     db.document_endpoint
   )
-
-  configure_database_with_shared_throughput(
-    Mongo.new_database_name,
+  configure_collections(
+    Mongo.database_name,
+    Mongo.collections,
     keys.primary_master_key,
     db.document_endpoint
   )
