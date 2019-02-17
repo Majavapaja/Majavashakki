@@ -20,13 +20,13 @@ const roomRepo = GameRoomsRepository.getInstance();
 export default {
   getAvailableGames: jsonAPI<ApiGameInfo[]>(async req => {
     const games = await GameModel.getAvailableGames(req.user._id);
-    return games.map(formatGamesListResponse)
+    return games.filter(inProgress).map(formatGamesListResponse)
   }),
 
   getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
     const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
     const games = await GameModel.getGames(gameIds)
-    return games.map(formatGamesListResponse)
+    return games.filter(inProgress).map(formatGamesListResponse)
   }),
 
   getGame: jsonAPI<any>(async req => {
@@ -134,4 +134,9 @@ function gameDocumentToApiResult(doc: IGameDocument): IGame {
     isCheck: isCheck(board, doc.currentTurn),
     isCheckmate: isCheckMate(board, doc.currentTurn),
   }
+}
+
+function inProgress(doc: IGameDocument): boolean {
+  const board = Game.MapFromDb(doc).board
+  return !isCheckMate(board, doc.currentTurn)
 }
