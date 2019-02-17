@@ -131,7 +131,7 @@ class SignUpView extends React.Component<any, any> {
             this.setState({isLoading: true});
             try {
                 await ApiService.write.register({email: this.state.email, name: this.state.username, password: this.state.password} as global.IUserContract);
-                this.props.history.push("/login");
+                this.props.history.push("/");
             } catch (error) {
                 this.setState({isLoading: false, error: error.message})
             }

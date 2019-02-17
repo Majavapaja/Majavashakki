@@ -30,11 +30,27 @@ export default {
     const user = validate<RegisterRequest>(RegisterRequestType, req.body)
     console.log(`Registering user: ${user.email}`);
 
-    if (!await User.registerUser(user)) {
+    const registeredUser = await User.registerUser(user);
+
+    if (!registeredUser) {
       throw new Error("Couldn't create user")
     }
 
-    return { status: "OK" }
+    console.log(`Logging in user: ${registeredUser.email}`);
+
+    const promise = new Promise((resolve, reject) => {
+      req.login(registeredUser, loginError => {
+        if (loginError) {
+          console.log(`Login error ${loginError}`);
+          reject("Couldn't log in");
+        } else {
+          resolve({ status: "OK" });
+        }
+      })
+    });
+
+    return promise;
+
   }),
 
   loginUser: async (req, res, next) => {
