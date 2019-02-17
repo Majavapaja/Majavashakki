@@ -39,7 +39,7 @@ export default {
       throw new NotFoundError(`Game '${id}' not found`)
     }
 
-    socket.join(game.title)
+    socket.join(`game:${id}`)
     return gameDocumentToApiResult(game)
   }),
 
