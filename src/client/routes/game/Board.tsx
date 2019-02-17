@@ -1,7 +1,9 @@
 import * as React from "react";
-import { observer } from "mobx-react"
+import { observer, inject } from "mobx-react"
 import * as Majavashakki from "../../../common/GamePieces"
+import {IAppStore} from "../../models/AppContainer"
 
+@inject((stores: IAppStore) => ({game: stores.app.game}))
 @observer
 class Board extends React.Component<any, any> {
   constructor(props) {

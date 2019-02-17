@@ -25,13 +25,13 @@ export default props => (
     <Route
       exact
       path="/game/:gameId"
-      render={() => ( <GameView game={props.game} /> )}
+      component={GameView}
     />
 
     <Route
       exact
       path="/"
-      render={() => ( <LobbyView game={props.game} /> )}
+      component={LobbyView}
     />
 
     <Route

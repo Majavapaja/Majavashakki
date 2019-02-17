@@ -4,7 +4,10 @@ import GameList from "./GameList";
 import NewGameForm from "./NewGameForm";
 import ApiService from "../../common/ApiService";
 import { ApiGameInfo } from "../../../common/types";
+import { inject } from "mobx-react";
+import {IAppStore} from "../../models/AppContainer"
 
+@inject((stores: IAppStore) => ({game: stores.app.game}))
 class LobbyView extends React.Component<ILobbyViewProps, ILobbyViewState> {
   constructor(props: any) {
     super(props);

@@ -2,12 +2,14 @@ import * as React from "react"
 import { withRouter } from "react-router-dom"
 import { withStyles, createStyles } from "@material-ui/core/styles"
 import Board from "./Board"
-import { observer } from "mobx-react"
+import { observer, inject } from "mobx-react"
 import { Paper, Typography } from "@material-ui/core"
+import {IAppStore} from "../../models/AppContainer"
 
 import PlayerBadge from "./PlayerBadge"
 import EndScreen from "./EndScreen"
 
+@inject((stores: IAppStore) => ({game: stores.app.game}))
 @observer
 class GameView extends React.Component<any, any> {
   constructor(props) {

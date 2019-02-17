@@ -5,15 +5,18 @@ import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
 import theme from "./mui-theme";
 import { BrowserRouter } from "react-router-dom"
 import App from "./routes/App"
-import Game from "./models/Game"
+import AppContainer from "./models/AppContainer";
+import { Provider } from "mobx-react";
 
-const game = new Game();
+const app = new AppContainer();
 
 ReactDOM.render(
-  <BrowserRouter>
-    <MuiThemeProvider theme={theme}>
-      <App game={game} />
-    </MuiThemeProvider>
-  </BrowserRouter>,
+  <Provider app={app}>
+    <BrowserRouter>
+      <MuiThemeProvider theme={theme}>
+        <App />
+      </MuiThemeProvider>
+    </BrowserRouter>
+  </Provider>,
   document.querySelector("#app"),
 )
