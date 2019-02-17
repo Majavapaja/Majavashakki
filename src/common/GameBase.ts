@@ -7,6 +7,8 @@ export default abstract class GameBase implements Majavashakki.IGame {
   public playerIdWhite: string;
   public playerIdBlack: string;
   public board: BoardBase;
+  public isCheck: boolean;
+  public isCheckmate: boolean;
 
   constructor(title: string) {
     this.title = title;

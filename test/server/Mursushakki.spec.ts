@@ -75,23 +75,40 @@ describe("Mursushakki API", () => {
   it("should allow making moves in game", async () => {
     const player1 = mkHttpClient()
     const player2 = mkHttpClient()
+    let game, move
 
     // Join players to the game
     await registerAndLogin(player1, "Matti", "matti@example.com", "password123")
     await registerAndLogin(player2, "Teppo", "teppo@example.com", "s4l4s4n4")
-    const game = await player1("POST", "/api/games", { title: "A Game of Matti and Shakki" })
+    game = await player1("POST", "/api/games", { title: "A Game of Matti and Shakki" })
     await player1("POST", `/api/games/${game.id}/join`)
     await player2("POST", `/api/games/${game.id}/join`)
 
     // Make way for the queen!
     assert.strictEqual((await player1("POST", `/api/games/${game.id}/move`, {from: {col: "g", row: "2"}, dest: {col: "g", row: "4"}})).status, "success")
     assert.strictEqual((await player2("POST", `/api/games/${game.id}/move`, {from: {col: "e", row: "7"}, dest: {col: "e", row: "6"}})).status, "success")
-    assert.strictEqual((await player1("POST", `/api/games/${game.id}/move`, {from: {col: "f", row: "2"}, dest: {col: "f", row: "3"}})).status, "success")
-    assert.strictEqual((await player2("POST", `/api/games/${game.id}/move`, {from: {col: "d", row: "8"}, dest: {col: "h", row: "4"}})).status, "success")
 
-    // TODO: Properly indicate that checkmate has happened
-    const err = await player2("POST", `/api/games/${game.id}/move`, {from: {col: "e", row: "1"}, dest: {col: "f", row: "2"}})
-    assert.strictEqual(err.status, "error")
+    move = await player1("POST", `/api/games/${game.id}/move`, {from: {col: "f", row: "2"}, dest: {col: "f", row: "3"}})
+    assert.strictEqual(move.status, "success")
+    assert.strictEqual(move.isCheck, false)
+    assert.strictEqual(move.isCheckmate, false)
+
+    game = await player1("GET", `/api/games/get/${game.id}`)
+    assert.strictEqual(game.isCheck, false)
+    assert.strictEqual(game.isCheckmate, false)
+
+    move = await player2("POST", `/api/games/${game.id}/move`, {from: {col: "d", row: "8"}, dest: {col: "h", row: "4"}})
+    assert.strictEqual(move.status, "success")
+    assert.strictEqual(move.isCheck, true)
+    assert.strictEqual(move.isCheckmate, true)
+
+    // Game should be marked check and checkmate
+    game = await player1("GET", `/api/games/get/${game.id}`)
+    assert.strictEqual(game.isCheck, true)
+    assert.strictEqual(game.isCheckmate, true)
+
+    assert.strictEqual((await player2("POST", `/api/games/${game.id}/move`, {from: {col: "e", row: "1"}, dest: {col: "f", row: "2"}})).status, "error")
+
   })
 })
 

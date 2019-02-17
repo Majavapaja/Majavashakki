@@ -11,6 +11,8 @@ import {
 import * as Majavashakki from "../common/GamePieces"
 import { IMoveResponse } from "../common/GamePieces"
 import { IGame } from "../common/GamePieces"
+import BoardBase from "../common/BoardBase"
+import { isCheck, isCheckMate } from "../common/logic/Checkmate"
 import { ApiGameInfo } from "../common/types"
 
 const roomRepo = GameRoomsRepository.getInstance();
@@ -39,7 +41,9 @@ export default {
       throw new NotFoundError(`Game '${id}' not found`)
     }
 
-    socket.join(`game:${id}`)
+    if (socket) {
+      socket.join(`game:${id}`)
+    }
     return gameDocumentToApiResult(game)
   }),
 
@@ -99,6 +103,13 @@ async function applyMove(doc: IGameDocument, userId: string, data: any): Promise
   if (moveResult.status !== Majavashakki.MoveStatus.Error) {
     game.changeTurn()
   }
+
+  // Purkkkaaa koska ei jaksa korjata muualla
+  if (moveResult.status !== "error") {
+    if (typeof moveResult.isCheck === "undefined") moveResult.isCheck = false
+    if (typeof moveResult.isCheckmate === "undefined") moveResult.isCheckmate = false
+  }
+
   return [game, moveResult]
 }
 
@@ -111,14 +122,16 @@ function formatGamesListResponse(game: IGameDocument): ApiGameInfo {
   return {id: _id, title}
 }
 
-// XXX: This is nearly identical with Game.MapForDb
-function gameDocumentToApiResult(game: IGameDocument): IGame {
+function gameDocumentToApiResult(doc: IGameDocument): IGame {
+  const board = Game.MapFromDb(doc).board
   return {
-    id: game._id,
-    title: game.title,
-    board: game.board,
-    currentTurn: game.currentTurn,
-    playerIdBlack: game.playerIdBlack,
-    playerIdWhite: game.playerIdWhite,
+    id: doc._id,
+    title: doc.title,
+    board: doc.board,
+    currentTurn: doc.currentTurn,
+    playerIdBlack: doc.playerIdBlack,
+    playerIdWhite: doc.playerIdWhite,
+    isCheck: isCheck(board, doc.currentTurn),
+    isCheckmate: isCheckMate(board, doc.currentTurn),
   }
 }

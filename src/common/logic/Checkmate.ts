@@ -28,6 +28,9 @@ export function doesMoveCauseCheck(board: BoardBase, start: Majavashakki.IPositi
 
 export function isCheckMate(board: BoardBase, color: Majavashakki.PieceColor): boolean {
     // This is only checked if king is in check
+    if (!isCheck(board, color)) {
+        return false
+    }
 
     // 1. Can king move?
     const king = board.getKing(color);

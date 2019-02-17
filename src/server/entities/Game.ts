@@ -13,6 +13,8 @@ export default class Game extends GameBase {
         game.playerIdBlack = gameState.playerIdBlack;
         game.playerIdWhite = gameState.playerIdWhite;
         game.currentTurn = gameState.currentTurn
+        game.isCheck = gameState.isCheck
+        game.isCheckmate = gameState.isCheckmate
         return game;
     }
 

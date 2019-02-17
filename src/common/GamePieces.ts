@@ -8,6 +8,8 @@ export interface IGame {
   playerIdWhite?: string;
   playerIdBlack?: string;
   board: IBoard;
+  isCheck: boolean;
+  isCheckmate: boolean;
 }
 
 export interface IBoard {
@@ -32,7 +34,7 @@ export interface IMoveResponse {
   result: MoveType;
   start: IPosition;
   destination: IPosition;
-  error: string;
+  error?: string;
   isCheck: boolean;
   isCheckmate: boolean;
 }
