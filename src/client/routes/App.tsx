@@ -1,5 +1,4 @@
 import NavigationBar from "../common/NavigationBar";
-import Snackbar from "@material-ui/core/Snackbar";
 import GameView from "./game/GameView";
 import LoginView from "./login/LoginView";
 import LobbyView from "./lobby/LobbyView";
@@ -7,24 +6,14 @@ import ProfileView from "./profile/ProfileView";
 import * as React from "react";
 import { Route } from "react-router-dom";
 import SignUpView from "./signup/SignUpView";
-import { inject, observer } from "mobx-react";
-import {IAppStore} from "../models/AppContainer"
-import ApiService from "client/common/ApiService";
+import NotificationView from "../common/NotificationView";
 
-@inject((stores: IAppStore) => ({api: stores.app.api}))
-@observer
-export default class App extends React.Component<IAppProps, any> {
+export default class App extends React.Component<any, any> {
 
   public render() {
     return (
       <div>
-        {console.log(this.props)}
-        <Snackbar
-          open={this.props.api.error.show}
-          autoHideDuration={4000}
-          message={this.props.api.error.message}
-          onClose={this.props.api.error.close}
-        />
+        <NotificationView />
         <NavigationBar />
         <Route
           exact
@@ -58,7 +47,3 @@ export default class App extends React.Component<IAppProps, any> {
       </div>
   )}
 };
-
-interface IAppProps {
-  api: ApiService;
-}
