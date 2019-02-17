@@ -72,9 +72,9 @@ export default class Game extends GameBase {
         await new Promise((resolve) => setTimeout(resolve, 200))
 
         await new Promise((resolve) => {
-          const piises = piece.isWhite() ? '♕♘♖♗' : '♛♞♜♝'
+          const piises = piece.isWhite() ? "♕♘♖♗" : "♛♞♜♝"
 
-          while(!promotionPieceType) {
+          while (!promotionPieceType) {
             if (confirm(`Pawn promotion! Promote to Queen ${piises[0]}?`)) {
               promotionPieceType = Majavashakki.PieceType.Queen
             } else if (confirm(`Pawn promotion! Promote to Knight ${piises[1]}?`)) {

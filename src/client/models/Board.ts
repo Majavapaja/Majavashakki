@@ -21,7 +21,7 @@ export default class Board extends BoardBase {
     }
 
     @action
-    public promotePiece (start: Majavashakki.IPosition, pieceType: Majavashakki.PieceType): Piece {
+    public promotePiece(start: Majavashakki.IPosition, pieceType: Majavashakki.PieceType): Piece {
         const piece = super.promotePiece(start, pieceType)
         decorate(piece, { position: observable })
         return piece

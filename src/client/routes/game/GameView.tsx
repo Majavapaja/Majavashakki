@@ -70,10 +70,12 @@ class GameView extends React.Component<any, any> {
       let content
       if (game.isCheckmate) {
         const winner = game.currentTurn === "white" ? "black" : "white"
-        content = <React.Fragment>
-          <Typography variant="display2">The winner is {winner}</Typography>
-          <EndScreen />
-        </React.Fragment>
+        content = (
+          <React.Fragment>
+            <Typography variant="display2">The winner is {winner}</Typography>
+            <EndScreen />
+          </React.Fragment>
+        )
 
       } else if (game.isCheck) {
         content = <Typography variant="display2">Check!</Typography>

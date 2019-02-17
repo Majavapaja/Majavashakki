@@ -80,14 +80,14 @@ export default class BoardBase implements Majavashakki.IBoard {
     public isPromotion(start: Majavashakki.IPosition, destination: Majavashakki.IPosition): boolean {
         const piece = this.getPiece(start)
 
-        function isPawn(piece: Majavashakki.IPiece): piece is Pawn {
-            return piece.type === Majavashakki.PieceType.Pawn
+        function isPawn(henryPiece: Majavashakki.IPiece): henryPiece is Pawn {
+            return henryPiece.type === Majavashakki.PieceType.Pawn
         }
 
         if (!isPawn(piece)) return false
 
-        if (piece.isWhite() && destination.row === '8') return true
-        if (piece.isBlack() && destination.row === '1') return true
+        if (piece.isWhite() && destination.row === "8") return true
+        if (piece.isBlack() && destination.row === "1") return true
 
         return false
     }
@@ -182,7 +182,7 @@ export default class BoardBase implements Majavashakki.IBoard {
             rook.hasMoved = true;
         } else {
             if (move.result === Majavashakki.MoveType.Promotion) {
-                if (!promotionPiece) return this.createError('You got a promotion, you should promote to something!')
+                if (!promotionPiece) return this.createError("You got a promotion, you should promote to something!")
                 startPiece = this.promotePiece(start, promotionPiece)
             }
 

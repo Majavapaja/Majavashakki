@@ -3,17 +3,17 @@ import { withStyles, createStyles } from "@material-ui/core/styles"
 
 const styles = theme => ({
   root: {
-    width: '100vw',
-    height: '100vh',
-    position: 'fixed',
+    width: "100vw",
+    height: "100vh",
+    position: "fixed",
     top: 0,
-    left: 0
+    left: 0,
   },
   timangi: {
-    position: 'absolute',
-    pointerEvents: 'none',
-    animation: 'timangi 1.5s linear infinite'
-  }
+    position: "absolute",
+    pointerEvents: "none",
+    animation: "timangi 1.5s linear infinite",
+  },
 })
 
 const EndScreen = ({ classes }) => (
@@ -29,9 +29,11 @@ const EndScreen = ({ classes }) => (
             left: `${Math.random() * 100}%`,
             animationDelay: `0.${randomAnimationModifier}s`,
             fontSize: `${size}px`,
-            animationDuration: `1.${randomAnimationModifier}s`
+            animationDuration: `1.${randomAnimationModifier}s`,
           }}
-        >💎</i>
+        >
+          💎
+        </i>
       )
     })}
   </div>
