@@ -14,8 +14,8 @@ export default class ApiService {
   public static write = {
     game:     async (title: string) => await postIt<CreateGameRequest, Majavashakki.IGame>("api/games", {title}),
     joinGame: async (id: string) => await postIt<CreateGameRequest, Majavashakki.IGame>(`api/games/${id}/join`),
-    makeMove: async (id: string, from, dest, promotionType) => await postIt<any, Majavashakki.IMoveResponse>(`api/games/${id}/move`, {from, dest, promotionType}),
-    // TODO smarter responses from api?
+    makeMove: async (id: string, from: Majavashakki.IPosition, dest: Majavashakki.IPosition, promotionType: Majavashakki.PieceType) =>
+      await postIt<any, Majavashakki.IMoveResponse>(`api/games/${id}/move`, {from, dest, promotionType}),
     register: async (user: global.IUserContract) => await postIt<global.IUserContract, void>("api/user/register", user),
     login:    async (user: global.IUserContract) => await postIt<global.IUserContract, void>("api/login", user),
     user:     async (user: UserUpdateRequest) => await postIt<UserUpdateRequest, ApiUser>("api/user", user),
