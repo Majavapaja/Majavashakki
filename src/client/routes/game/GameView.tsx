@@ -33,7 +33,8 @@ class GameView extends React.Component<any, any> {
 
     return (
       <div className={classes.root}>
-        <Paper className={classes.gameContainer}>
+        <div className={classes.gameContainer}>
+        <Paper className={classes.paper}>
           <div className={classes.playersContainer}>
             <PlayerBadge
               player={{
@@ -41,6 +42,7 @@ class GameView extends React.Component<any, any> {
                 color: "white",
               }}
               isCurrentPlayer={game.currentTurn === "white"}
+              isWinner={game.isCheckmate && game.currentTurn === "white"}
             />
             <PlayerBadge
               player={{
@@ -48,13 +50,36 @@ class GameView extends React.Component<any, any> {
                 color: "black",
               }}
               isCurrentPlayer={game.currentTurn === "black"}
+              isWinner={game.isCheckmate && game.currentTurn === "black"}
             />
           </div>
           <Board game={this.props.game} gameName={game.title}/>
           {errorContainer}
         </Paper>
+        {this.renderCheckmateInfo()}
+        </div>
       </div>
     );
+  }
+
+  private renderCheckmateInfo() {
+    const {classes, game} = this.props
+
+    if (game.isCheckmate || game.isCheck) {
+      let content
+      if (game.isCheckmate) {
+        const winner = game.currentTurn === "white" ? "white" : "black"
+        content = <Typography variant="display2">The winner is {winner}</Typography>
+      } else if (game.isCheck) {
+        content = <Typography variant="display2">Check!</Typography>
+      }
+
+      return (
+        <Paper className={[classes.paper, classes.checkmateInfo].join(" ")}>
+          {content}
+        </Paper>
+      )
+    }
   }
 }
 
@@ -64,6 +89,13 @@ const styles = theme => ({
     height: "100vh",
     justifyContent: "center",
     alignItems: "flex-start",
+  },
+  paper: {
+    margin: theme.spacing.unit,
+    padding: theme.spacing.unit,
+  },
+  checkmateInfo: {
+    textAlign: "center",
   },
   gameContainer: {
     marginTop: theme.spacing.unit * 2,

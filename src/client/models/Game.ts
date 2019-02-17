@@ -19,6 +19,10 @@ export default class Game extends GameBase {
   public currentUser: global.IUserContract
   @observable
   public error: string
+  @observable
+  public isCheck: boolean
+  @observable
+  public isCheckmate: boolean
 
   public board: BoardModel
   private socket: SocketIOClient.Socket
@@ -77,6 +81,8 @@ export default class Game extends GameBase {
       this.board.move(move.start, move.destination)
       this.error = ""
       this.changeTurn()
+      this.isCheck = move.isCheck
+      this.isCheckmate = move.isCheckmate
     } else {
       this.error = move.error
     }

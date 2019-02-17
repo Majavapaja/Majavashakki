@@ -9,11 +9,11 @@ import classNames from "classnames"
 @observer
 class PlayerBadge extends React.Component<any, any> {
     public render() {
-        const { classes, player, isCurrentPlayer } = this.props
+        const { classes, player, isCurrentPlayer, isWinner } = this.props
 
         const rootClasses = classNames(
             classes.root,
-            { active: isCurrentPlayer },
+            { active: isCurrentPlayer, winner: isWinner },
         )
 
         return (
@@ -30,6 +30,10 @@ const styles = theme => ({
     root: {
         "&.active": {
             backgroundColor: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
+        },
+        "&.winner": {
+            backgroundColor: "green",
             color: theme.palette.primary.contrastText,
         },
     },
