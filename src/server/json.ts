@@ -37,6 +37,8 @@ export function jsonAPI<ResponseT>(handler: (req: Request) => Promise<ResponseT>
       } else if (e instanceof NotFoundError) {
         writeJSON(res, 404, {error: "Not Found", message: e.message})
       } else {
+        console.log(`Error handling request: ${req.path}`)
+        console.log(e)
         writeJSON(res, 500, isProd()
           ? {error: "Internal Server Error"}
           : {error: "Internal Server Error", message: e.message},
