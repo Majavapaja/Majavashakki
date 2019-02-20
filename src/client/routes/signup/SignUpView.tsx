@@ -31,13 +31,18 @@ class SignUpView extends React.Component<any, any> {
   private emailField: any = React.createRef();
   private nameField: any = React.createRef();
   private passwordField: any = React.createRef();
-  private submitField: any = React.createRef();
+  private passwordConfirmField: any = React.createRef();
 
     constructor(props: any) {
         super(props);
         this.state = {
             isLoading: false,
             error: "",
+            // Fields
+            email: "",
+            username: "",
+            password: "",
+            passwordConfirm: "",
         }
     }
 
@@ -51,6 +56,7 @@ class SignUpView extends React.Component<any, any> {
                     id="email"
                     label="Email"
                     type="email"
+                    value={this.state.email}
                     margin="normal"
                     required={true}
                     onChange={this.handleInputChange}
@@ -59,6 +65,7 @@ class SignUpView extends React.Component<any, any> {
                 <TextField
                     id="username"
                     label="Username"
+                    value={this.state.username}
                     margin="normal"
                     required={true}
                     onChange={this.handleInputChange}
@@ -68,6 +75,7 @@ class SignUpView extends React.Component<any, any> {
                     id="password"
                     label="Password"
                     type="password"
+                    value={this.state.password}
                     margin="normal"
                     inputProps={{ minLength: 4 }}
                     required={true}
@@ -76,13 +84,14 @@ class SignUpView extends React.Component<any, any> {
                 />
                 <TextField
                     id="passwordConfirm"
+                    value={this.state.passwordConfirm}
                     label="Confirm password"
                     type="password"
                     margin="normal"
                     inputProps={{ minLength: 4 }}
                     required={true}
                     onChange={this.handleInputChange}
-                    inputRef={this.submitField}
+                    inputRef={this.passwordConfirmField}
                 />
                 <Button
                     variant="raised"
@@ -117,7 +126,7 @@ class SignUpView extends React.Component<any, any> {
         case this.nameField.current.id:
           return this.focusField(this.passwordField);
         case this.passwordField.current.id:
-          return this.focusField(this.submitField);
+          return this.focusField(this.passwordConfirmField);
       }
     }
 
