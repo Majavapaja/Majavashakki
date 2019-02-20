@@ -1,7 +1,7 @@
 import * as Majavashakki from "../../common/GamePieces"
 import BoardBase from "../BoardBase";
 
-export default class Piece implements Majavashakki.IPiece {
+export default abstract class Piece implements Majavashakki.IPiece {
     public type: Majavashakki.PieceType
     public color: Majavashakki.PieceColor
     public position: Majavashakki.IPosition
@@ -14,9 +14,8 @@ export default class Piece implements Majavashakki.IPiece {
         this.hasMoved = false
     }
 
-    public isValidMove(board: BoardBase, _destination: Majavashakki.IPosition): boolean {
-        return false
-    }
+    public abstract isValidMove(board: BoardBase, _destination: Majavashakki.IPosition): boolean
+    public abstract clone(): Piece
 
     public isBlack() {
         return this.color === Majavashakki.PieceColor.Black
@@ -24,12 +23,6 @@ export default class Piece implements Majavashakki.IPiece {
 
     public isWhite() {
         return this.color === Majavashakki.PieceColor.White
-    }
-
-    public clone(): Piece {
-        const piece = new Piece(this.color, this.position, this.type)
-        piece.hasMoved = piece.hasMoved
-        return piece
     }
 
     // TODO: Refactor this so it doesn't need parameters or if not possible make it static
