@@ -1,5 +1,5 @@
 /* Defines user schema and model */
-import {Document, Schema, SchemaOptions, Model, model, Types} from "mongoose";
+import {Document, Schema, Model, model, Types} from "mongoose";
 import Game from "../entities/Game";
 import * as Majavashakki from "../../common/GamePieces";
 import { schemaOptions } from "../mongo"

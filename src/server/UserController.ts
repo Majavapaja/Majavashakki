@@ -1,4 +1,4 @@
-import { User, IUserDocument } from "./data/User";
+import { User } from "./data/User";
 import passport from "passport";
 import { jsonAPI, validate, ValidationError } from "./json"
 import {

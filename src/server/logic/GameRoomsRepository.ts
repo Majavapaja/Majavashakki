@@ -1,7 +1,6 @@
 import Game from "../entities/Game";
 import {User} from "../data/User";
 import {GameModel, IGameDocument} from "../data/GameModel";
-import * as Majavashakki from "../../common/GamePieces"
 
 export class GameRoomsRepository {
     public static getInstance(): GameRoomsRepository {

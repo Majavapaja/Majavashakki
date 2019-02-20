@@ -1,7 +1,6 @@
 /* Defines user schema and model */
 
-import {Document, Schema, SchemaOptions, Model, model} from "mongoose";
-import Game from "../entities/Game"
+import {Document, Schema, Model, model} from "mongoose";
 import {RegisterRequest} from "../../common/types"
 import * as _ from "lodash";
 import bcrypt from "bcryptjs";

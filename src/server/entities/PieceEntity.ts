@@ -6,7 +6,6 @@ import Bishop from "../../common/pieces/Bishop";
 import Queen from "../../common/pieces/Queen";
 import King from "../../common/pieces/King";
 import Knight from "../../common/pieces/Knight";
-import BoardBase from "../../common/BoardBase";
 
 export default class PieceEntity {
     public static MapToDb(piece: Piece): Majavashakki.IPiece {

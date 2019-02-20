@@ -16,7 +16,6 @@ import {
   Input,
   InputAdornment,
   AppBar,
-  ListItemAvatar,
   Avatar,
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";

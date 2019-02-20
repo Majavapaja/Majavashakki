@@ -1,9 +1,6 @@
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import sio from "socket.io";
 import {getSession} from "./session";
-import {GameModel} from "./data/GameModel";
-import Game from "./entities/Game";
-import * as Majavashakki from "../common/GamePieces"
 import {User} from "./data/User"
 
 const roomRepo = GameRoomsRepository.getInstance()

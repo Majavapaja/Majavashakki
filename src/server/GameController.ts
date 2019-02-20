@@ -11,7 +11,6 @@ import {
 import * as Majavashakki from "../common/GamePieces"
 import { IMoveResponse } from "../common/GamePieces"
 import { IGame } from "../common/GamePieces"
-import BoardBase from "../common/BoardBase"
 import { isCheck, isCheckMate } from "../common/logic/Checkmate"
 import { ApiGameInfo } from "../common/types"
 
