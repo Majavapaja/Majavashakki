@@ -2,10 +2,8 @@ import { observable } from "mobx";
 
 export default class PopupNotification {
   @observable
-  private show: boolean = false;
-  // Case spesific user friendly errors maybe in version 2.0
-  public defaultMessage: string = "Did not work. Resistance is futile. All your inputs are belong to us!"
-  private message: string = this.defaultMessage;
+  public show: boolean = false;
+  public message?: string
   public close = () => this.show = false;
 
   public notify = (message: string): void => {
@@ -15,7 +13,6 @@ export default class PopupNotification {
 }
 
 export interface IPopupNotification {
-  defaultMessage: string;
   close: () => void;
 
   notify: (message: string) => void;
