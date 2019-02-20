@@ -183,6 +183,9 @@ export default class BoardBase implements Majavashakki.IBoard {
         } else {
             if (move.result === Majavashakki.MoveType.Promotion) {
                 if (!promotionPiece) return this.createError("You got a promotion, you should promote to something!")
+                if (promotionPiece === Majavashakki.PieceType.Pawn) return this.createError("You are getting screwed, that isn't a promotion")
+                if (promotionPiece === Majavashakki.PieceType.King) return this.createError("Are you trying to start a civil war? There can't be two kings")
+
                 startPiece = this.promotePiece(start, promotionPiece)
             }
 
