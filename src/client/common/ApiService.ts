@@ -32,8 +32,13 @@ export default class ApiService {
     try {
       return await request({method: "POST", url: `${base}/${api}`, body, json: true})
     } catch (ex) {
-      // TODO Case spesific user friendly errors maybe in version 2.0
-      this.error.show = true
+      if (isValidationError(ex)) {
+        const errors = ex.response.body.errors
+        this.error.notify(errors.join("\n"))
+      } else {
+        this.error.notify("Unexpected error occurred :(")
+      }
+      throw ex
     }
   }
 
@@ -41,4 +46,8 @@ export default class ApiService {
   private getIt = async <T> (api: string): Promise<T> => {
     return await request({method: "GET", url: `${base}/${api}`, json: true})
   }
+}
+
+function isValidationError(ex) {
+  return ex.name === "StatusCodeError" && ex.statusCode === 400
 }

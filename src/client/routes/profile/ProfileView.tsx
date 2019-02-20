@@ -70,8 +70,13 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
         name: this.state.name,
         email: this.state.email,
       }
-      await this.props.api.write.user(payload);
-      this.props.history.push("/")
+      try {
+        await this.props.api.write.user(payload);
+        this.props.history.push("/")
+      } catch (e) {
+        // Error happened! ApiService created error notification
+        // so we don't have to do anything here.
+      }
     }
   }
 

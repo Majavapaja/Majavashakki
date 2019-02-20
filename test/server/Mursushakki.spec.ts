@@ -42,6 +42,20 @@ describe("Mursushakki API", () => {
     }
   })
 
+  it("should return 400 and error message when supplying invalid email on profile page", async () => {
+    await registerAndLogin(http, "Mikko Mallikas", "mikko.mallikas@example.com", "password123")
+    try {
+      await http("POST", "/api/user", { name:  "Mikko Mallikas", email: "kelvoton maili" })
+      assert.fail("Updating user with invalid email should fail")
+    } catch (e) {
+      assert.strictEqual(e.name, "StatusCodeError")
+      assert.strictEqual(e.statusCode, 400)
+
+      const {body} = e.response
+      assert.strictEqual(body.errors[0], "Email 'kelvoton maili' is invalid (should contain at least @ character)")
+    }
+  })
+
   it("should show only games available for joining", async () => {
     const player1 = mkHttpClient()
     const player2 = mkHttpClient()

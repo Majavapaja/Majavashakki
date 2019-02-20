@@ -1,10 +1,35 @@
 import * as t from "io-ts"
 
 const minLength = n => s => s.length >= n
-const contains = x => xs => xs.indexOf(x) !== -1
+const contains = x => xs => xs.includes(x)
+
+type Validator<T> = (val: T) => boolean
+type ErrorFormatter<T> = (val: T) => string
+
+const mkValidator = <T>(
+  name: string,
+  baseType: t.Type<T>,
+  validators: Array<Validator<T>>,
+  mkMessage: ErrorFormatter<T>,
+) =>
+  new t.Type<T, T, unknown>(
+    name,
+    baseType.is,
+    (u, c) =>
+      baseType.validate(u, c).chain(val => {
+        const valid = validators.every(v => v(val))
+        return valid ? t.success(val) : t.failure(u, c, mkMessage(val))
+      }),
+    t.identity,
+  )
 
 export const UsernameType = t.refinement(t.string, minLength(1), "Username")
-export const EmailType = t.refinement(t.string, contains("@"), "Email")
+
+export const EmailType = mkValidator<string>(
+  "Email", t.string, [contains("@")],
+  val => `Email '${val}' is invalid (should contain at least @ character)`,
+)
+
 export const PasswordType = t.refinement(t.string, minLength(4), "Password")
 
 export const GameNameType = t.refinement(t.string, minLength(1), "GameName")
