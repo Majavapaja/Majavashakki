@@ -1,6 +1,6 @@
 import { User, IUserDocument } from "./data/User";
 import passport from "passport";
-import { jsonAPI, validate } from "./json"
+import { jsonAPI, validate, ValidationError } from "./json"
 import {
   ApiUser,
   RegisterRequestType, RegisterRequest,
@@ -22,8 +22,15 @@ export default {
   postUser: jsonAPI<void>(async req => {
     const userUpdate = validate<UserUpdateRequest>(UserUpdateRequestType, req.body)
     const {_id, name} = req.user
-    console.log(`Updating user ${_id}:`, userUpdate);
-    await User.findOneAndUpdate({_id}, userUpdate).exec()
+    try {
+      console.log(`Updating user ${_id}:`, userUpdate);
+      await User.findOneAndUpdate({_id}, userUpdate).exec()
+    } catch (e) {
+      if (isUniqueIndexViolation(e)) {
+        throw new ValidationError([`Email ${userUpdate.email}' is already in use`])
+      }
+      throw e
+    }
   }),
 
   registerUser: jsonAPI<any>(async req => {
@@ -77,4 +84,8 @@ export default {
     req.logout()
     res.redirect("/login")
   },
+}
+
+function isUniqueIndexViolation(e) {
+  return e.name === "MongoError" && e.codeName === "DuplicateKey"
 }
