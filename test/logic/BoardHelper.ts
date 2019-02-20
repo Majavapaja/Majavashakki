@@ -1,18 +1,22 @@
-import BoardBase from "../../src/common/BoardBase";
+import BoardBase from "../../src/common/BoardBase"
 import { PieceColor, PieceType, MoveStatus, IPosition } from "../../src/common/GamePieces"
-import Piece from "../../src/common/pieces/Piece";
-import Pawn from "../../src/common/pieces/Pawn";
-import Rook from "../../src/common/pieces/Rook";
-import Bishop from "../../src/common/pieces/Bishop";
-import Queen from "../../src/common/pieces/Queen";
-import King from "../../src/common/pieces/King";
-import Knight from "../../src/common/pieces/Knight";
+import Piece from "../../src/common/pieces/Piece"
+import Pawn from "../../src/common/pieces/Pawn"
+import Rook from "../../src/common/pieces/Rook"
+import Bishop from "../../src/common/pieces/Bishop"
+import Queen from "../../src/common/pieces/Queen"
+import King from "../../src/common/pieces/King"
+import Knight from "../../src/common/pieces/Knight"
+import * as Majavashakki from "../../src/common/GamePieces"
 
 export function moveSequence(board: BoardBase, moves: string[][]) {
     const results = [];
 
     for (const move of moves) {
-        const action = board.move(stringToPosition(move[0]), stringToPosition(move[1]));
+        let pieceType
+        if (move[2]) pieceType =  move[2] as Majavashakki.PieceType
+
+        const action = board.move(stringToPosition(move[0]), stringToPosition(move[1]), pieceType);
         if (action.status === MoveStatus.Success) {
             let result: string = action.result
             if (action.isCheckmate) result += "|checkmate"
