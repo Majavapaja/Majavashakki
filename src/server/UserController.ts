@@ -27,7 +27,7 @@ export default {
       await User.findOneAndUpdate({_id}, userUpdate).exec()
     } catch (e) {
       if (isUniqueIndexViolation(e)) {
-        throw new ValidationError([`Email ${userUpdate.email}' is already in use`])
+        throw new ValidationError([`Email ${userUpdate.email} is already in use`])
       }
       throw e
     }
@@ -35,29 +35,30 @@ export default {
 
   registerUser: jsonAPI<any>(async req => {
     const user = validate<RegisterRequest>(RegisterRequestType, req.body)
-    console.log(`Registering user: ${user.email}`);
 
-    const registeredUser = await User.registerUser(user);
+    try {
+      console.log(`Registering user: ${user.email}`);
+      const registeredUser = await User.registerUser(user);
 
-    if (!registeredUser) {
-      throw new Error("Couldn't create user")
+      console.log(`Logging in user: ${registeredUser.email}`);
+      const promise = new Promise((resolve, reject) => {
+        req.login(registeredUser, loginError => {
+          if (loginError) {
+            console.log(`Login error ${loginError}`);
+            reject("Couldn't log in");
+          } else {
+            resolve({ status: "OK" });
+          }
+        })
+      });
+
+      return promise;
+    } catch (e) {
+      if (isUniqueIndexViolation(e)) {
+        throw new ValidationError([`Email ${user.email}' is already in use`])
+      }
+      throw e
     }
-
-    console.log(`Logging in user: ${registeredUser.email}`);
-
-    const promise = new Promise((resolve, reject) => {
-      req.login(registeredUser, loginError => {
-        if (loginError) {
-          console.log(`Login error ${loginError}`);
-          reject("Couldn't log in");
-        } else {
-          resolve({ status: "OK" });
-        }
-      })
-    });
-
-    return promise;
-
   }),
 
   loginUser: async (req, res, next) => {
@@ -87,5 +88,5 @@ export default {
 }
 
 function isUniqueIndexViolation(e) {
-  return e.name === "MongoError" && e.codeName === "DuplicateKey"
+  return e.name === "MongoError" && e.code === 11000
 }

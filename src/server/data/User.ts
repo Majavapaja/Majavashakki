@@ -84,14 +84,10 @@ UserSchema.statics.registerUser = async (user: RegisterRequest): Promise<IUserDo
   const userObj = new User();
   const result = await User.findOne({ email: user.email }).exec();
 
-  if (!result) {
-    userObj.name = user.name
-    userObj.email = user.email
-    userObj.password = await bcrypt.hash(user.password, PASSWORD_SALT_ROUNDS)
-    return await userObj.save();
-  } else {
-    console.log(`User already exists ${result.email} name: ${result.name}, id: ${result._id}`);
-  }
+  userObj.name = user.name
+  userObj.email = user.email
+  userObj.password = await bcrypt.hash(user.password, PASSWORD_SALT_ROUNDS)
+  return await userObj.save();
 }
 
 UserSchema.statics.save = async (user: global.IUserContract): Promise<IUserDocument> => {

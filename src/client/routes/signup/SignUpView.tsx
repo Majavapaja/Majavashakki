@@ -131,8 +131,12 @@ class SignUpView extends React.Component<any, any> {
             this.setState({error: "Passwords don't match D:"})
         } else {
             this.setState({isLoading: true});
-            await this.props.api.write.register({email: this.state.email, name: this.state.username, password: this.state.password} as global.IUserContract);
-            this.props.history.push("/");
+            try {
+              await this.props.api.write.register({email: this.state.email, name: this.state.username, password: this.state.password} as global.IUserContract);
+              this.props.history.push("/");
+            } catch (e) {
+              this.setState({isLoading: false});
+            }
         }
     }
 
