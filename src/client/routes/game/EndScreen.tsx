@@ -1,7 +1,7 @@
 import * as React from "react"
-import { withStyles, createStyles } from "@material-ui/core/styles"
+import { withStyles, createStyles, Theme } from "@material-ui/core/styles"
 
-const styles = theme => ({
+const styles = (theme: Theme) => createStyles({
   root: {
     width: "100vw",
     height: "100vh",

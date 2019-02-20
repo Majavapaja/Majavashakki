@@ -1,6 +1,6 @@
 import * as React from "react"
 import { withRouter } from "react-router-dom"
-import { withStyles, createStyles } from "@material-ui/core/styles"
+import { withStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Board from "./Board"
 import { observer, inject } from "mobx-react"
 import { Paper, Typography } from "@material-ui/core"
@@ -92,7 +92,7 @@ class GameView extends React.Component<any, any> {
   }
 }
 
-const styles = theme => ({
+const styles = (theme: Theme) => createStyles({
   root: {
     display: "flex",
     height: "100vh",
