@@ -9,6 +9,7 @@ import Queen from "./pieces/Queen";
 import Knight from "./pieces/Knight";
 import Bishop from "./pieces/Bishop";
 import Rook from "./pieces/Rook";
+import { isDraw } from "./logic/Draw";
 
 export default class BoardBase implements Majavashakki.IBoard {
     public static readonly cols: string = "abcdefgh"
@@ -197,7 +198,10 @@ export default class BoardBase implements Majavashakki.IBoard {
         startPiece.position = destination;
         this.moveHistory.push([start, destination]);
 
-        const nextPlayerColor = startPiece.color === Majavashakki.PieceColor.White ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White;
+        const nextPlayerColor = startPiece.isWhite() ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White;
+
+        move.isDraw = isDraw(this, nextPlayerColor)
+
         if (!isCheck(this, nextPlayerColor)) {
             return move;
         }
