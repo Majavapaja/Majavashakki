@@ -1,5 +1,5 @@
 import BoardBase from "../BoardBase"
-import { PieceColor } from "../GamePieces"
+import { PieceColor, PieceType, MoveStatus } from "../GamePieces"
 
 export const isDraw = (board: BoardBase, playerColor: PieceColor) => {
   if (isStaleMate(board, playerColor)) return true
@@ -10,15 +10,19 @@ export const isDraw = (board: BoardBase, playerColor: PieceColor) => {
 }
 
 const isStaleMate = (board: BoardBase, playerColor): boolean => {
+  const boardCopy: BoardBase = new BoardBase()
+  boardCopy.pieces = board.pieces.map(piece => piece.clone())
+
   // TODO: See if this could be optimized
-  for (const piece of board.pieces) {
+  for (const piece of boardCopy.pieces) {
     // Only check the requested players moves
     if (piece.color !== playerColor) continue
 
     for (const col of BoardBase.cols) {
       for (const row of BoardBase.rows) {
         const destination = { row, col }
-        if (board.isValidMove(piece.position, destination)) {
+        const moveResult = boardCopy.move(piece.position, destination, PieceType.Queen)
+        if (moveResult.status === MoveStatus.Success) {
           return false
         }
       }
