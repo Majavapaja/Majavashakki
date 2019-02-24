@@ -4,12 +4,12 @@ import Piece from "./pieces/Piece"
 import { doesMoveCauseCheck } from "./logic/Checkmate"
 import Pawn from "./pieces/Pawn"
 import King from "./pieces/King"
-import { isCheck, isCheckMate } from "./logic/Checkmate";
-import Queen from "./pieces/Queen";
-import Knight from "./pieces/Knight";
-import Bishop from "./pieces/Bishop";
-import Rook from "./pieces/Rook";
-import { isDraw } from "./logic/Draw";
+import { isCheck, isCheckMate } from "./logic/Checkmate"
+import Queen from "./pieces/Queen"
+import Knight from "./pieces/Knight"
+import Bishop from "./pieces/Bishop"
+import Rook from "./pieces/Rook"
+import { isDraw } from "./logic/Draw"
 
 export default class BoardBase implements Majavashakki.IBoard {
     public static readonly cols: string = "abcdefgh"

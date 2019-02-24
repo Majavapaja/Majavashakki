@@ -1,5 +1,5 @@
-import BoardBase from "common/BoardBase"
-import { PieceColor } from "common/GamePieces"
+import BoardBase from "../BoardBase"
+import { PieceColor } from "../GamePieces"
 
 export const isDraw = (board: BoardBase, playerColor: PieceColor) => {
   if (isStaleMate(board, playerColor)) return true
