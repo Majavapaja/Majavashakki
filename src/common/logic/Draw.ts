@@ -1,5 +1,5 @@
 import BoardBase from "../BoardBase"
-import { PieceColor } from "../GamePieces"
+import { PieceColor, MoveStatus } from "../GamePieces"
 
 export const isDraw = (board: BoardBase, playerColor: PieceColor) => {
   if (isStaleMate(board, playerColor)) return true
@@ -18,7 +18,8 @@ const isStaleMate = (board: BoardBase, playerColor): boolean => {
     for (const col of BoardBase.cols) {
       for (const row of BoardBase.rows) {
         const destination = { row, col }
-        if (board.isValidMove(piece.position, destination)) {
+        const result = board.isValidMove(piece.position, destination)
+        if (result.status === MoveStatus.Success) {
           return false
         }
       }
