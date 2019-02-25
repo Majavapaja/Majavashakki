@@ -1,5 +1,5 @@
-import { factory } from "factory-girl";
-import BoardBase from "../../src/common/BoardBase";
+import { factory } from "factory-girl"
+import BoardBase from "../../src/common/BoardBase"
 import { PieceColor, PieceType } from "../../src/common/GamePieces"
 import { createPiece } from "./BoardHelper"
 
@@ -18,11 +18,11 @@ factory.define("board-check", BoardBase, {}, {
         model.pieces = [
             createPiece("b3", PieceType.Rook, PieceColor.Black, false, model),
             createPiece("c1", PieceType.King, PieceColor.White, false, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -41,11 +41,11 @@ factory.define("board-king-in-check", BoardBase, {}, {
             createPiece("d3", PieceType.Knight, PieceColor.Black, true, model),
             createPiece("d1", PieceType.King, PieceColor.White, true, model),
             createPiece("a1", PieceType.Rook, PieceColor.White, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -63,11 +63,11 @@ factory.define("board-check-from-own-move", BoardBase, {}, {
             createPiece("d1", PieceType.King, PieceColor.White, true, model),
             createPiece("c1", PieceType.Rook, PieceColor.White, true, model),
             createPiece("a1", PieceType.Rook, PieceColor.Black, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -85,11 +85,11 @@ factory.define("board-check-enpassant", BoardBase, {}, {
             createPiece("b5", PieceType.Pawn, PieceColor.White, true, model),
             createPiece("a7", PieceType.Pawn, PieceColor.Black, false, model),
             createPiece("b7", PieceType.King, PieceColor.Black, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
 /*  Board Description
     ⚊⚊⚊♚⚊⚊⚊⚊
@@ -107,10 +107,55 @@ factory.define("board-check-castling", BoardBase, {}, {
             createPiece("a1", PieceType.Rook, PieceColor.White, false, model),
             createPiece("e1", PieceType.King, PieceColor.White, false, model),
             createPiece("d8", PieceType.King, PieceColor.Black, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
-export default factory;
+/*  Board Description
+    ⚊⚊⚊♚⚊⚊⚊⚊
+    ♙⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ♔⚊⚊⚊⚊⚊⚊⚊
+*/
+factory.define("board-check-promotion", BoardBase, {}, {
+    afterBuild: (model, attrs, buildOptions) => {
+        model.pieces = [
+            createPiece("a7", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("a1", PieceType.King, PieceColor.White, true, model),
+            createPiece("d8", PieceType.King, PieceColor.Black, true, model),
+        ]
+
+        return model
+    },
+})
+
+/*  Board Description
+    ♚♝⚊⚊⚊⚊⚊♖
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊♔⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+*/
+factory.define("board-check-two-kings", BoardBase, {}, {
+    afterBuild: (model, attrs, buildOptions) => {
+        model.pieces = [
+            createPiece("a8", PieceType.King, PieceColor.Black, true, model),
+            createPiece("b8", PieceType.Bishop, PieceColor.Black, true, model),
+            createPiece("b6", PieceType.King, PieceColor.White, true, model),
+            createPiece("h8", PieceType.Rook, PieceColor.White, true, model),
+        ]
+
+        return model
+    },
+})
+
+export default factory
