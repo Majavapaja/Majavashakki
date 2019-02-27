@@ -21,7 +21,8 @@ export function moveSequence(board: BoardBase, moves: string[][]) {
             let result: string = action.result
             if (action.isCheckmate) result += "|checkmate"
             else if (action.isCheck) result += "|check"
-            else if (action.isDraw) result += "|draw"
+
+            if (action.isDraw) result += "|draw"
 
             results.push(result);
         } else {
