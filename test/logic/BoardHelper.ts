@@ -22,7 +22,7 @@ export function moveSequence(board: BoardBase, moves: string[][]) {
             if (action.isCheckmate) result += "|checkmate"
             else if (action.isCheck) result += "|check"
 
-            if (action.isDraw) result += "|draw"
+            if (action.isDraw && !action.isCheckmate) result += "|draw"
 
             results.push(result);
         } else {

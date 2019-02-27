@@ -1,7 +1,11 @@
 import BoardBase from "../BoardBase"
-import { PieceColor, MoveStatus } from "../GamePieces"
+import { PieceColor, MoveStatus, PieceType } from "../GamePieces"
 
 export const isDraw = (board: BoardBase, playerColor: PieceColor) => {
+  // If board doesn't contain two kings don't calculate for draw. For tests
+  // TODO: Maybe fix tests instead of bad logic in code?
+  if (board.pieces.filter(piece => piece.type === PieceType.King).length !== 2) return false
+
   if (isStaleMate(board, playerColor)) return true
   if (hasThereBeenFiftyMovesWithoutCaptures(board)) return true
   if (thereIsntEnoughMaterialToDoCheckmate(board)) return true

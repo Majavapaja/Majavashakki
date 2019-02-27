@@ -128,6 +128,7 @@ export default class BoardBase implements Majavashakki.IBoard {
                 const pawn = startPiece as Pawn
                 if (pawn.isEnPassant(this, destination)) {
                     move.result = Majavashakki.MoveType.Enpassant
+                    // TODO: Can I cause a check to myself from enpassant?
                     return move
                 }
             } else if (startPiece.type === Majavashakki.PieceType.King) {
@@ -137,6 +138,7 @@ export default class BoardBase implements Majavashakki.IBoard {
                     return move
                 }
             }
+
             return this.createError("I see you are new at chess, you might check the rules first https://en.wikipedia.org/wiki/Chess#Rules")
         }
 
