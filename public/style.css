@@ -202,25 +202,24 @@ ul {
 }
 
 .board .cell .piece {
-  background: url(./sprites.png);
-  position: absolute;
-  width: 32px;
-  height: 32px;
-
+  background: url(/assets/sprites.png);
+  width: 100%;
+  height: 100%;
+  background-size: 600%;
 }
 
-.board .cell .piece.white.king { background-position: calc(0 * -32px) calc(0 * -32px); }
-.board .cell .piece.black.king { background-position: calc(0 * -32px) calc(1 * -32px); }
-.board .cell .piece.white.queen { background-position: calc(1 * -32px) calc(0 * -32px); }
-.board .cell .piece.black.queen { background-position: calc(1 * -32px) calc(1 * -32px); }
-.board .cell .piece.white.rook { background-position: calc(2 * -32px) calc(0 * -32px); }
-.board .cell .piece.black.rook { background-position: calc(2 * -32px) calc(1 * -32px); }
-.board .cell .piece.white.bishop { background-position: calc(3 * -32px) calc(0 * -32px); }
-.board .cell .piece.black.bishop { background-position: calc(3 * -32px) calc(1 * -32px); }
-.board .cell .piece.white.knight { background-position: calc(4 * -32px) calc(0 * -32px); }
-.board .cell .piece.black.knight { background-position: calc(4 * -32px) calc(1 * -32px); }
-.board .cell .piece.white.pawn { background-position: calc(5 * -32px) calc(0 * -32px); }
-.board .cell .piece.black.pawn { background-position: calc(5 * -32px) calc(1 * -32px); }
+.board .cell .piece.white.king { background-position: calc(0 * 20%) calc(0 * 100%); }
+.board .cell .piece.black.king { background-position: calc(0 * 20%) calc(1 * 100%); }
+.board .cell .piece.white.queen { background-position: calc(1 * 20%) calc(0 * 100%); }
+.board .cell .piece.black.queen { background-position: calc(1 * 20%) calc(1 * 100%); }
+.board .cell .piece.white.rook { background-position: calc(2 * 20%) calc(0 * 100%); }
+.board .cell .piece.black.rook { background-position: calc(2 * 20%) calc(1 * 100%); }
+.board .cell .piece.white.bishop { background-position: calc(3 * 20%) calc(0 * 100%); }
+.board .cell .piece.black.bishop { background-position: calc(3 * 20%) calc(1 * 100%); }
+.board .cell .piece.white.knight { background-position: calc(4 * 20%) calc(0 * 100%); }
+.board .cell .piece.black.knight { background-position: calc(4 * 20%) calc(1 * 100%); }
+.board .cell .piece.white.pawn { background-position: calc(5 * 20%) calc(0 * 100%); }
+.board .cell .piece.black.pawn { background-position: calc(5 * 20%) calc(1 * 100%); }
 
 .board .cell.selected { background: #0f0 !important; }
 .board .cell.targeted { background: #00f !important; }
