@@ -11,9 +11,3 @@ export default class PopupNotification {
     this.show = true
   }
 }
-
-export interface IPopupNotification {
-  close: () => void;
-
-  notify: (message: string) => void;
-}
