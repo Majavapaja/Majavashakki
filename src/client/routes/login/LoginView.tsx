@@ -1,50 +1,25 @@
 import * as React from "react";
-import { withRouter } from "react-router-dom";
-import {TextField, Typography, withStyles, createStyles, Paper, Button} from "@material-ui/core";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+import {TextField, Typography, withStyles, createStyles, Paper, Button, WithStyles} from "@material-ui/core";
 import Majava from "../../common/Majava";
-import { inject } from "mobx-react";
+import { observable } from "mobx";
+import { inject, observer } from "mobx-react";
 import { IAppStore } from "client/models/AppContainer";
+import UserStore from "client/models/UserStore";
 
-const styles = createStyles({
-    root: {
-        display: "flex",
-        height: "100vh",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    loginContainer: {
-        width: 500,
-        padding: 25,
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    facebookButton: {
-        backgroundColor: "#3B5998",
-        color: "#fff",
-    },
-    divider: {
-        border: "1px solid rgba(0,0,0,.1)",
-        width: "100%",
-        margin: "25px 0",
-    },
-    button: {
-        margin: "10px 0",
-    },
-})
-
-@inject((stores: IAppStore) => ({api: stores.app.api}))
-class LoginView extends React.Component<any, any> {
+@inject((stores: IAppStore) => ({userStore: stores.app.user}))
+@observer
+class LoginView extends React.Component<ILoginViewProps, any> {
   private submitField: any = React.createRef();
+  private loginStore = new LoginStore();
 
-  constructor(props: any) {
+  constructor(props: ILoginViewProps) {
         super(props);
         this.state = { }
     }
 
     public render() {
-        const { classes } = this.props
+        const classes = this.props.classes
         return (
             <form className={classes.root} onSubmit={this.handleSubmit}>
                 <Paper
@@ -52,7 +27,7 @@ class LoginView extends React.Component<any, any> {
                   onKeyPress={this.handleEnterKey}
                 >
                     <Majava />
-                    <Typography color="error">{this.state.error}</Typography>
+                    <Typography color="error">{this.loginStore.error}</Typography>
                     <TextField
                         autoFocus
                         id="email"
@@ -113,17 +88,53 @@ class LoginView extends React.Component<any, any> {
         const target = event.target;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const id = target.id;
-
-        this.setState({
-          [id]: value,
-        });
+        this.loginStore[id] = value;
     }
 
     private handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
-        await this.props.api.write.login({email: this.state.email, password: this.state.password} as global.IUserContract);
+        await this.props.userStore.login(this.loginStore.email, this.loginStore.password);
         this.props.history.push("/");
     }
 }
+
+interface ILoginViewProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
+    userStore: UserStore;
+}
+
+class LoginStore {
+    @observable public error?: string
+    @observable public email: string = ""
+    @observable public password: string = ""
+}
+
+const styles = createStyles({
+    root: {
+        display: "flex",
+        height: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    loginContainer: {
+        width: 500,
+        padding: 25,
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    facebookButton: {
+        backgroundColor: "#3B5998",
+        color: "#fff",
+    },
+    divider: {
+        border: "1px solid rgba(0,0,0,.1)",
+        width: "100%",
+        margin: "25px 0",
+    },
+    button: {
+        margin: "10px 0",
+    },
+})
 
 export default withStyles(styles)(withRouter(LoginView));
