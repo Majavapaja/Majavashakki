@@ -3,47 +3,22 @@ import { withRouter } from "react-router-dom";
 import {TextField, Typography, withStyles, createStyles, Paper, Button} from "@material-ui/core";
 
 import Majava from "../../common/Majava";
-import { inject } from "mobx-react";
+import { observable } from "mobx";
+import { inject, observer } from "mobx-react";
 import { IAppStore } from "client/models/AppContainer";
 
-const styles = createStyles({
-    root: {
-        display: "flex",
-        height: "100vh",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    formContainer: {
-        width: 500,
-        padding: 25,
-        display: "flex",
-        justifyContent: "center",
-        flexDirection: "column",
-        alignItems: "center",
-    },
-    button: {
-        margin: "10px 0",
-    },
-})
-
 @inject((stores: IAppStore) => ({api: stores.app.api}))
-class SignUpView extends React.Component<any, any> {
-  private emailField: any = React.createRef();
-  private nameField: any = React.createRef();
-  private passwordField: any = React.createRef();
-  private passwordConfirmField: any = React.createRef();
+@observer
+class SignUpView extends React.Component<any, never> {
+    private emailField: any = React.createRef();
+    private nameField: any = React.createRef();
+    private passwordField: any = React.createRef();
+    private passwordConfirmField: any = React.createRef();
+
+    private store: SignupStore = new SignupStore()
 
     constructor(props: any) {
         super(props);
-        this.state = {
-            isLoading: false,
-            error: "",
-            // Fields
-            email: "",
-            username: "",
-            password: "",
-            passwordConfirm: "",
-        }
     }
 
     public render() {
@@ -56,7 +31,7 @@ class SignUpView extends React.Component<any, any> {
                     id="email"
                     label="Email"
                     type="email"
-                    value={this.state.email}
+                    value={this.store.email}
                     margin="normal"
                     required={true}
                     onChange={this.handleInputChange}
@@ -65,7 +40,7 @@ class SignUpView extends React.Component<any, any> {
                 <TextField
                     id="username"
                     label="Username"
-                    value={this.state.username}
+                    value={this.store.username}
                     margin="normal"
                     required={true}
                     onChange={this.handleInputChange}
@@ -75,7 +50,7 @@ class SignUpView extends React.Component<any, any> {
                     id="password"
                     label="Password"
                     type="password"
-                    value={this.state.password}
+                    value={this.store.password}
                     margin="normal"
                     inputProps={{ minLength: 4 }}
                     required={true}
@@ -84,7 +59,7 @@ class SignUpView extends React.Component<any, any> {
                 />
                 <TextField
                     id="passwordConfirm"
-                    value={this.state.passwordConfirm}
+                    value={this.store.passwordConfirm}
                     label="Confirm password"
                     type="password"
                     margin="normal"
@@ -110,9 +85,9 @@ class SignUpView extends React.Component<any, any> {
                   className={classes.formContainer}
                   onKeyPress={this.handleEnterKey}
                 >
-                    <Majava animation={this.state.isLoading && "spin"}/>
-                    <Typography color="error">{this.state.error}</Typography>
-                    {!this.state.isLoading && form}
+                    <Majava animation={this.store.isLoading && "spin"}/>
+                    <Typography color="error">{this.store.error}</Typography>
+                    {!this.store.isLoading && form}
                 </Paper>
             </form>
         );
@@ -136,15 +111,20 @@ class SignUpView extends React.Component<any, any> {
 
     private handleSubmit = async (event: React.SyntheticEvent) => {
         event.preventDefault();
-        if (this.state.password !== this.state.passwordConfirm) {
-            this.setState({error: "Passwords don't match D:"})
+        this.store.error = undefined
+        if (this.store.password !== this.store.passwordConfirm) {
+            this.store.error = "Passwords don't match D:"
         } else {
-            this.setState({isLoading: true});
+            this.store.isLoading = true
             try {
-              await this.props.api.write.register({email: this.state.email, name: this.state.username, password: this.state.password} as global.IUserContract);
+              await this.props.api.write.register({
+                email: this.store.email,
+                name: this.store.username,
+                password: this.store.password,
+              } as global.IUserContract);
               this.props.history.push("/");
             } catch (e) {
-              this.setState({isLoading: false});
+              this.store.isLoading = false
             }
         }
     }
@@ -153,11 +133,37 @@ class SignUpView extends React.Component<any, any> {
         const target = event.target;
         const value = target.type === "checkbox" ? target.checked : target.value;
         const id = target.id;
-
-        this.setState({
-          [id]: value,
-        });
+        this.store[id] = value
     }
 }
+
+class SignupStore {
+  @observable public isLoading: boolean = false
+  @observable public error?: string
+  @observable public email: string = ""
+  @observable public username: string = ""
+  @observable public password: string = ""
+  @observable public passwordConfirm: string = ""
+}
+
+const styles = createStyles({
+    root: {
+        display: "flex",
+        height: "100vh",
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    formContainer: {
+        width: 500,
+        padding: 25,
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+    },
+    button: {
+        margin: "10px 0",
+    },
+})
 
 export default withStyles(styles)(withRouter(SignUpView));
