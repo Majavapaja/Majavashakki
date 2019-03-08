@@ -7,8 +7,8 @@ import UserStore from "client/models/UserStore";
 import { observable } from "mobx";
 
 class ProfileViewForm {
-  @observable email: string;
-  @observable name: string
+  @observable public email: string;
+  @observable public name: string
 }
 
 @inject((stores: IAppStore) => ({ userStore: stores.app.user }))

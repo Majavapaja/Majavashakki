@@ -3,16 +3,12 @@ import ApiService from "../common/ApiService";
 import { UserUpdateRequest } from "common/types";
 
 export default class UserStore {
-
-  @observable
-  name: string;
-
-  @observable
-  email: string;
+  @observable public name: string;
+  @observable public email: string;
 
   private _api: ApiService
 
-  constructor(api: ApiService){
+  constructor(api: ApiService) {
     this._api = api;
   }
 
