@@ -9,13 +9,12 @@ import UserStore from "client/models/UserStore";
 
 @inject((stores: IAppStore) => ({userStore: stores.app.user}))
 @observer
-class LoginView extends React.Component<ILoginViewProps, any> {
+class LoginView extends React.Component<ILoginViewProps, never> {
   private submitField: any = React.createRef();
   private loginStore = new LoginStore();
 
   constructor(props: ILoginViewProps) {
         super(props);
-        this.state = { }
     }
 
     public render() {
