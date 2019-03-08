@@ -1,23 +1,29 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import {TextField, WithStyles, withStyles, createStyles, Theme, Button, Typography} from "@material-ui/core";
-import ApiService from "../../common/ApiService";
-import { UserUpdateRequest } from "../../../common/types";
-import { inject } from "mobx-react";
+import { inject, observer } from "mobx-react";
 import { IAppStore } from "client/models/AppContainer";
+import UserStore from "client/models/UserStore";
+import { observable } from "mobx";
 
-@inject((stores: IAppStore) => ({api: stores.app.api}))
-class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> {
+class ProfileViewForm {
+  @observable email: string;
+  @observable name: string
+}
+
+@inject((stores: IAppStore) => ({ userStore: stores.app.user }))
+@observer
+class ProfileView extends React.Component<IProfileViewProps, never> {
   private submitField: any = React.createRef();
+  private form = new ProfileViewForm()
 
   constructor(props: IProfileViewProps) {
     super(props);
-    this.state = {name: "", email: ""}
-  }
 
-  public async componentDidMount() {
-    const {name, email} = await this.props.api.read.user();
-    this.setState({name, email});
+    console.log(this.props.userStore)
+
+    this.form.name = this.props.userStore.name
+    this.form.email = this.props.userStore.email
   }
 
   public render() {
@@ -32,7 +38,7 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
           id="name"
           label="Name"
           className={this.props.classes.textField}
-          value={this.state.name}
+          value={this.form.name}
           onChange={this.onInputChange}
           margin="normal"
         />
@@ -42,7 +48,7 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
           id="email"
           label="Email"
           className={this.props.classes.textField}
-          value={this.state.email}
+          value={this.form.email}
           onChange={this.onInputChange}
           margin="normal"
           inputRef={this.submitField}
@@ -61,22 +67,13 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
   }
 
   public onInputChange = ({target}) => {
-    this.setState({[target.id]: target.value} as IProfileViewState);
+    this.form[target.id] = target.value
   }
 
   public handleSubmit = async () => {
-    if (this.state.name && this.state.email) {
-      const payload: UserUpdateRequest = {
-        name: this.state.name,
-        email: this.state.email,
-      }
-      try {
-        await this.props.api.write.user(payload);
-        this.props.history.push("/")
-      } catch (e) {
-        // Error happened! ApiService created error notification
-        // so we don't have to do anything here.
-      }
+    if (this.form.name && this.form.email) {
+      await this.props.userStore.update(this.form.email, this.form.name)
+      this.props.history.push("/")
     }
   }
 
@@ -87,12 +84,7 @@ class ProfileView extends React.Component<IProfileViewProps, IProfileViewState> 
 }
 
 interface IProfileViewProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
-  api?: ApiService;
-}
-
-interface IProfileViewState  {
-  name: string
-  email: string
+  userStore: UserStore;
 }
 
 const styles = (theme: Theme) => createStyles({

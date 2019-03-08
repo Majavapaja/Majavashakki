@@ -9,7 +9,7 @@ import Menu from "@material-ui/core/Menu";
 import { withRouter } from "react-router-dom";
 import MajavapajaLogo from "./MajavapajaLogo";
 import {IAppStore} from "../models/AppContainer"
-import { inject } from "mobx-react";
+import { inject, observer } from "mobx-react";
 
 const styles = createStyles({
   grow: {
@@ -71,7 +71,8 @@ class LoginMenu extends React.Component<any, any> {
   }
 }
 
-@inject((stores: IAppStore) => ({api: stores.app.api}))
+@inject((stores: IAppStore) => ({ api: stores.app.api, userStore: stores.app.user }))
+@observer
 class NavigationBar extends React.Component<any, any> {
   constructor(props: any) {
     super(props);
@@ -103,7 +104,8 @@ class NavigationBar extends React.Component<any, any> {
         <AppBar position="static">
           <Toolbar>
             <MajavapajaLogo />
-            {this.state.logged && <LoginMenu logout={this.logout} profile={this.profile} />}
+            {/* TODO: Show only if user is logged in */}
+            {<LoginMenu logout={this.logout} profile={this.profile} />}
           </Toolbar>
         </AppBar>
       </div>
