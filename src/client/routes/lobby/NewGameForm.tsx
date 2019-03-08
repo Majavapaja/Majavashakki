@@ -2,29 +2,26 @@ import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import { Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField } from "@material-ui/core";
 import ApiService from "../../common/ApiService";
+import { action, observable } from "mobx";
 import { inject } from "mobx-react";
 import { IAppStore } from "client/models/AppContainer";
+import { IGame } from "../../../common/GamePieces";
 
 @inject((stores: IAppStore) => ({api: stores.app.api}))
-class NewGameForm extends React.Component<INewGameProps, INewGameState> {
+class NewGameForm extends React.Component<INewGameProps, never> {
+  private store = new NewGameFormStore()
+
   constructor(props: any) {
     super(props);
-
-    this.state = {
-      newRoomForm: {
-        name: "",
-      },
-    };
   }
 
   public onSubmitNewRoom = async (event) => {
     event.preventDefault();
 
-    const gameTitle = this.cleanInput(this.state.newRoomForm.name);
+    const gameTitle = this.cleanInput(this.store.name);
 
     if (gameTitle) {
-      const game = await this.props.api.write.game(gameTitle);
-      await this.props.api.write.joinGame(game.id);
+      const game = await this.store.createAndJoin(gameTitle)
       this.props.history.push(`/game/${game.id}`)
     }
   }
@@ -33,13 +30,9 @@ class NewGameForm extends React.Component<INewGameProps, INewGameState> {
     return input.trim().replace("<", "").replace(">", "");
   }
 
-  public onInputChange = ({target}) => {
-    this.setState({
-      newRoomForm: {
-        ...this.state.newRoomForm,
-        [target.name]: target.value,
-      },
-    });
+  @action.bound
+  public onNameInputChange = ({target}) => {
+    this.store.name = target.value
   }
 
   public render() {
@@ -54,7 +47,7 @@ class NewGameForm extends React.Component<INewGameProps, INewGameState> {
             <TextField
               name="name"
               label="Room name"
-              onChange={this.onInputChange}
+              onChange={this.onNameInputChange}
             />
           </form>
         </DialogContent>
@@ -71,13 +64,23 @@ class NewGameForm extends React.Component<INewGameProps, INewGameState> {
   }
 }
 
+class NewGameFormStore {
+  @observable public name: string = ""
+
+  private api = new ApiService()
+
+  @action
+  public async createAndJoin(gameName: string): Promise<IGame> {
+    const game = await this.api.write.game(gameName);
+    await this.api.write.joinGame(game.id);
+    return game
+  }
+}
+
 interface INewGameProps extends RouteComponentProps<any> {
   open: boolean,
   api?: ApiService,
   handleClose: () => void,
-}
-interface INewGameState {
-  newRoomForm: any,
 }
 
 export default withRouter(NewGameForm);
