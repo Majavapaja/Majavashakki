@@ -9,9 +9,9 @@ if (process.env.MajavashakkiMongoConnectionString) {
 export class MongooseClient {
   private static hooksInitialized: boolean = false
 
-  public static InitMongoConnection() {
+  public static async InitMongoConnection() {
     console.log("MongooseClient connecting")
-    mongoose.connect(connectionString, {
+    await mongoose.connect(connectionString, {
       dbName: "Majavashakki",
       useNewUrlParser: true,
     });

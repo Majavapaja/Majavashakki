@@ -10,10 +10,10 @@ import Routes from "./Routes";
 
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 
-export const start = port => {
+export const start = async port => {
   const app = express();
   const appRootUrl = siteName ? `https://${siteName}.azurewebsites.net` : `http://localhost:${port}`;
-  MongooseClient.InitMongoConnection();
+  await MongooseClient.InitMongoConnection();
   initPassport(appRootUrl);
   enableSessions(app, SocketServer);
   initSockets();
@@ -30,7 +30,7 @@ export const start = port => {
     await MongooseClient.disconnect()
   }
 
-  return new Promise(resolve => {
+  return await new Promise(resolve => {
     server.listen(port, () => {
       console.log(`Server listening at port ${port}`);
       resolve(close)
