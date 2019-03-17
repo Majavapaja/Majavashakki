@@ -55,7 +55,7 @@ export default {
       return promise;
     } catch (e) {
       if (isUniqueIndexViolation(e)) {
-        throw new ValidationError([`Email ${user.email}' is already in use`])
+        throw new ValidationError([`Email '${user.email}' is already in use`])
       }
       throw e
     }

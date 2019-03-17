@@ -1,4 +1,5 @@
 import assert from "assert";
+import {AssertionError} from "assert"
 import request from "request-promise"
 import mongoose from "mongoose";
 
@@ -12,11 +13,11 @@ describe("Mursushakki API", () => {
 
   beforeEach(async () => {
     closeServer = await start(PORT)
+    await mongoose.connection.db.dropDatabase()
     http = mkHttpClient()
   })
 
   afterEach(async () => {
-    await mongoose.connection.db.dropDatabase()
     await closeServer()
   })
 
@@ -32,11 +33,27 @@ describe("Mursushakki API", () => {
     assert.strictEqual(user.email, "mikko.mallikas@example.com")
   })
 
+  it("should return nvalidation error if registering with duplicate email", async () => {
+    const email = "mikko.mallikas@example.com"
+
+    const success = await http("POST", "/api/user/register", { name: "Eka Mallikas", email, password: "password123" })
+    assert.strictEqual(success.status, "OK")
+
+    try {
+      const failure = await http("POST", "/api/user/register", { name: "Toka Mallikas", email, password: "foobar!" })
+      assert.fail("Duplicate registration should have thrown ValidationError")
+    } catch (e) {
+      if (e instanceof AssertionError) throw e
+      assertValidation(e, [`Email '${email}' is already in use`])
+    }
+  })
+
   it("should return 401 on invalid login", async () => {
     try {
       await http("POST", "/api/login", { email: "doesnotexist@example.com", password: "password123" })
       assert.fail("Login should have thrown because of invalid credentials")
     } catch (e) {
+      if (e instanceof AssertionError) throw e
       assert.strictEqual(e.name, "StatusCodeError")
       assert.strictEqual(e.statusCode, 401)
     }
@@ -48,11 +65,8 @@ describe("Mursushakki API", () => {
       await http("POST", "/api/user", { name:  "Mikko Mallikas", email: "kelvoton maili" })
       assert.fail("Updating user with invalid email should fail")
     } catch (e) {
-      assert.strictEqual(e.name, "StatusCodeError")
-      assert.strictEqual(e.statusCode, 400)
-
-      const {body} = e.response
-      assert.strictEqual(body.errors[0], "Email 'kelvoton maili' is invalid (should contain at least @ character)")
+      if (e instanceof AssertionError) throw e
+      assertValidation(e, ["Email 'kelvoton maili' is invalid (should contain at least @ character)"])
     }
   })
 
@@ -126,6 +140,12 @@ describe("Mursushakki API", () => {
   })
 })
 
+function assertValidation(e: any, errors: string[]) {
+  assert.strictEqual(e.name, "StatusCodeError")
+  assert.strictEqual(e.statusCode, 400)
+  assert.deepStrictEqual(e.response.body.errors, errors)
+}
+
 async function registerAndLogin(http: HttpClient, name: string, email: string, password: string): Promise<any> {
   const registerResult = await http("POST", "/api/user/register", { name, email, password })
   assert.strictEqual(registerResult.status, "OK")
@@ -134,6 +154,7 @@ async function registerAndLogin(http: HttpClient, name: string, email: string, p
     await http("POST", "/api/login", { email, password })
     assert.fail("Login should have thrown because of redirect")
   } catch (e) {
+    if (e instanceof AssertionError) throw e
     assert.strictEqual(e.name, "StatusCodeError")
     assert.strictEqual(e.statusCode, 302)
   }

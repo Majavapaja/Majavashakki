@@ -80,13 +80,11 @@ UserSchema.statics.findOrCreate = async (facebookId: string): Promise<IUserDocum
 };
 
 UserSchema.statics.registerUser = async (user: RegisterRequest): Promise<IUserDocument | undefined> => {
-  const userObj = new User();
-  const result = await User.findOne({ email: user.email }).exec();
-
-  userObj.name = user.name
-  userObj.email = user.email
-  userObj.password = await bcrypt.hash(user.password, PASSWORD_SALT_ROUNDS)
-  return await userObj.save();
+  const doc = new User();
+  doc.name = user.name
+  doc.email = user.email
+  doc.password = await bcrypt.hash(user.password, PASSWORD_SALT_ROUNDS)
+  return await doc.save();
 }
 
 UserSchema.statics.save = async (user: global.IUserContract): Promise<IUserDocument> => {
