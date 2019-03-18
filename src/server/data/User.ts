@@ -49,11 +49,6 @@ export let UserSchema: Schema = new Schema({
   collection: "users",
 }));
 
-UserSchema.pre("save", (next) => {
-  // Hash / Salt 'n' shit?
-  next();
-});
-
 // Statics can be called straight from the model (find, search, create)
 
 // TODO passport session doesn't get methods set by mongoose for IUserDocument instances via UserSchema.methods...

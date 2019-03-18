@@ -6,6 +6,7 @@
     ],
     "jsRules": {},
     "rules": {
+      "only-arrow-functions": false,
       "arrow-parens": false,
       "curly": [true, "ignore-same-line"],
       "eofline":false,

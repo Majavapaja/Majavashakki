@@ -4,20 +4,23 @@ import request from "request-promise"
 import mongoose from "mongoose";
 
 import { start } from "../../src/server/app"
+import {clearDatabase} from "../../src/server/mongo"
 
-const PORT = 3001
+const PORT = "3001"
 
 describe("Mursushakki API", () => {
   let closeServer
   let http: HttpClient
 
-  beforeEach(async () => {
+  before(async () => {
     closeServer = await start(PORT)
-    await mongoose.connection.db.dropDatabase()
+  })
+  beforeEach(async () => {
+    await clearDatabase()
     http = mkHttpClient()
   })
 
-  afterEach(async () => {
+  after(async () => {
     await closeServer()
   })
 

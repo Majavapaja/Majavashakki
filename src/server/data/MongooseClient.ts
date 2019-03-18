@@ -10,10 +10,10 @@ export class MongooseClient {
   private static hooksInitialized: boolean = false
 
   public static async InitMongoConnection() {
-    console.log("MongooseClient connecting")
     await mongoose.connect(connectionString, {
       dbName: "Majavashakki",
       useNewUrlParser: true,
+      useCreateIndex: true,
     });
     mongoose.set("debug", false);
 

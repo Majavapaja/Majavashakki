@@ -47,6 +47,7 @@ class LoginView extends React.Component<ILoginViewProps, never> {
                     />
 
                     <Button
+                        id="loginButton"
                         variant="raised"
                         color="primary"
                         className={classes.button}
@@ -58,6 +59,7 @@ class LoginView extends React.Component<ILoginViewProps, never> {
                     <Typography variant="subheading">or</Typography>
 
                     <Button
+                        id="registerButton"
                         variant="raised"
                         color="primary"
                         className={classes.button}

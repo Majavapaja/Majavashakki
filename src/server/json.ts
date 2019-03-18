@@ -1,8 +1,7 @@
 import * as t from "io-ts"
 import { PathReporter } from "io-ts/lib/PathReporter"
 import { RequestHandler, Request, Response } from "express"
-
-const isProd = () => process.env.NODE_ENV === "production"
+import {isProd} from "./util"
 
 export class NotFoundError {
   constructor(readonly message: string) {}

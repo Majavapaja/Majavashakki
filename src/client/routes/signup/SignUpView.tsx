@@ -69,6 +69,7 @@ class SignUpView extends React.Component<any, never> {
                     inputRef={this.passwordConfirmField}
                 />
                 <Button
+                    id="signupButton"
                     variant="raised"
                     color="primary"
                     type="submit"

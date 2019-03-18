@@ -11,6 +11,7 @@ class NotificationView extends React.Component<INotificationProps, any> {
   public render() {
     return (
       <Snackbar
+        id="notification-snackbar"
         open={this.props.api.error.show}
         autoHideDuration={6000}
         message={this.props.api.error.message}
