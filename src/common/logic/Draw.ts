@@ -1,5 +1,5 @@
 import BoardBase from "../BoardBase"
-import { PieceColor, MoveStatus, PieceType } from "../GamePieces"
+import { PieceColor, MoveStatus, PieceType, IPosition } from "../GamePieces"
 
 export const isDraw = (board: BoardBase, playerColor: PieceColor) => {
   // If board doesn't contain two kings don't calculate for draw. For tests
@@ -8,7 +8,7 @@ export const isDraw = (board: BoardBase, playerColor: PieceColor) => {
 
   if (isStaleMate(board, playerColor)) return true
   if (hasThereBeenFiftyMovesWithoutCaptures(board)) return true
-  if (thereIsntEnoughMaterialToDoCheckmate(board)) return true
+  if (!hasEnoughMaterialForCheckmate(board)) return true
 
   return false
 }
@@ -37,11 +37,33 @@ const hasThereBeenFiftyMovesWithoutCaptures = (board: BoardBase): boolean => {
   return false
 }
 
-const thereIsntEnoughMaterialToDoCheckmate = (board: BoardBase): boolean => {
-  // king versus king
-  // king and bishop versus king
-  // king and knight versus king
-  // king and bishop versus king and bishop with the bishops on the same color.
+const hasEnoughMaterialForCheckmate = (board: BoardBase): boolean => {
+  // With more than 4 pieces there should be enough pieces for checkmate
+  if (board.pieces.length > 4) return true
 
-  return false
+  // King versus king. (If two pieces left they must be kings)
+  if (board.pieces.length === 2) return false
+
+  const blackBishop = board.pieces.find(piece => piece.type === PieceType.Bishop && piece.isBlack())
+  const whiteBishop = board.pieces.find(piece => piece.type === PieceType.Bishop && piece.isWhite())
+  // king and bishop versus king and bishop with the bishops on the same color.
+  if (board.pieces.length === 4 && blackBishop && whiteBishop) {
+    const isOnWhite = (position: IPosition) => (
+      (["b", "d", "f", "h"].includes(position.col) && Number(position.row) % 2 !== 0) ||
+      (["a", "c", "e", "g"].includes(position.col) && Number(position.row) % 2 === 0)
+    )
+
+    if (
+      (isOnWhite(blackBishop.position) && isOnWhite(whiteBishop.position)) ||
+      (!isOnWhite(blackBishop.position) && !isOnWhite(whiteBishop.position))
+    ) return false
+  }
+
+  if (board.pieces.length !== 3) return true
+
+  const knight = board.pieces.find(piece => piece.type === PieceType.Knight)
+  // King and bishop versus king or King and knight vs king
+  if (blackBishop || whiteBishop || knight) return false
+
+  return true
 }
