@@ -6,6 +6,7 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 npm ci
 npm run lint
+npm run build
 TS_NODE_FILES=true npm test
 
 if [ ! -d "$repo/deployment/.venv" ]; then

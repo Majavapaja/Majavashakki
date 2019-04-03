@@ -36,6 +36,7 @@ export function browserSpec(name, func) {
 
 export async function mkBrowser() {
   return await puppeteer.launch({
+    args: runHeadless ? ["--no-sandbox", "--disable-setuid-sandbox"] : [],
     slowMo: runHeadless ? 0 : 50,
     headless: runHeadless,
     timeout: 2000,
