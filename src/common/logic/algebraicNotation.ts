@@ -21,7 +21,7 @@ export const getPieceType = (type: Majavashakki.PieceType): string => {
 export const getDisambiguation = (board: BoardBase, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): string => {
   const startPiece = board.getPiece(start)
   const possibleConflicts = board.pieces
-    .filter(piece => piece.type === startPiece.type && piece.color === startPiece.color)
+    .filter(piece => piece !== startPiece && piece.type === startPiece.type && piece.color === startPiece.color)
 
   if (possibleConflicts.length === 0) return ''
 
