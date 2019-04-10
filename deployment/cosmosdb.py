@@ -18,7 +18,7 @@ def configure_collections(db_name, collection_names, master_key, url_connection)
   for collection_name in collection_names:
     configure_collection(client, db, collection_name, desired_throughput=Mongo.collection_throughput)
 
-def set_db_throughput(client, db_self desired_throughput):
+def set_db_throughput(client, db_self, desired_throughput):
   offer = list(client.QueryOffers(f"SELECT * FROM c WHERE c.resource = '{db_self}'"))[0]
   current_throughput = offer["content"]["offerThroughput"]
   if current_throughput == desired_throughput:
