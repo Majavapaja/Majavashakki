@@ -63,6 +63,7 @@ async def main():
     Azure.resource_group,
     Azure.site_name,
     Site(
+      server_farm_id=plan.id,
       location=Azure.location,
       site_config=SiteConfig(
         app_settings=env_pairs,
