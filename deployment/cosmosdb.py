@@ -8,7 +8,7 @@ from config import Mongo
 log = logging.getLogger(__name__)
 
 def configure_database_with_shared_throughput(db_name, master_key, url_connection):
-  client = CosmosClient(url_connection=url_connection, auth={"masterKey": master_key}))
+  client = CosmosClient(url_connection=url_connection, auth={"masterKey": master_key})
   db = configure_db(client, db_name, {"offerThroughput": Mongo.throughput})
   set_db_throughput(client, db["_self"], Mongo.throughput)
 
