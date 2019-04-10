@@ -82,7 +82,7 @@ async def main():
       "git", "-c", "user.name='Majavashakki Deployer'", "-c", "user.email='majavashakki-deployer@majavapaja.fi'",
       "commit", "--allow-empty", "-m", "Empty commit to force app service to redeploy"
     )
-  await shell("git", "push", "--force", git_url, "HEAD:master")
+  await shell("git", "push", "--force", git_url, "HEAD:refs/heads/master")
 
   log.info("Done")
 
