@@ -10,14 +10,15 @@ import Knight from "./pieces/Knight"
 import Bishop from "./pieces/Bishop"
 import Rook from "./pieces/Rook"
 import { isDraw } from "./logic/Draw"
+import { getPieceType, getDisambiguation } from "./logic/algebraicNotation";
 
 export default class BoardBase implements Majavashakki.IBoard {
     public static readonly cols: string = "abcdefgh"
     public static readonly rows: string = "12345678"
     public pieces: Piece[]
-    public moveHistory: Majavashakki.IPosition[][]
+    public moveHistory: Majavashakki.IMove[]
 
-    constructor(pieces?: Piece[], moveHistory?: Majavashakki.IPosition[][]) {
+    constructor(pieces?: Piece[], moveHistory?: Majavashakki.IMove[]) {
         if (pieces && moveHistory) {
             this.pieces = pieces
             this.moveHistory = moveHistory
@@ -167,11 +168,40 @@ export default class BoardBase implements Majavashakki.IBoard {
             return move;
         }
 
-        let startPiece = this.getPiece(start);
+        let startPiece = this.getPiece(start)
+        let an: Majavashakki.AlgebraicNotation = getPieceType(startPiece.type)
+        an += getDisambiguation(this, start, destination)
+        if (move.result === Majavashakki.MoveType.Capture || move.result === Majavashakki.MoveType.Enpassant) {
+            an += 'x'
+
+            // If piece was a pawn and it was a capture, we need to add start file of the pawn at the start of the notation
+            if (startPiece.type === Majavashakki.PieceType.Pawn) {
+                an = start.col + an
+            }
+        } else if (move.result === Majavashakki.MoveType.Promotion && this.getPiece(destination)) {
+            // If move result is promotion and there is a piece at destination it means that the promotion was a capture
+            an += 'x'
+        }
+
+        an += destination.col + destination.row
+
+        // Add special moves at the end of the notation
+        if (move.result === Majavashakki.MoveType.Promotion) an += getPieceType(promotionPiece)
+        else if (move.result === Majavashakki.MoveType.Enpassant) an += 'e.p.'
+
+        if (move.result === Majavashakki.MoveType.Castling) {
+            // If castling destination is g, it is kingside castling
+            if (destination.col === 'g') an = '0-0'
+            // If castling destination is c, it is queenside castling
+            else if (destination.col === 'c') an = '0-0-0'
+        }
+
+        if (move.isCheckmate) an += '#'
+        else if (move.isCheck) an += '+'
 
         if (move.result === Majavashakki.MoveType.Enpassant) {
             // Remove target of en passant, which is in the destination of the previous move
-            this.removePiece(this.moveHistory[this.moveHistory.length - 1][1]);
+            this.removePiece(this.moveHistory[this.moveHistory.length - 1].destination);
         } else if (move.result === Majavashakki.MoveType.Castling) {
             startPiece.hasMoved = true;
 
@@ -196,9 +226,15 @@ export default class BoardBase implements Majavashakki.IBoard {
             startPiece.hasMoved = true;
         }
 
+        // Move history move must be created before actually moving the piece on board
+        this.moveHistory.push({
+            start,
+            destination,
+            an,
+        })
+
         // Move piece
         startPiece.position = destination;
-        this.moveHistory.push([start, destination]);
 
         const nextPlayerColor = startPiece.isWhite() ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White;
 

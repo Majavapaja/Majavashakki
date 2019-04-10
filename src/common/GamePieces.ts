@@ -14,7 +14,7 @@ export interface IGame {
 
 export interface IBoard {
   pieces: IPiece[];
-  moveHistory: IPosition[][];
+  moveHistory: IMove[];
 }
 
 export interface IPosition {
@@ -39,6 +39,15 @@ export interface IMoveResponse {
   isCheckmate: boolean;
   isDraw: boolean;
   promotionType: PieceType;
+}
+
+// Check https://en.wikipedia.org/wiki/Algebraic_notation_(chess)
+export type AlgebraicNotation = string
+
+export interface IMove {
+  start: IPosition;
+  destination: IPosition;
+  an: AlgebraicNotation;
 }
 
 export enum PieceType {

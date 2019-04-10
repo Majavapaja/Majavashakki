@@ -7,7 +7,7 @@ export const isDraw = (board: BoardBase, playerColor: PieceColor) => {
   if (board.pieces.filter(piece => piece.type === PieceType.King).length !== 2) return false
 
   if (isStaleMate(board, playerColor)) return true
-  if (hasThereBeenFiftyMovesWithoutCaptures(board)) return true
+  if (hasThereBeenFiftyMovesWithoutCapturesOrPawnMovement(board)) return true
   if (!hasEnoughMaterialForCheckmate(board)) return true
 
   return false
@@ -33,8 +33,9 @@ const isStaleMate = (board: BoardBase, playerColor): boolean => {
   return true
 }
 
-const hasThereBeenFiftyMovesWithoutCaptures = (board: BoardBase): boolean => {
-  return false
+const hasThereBeenFiftyMovesWithoutCapturesOrPawnMovement = (board: BoardBase): boolean => {
+  if (board.moveHistory.length < 50) return false
+
 }
 
 const hasEnoughMaterialForCheckmate = (board: BoardBase): boolean => {

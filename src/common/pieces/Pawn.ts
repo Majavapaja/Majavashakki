@@ -51,9 +51,9 @@ export default class Pawn extends Piece {
 
             if (targetPiece && targetPiece.type === "pawn" && targetPiece.color !== this.color) {
                 // Check if last move was double move and that its destination was targetPiece
-                const lastMove: Majavashakki.IPosition[] = board.moveHistory[board.moveHistory.length - 1]
-                const lastStart = this.positionToNumbers(lastMove[0])
-                const lastDest = this.positionToNumbers(lastMove[1])
+                const lastMove: Majavashakki.IMove = board.moveHistory[board.moveHistory.length - 1]
+                const lastStart = this.positionToNumbers(lastMove.start)
+                const lastDest = this.positionToNumbers(lastMove.destination)
 
                 const lastMoveDiff: number = Math.abs(lastDest.row - lastStart.row)
                 if (lastMoveDiff === 2 && board.comparePos(lastMove[1], targetPiece.position)) return true
