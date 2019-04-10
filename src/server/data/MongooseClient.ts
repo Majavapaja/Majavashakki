@@ -11,7 +11,7 @@ export class MongooseClient {
 
   public static async InitMongoConnection() {
     await mongoose.connect(connectionString, {
-      dbName: "Majavashakki",
+      dbName: "chess",
       useNewUrlParser: true,
       useCreateIndex: true,
     });

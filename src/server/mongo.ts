@@ -4,6 +4,7 @@ import {isProd} from "./util"
 
 export const schemaOptions = (overrides = {}): SchemaOptions => {
   return {
+    shardKey: { _id: "hashed" },
     timestamps: true,
     ...overrides,
   }
