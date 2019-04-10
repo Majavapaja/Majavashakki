@@ -62,6 +62,7 @@ class MajavapajaLogo extends React.Component<any, any> {
             "Exactly as programmed",
             "Hard work is money",
             "Hard code is money",
+            "Oispa kaljaa",
         ]
         const randomIndex = Math.floor(Math.random() * slogans.length)
         return slogans[randomIndex]
