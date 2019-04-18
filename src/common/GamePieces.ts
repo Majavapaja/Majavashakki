@@ -47,7 +47,7 @@ export type AlgebraicNotation = string
 export interface IMove {
   start: IPosition;
   destination: IPosition;
-  an: AlgebraicNotation;
+  algebraicNotation: AlgebraicNotation;
 }
 
 export enum PieceType {

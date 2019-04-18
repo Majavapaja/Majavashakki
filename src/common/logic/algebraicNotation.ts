@@ -53,35 +53,35 @@ const getDisambiguation = (board: BoardBase, start: Majavashakki.IPosition, dest
 export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveResponse): Majavashakki.AlgebraicNotation => {
   const startPiece = board.getPiece(move.start)
 
-  let an: Majavashakki.AlgebraicNotation = getPieceType(startPiece.type)
-  an += getDisambiguation(board, move.start, move.destination)
+  let notation: Majavashakki.AlgebraicNotation = getPieceType(startPiece.type)
+  notation += getDisambiguation(board, move.start, move.destination)
   if (move.result === Majavashakki.MoveType.Capture || move.result === Majavashakki.MoveType.Enpassant) {
-    an += 'x'
+    notation += 'x'
 
     // If piece was a pawn and it was a capture, we need to add start file of the pawn at the start of the notation
     if (startPiece.type === Majavashakki.PieceType.Pawn) {
-      an = move.start.col + an
+      notation = move.start.col + notation
     }
   } else if (move.result === Majavashakki.MoveType.Promotion && this.getPiece(move.destination)) {
     // If move result is promotion and there is a piece at destination it means that the promotion was a capture
-    an += 'x'
+    notation += 'x'
   }
 
-  an += move.destination.col + move.destination.row
+  notation += move.destination.col + move.destination.row
 
   // Add special moves at the end of the notation
-  if (move.result === Majavashakki.MoveType.Promotion) an += getPieceType(move.promotionType)
-  else if (move.result === Majavashakki.MoveType.Enpassant) an += 'e.p.'
+  if (move.result === Majavashakki.MoveType.Promotion) notation += getPieceType(move.promotionType)
+  else if (move.result === Majavashakki.MoveType.Enpassant) notation += 'e.p.'
 
   if (move.result === Majavashakki.MoveType.Castling) {
     // If castling destination is g, it is kingside castling
-    if (move.destination.col === 'g') an = '0-0'
+    if (move.destination.col === 'g') notation = '0-0'
     // If castling destination is c, it is queenside castling
-    else if (move.destination.col === 'c') an = '0-0-0'
+    else if (move.destination.col === 'c') notation = '0-0-0'
   }
 
-  if (move.isCheckmate) an += '#'
-  else if (move.isCheck) an += '+'
+  if (move.isCheckmate) notation += '#'
+  else if (move.isCheck) notation += '+'
 
-  return an
+  return notation
 }

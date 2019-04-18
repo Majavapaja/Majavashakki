@@ -169,7 +169,7 @@ export default class BoardBase implements Majavashakki.IBoard {
         }
 
         let startPiece = this.getPiece(start)
-        const an = getAlgebraicNotation(this, move)
+        const algebraicNotation = getAlgebraicNotation(this, move)
 
         if (move.result === Majavashakki.MoveType.Enpassant) {
             // Remove target of en passant, which is in the destination of the previous move
@@ -202,7 +202,7 @@ export default class BoardBase implements Majavashakki.IBoard {
         this.moveHistory.push({
             start,
             destination,
-            an,
+            algebraicNotation,
         })
 
         // Move piece
