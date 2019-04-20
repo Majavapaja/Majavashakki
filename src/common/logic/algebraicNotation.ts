@@ -31,9 +31,9 @@ const getDisambiguation = (board: BoardBase, start: Majavashakki.IPosition, dest
 
   if (conflicts.length === 0) return ''
 
-  // Check if the file conflicts
   let fileConflict
   conflicts.forEach(piece => {
+    if (fileConflict) return
     fileConflict = piece.position.col === startPiece.position.col
   })
 
@@ -41,6 +41,7 @@ const getDisambiguation = (board: BoardBase, start: Majavashakki.IPosition, dest
 
   let rankConflict
   conflicts.forEach(piece => {
+    if (rankConflict) return
     rankConflict = piece.position.row === startPiece.position.row
   })
 
