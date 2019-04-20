@@ -51,7 +51,7 @@ const getDisambiguation = (board: BoardBase, start: Majavashakki.IPosition, dest
   return startPiece.position.col + startPiece.position.row
 }
 
-export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveResponse): Majavashakki.AlgebraicNotation => {
+export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveResponse, promotionPiece?: Majavashakki.PieceType): Majavashakki.AlgebraicNotation => {
   const startPiece = board.getPiece(move.start)
 
   let notation: Majavashakki.AlgebraicNotation = getPieceType(startPiece.type)
@@ -63,7 +63,7 @@ export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveR
     if (startPiece.type === Majavashakki.PieceType.Pawn) {
       notation = move.start.col + notation
     }
-  } else if (move.result === Majavashakki.MoveType.Promotion && this.getPiece(move.destination)) {
+  } else if (move.result === Majavashakki.MoveType.Promotion && board.getPiece(move.destination)) {
     // If move result is promotion and there is a piece at destination it means that the promotion was a capture
     notation += 'x'
   }
@@ -71,7 +71,7 @@ export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveR
   notation += move.destination.col + move.destination.row
 
   // Add special moves at the end of the notation
-  if (move.result === Majavashakki.MoveType.Promotion) notation += getPieceType(move.promotionType)
+  if (move.result === Majavashakki.MoveType.Promotion) notation += getPieceType(promotionPiece)
   else if (move.result === Majavashakki.MoveType.Enpassant) notation += 'e.p.'
 
   if (move.result === Majavashakki.MoveType.Castling) {
