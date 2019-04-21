@@ -56,7 +56,7 @@ export default class Pawn extends Piece {
                 const lastDest = this.positionToNumbers(lastMove.destination)
 
                 const lastMoveDiff: number = Math.abs(lastDest.row - lastStart.row)
-                if (lastMoveDiff === 2 && board.comparePos(lastMove[1], targetPiece.position)) return true
+                if (lastMoveDiff === 2 && board.comparePos(lastMove.destination, targetPiece.position)) return true
             }
         }
     }
