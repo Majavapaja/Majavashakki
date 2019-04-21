@@ -10,7 +10,7 @@ import Knight from "./pieces/Knight"
 import Bishop from "./pieces/Bishop"
 import Rook from "./pieces/Rook"
 import { isDraw } from "./logic/Draw"
-import { getAlgebraicNotation } from "./logic/algebraicNotation"
+import { getAlgebraicNotation, setCheck } from "./logic/algebraicNotation"
 
 export default class BoardBase implements Majavashakki.IBoard {
     public static readonly cols: string = "abcdefgh"
@@ -169,7 +169,7 @@ export default class BoardBase implements Majavashakki.IBoard {
         }
 
         let startPiece = this.getPiece(start)
-        const algebraicNotation = getAlgebraicNotation(this, move, promotionPiece)
+        let algebraicNotation = getAlgebraicNotation(this, move, promotionPiece)
 
         if (move.result === Majavashakki.MoveType.Enpassant) {
             // Remove target of en passant, which is in the destination of the previous move
@@ -198,30 +198,25 @@ export default class BoardBase implements Majavashakki.IBoard {
             startPiece.hasMoved = true;
         }
 
-        // Move history move must be created before actually moving the piece on board
-        this.moveHistory.push({
-            start,
-            destination,
-            algebraicNotation,
-        })
-
         // Move piece
         startPiece.position = destination;
 
         const nextPlayerColor = startPiece.isWhite() ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White;
 
         move.isDraw = isDraw(this, nextPlayerColor)
+        move.isCheck = isCheck(this, nextPlayerColor)
+        // Only check for mate if game is in check
+        move.isCheckmate = move.isCheck && isCheckMate(this, nextPlayerColor)
 
-        if (!isCheck(this, nextPlayerColor)) {
-            return move;
-        }
+        // Set check and checkmate to the algebraic notation
+        algebraicNotation = setCheck(algebraicNotation, move)
 
-        move.isCheck = true
-
-        if (isCheckMate(this, nextPlayerColor)) {
-            move.isCheckmate = true
-            return move
-        }
+        // Move history move must be created before actually moving the piece on board
+        this.moveHistory.push({
+            start,
+            destination,
+            algebraicNotation,
+        })
 
         return move
     }

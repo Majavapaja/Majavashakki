@@ -81,6 +81,10 @@ export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveR
     else if (move.destination.col === 'c') notation = '0-0-0'
   }
 
+  return notation
+}
+
+export const setCheck = (notation: Majavashakki.AlgebraicNotation, move: Majavashakki.IMoveResponse): Majavashakki.AlgebraicNotation => {
   if (move.isCheckmate) notation += '#'
   else if (move.isCheck) notation += '+'
 
