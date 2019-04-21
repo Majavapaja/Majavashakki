@@ -129,6 +129,7 @@ factory.define("board-check-promotion", BoardBase, {}, {
             createPiece("a7", PieceType.Pawn, PieceColor.White, true, model),
             createPiece("a1", PieceType.King, PieceColor.White, true, model),
             createPiece("d8", PieceType.King, PieceColor.Black, true, model),
+            createPiece("h2", PieceType.Pawn, PieceColor.Black, false, model),
         ]
 
         return model
