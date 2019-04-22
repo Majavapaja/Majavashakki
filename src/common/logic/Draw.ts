@@ -7,7 +7,7 @@ export const isDraw = (board: BoardBase, playerColor: PieceColor) => {
   if (board.pieces.filter(piece => piece.type === PieceType.King).length !== 2) return false
 
   if (isStaleMate(board, playerColor)) return true
-  if (hasThereBeenFiftyMovesWithoutCapturesOrPawnMovement(board)) return true
+  if (!hasEnoughAction(board)) return true
   if (!hasEnoughMaterialForCheckmate(board)) return true
 
   return false
@@ -33,9 +33,19 @@ const isStaleMate = (board: BoardBase, playerColor): boolean => {
   return true
 }
 
-const hasThereBeenFiftyMovesWithoutCapturesOrPawnMovement = (board: BoardBase): boolean => {
-  if (board.moveHistory.length < 50) return false
+/** Check if there has been any captures or pawn movement within fifty moves */
+const hasEnoughAction = (board: BoardBase): boolean => {
+  if (board.moveHistory.length < 50) return true
 
+  const startIndex = board.moveHistory.length - 1
+  for (let i = startIndex; i > startIndex - 50; i--) {
+    const notation = board.moveHistory[i].algebraicNotation
+    if (notation.includes('x') || !/^[A-Z]/.test(notation)) {
+      return true
+    }
+  }
+
+  return false
 }
 
 const hasEnoughMaterialForCheckmate = (board: BoardBase): boolean => {
