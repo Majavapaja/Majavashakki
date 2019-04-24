@@ -8,8 +8,8 @@ export default class Bishop extends Piece {
     }
 
     public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
-        const start = this.positionToNumbers(this.position);
-        const dest = this.positionToNumbers(destination);
+        const start = this.currentPositionInNumbers();
+        const dest = Piece.positionToNumbers(destination);
 
         let rowDiff = Math.abs(dest.row - start.row);
         let colDiff = Math.abs(dest.col - start.col);
@@ -27,7 +27,7 @@ export default class Bishop extends Piece {
 
             if (rowDiff === 0 && colDiff === 0) break;
 
-            if (board.getPiece(this.numbersToPosition(dest))) return false;
+            if (board.getPiece(Piece.numbersToPosition(dest))) return false;
         }
 
         return true;

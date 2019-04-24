@@ -120,8 +120,8 @@ function getPiecePathToKing(board: BoardBase, king: King, piece: Piece): Majavas
 
     const pathToKing = [];
 
-    const start = piece.positionToNumbers(piece.position);
-    const dest = king.positionToNumbers(king.position);
+    const start = piece.currentPositionInNumbers();
+    const dest = king.currentPositionInNumbers();
 
     let rowDiff = Math.abs(dest.row - start.row);
     let colDiff = Math.abs(dest.col - start.col);
@@ -137,9 +137,9 @@ function getPiecePathToKing(board: BoardBase, king: King, piece: Piece): Majavas
 
         if (rowDiff <= 0 && colDiff <= 0) break;
 
-        const result = board.isValidMove(piece.position, king.numbersToPosition(dest));
+        const result = board.isValidMove(piece.position, Piece.numbersToPosition(dest));
         if (result.status === Majavashakki.MoveStatus.Success) {
-            pathToKing.push(king.numbersToPosition(dest));
+            pathToKing.push(Piece.numbersToPosition(dest));
         }
     }
 

@@ -8,8 +8,8 @@ export default class Rook extends Piece {
     }
 
     public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
-        const start = this.positionToNumbers(this.position);
-        const dest = this.positionToNumbers(destination);
+        const start = this.currentPositionInNumbers();
+        const dest = Piece.positionToNumbers(destination);
 
         if (dest.col !== start.col && dest.row !== start.row) return false;
 
@@ -21,7 +21,7 @@ export default class Rook extends Piece {
 
             if (start.col === dest.col && start.row === dest.row) break;
 
-            if (board.getPiece(this.numbersToPosition(dest))) return false;
+            if (board.getPiece(Piece.numbersToPosition(dest))) return false;
         }
 
         return true;

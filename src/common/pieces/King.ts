@@ -9,8 +9,8 @@ export default class King extends Piece {
     }
 
     public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
-        const start = this.positionToNumbers(this.position);
-        const dest = this.positionToNumbers(destination);
+        const start = this.currentPositionInNumbers();
+        const dest = Piece.positionToNumbers(destination);
 
         const rowDiff = Math.abs(dest.row - start.row);
         const colDiff = Math.abs(dest.col - start.col);
@@ -25,8 +25,8 @@ export default class King extends Piece {
         if (this.hasMoved) return false;
 
         // Check that destination is two columns away from king
-        const start = this.positionToNumbers(this.position);
-        const dest = this.positionToNumbers(destination);
+        const start = this.currentPositionInNumbers();
+        const dest = Piece.positionToNumbers(destination);
 
         const rowDiff = dest.row - start.row;
         const colDiff = dest.col - start.col;
@@ -55,17 +55,17 @@ export default class King extends Piece {
 
         // Move 1
         dest.col -= direction;
-        if (doesMoveCauseCheck(board, this.position, this.numbersToPosition(dest))) return false;
-        if (board.getPiece(this.numbersToPosition(dest))) return false;
+        if (doesMoveCauseCheck(board, this.position, Piece.numbersToPosition(dest))) return false;
+        if (board.getPiece(Piece.numbersToPosition(dest))) return false;
 
         // Move 2
         dest.col += direction;
-        if (doesMoveCauseCheck(board, this.position, this.numbersToPosition(dest))) return false;
-        if (board.getPiece(this.numbersToPosition(dest))) return false;
+        if (doesMoveCauseCheck(board, this.position, Piece.numbersToPosition(dest))) return false;
+        if (board.getPiece(Piece.numbersToPosition(dest))) return false;
 
         // Check that rook can move to "Move 1" position.
         dest.col -= direction;
-        if (!rook.isValidMove(board, this.numbersToPosition(dest))) return false;
+        if (!rook.isValidMove(board, Piece.numbersToPosition(dest))) return false;
 
         // Valid castling
         return true;

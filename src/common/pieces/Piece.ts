@@ -25,13 +25,15 @@ export default abstract class Piece implements Majavashakki.IPiece {
         return this.color === Majavashakki.PieceColor.White
     }
 
-    // TODO: Refactor this so it doesn't need parameters or if not possible make it static
-    public positionToNumbers(pos: Majavashakki.IPosition) {
-        return {col: BoardBase.cols.indexOf(pos.col), row: BoardBase.rows.indexOf(pos.row)};
-    }
+    public currentPositionInNumbers = () => Piece.positionToNumbers(this.position)
 
-    // TODO: Refactor this so it doesn't need parameters or if not possible make it static
-    public numbersToPosition(pos): Majavashakki.IPosition {
-        return {col: BoardBase.cols.charAt(pos.col), row: BoardBase.rows.charAt(pos.row)};
-    }
+    public static positionToNumbers = (position: Majavashakki.IPosition) => ({
+        col: BoardBase.cols.indexOf(position.col),
+        row: BoardBase.rows.indexOf(position.row),
+    })
+
+    public static numbersToPosition = (numbers: any): Majavashakki.IPosition => ({
+        col: BoardBase.cols.charAt(numbers.col),
+        row: BoardBase.rows.charAt(numbers.row),
+    })
 }

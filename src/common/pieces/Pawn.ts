@@ -8,8 +8,8 @@ export default class Pawn extends Piece {
     }
 
     public isValidMove(board: BoardBase, destination: Majavashakki.IPosition): boolean {
-        const start = this.positionToNumbers(this.position)
-        const dest = this.positionToNumbers(destination)
+        const start = this.currentPositionInNumbers()
+        const dest = Piece.positionToNumbers(destination)
 
         const rowDiff = dest.row - start.row
         const colDiff = dest.col - start.col
@@ -25,7 +25,7 @@ export default class Pawn extends Piece {
             if (!this.hasMoved && rowDiff === movementDirection * 2) {
                 // Ensure that double move is not blocked by piece
                 dest.row -= movementDirection
-                if (!board.getPiece(this.numbersToPosition(dest))) return true
+                if (!board.getPiece(Piece.numbersToPosition(dest))) return true
             }
 
             if (rowDiff === movementDirection) return true
@@ -35,8 +35,8 @@ export default class Pawn extends Piece {
     }
 
     public isEnPassant(board: BoardBase, destination: Majavashakki.IPosition): boolean {
-        const start = this.positionToNumbers(this.position)
-        const dest = this.positionToNumbers(destination)
+        const start = this.currentPositionInNumbers()
+        const dest = Piece.positionToNumbers(destination)
 
         const rowDiff = dest.row - start.row
         const colDiff = dest.col - start.col
@@ -47,13 +47,13 @@ export default class Pawn extends Piece {
         if (rowDiff === movementDirection && (colDiff === 1 || colDiff === -1)) {
             // Check if there is a piece below destination and that piece is enemy pawn
             dest.row -= movementDirection
-            const targetPiece = board.getPiece(this.numbersToPosition(dest))
+            const targetPiece = board.getPiece(Piece.numbersToPosition(dest))
 
             if (targetPiece && targetPiece.type === "pawn" && targetPiece.color !== this.color) {
                 // Check if last move was double move and that its destination was targetPiece
                 const lastMove: Majavashakki.IMove = board.moveHistory[board.moveHistory.length - 1]
-                const lastStart = this.positionToNumbers(lastMove.start)
-                const lastDest = this.positionToNumbers(lastMove.destination)
+                const lastStart = Piece.positionToNumbers(lastMove.start)
+                const lastDest = Piece.positionToNumbers(lastMove.destination)
 
                 const lastMoveDiff: number = Math.abs(lastDest.row - lastStart.row)
                 if (lastMoveDiff === 2 && board.comparePos(lastMove.destination, targetPiece.position)) return true
