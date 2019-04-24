@@ -33,7 +33,7 @@ export function moveSequence(board: BoardBase, moves: string[][]) {
     return results;
 }
 
-function stringToPosition(str): IPosition {
+export function stringToPosition(str): IPosition {
     if (!str || str.length !== 2) return null;
 
     const colIndex = BoardBase.cols.indexOf(str.charAt(0));
