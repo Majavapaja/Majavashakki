@@ -203,7 +203,6 @@ export default class BoardBase implements Majavashakki.IBoard {
 
         const nextPlayerColor = startPiece.isWhite() ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White;
 
-        move.isDraw = isDraw(this, nextPlayerColor)
         move.isCheck = isCheck(this, nextPlayerColor)
         // Only check for mate if game is in check
         move.isCheckmate = move.isCheck && isCheckMate(this, nextPlayerColor)
@@ -218,6 +217,8 @@ export default class BoardBase implements Majavashakki.IBoard {
             algebraicNotation,
         })
 
+        // Check draw after move has been added to moveHistory, because we need the latest move to be there
+        move.isDraw = isDraw(this, nextPlayerColor)
         return move
     }
 
