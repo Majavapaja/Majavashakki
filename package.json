@@ -52,7 +52,8 @@
     "build": "parcel build src/client/index.html --public-url /",
     "start": "node app.js",
     "test": "better-npm-run test",
-    "test:watch": "nodemon --watch src --watch test --ext ts,tsx --exec 'npm test || true'"
+    "test:browser": "better-npm-run test:browser",
+    "test:watch": "nodemon --watch src --watch test --ext ts,tsx --exec npm test || true"
   },
   "betterScripts": {
     "dev": {
@@ -63,6 +64,12 @@
     },
     "test": {
       "command": "mocha --timeout 999999 --require mocha_tsnode_hax.js test/**/*.spec.ts",
+      "env": {
+        "MajavashakkiSessionSecret": "majestetic"
+      }
+    },
+    "test:browser": {
+      "command": "mocha --timeout 999999 --require mocha_tsnode_hax.js test/**/*.browser.ts",
       "env": {
         "MajavashakkiSessionSecret": "majestetic"
       }

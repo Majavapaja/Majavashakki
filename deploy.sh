@@ -8,6 +8,7 @@ npm ci
 npm run lint
 npm run build
 TS_NODE_FILES=true npm test
+TS_NODE_FILES=true npm test:browser
 
 if [ ! -d "$repo/deployment/.venv" ]; then
   python3 -m venv "$repo/deployment/.venv"
