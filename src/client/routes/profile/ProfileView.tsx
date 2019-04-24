@@ -7,8 +7,8 @@ import UserStore from "client/models/UserStore";
 import { observable } from "mobx";
 
 class ProfileViewForm {
-  @observable public email: string;
-  @observable public name: string
+  @observable public email: string = ""
+  @observable public name: string = ""
 }
 
 @inject((stores: IAppStore) => ({ userStore: stores.app.user }))
@@ -19,9 +19,10 @@ class ProfileView extends React.Component<IProfileViewProps, never> {
 
   constructor(props: IProfileViewProps) {
     super(props);
+  }
 
-    console.log(this.props.userStore)
-
+  public async componentDidMount() {
+    await this.props.userStore.refreshFromServer()
     this.form.name = this.props.userStore.name
     this.form.email = this.props.userStore.email
   }

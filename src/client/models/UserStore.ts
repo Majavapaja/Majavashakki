@@ -15,6 +15,11 @@ export default class UserStore {
   @action
   public async login(email: string, password: string) {
     await this._api.write.login({email, password} as global.IUserContract);
+    await this.refreshFromServer()
+  }
+
+  @action
+  public async refreshFromServer() {
     const user = await this._api.read.user();
     console.log(user)
 
