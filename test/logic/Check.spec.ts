@@ -61,7 +61,7 @@ describe("Check", () => {
         })
     })
 
-    describe("Enpassant check", () => {
+    describe("Enpassant", () => {
         it("should be able to check with enpassant", done => {
             const promise = factory.build("board-check-enpassant")
                 .then(board => moveSequence(board, [["a7", "a5"], ["b5", "a6"]]))
@@ -72,6 +72,14 @@ describe("Check", () => {
             factory.build("board-check-enpassant-suicide").then(board => {
                 const result = moveSequence(board, [["c7", "c5"], ["b5", "c6"]])
                 result.should.have.same.members(["move", "error"])
+                done()
+            })
+        })
+
+        it("should allow enpassant to save king from check", done => {
+            factory.build("board-check-enpassant-save").then(board => {
+                const result = moveSequence(board, [["c7", "c5"], ["b5", "c6"]])
+                result.should.have.same.members(["move|check", "enpassant"])
                 done()
             })
         })

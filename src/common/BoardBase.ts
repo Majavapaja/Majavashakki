@@ -131,7 +131,7 @@ export default class BoardBase implements Majavashakki.IBoard {
             return this.createError("I see you are new at chess, you might check the rules first https://en.wikipedia.org/wiki/Chess#Rules")
         }
 
-        if (doesMoveCauseCheck(this, start, destination)) {
+        if (doesMoveCauseCheck(this, start, destination, isEnpassant)) {
             return this.createError("Good thing chess rules prevent you from making this move, you would have lost otherwise.")
         }
 

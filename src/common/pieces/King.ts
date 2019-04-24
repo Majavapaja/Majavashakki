@@ -55,12 +55,12 @@ export default class King extends Piece {
 
         // Move 1
         dest.col -= direction;
-        if (doesMoveCauseCheck(board, this.position, Piece.numbersToPosition(dest))) return false;
+        if (doesMoveCauseCheck(board, this.position, Piece.numbersToPosition(dest), false)) return false;
         if (board.getPiece(Piece.numbersToPosition(dest))) return false;
 
         // Move 2
         dest.col += direction;
-        if (doesMoveCauseCheck(board, this.position, Piece.numbersToPosition(dest))) return false;
+        if (doesMoveCauseCheck(board, this.position, Piece.numbersToPosition(dest), false)) return false;
         if (board.getPiece(Piece.numbersToPosition(dest))) return false;
 
         // Check that rook can move to "Move 1" position.

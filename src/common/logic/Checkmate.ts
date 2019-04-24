@@ -13,17 +13,29 @@ export function isCheck(board: BoardBase, color: Majavashakki.PieceColor): boole
     return false;
 }
 
-export function doesMoveCauseCheck(board: BoardBase, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): boolean {
-    const boardCopy: BoardBase = new BoardBase();
-    boardCopy.pieces = board.pieces.map(piece => piece.clone());
+export function doesMoveCauseCheck(
+    board: BoardBase,
+    start: Majavashakki.IPosition,
+    destination: Majavashakki.IPosition,
+    isEnpassant: boolean,
+): boolean {
+    const boardCopy: BoardBase = new BoardBase()
+    boardCopy.pieces = board.pieces.map(piece => piece.clone())
 
-    const startPieceCopy = boardCopy.getPiece(start);
-    boardCopy.removePiece(destination);
-    startPieceCopy.position = destination;
-    startPieceCopy.hasMoved = true;
+    const startPieceCopy = boardCopy.getPiece(start)
+    if (isEnpassant) {
+        // If enpassant remove piece below the destination
+        const destinationNumbers = Piece.positionToNumbers(destination)
+        destinationNumbers.row--
+        boardCopy.removePiece(Piece.numbersToPosition(destinationNumbers))
+    } else {
+        boardCopy.removePiece(destination)
+    }
+    startPieceCopy.position = destination
+    startPieceCopy.hasMoved = true
 
     // Check if board is in check after moving
-    return isCheck(boardCopy, startPieceCopy.color);
+    return isCheck(boardCopy, startPieceCopy.color)
 }
 
 export function isCheckMate(board: BoardBase, color: Majavashakki.PieceColor): boolean {
