@@ -7,8 +7,8 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 npm ci
 npm run lint
 npm run build
-TS_NODE_FILES=true npm test
-TS_NODE_FILES=true npm test:browser
+TS_NODE_FILES=true npm run test
+TS_NODE_FILES=true npm run test:browser
 
 if [ ! -d "$repo/deployment/.venv" ]; then
   python3 -m venv "$repo/deployment/.venv"
