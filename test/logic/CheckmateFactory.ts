@@ -1,5 +1,5 @@
-import { factory } from "factory-girl";
-import BoardBase from "../../src/common/BoardBase";
+import { factory } from "factory-girl"
+import BoardBase from "../../src/common/BoardBase"
 import { PieceColor, PieceType } from "../../src/common/GamePieces"
 import { createPiece } from "./BoardHelper"
 
@@ -29,11 +29,11 @@ factory.define("board-foolsmate", BoardBase, {}, {
             createPiece("f1", PieceType.Bishop, PieceColor.White, false, model),
 
             createPiece("d8", PieceType.Queen, PieceColor.Black, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
 /*  Board Description
     ⚊♕⚊⚊⚊⚊⚊⚊
@@ -64,11 +64,11 @@ factory.define("board-gameofcentury", BoardBase, {}, {
             createPiece("b3", PieceType.Bishop, PieceColor.Black, true, model),
             createPiece("c3", PieceType.Knight, PieceColor.Black, true, model),
             createPiece("a2", PieceType.Rook, PieceColor.Black, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -88,11 +88,11 @@ factory.define("board-doublecheck", BoardBase, {}, {
             createPiece("c3", PieceType.Bishop, PieceColor.Black, true, model),
             createPiece("d3", PieceType.Knight, PieceColor.Black, true, model),
             createPiece("c2", PieceType.Rook, PieceColor.Black, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -109,11 +109,11 @@ factory.define("board-kingcanmove", BoardBase, {}, {
         model.pieces = [
             createPiece("d1", PieceType.King, PieceColor.White, true, model),
             createPiece("c2", PieceType.Rook, PieceColor.Black, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
 /*  Board Description
 ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -133,11 +133,11 @@ factory.define("board-checkmate-piececancapture", BoardBase, {}, {
             createPiece("c2", PieceType.Rook, PieceColor.Black, true, model),
             createPiece("d3", PieceType.Knight, PieceColor.Black, true, model),
             createPiece("c3", PieceType.Bishop, PieceColor.Black, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
 /*  Board Description
 ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -158,11 +158,11 @@ factory.define("board-checkmate-piececanblock", BoardBase, {}, {
             createPiece("a2", PieceType.Rook, PieceColor.Black, true, model),
             createPiece("d3", PieceType.Knight, PieceColor.Black, true, model),
             createPiece("c3", PieceType.Bishop, PieceColor.Black, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊♖
@@ -183,11 +183,37 @@ factory.define("board-checkmate-enpassant", BoardBase, {}, {
             createPiece("c5", PieceType.Queen, PieceColor.White, true, model),
             createPiece("a7", PieceType.Pawn, PieceColor.Black, false, model),
             createPiece("b7", PieceType.King, PieceColor.Black, true, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
+
+/*  Board Description
+    ♜⚊♜⚊⚊⚊⚊⚊
+    ♟⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊♙⚊⚊⚊⚊⚊♜
+    ⚊♔⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊♜
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+*/
+factory.define("board-checkmate-enpassant-save", BoardBase, {}, {
+    afterBuild: (model, attrs, buildOptions) => {
+        model.pieces = [
+            createPiece("b5", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("b4", PieceType.King, PieceColor.White, true, model),
+            createPiece("a8", PieceType.Rook, PieceColor.Black, true, model),
+            createPiece("c8", PieceType.Rook, PieceColor.Black, true, model),
+            createPiece("h5", PieceType.Rook, PieceColor.Black, true, model),
+            createPiece("h3", PieceType.Rook, PieceColor.Black, true, model),
+            createPiece("a7", PieceType.Pawn, PieceColor.Black, false, model),
+        ]
+
+        return model
+    },
+})
 
 /*  Board Description
     ⚊⚊♜♚♜⚊⚊⚊
@@ -209,10 +235,10 @@ factory.define("board-checkmate-castling", BoardBase, {}, {
             createPiece("e8", PieceType.Rook, PieceColor.Black, true, model),
             createPiece("c7", PieceType.Pawn, PieceColor.Black, false, model),
             createPiece("e7", PieceType.Pawn, PieceColor.Black, false, model),
-        ];
+        ]
 
-        return model;
+        return model
     },
-});
+})
 
-export default factory;
+export default factory
