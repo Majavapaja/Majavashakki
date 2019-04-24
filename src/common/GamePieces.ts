@@ -1,3 +1,5 @@
+import {ApiPlayerDetails} from "./types"
+
 export interface IGame {
   // error TS2320: Interface 'IGameDocument' cannot simultaneously extend types 'IGame' and 'Document'.
   // Named property 'id' of types 'IGame' and 'Document' are not identical.
@@ -10,6 +12,9 @@ export interface IGame {
   board: IBoard;
   isCheck: boolean;
   isCheckmate: boolean;
+
+  playerBlack?: ApiPlayerDetails
+  playerWhite?: ApiPlayerDetails
 }
 
 export interface IBoard {

@@ -1,6 +1,7 @@
 import socketIO from "socket.io-client"
 import { observable, action } from "mobx";
 import * as Majavashakki from "../../common/GamePieces"
+import {ApiPlayerDetails} from "../../common/types"
 import GameEntity from "../../server/entities/Game"
 import BoardModel from "./Board";
 import ApiService from "../common/ApiService";
@@ -23,6 +24,11 @@ export default class Game extends GameBase {
   public isCheck: boolean
   @observable
   public isCheckmate: boolean
+
+  @observable
+  public playerBlack?: ApiPlayerDetails
+  @observable
+  public playerWhite?: ApiPlayerDetails
 
   public board: BoardModel
   private socket: SocketIOClient.Socket
@@ -51,6 +57,8 @@ export default class Game extends GameBase {
     this.board = new BoardModel(game.board.pieces, game.board.moveHistory)
     this.isCheck = gameEntity.isCheck
     this.isCheckmate = gameEntity.isCheckmate
+    this.playerWhite = gameEntity.playerWhite
+    this.playerBlack = gameEntity.playerBlack
 
     this.isLoading = false
   }

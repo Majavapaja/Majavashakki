@@ -56,7 +56,9 @@ export default {
     if (socket) {
       socket.join(`game:${id}`)
     }
-    return gameDocumentToApiResult(game)
+
+    const players = await User.findByIds(removeFalsy([game.playerIdBlack, game.playerIdWhite]))
+    return gameDocumentToApiResult(game, players)
   }),
 
   postGame: jsonAPI<IGame>(async req => {
@@ -64,7 +66,7 @@ export default {
     console.log(`Creating a new game '${body.title}'`);
 
     const game = await GameModel.findOrCreate(body.title)
-    return gameDocumentToApiResult(game)
+    return gameDocumentToApiResult(game, [])
   }),
 
   joinGame: jsonAPI<IGame>(async req => {
@@ -84,7 +86,8 @@ export default {
       // TODO: How does the player join the socket.io "room" of the game after reconnecting?
       socket.join(`game:${doc.id}`)
     }
-    return gameDocumentToApiResult(doc)
+    const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
+    return gameDocumentToApiResult(doc, players)
   }),
 
   makeMove: jsonAPI<IMoveResponse>(async req => {
@@ -141,7 +144,7 @@ function formatGamesListResponse(players: IUserDocument[]) {
   }
 }
 
-function gameDocumentToApiResult(doc: IGameDocument): IGame {
+function gameDocumentToApiResult(doc: IGameDocument, players: IUserDocument[]): IGame {
   const board = Game.MapFromDb(doc).board
   return {
     id: doc._id,
@@ -150,6 +153,8 @@ function gameDocumentToApiResult(doc: IGameDocument): IGame {
     currentTurn: doc.currentTurn,
     playerIdBlack: doc.playerIdBlack,
     playerIdWhite: doc.playerIdWhite,
+    playerBlack: userDocumentToPlayerDetails(players.find(p => String(p._id) === doc.playerIdBlack)),
+    playerWhite: userDocumentToPlayerDetails(players.find(p => String(p._id) === doc.playerIdWhite)),
     isCheck: isCheck(board, doc.currentTurn),
     isCheckmate: isCheckMate(board, doc.currentTurn),
   }

@@ -42,7 +42,7 @@ class GameView extends React.Component<any, any> {
             <PlayerBadge
               id="whiteBadge"
               player={{
-                name: "Matti",
+                name: game.playerWhite ? game.playerWhite.name : "N/A",
                 color: "white",
               }}
               isCurrentPlayer={game.currentTurn === "white"}
@@ -51,7 +51,7 @@ class GameView extends React.Component<any, any> {
             <PlayerBadge
               id="blackBadge"
               player={{
-                name: "Teppo",
+                name: game.playerBlack ? game.playerBlack.name : "N/A",
                 color: "black",
               }}
               isCurrentPlayer={game.currentTurn === "black"}
