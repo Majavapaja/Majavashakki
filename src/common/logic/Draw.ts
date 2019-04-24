@@ -13,7 +13,7 @@ export const isDraw = (board: BoardBase, playerColor: PieceColor) => {
   return false
 }
 
-const isStaleMate = (board: BoardBase, playerColor): boolean => {
+const isStaleMate = (board: BoardBase, playerColor: PieceColor): boolean => {
   // TODO: See if this could be optimized
   for (const piece of board.pieces) {
     // Only check the requested players moves
