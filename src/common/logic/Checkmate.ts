@@ -93,9 +93,6 @@ function getCheckingPiece(board: BoardBase, king: King): Piece {
     for (const piece of board.pieces) {
         if (piece.color !== king.color) {
             if (piece.isValidMove(board, king.position)) {
-                // TODO: What if move was enPassant?
-                // TODO: What if move was castling?
-                // TODO: What if move was promotion?
                 return piece
             }
         }
@@ -110,9 +107,6 @@ function isDoubleCheck(board: BoardBase, king: King): boolean {
     for (const piece of board.pieces) {
         if (piece.color !== king.color) {
             if (piece.isValidMove(board, king.position)) {
-                // TODO: What if move was enPassant?
-                // TODO: What if move was castling?
-                // TODO: What if move was promotion?
                 checkingPieces++
             }
         }
