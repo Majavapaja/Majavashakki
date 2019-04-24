@@ -40,7 +40,7 @@ const hasEnoughAction = (board: BoardBase): boolean => {
   const startIndex = board.moveHistory.length - 1
   for (let i = startIndex; i > startIndex - 50; i--) {
     const notation = board.moveHistory[i].algebraicNotation
-    if (notation.includes('x') || !/^[A-Z]/.test(notation)) {
+    if (notation.includes("x") || !/^[A-Z]/.test(notation)) {
       return true
     }
   }

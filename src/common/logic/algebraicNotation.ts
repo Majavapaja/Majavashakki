@@ -1,20 +1,20 @@
-import * as Majavashakki from '../GamePieces'
+import * as Majavashakki from "../GamePieces"
 import BoardBase from "../BoardBase";
 
 const getPieceType = (type: Majavashakki.PieceType): string => {
   switch (type) {
     case Majavashakki.PieceType.King:
-      return 'K'
+      return "K"
     case Majavashakki.PieceType.Queen:
-      return 'Q'
+      return "Q"
     case Majavashakki.PieceType.Rook:
-      return 'R'
+      return "R"
     case Majavashakki.PieceType.Bishop:
-      return 'B'
+      return "B"
     case Majavashakki.PieceType.Knight:
-      return 'N'
+      return "N"
     case Majavashakki.PieceType.Pawn:
-      return ''
+      return ""
   }
 }
 
@@ -23,13 +23,13 @@ const getDisambiguation = (board: BoardBase, start: Majavashakki.IPosition, dest
   const possibleConflicts = board.pieces
     .filter(piece => piece !== startPiece && piece.type === startPiece.type && piece.color === startPiece.color)
 
-  if (possibleConflicts.length === 0) return ''
+  if (possibleConflicts.length === 0) return ""
 
   // Check if any of the conflicting pieces can move to the destination
   const conflicts = possibleConflicts
     .filter(piece => board.isValidMove(piece.position, destination).status === Majavashakki.MoveStatus.Success)
 
-  if (conflicts.length === 0) return ''
+  if (conflicts.length === 0) return ""
 
   let fileConflict
   conflicts.forEach(piece => {
@@ -57,7 +57,7 @@ export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveR
   let notation: Majavashakki.AlgebraicNotation = getPieceType(startPiece.type)
   notation += getDisambiguation(board, move.start, move.destination)
   if (move.result === Majavashakki.MoveType.Capture || move.result === Majavashakki.MoveType.Enpassant) {
-    notation += 'x'
+    notation += "x"
 
     // If piece was a pawn and it was a capture, we need to add start file of the pawn at the start of the notation
     if (startPiece.type === Majavashakki.PieceType.Pawn) {
@@ -65,28 +65,28 @@ export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveR
     }
   } else if (move.result === Majavashakki.MoveType.Promotion && board.getPiece(move.destination)) {
     // If move result is promotion and there is a piece at destination it means that the promotion was a capture
-    notation += 'x'
+    notation += "x"
   }
 
   notation += move.destination.col + move.destination.row
 
   // Add special moves at the end of the notation
   if (move.result === Majavashakki.MoveType.Promotion) notation += getPieceType(promotionPiece)
-  else if (move.result === Majavashakki.MoveType.Enpassant) notation += 'e.p.'
+  else if (move.result === Majavashakki.MoveType.Enpassant) notation += "e.p."
 
   if (move.result === Majavashakki.MoveType.Castling) {
     // If castling destination is g, it is kingside castling
-    if (move.destination.col === 'g') notation = '0-0'
+    if (move.destination.col === "g") notation = "0-0"
     // If castling destination is c, it is queenside castling
-    else if (move.destination.col === 'c') notation = '0-0-0'
+    else if (move.destination.col === "c") notation = "0-0-0"
   }
 
   return notation
 }
 
 export const setCheck = (notation: Majavashakki.AlgebraicNotation, move: Majavashakki.IMoveResponse): Majavashakki.AlgebraicNotation => {
-  if (move.isCheckmate) notation += '#'
-  else if (move.isCheck) notation += '+'
+  if (move.isCheckmate) notation += "#"
+  else if (move.isCheck) notation += "+"
 
   return notation
 }
