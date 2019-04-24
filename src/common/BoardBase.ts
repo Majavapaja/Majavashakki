@@ -123,29 +123,16 @@ export default class BoardBase implements Majavashakki.IBoard {
             destination,
         } as Majavashakki.IMoveResponse
 
-        // Check that piece movement is valid
-        if (!startPiece.isValidMove(this, destination)) {
-            if (startPiece.type === Majavashakki.PieceType.Pawn) {
-                const pawn = startPiece as Pawn
-                if (pawn.isEnPassant(this, destination)) {
-                    move.result = Majavashakki.MoveType.Enpassant
-                    // TODO: Can I cause a check to myself from enpassant?
-                    return move
-                }
-            } else if (startPiece.type === Majavashakki.PieceType.King) {
-                const king = startPiece as King
-                if (king.isCastling(this, destination)) {
-                    move.result = Majavashakki.MoveType.Castling
-                    return move
-                }
-            }
+        const isEnpassant = this.isMoveEnpassant(startPiece, destination)
+        const isCastling = this.isMoveCastling(startPiece, destination)
+        const isValidMove = startPiece.isValidMove(this, destination) || isEnpassant || isCastling
 
+        if (!isValidMove) {
             return this.createError("I see you are new at chess, you might check the rules first https://en.wikipedia.org/wiki/Chess#Rules")
         }
 
-        // Check if move causes check for the player
         if (doesMoveCauseCheck(this, start, destination)) {
-            return this.createError("Good thing chess rules prevents you from making this move, you would have lost otherwise.")
+            return this.createError("Good thing chess rules prevent you from making this move, you would have lost otherwise.")
         }
 
         if (this.isPromotion(start, destination)) {
@@ -154,7 +141,10 @@ export default class BoardBase implements Majavashakki.IBoard {
         }
 
         // Piece movement was valid
-        if (destinationPiece) move.result = Majavashakki.MoveType.Capture
+        if (isCastling) move.result = Majavashakki.MoveType.Castling
+        else if (isEnpassant) move.result = Majavashakki.MoveType.Enpassant
+        else if (this.isPromotion(start, destination)) move.result = Majavashakki.MoveType.Enpassant
+        else if (destinationPiece) move.result = Majavashakki.MoveType.Capture
         else move.result = Majavashakki.MoveType.Move
 
         return move
@@ -220,6 +210,19 @@ export default class BoardBase implements Majavashakki.IBoard {
         // Check draw after move has been added to moveHistory, because we need the latest move to be there
         move.isDraw = isDraw(this, nextPlayerColor)
         return move
+    }
+
+    private isMoveEnpassant(piece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
+        if (piece.type !== Majavashakki.PieceType.Pawn) return false
+        const pawn = piece as Pawn
+        return pawn.isEnPassant(this, destination)
+    }
+
+    private isMoveCastling(piece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
+        if (piece.type !== Majavashakki.PieceType.King) return false
+
+        const king = piece as King
+        return king.isCastling(this, destination)
     }
 
     private createError(msg: string): Majavashakki.IMoveResponse {

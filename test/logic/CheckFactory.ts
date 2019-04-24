@@ -92,6 +92,30 @@ factory.define("board-check-enpassant", BoardBase, {}, {
 })
 
 /*  Board Description
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ♚♜♟⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊♙⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊♚⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+*/
+factory.define("board-check-enpassant-suicide", BoardBase, {}, {
+    afterBuild: (model, attrs, buildOptions) => {
+        model.pieces = [
+            createPiece("b5", PieceType.Pawn, PieceColor.White, true, model),
+            createPiece("b3", PieceType.King, PieceColor.White, true, model),
+            createPiece("c7", PieceType.Pawn, PieceColor.Black, false, model),
+            createPiece("a7", PieceType.King, PieceColor.Black, true, model),
+            createPiece("b7", PieceType.Rook, PieceColor.Black, true, model),
+        ]
+
+        return model
+    },
+})
+
+/*  Board Description
     ⚊⚊⚊♚⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
