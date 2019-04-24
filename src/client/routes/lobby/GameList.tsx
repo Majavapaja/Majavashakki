@@ -45,14 +45,14 @@ class GameList extends React.Component<IGameListProps, any> {
   }
 
   public render() {
-    const { classes, games } = this.props
+    const { classes, games, id } = this.props
     const noGames = !games || games.length === 0
 
     return (
-      <Paper className={classes.root}>
+      <Paper id={id} className={classes.root}>
         <AppBar position="static" className={classes.header}>
           <Typography className={classes.contrastText} variant="headline">{this.props.title}</Typography>
-          <Button onClick={this.props.openDialog} className={classes.contrastText}>
+          <Button id="createGame" onClick={this.props.openDialog} className={classes.contrastText}>
             <AddIcon /> Game
           </Button>
         </AppBar>
@@ -86,6 +86,7 @@ class GameList extends React.Component<IGameListProps, any> {
                     <Avatar alt="Player 2" src={Player2Avatar} title="Player 2 username" />
                   </div>
                   <ListItemText
+                    className="game-title"
                     primary={game.title}
                     secondary={"123 turns"}
                   />
@@ -106,6 +107,7 @@ class GameList extends React.Component<IGameListProps, any> {
 }
 
 interface IGameListProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
+  id: string,
   title: string,
   games: ApiGameInfo[],
   api?: ApiService,

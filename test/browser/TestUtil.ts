@@ -1,33 +1,38 @@
 import assert from "assert"
 import puppeteer from "puppeteer"
 import {start} from "../../src/server/app"
-import {clearDatabase} from "../../src/server/mongo"
+import {clearDatabase, initTestData} from "../../src/server/mongo"
 
 const PORT = "3001"
 const runHeadless = !!process.env.CI
 
-export function browserSpec(name, func) {
+export function browserSpec(name, {numBrowsers}, func) {
   describe(name, function() {
     before(async function() {
       this.closeServer = await start(PORT)
-      this.browser = await mkBrowser()
+      this.browsers = await timesAsync(numBrowsers, mkBrowser)
+      this.browser = this.browsers[0]
     })
 
     after(async function() {
-      this.browser.close()
+      await mapAsync(this.browsers, b => b.close())
       await this.closeServer()
     })
 
     beforeEach(async function() {
       await clearDatabase()
+      await initTestData()
 
-      this.page = await this.browser.newPage()
-      const cookies = await this.page.cookies()
-      await this.page.deleteCookie(...cookies)
+      this.pages = await mapAsync(this.browsers, b => b.newPage())
+      this.page = this.pages[0]
+      await mapAsync(this.pages, async p => {
+        const cookies = await this.page.cookies()
+        await this.page.deleteCookie(...cookies)
+      })
     })
 
     afterEach(async function() {
-      await this.page.close()
+      await mapAsync(this.pages, p => p.close())
     })
 
     func()
@@ -62,4 +67,16 @@ export async function countInPage(page, selector, count) {
   await page.waitForSelector(selector, {visible: true})
   const elements = await page.$$(selector)
   assert.strictEqual(elements.length, count);
+}
+
+async function timesAsync(n, func) {
+  const results = []
+  for (let i = 0; i < n; i++) {
+    results.push(await func())
+  }
+  return results
+}
+
+async function mapAsync(xs, func) {
+  return await Promise.all(xs.map(func))
 }

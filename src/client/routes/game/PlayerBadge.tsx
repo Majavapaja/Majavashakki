@@ -9,7 +9,7 @@ import classNames from "classnames"
 @observer
 class PlayerBadge extends React.Component<any, any> {
     public render() {
-        const { classes, player, isCurrentPlayer, isWinner } = this.props
+        const { classes, player, isCurrentPlayer, isWinner, id } = this.props
 
         const rootClasses = classNames(
             classes.root,
@@ -18,6 +18,7 @@ class PlayerBadge extends React.Component<any, any> {
 
         return (
             <Chip
+                id={id}
                 className={rootClasses}
                 avatar={<Avatar className={[classes.playerColor, player.color].join(" ")} />}
                 label={player.name}

@@ -5,7 +5,7 @@ import * as Util from "./TestUtil"
 const testEmail = "foo@bar"
 const user1 = {username: "matti", email: testEmail, password: "foobar"}
 
-Util.browserSpec("Login", function() {
+Util.browserSpec("Login", {numBrowsers: 1}, function() {
   it("redirects to login from front page", async function() {
     const {page} = this
 

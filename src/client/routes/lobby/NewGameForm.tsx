@@ -38,6 +38,7 @@ class NewGameForm extends React.Component<INewGameProps, never> {
   public render() {
     return (
       <Dialog
+        id="createGameDialog"
         open={this.props.open}
         onClose={this.props.handleClose}
       >
@@ -52,10 +53,10 @@ class NewGameForm extends React.Component<INewGameProps, never> {
           </form>
         </DialogContent>
         <DialogActions>
-          <Button onClick={this.props.handleClose} color="primary">
+          <Button id="cancelButton" onClick={this.props.handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={this.onSubmitNewRoom} color="primary">
+          <Button id="createButton" onClick={this.onSubmitNewRoom} color="primary">
             Create
           </Button>
         </DialogActions>

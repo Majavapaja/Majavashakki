@@ -26,6 +26,7 @@ class Board extends React.Component<any, any> {
               onClick={() => this.onCellClick(position)}
               selected={board.comparePos(this.state.selectedCell, position)}
               targeted={board.comparePos(this.state.moveTarget, position)}
+              position={position}
               key={position.col + position.row}
             />
         ))}
@@ -59,7 +60,7 @@ class Board extends React.Component<any, any> {
   }
 }
 
-function Cell({piece, selected, targeted, onClick}) {
+function Cell({position, piece, selected, targeted, onClick}) {
   const classes = [
     "cell",
     selected && "selected",
@@ -67,7 +68,7 @@ function Cell({piece, selected, targeted, onClick}) {
   ].filter(Boolean);
 
   return (
-    <div className={classes.join(" ")} onClick={onClick}>
+    <div data-position={position.col + position.row} className={classes.join(" ")} onClick={onClick}>
       {piece && <Piece piece={piece}/>}
     </div>
   );

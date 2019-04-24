@@ -40,6 +40,7 @@ class GameView extends React.Component<any, any> {
         <Paper className={classes.paper}>
           <div className={classes.playersContainer}>
             <PlayerBadge
+              id="whiteBadge"
               player={{
                 name: "Matti",
                 color: "white",
@@ -48,6 +49,7 @@ class GameView extends React.Component<any, any> {
               isWinner={game.isCheckmate && game.currentTurn === "black"}
             />
             <PlayerBadge
+              id="blackBadge"
               player={{
                 name: "Teppo",
                 color: "black",
@@ -74,7 +76,7 @@ class GameView extends React.Component<any, any> {
         const winner = game.currentTurn === "white" ? "black" : "white"
         content = (
           <React.Fragment>
-            <Typography variant="display2">The winner is {winner}</Typography>
+            <Typography id="winMessage" variant="display2">The winner is {winner}</Typography>
             <EndScreen />
           </React.Fragment>
         )
