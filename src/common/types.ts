@@ -85,4 +85,11 @@ export interface ApiUser {
 export interface ApiGameInfo {
   id: string
   title: string
+  playerWhite?: ApiPlayerDetails
+  playerBlack?: ApiPlayerDetails
+}
+
+export interface ApiPlayerDetails {
+  id: string
+  name: string
 }

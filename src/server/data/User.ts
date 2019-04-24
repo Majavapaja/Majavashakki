@@ -27,6 +27,7 @@ export interface IUserModel extends Model<IUserDocument> {
   validProfile(user: IUserDocument): boolean;
   registerUser(user: RegisterRequest): Promise<IUserDocument | undefined>;
   getMyGames(userId: string, active?: boolean): Promise<string[]>;
+  findByIds(ids: string[]): Promise<IUserDocument[]>
 }
 
 export let UserSchema: Schema = new Schema({
@@ -105,6 +106,10 @@ UserSchema.statics.getMyGames = async (_id: string): Promise<string[]> => {
   const user = await User.findOne({_id}).exec();
   if (!user) throw new Error(`Invalid user id '${_id}' for fetching my games`);
   return user.gameIds
+}
+
+UserSchema.statics.findByIds = async (ids: string[]): Promise<IUserDocument[]> => {
+  return await User.find({_id: {$in: ids}}).exec()
 }
 
 // Methods are used for instance of items

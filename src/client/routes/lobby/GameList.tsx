@@ -75,23 +75,28 @@ class GameList extends React.Component<IGameListProps, any> {
             {
               games
               .filter(game => game.title.toLowerCase().includes(this.state.filter))
-              .map(game => (
-                <ListItem
+              .map(game => {
+                const whiteName = game.playerWhite ? game.playerWhite.name : undefined
+                const blackName = game.playerBlack ? game.playerBlack.name : undefined
+                const msg = !whiteName ? "Waiting for players..."
+                  : !blackName ? `${whiteName} waiting for opponent...`
+                  : `${whiteName} vs ${blackName}`
+                return <ListItem
                   key={game.title}
                   button
                   onClick={() => this.onRoomClick(game)}
                 >
                   <div className={classes.playerAvatarsContainer}>
-                    <Avatar alt="Player 1" src={Player1Avatar} title="Player 1 username" />
-                    <Avatar alt="Player 2" src={Player2Avatar} title="Player 2 username" />
+                    <Avatar alt="Player 1" src={Player1Avatar} title={whiteName} />
+                    <Avatar alt="Player 2" src={Player2Avatar} title={blackName} />
                   </div>
                   <ListItemText
                     className="game-title"
                     primary={game.title}
-                    secondary={"123 turns"}
+                    secondary={msg}
                   />
                 </ListItem>
-              ))
+              })
             }
           </List>
           {noGames && <Typography>No games available</Typography>}

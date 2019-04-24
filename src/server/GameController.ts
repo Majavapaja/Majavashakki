@@ -1,12 +1,14 @@
 import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import { User } from "./data/User";
 import { GameModel, IGameDocument } from "./data/GameModel";
+import { IUserDocument } from "./data/User"
 import { SessionSocketMap, notifyGame } from "./Sockets";
 import Game from "./entities/Game";
 import { jsonAPI, NotFoundError, validate } from "./json"
 import {
   CreateGameRequestType, CreateGameRequest,
   MoveRequest, MoveRequestType,
+  ApiPlayerDetails,
 } from "../common/types"
 import * as Majavashakki from "../common/GamePieces"
 import { IMoveResponse } from "../common/GamePieces"
@@ -16,16 +18,27 @@ import { ApiGameInfo } from "../common/types"
 
 const roomRepo = GameRoomsRepository.getInstance();
 
+const flatten = xs => [].concat(...xs)
+const removeFalsy = xs => xs.filter(x => !!x)
+
 export default {
   getAvailableGames: jsonAPI<ApiGameInfo[]>(async req => {
     const games = await GameModel.getAvailableGames(req.user._id);
-    return games.filter(inProgress).map(formatGamesListResponse)
+
+    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
+    const players = await User.findByIds(playerIds)
+
+    return games.filter(inProgress).map(formatGamesListResponse(players))
   }),
 
   getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
     const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
     const games = await GameModel.getGames(gameIds)
-    return games.filter(inProgress).map(formatGamesListResponse)
+
+    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
+    const players = await User.findByIds(playerIds)
+
+    return games.filter(inProgress).map(formatGamesListResponse(players))
   }),
 
   getGame: jsonAPI<any>(async req => {
@@ -116,9 +129,16 @@ function isPartOfTheGame(game: IGameDocument, userId: string): boolean {
   return [game.playerIdBlack, game.playerIdWhite].indexOf(userId) !== -1
 }
 
-function formatGamesListResponse(game: IGameDocument): ApiGameInfo {
-  const {_id, title} = game
-  return {id: _id, title}
+function formatGamesListResponse(players: IUserDocument[]) {
+  return function(game: IGameDocument): ApiGameInfo {
+    const {_id, title} = game
+    return {
+      id: _id,
+      title,
+      playerWhite: userDocumentToPlayerDetails(players.find(p => String(p._id) === game.playerIdWhite)),
+      playerBlack: userDocumentToPlayerDetails(players.find(p => String(p._id) === game.playerIdBlack)),
+    }
+  }
 }
 
 function gameDocumentToApiResult(doc: IGameDocument): IGame {
@@ -133,6 +153,11 @@ function gameDocumentToApiResult(doc: IGameDocument): IGame {
     isCheck: isCheck(board, doc.currentTurn),
     isCheckmate: isCheckMate(board, doc.currentTurn),
   }
+}
+
+function userDocumentToPlayerDetails(doc?: IUserDocument): ApiPlayerDetails | undefined {
+  if (!doc) return undefined
+  return {id: doc._id, name: doc.name}
 }
 
 function inProgress(doc: IGameDocument): boolean {
