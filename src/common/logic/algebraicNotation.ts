@@ -47,7 +47,6 @@ const getDisambiguation = (board: BoardBase, start: Majavashakki.IPosition, dest
 
   if (!rankConflict) return startPiece.position.row
 
-
   return startPiece.position.col + startPiece.position.row
 }
 
