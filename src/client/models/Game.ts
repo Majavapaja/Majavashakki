@@ -4,8 +4,8 @@ import * as Majavashakki from "../../common/GamePieces"
 import {ApiPlayerDetails} from "../../common/types"
 import GameEntity from "../../server/entities/Game"
 import BoardModel from "./Board";
-import ApiService from "../common/ApiService";
 import GameBase from "../../common/GameBase";
+import AppContainer from "./AppContainer";
 
 // TODO: Extend /src/common/Game
 export default class Game extends GameBase {
@@ -33,20 +33,20 @@ export default class Game extends GameBase {
   public board: BoardModel
   private socket: SocketIOClient.Socket
   private gameId: string
-  private readonly _api: ApiService;
+  private readonly rootStore: AppContainer
 
-  constructor(title: string, api: ApiService) {
-    super(title);
+  constructor(rootStore: AppContainer) {
+    super("")
     this.isLoading = true
-    this._api = api;
+    this.rootStore = rootStore
   }
 
   @action
   public loadGame = async (gameId: string) => {
     this.isLoading = true
 
-    this.currentUser = await this._api.read.user();
-    const gameEntity = await this._api.read.game(gameId);
+    this.currentUser = await this.rootStore.api.read.user();
+    const gameEntity = await this.rootStore.api.read.game(gameId);
 
     const game = GameEntity.MapFromDb(gameEntity)
     this.title = game.title
@@ -69,45 +69,26 @@ export default class Game extends GameBase {
   }
 
   @action
-  public async move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string = this.currentUser.id): Promise<Majavashakki.IMoveResponse> {
-    // :thinking:
+  public async move(
+    start: Majavashakki.IPosition,
+    destination: Majavashakki.IPosition,
+    promotionPiece?: Majavashakki.PieceType,
+  ): Promise<Majavashakki.IMoveResponse> {
     const piece = this.board.getPiece(start)
-    let promotionPieceType
+    console.log(promotionPiece)
 
-    if (this.board.isPromotion(start, destination)) {
-        // Do temporary move so it looks good
-        piece.position = destination
-
-        // Wait a while so the pawn movement updates to UI before alerts stop code execution
-        await new Promise((resolve) => setTimeout(resolve, 200))
-
-        await new Promise((resolve) => {
-          const piises = piece.isWhite() ? "♕♘♖♗" : "♛♞♜♝"
-
-          while (!promotionPieceType) {
-            if (confirm(`Pawn promotion! Promote to Queen ${piises[0]}?`)) {
-              promotionPieceType = Majavashakki.PieceType.Queen
-            } else if (confirm(`Pawn promotion! Promote to Knight ${piises[1]}?`)) {
-              promotionPieceType = Majavashakki.PieceType.Knight
-            } else if (confirm(`Pawn promotion! Promote to Rook ${piises[2]}?`)) {
-              promotionPieceType = Majavashakki.PieceType.Rook
-            } else if (confirm(`Pawn promotion! Promote to Bishop ${piises[3]}?`)) {
-              promotionPieceType = Majavashakki.PieceType.Bishop
-            }
-          }
-
-          resolve()
-        })
-
-        alert(`You chose ${promotionPieceType}`)
-
-        piece.position = start
+    // if (promotionPiece) piece.position = start
+    if (!promotionPiece && this.board.isPromotion(start, destination)) {
+      // Do temporary move so it looks good
+      // piece.position = destination
+      this.rootStore.promotionDialog.openDialog(start, destination)
+      return
     }
 
-    const result = await super.move(start, destination, userId, promotionPieceType);
+    const result = await super.move(start, destination, this.currentUser.id, promotionPiece);
 
     if (result.status === Majavashakki.MoveStatus.Success) {
-      await this._api.write.makeMove(this.gameId, start, destination, promotionPieceType)
+      await this.rootStore.api.write.makeMove(this.gameId, start, destination, promotionPiece)
     } else {
       this.error = result.error
     }

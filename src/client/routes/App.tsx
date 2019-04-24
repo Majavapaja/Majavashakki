@@ -7,6 +7,7 @@ import * as React from "react";
 import { Route } from "react-router-dom";
 import SignUpView from "./signup/SignUpView";
 import NotificationView from "../common/NotificationView";
+import PromotionDialog from "../common/PromotionDialog";
 
 export default class App extends React.Component<any, any> {
 
@@ -15,6 +16,8 @@ export default class App extends React.Component<any, any> {
       <div>
         <NotificationView />
         <NavigationBar />
+        <PromotionDialog />
+
         <Route
           exact
           path="/login"

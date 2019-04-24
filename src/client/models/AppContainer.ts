@@ -1,11 +1,13 @@
 import Game from "./Game"
 import UserStore from "./UserStore"
-import ApiService from "../common/ApiService";
+import ApiService from "../common/ApiService"
+import PromotionDialogStore from "./PromotionDialogStore"
 
 export default class AppContainer {
-  public api = new ApiService();
-  public game = new Game("", this.api);
+  public api = new ApiService()
   public user = new UserStore(this.api)
+  public game = new Game(this)
+  public promotionDialog = new PromotionDialogStore(this)
 }
 
 export interface IAppStore {
