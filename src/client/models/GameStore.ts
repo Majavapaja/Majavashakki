@@ -5,7 +5,7 @@ import {ApiPlayerDetails} from "../../common/types"
 import GameEntity from "../../server/entities/Game"
 import BoardStore from "./BoardStore"
 import GameBase from "../../common/GameBase"
-import AppContainer from "./AppContainer"
+import AppStore from "./AppStore"
 
 // TODO: Extend /src/common/Game
 export default class GameStore extends GameBase {
@@ -34,9 +34,9 @@ export default class GameStore extends GameBase {
   public boardStore: BoardStore
   private socket: SocketIOClient.Socket
   private gameId: string
-  private readonly rootStore: AppContainer
+  private readonly rootStore: AppStore
 
-  constructor(rootStore: AppContainer) {
+  constructor(rootStore: AppStore) {
     super("")
     this.isLoading = true
     this.rootStore = rootStore

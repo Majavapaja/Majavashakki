@@ -1,6 +1,6 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react"
-import {IAppStore} from "../../../models/AppContainer"
+import {IAppStore} from "../../../models/AppStore"
 import Cell from "./Cell"
 import { WithStyles, createStyles, withStyles } from "@material-ui/core"
 import BoardStore from "../../../models/BoardStore"

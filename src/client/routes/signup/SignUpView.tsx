@@ -5,7 +5,7 @@ import {TextField, Typography, withStyles, createStyles, Paper, Button} from "@m
 import Majava from "../../common/Majava";
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
-import { IAppStore } from "client/models/AppContainer";
+import { IAppStore } from "client/models/AppStore";
 
 @inject((stores: IAppStore) => ({api: stores.app.api}))
 @observer

@@ -1,7 +1,7 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { Button, WithStyles, createStyles, withStyles } from "@material-ui/core"
-import { IAppStore } from "client/models/AppContainer"
+import { IAppStore } from "client/models/AppStore"
 import ChessPiece from "../ChessPiece"
 import PromotionDialogStore from "client/models/PromotionDialogStore"
 import GameStore from "client/models/GameStore"

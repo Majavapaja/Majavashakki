@@ -4,7 +4,7 @@ import { withStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Board from "./Board"
 import { observer, inject } from "mobx-react"
 import { Paper, Typography } from "@material-ui/core"
-import {IAppStore} from "../../models/AppContainer"
+import {IAppStore} from "../../models/AppStore"
 
 import PlayerBadge from "./PlayerBadge"
 import EndScreen from "./EndScreen"

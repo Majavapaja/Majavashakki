@@ -4,7 +4,7 @@ import {TextField, Typography, withStyles, createStyles, Paper, Button, WithStyl
 import Majava from "../../common/Majava";
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
-import { IAppStore } from "client/models/AppContainer";
+import { IAppStore } from "client/models/AppStore";
 import UserStore from "client/models/UserStore";
 
 @inject((stores: IAppStore) => ({userStore: stores.app.user}))

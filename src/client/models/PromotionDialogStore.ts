@@ -1,14 +1,14 @@
 import { observable, action } from "mobx"
 import * as Majavashakki from "../../common/GamePieces"
-import AppContainer from "./AppContainer"
+import AppStore from "./AppStore"
 
 export default class PromotionDialogStore {
   @observable public isOpen: boolean
-  private rootStore: AppContainer
+  private rootStore: AppStore
   private start: Majavashakki.IPosition
   private destination: Majavashakki.IPosition
 
-  constructor(rootStore: AppContainer) {
+  constructor(rootStore: AppStore) {
     this.rootStore = rootStore
     this.isOpen = false
   }

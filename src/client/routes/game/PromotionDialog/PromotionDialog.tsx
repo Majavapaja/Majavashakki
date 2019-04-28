@@ -1,7 +1,7 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { Dialog, DialogTitle, DialogContent, DialogActions, WithStyles, createStyles, withStyles } from "@material-ui/core"
-import { IAppStore } from "client/models/AppContainer"
+import { IAppStore } from "client/models/AppStore"
 import { PieceType } from "../../../../common/GamePieces"
 import PromotionDialogStore from "client/models/PromotionDialogStore"
 import PromotionButton from "./PromotionButton"

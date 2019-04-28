@@ -4,7 +4,7 @@ import { Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField } 
 import ApiService from "../../common/ApiService";
 import { action, observable } from "mobx";
 import { inject } from "mobx-react";
-import { IAppStore } from "client/models/AppContainer";
+import { IAppStore } from "client/models/AppStore";
 import { IGame } from "../../../common/GamePieces";
 
 @inject((stores: IAppStore) => ({api: stores.app.api}))
