@@ -56,6 +56,9 @@ export default class BoardStore extends BoardBase {
                 cells.push({
                     position,
                     piece,
+                    onClick: () => this.onCellClick(position),
+                    cellColor: this.getCellColor(position),
+                    isSelected: this.comparePos(this.selectedCell, position),
                 })
             }
         }

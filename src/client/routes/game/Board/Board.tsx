@@ -8,14 +8,10 @@ import BoardStore from "../../../store/BoardStore"
 const Board = inject((stores: IAppStore) => ({ boardStore: stores.app.game.boardStore }))(observer((props: IBoardProps) => (
       <React.Fragment>
       <div className={props.classes.board} data-test-ui-component="board">
-        {props.boardStore.cells.map(({position, piece}) => (
+        {props.boardStore.cells.map((cell) => (
             <Cell
-              piece={piece}
-              cellColor={props.boardStore.getCellColor(position)}
-              onClick={() => props.boardStore.onCellClick(position)}
-              selected={props.boardStore.comparePos(props.boardStore.selectedCell, position)}
-              position={position}
-              key={position.col + position.row}
+              {...cell}
+              key={cell.position.col + cell.position.row}
             />
         ))}
       </div>

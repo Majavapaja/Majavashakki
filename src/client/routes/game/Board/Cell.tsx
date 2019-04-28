@@ -6,7 +6,7 @@ import { WithStyles, createStyles, withStyles } from "@material-ui/core"
 const Cell = (props: ICellProps) => {
   const dataPosition = props.position.col + props.position.row
   let backgroundColor = props.cellColor === Majavashakki.PieceColor.White ? "#eee" : "#333"
-  if (props.selected) backgroundColor = "#00f"
+  if (props.isSelected) backgroundColor = "#0f0"
 
   return (
     <div
@@ -24,7 +24,7 @@ interface ICellProps extends WithStyles<typeof styles> {
   position: Majavashakki.IPosition,
   cellColor: Majavashakki.PieceColor,
   piece: Majavashakki.IPiece,
-  selected: boolean,
+  isSelected: boolean,
   onClick: any,
 }
 
