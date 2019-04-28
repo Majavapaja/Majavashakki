@@ -7,21 +7,21 @@ import BoardStore from "../../../models/Board"
 
 const Board = inject((stores: IAppStore) => ({ boardStore: stores.app.game.board }))(observer((props: IBoardProps) => (
       <React.Fragment>
-      <div className={this.props.classes.board}>
+      <div className={props.classes.board} data-test-ui-component="board">
         {props.boardStore.cells.map(({position, piece}) => (
             <Cell
               piece={piece}
               cellColor={props.boardStore.getCellColor(position)}
               onClick={() => props.boardStore.onCellClick(position)}
-              selected={props.boardStore.comparePos(this.state.selectedCell, position)}
-              targeted={props.boardStore.comparePos(this.state.moveTarget, position)}
+              selected={props.boardStore.comparePos(props.boardStore.selectedCell, position)}
+              targeted={props.boardStore.comparePos(props.boardStore.moveTarget, position)}
               position={position}
               key={position.col + position.row}
             />
         ))}
       </div>
       </React.Fragment>
-    )
+    ),
 ))
 
 interface IBoardProps extends WithStyles<typeof styles> {

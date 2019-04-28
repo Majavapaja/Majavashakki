@@ -45,7 +45,7 @@ export interface IUserModel extends Model<IUserDocument> {
   addGame(userId: string, gameId: string): Promise<void>;
   validProfile(user: IUserDocument): boolean;
   registerUser(user: RegisterRequest): Promise<IUserDocument | undefined>;
-  getMyGames(userId: string, active?: boolean): Promise<string[]>;
+  getMyGames(userId: string): Promise<string[]>;
   findByIds(ids: string[]): Promise<IUserDocument[]>
 }
 

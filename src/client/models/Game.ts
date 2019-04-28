@@ -60,6 +60,7 @@ export default class Game extends GameBase {
     this.isCheckmate = gameEntity.isCheckmate
     this.playerWhite = gameEntity.playerWhite
     this.playerBlack = gameEntity.playerBlack
+    this.inProgress = gameEntity.inProgress
 
     this.isLoading = false
   }

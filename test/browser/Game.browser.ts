@@ -119,7 +119,7 @@ async function joinGame(page, gameName) {
   const xpath = `//span[contains(., '${gameName}')]`
   const game = await page.waitForXPath(xpath)
   await game.click()
-  await page.waitForSelector(".board")
+  await page.waitForSelector("[data-test-ui-component=board]")
 }
 
 async function makeMove(page, start, destination) {
