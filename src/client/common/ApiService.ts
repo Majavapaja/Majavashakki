@@ -2,7 +2,7 @@ import request from "request-promise";
 import * as Majavashakki from "../../common/GamePieces";
 import { ApiGameInfo, ApiUser, UserUpdateRequest, CreateGameRequest } from "../../common/types";
 import { action } from "mobx";
-import PopupNotificationStore from "../models/PopupNotificationStore";
+import PopupNotificationStore from "../store/PopupNotificationStore";
 
 const base = window.location.origin;
 

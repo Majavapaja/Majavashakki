@@ -6,7 +6,7 @@ import ApiService from "../../common/ApiService";
 import { ApiGameInfo } from "../../../common/types";
 import { action, observable } from "mobx";
 import { inject, observer } from "mobx-react";
-import {IAppStore} from "../../models/AppStore"
+import {IAppStore} from "../../store/AppStore"
 
 @inject((stores: IAppStore) => ({game: stores.app.game, api: stores.app.api}))
 @observer

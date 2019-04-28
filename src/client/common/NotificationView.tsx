@@ -1,6 +1,6 @@
 import * as React from "react";
 import { inject, observer } from "mobx-react";
-import { IAppStore } from "client/models/AppStore";
+import { IAppStore } from "client/store/AppStore";
 import Snackbar from "@material-ui/core/Snackbar";
 import ApiService from "./ApiService";
 
