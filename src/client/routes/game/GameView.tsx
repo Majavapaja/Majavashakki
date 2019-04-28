@@ -16,7 +16,7 @@ class GameView extends React.Component<any, any> {
     super(props)
   }
 
-  pubclic async componentDidMount() {
+  public async componentDidMount() {
     const {game, match} = this.props
     await game.loadGame(match.params.gameId)
     if (!game.socket) game.connectSocket()
