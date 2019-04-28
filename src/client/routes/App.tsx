@@ -7,7 +7,7 @@ import * as React from "react";
 import { Route } from "react-router-dom";
 import SignUpView from "./signup/SignUpView";
 import NotificationView from "../common/NotificationView";
-import PromotionDialog from "../common/PromotionDialog";
+import PromotionDialog from "./game/PromotionDialog";
 
 export default class App extends React.Component<any, any> {
 

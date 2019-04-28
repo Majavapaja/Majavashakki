@@ -1,6 +1,6 @@
 import { observable, action } from "mobx"
 import * as Majavashakki from "../../common/GamePieces"
-import AppContainer from "./AppContainer";
+import AppContainer from "./AppContainer"
 
 export default class PromotionDialogStore {
   @observable public isOpen: boolean
