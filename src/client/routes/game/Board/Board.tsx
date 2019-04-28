@@ -14,7 +14,6 @@ const Board = inject((stores: IAppStore) => ({ boardStore: stores.app.game.board
               cellColor={props.boardStore.getCellColor(position)}
               onClick={() => props.boardStore.onCellClick(position)}
               selected={props.boardStore.comparePos(props.boardStore.selectedCell, position)}
-              targeted={props.boardStore.comparePos(props.boardStore.moveTarget, position)}
               position={position}
               key={position.col + position.row}
             />
