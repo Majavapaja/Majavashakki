@@ -55,7 +55,7 @@ export default class Game extends GameBase {
     this.currentTurn = game.currentTurn
     this.playerIdBlack = game.playerIdBlack
     this.playerIdWhite = game.playerIdWhite
-    this.board = new BoardModel(game.board.pieces, game.board.moveHistory)
+    this.board = new BoardModel(this, game.board.pieces, game.board.moveHistory)
     this.isCheck = gameEntity.isCheck
     this.isCheckmate = gameEntity.isCheckmate
     this.playerWhite = gameEntity.playerWhite
