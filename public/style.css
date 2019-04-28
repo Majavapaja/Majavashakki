@@ -4,14 +4,3 @@ html {
   background-size: cover;
 }
 
-@keyframes timangi {
-  0% {
-    transform: translateY(0vh);
-  }
-  75% {
-    transform: translateY(95vh);
-  }
-  100% {
-    transform: translateY(100vh);
-  }
-}

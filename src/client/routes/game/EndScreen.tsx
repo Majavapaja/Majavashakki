@@ -27,6 +27,17 @@ const EndScreen = (props: IEndScreenProps) => (
 interface IEndScreenProps extends WithStyles<typeof styles> { }
 
 const styles = (theme: Theme) => createStyles({
+  "@keyframes timangi": {
+    "0%": {
+      transform: "translateY(0vh)",
+    },
+    "75%": {
+      transform: "translateY(95vh)",
+    },
+    "100%": {
+      transform: "translateY(100vh)",
+    },
+  },
   root: {
     pointerEvents: "none",
     width: "100vw",
