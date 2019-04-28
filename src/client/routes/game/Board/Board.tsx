@@ -1,18 +1,20 @@
 import * as React from "react";
 import { observer, inject } from "mobx-react"
-import * as Majavashakki from "../../../common/GamePieces"
-import {IAppStore} from "../../models/AppContainer"
-import ChessPiece from "./ChessPiece"
+import * as Majavashakki from "../../../../common/GamePieces"
+import {IAppStore} from "../../../models/AppContainer"
+import Cell from "./Cell"
+import { WithStyles, createStyles, withStyles } from "@material-ui/core"
+import Game from "../../../models/Game"
 
 @inject((stores: IAppStore) => ({game: stores.app.game}))
 @observer
-class Board extends React.Component<any, any> {
+class Board extends React.Component<IBoardProps, any> {
   constructor(props) {
-    super(props);
+    super(props)
     this.state = {
       selectedCell: null,
       moveTarget: null,
-    };
+    }
   }
 
   public render() {
@@ -20,10 +22,11 @@ class Board extends React.Component<any, any> {
 
     return (
       <React.Fragment>
-      <div className="board">
+      <div className={this.props.classes.board}>
         {board.cells.map(({position, piece}) => (
             <Cell
               piece={piece}
+              cellColor={board.getCellColor(position)}
               onClick={() => this.onCellClick(position)}
               selected={board.comparePos(this.state.selectedCell, position)}
               targeted={board.comparePos(this.state.moveTarget, position)}
@@ -61,18 +64,16 @@ class Board extends React.Component<any, any> {
   }
 }
 
-function Cell({position, piece, selected, targeted, onClick}) {
-  const classes = [
-    "cell",
-    selected && "selected",
-    targeted && "targeted",
-  ].filter(Boolean);
-
-  return (
-    <div data-position={position.col + position.row} className={classes.join(" ")} onClick={onClick}>
-      {piece && <ChessPiece color={piece.color} type={piece.type} />}
-    </div>
-  );
+interface IBoardProps extends WithStyles<typeof styles> {
+  game?: Game
 }
 
-export default Board;
+const styles = theme => createStyles({
+  board: {
+    display: "flex",
+    flexFlow: "row wrap",
+    width: "60vmin",
+  }
+})
+
+export default withStyles(styles)(Board)
