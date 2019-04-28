@@ -73,7 +73,7 @@ const styles = theme => createStyles({
     display: "flex",
     flexFlow: "row wrap",
     width: "60vmin",
-  }
+  },
 })
 
 export default withStyles(styles)(Board)
