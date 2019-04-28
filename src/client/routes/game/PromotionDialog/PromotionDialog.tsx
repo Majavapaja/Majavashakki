@@ -1,10 +1,9 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, WithStyles, createStyles, withStyles } from "@material-ui/core"
+import { Dialog, DialogTitle, DialogContent, DialogActions, WithStyles, createStyles, withStyles } from "@material-ui/core"
 import { IAppStore } from "client/models/AppContainer"
 import { PieceType } from "../../../../common/GamePieces"
 import PromotionDialogStore from "client/models/PromotionDialogStore"
-import Game from "client/models/Game"
 import PromotionButton from "./PromotionButton"
 
 const PromotionDialog = inject((stores: IAppStore) => ({

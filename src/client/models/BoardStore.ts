@@ -2,16 +2,16 @@ import { observable, action, computed, decorate } from "mobx"
 import * as Majavashakki from "../../common/GamePieces"
 import Piece from "../../common/pieces/Piece"
 import BoardBase from "../../common/BoardBase"
-import Game from "./Game"
+import GameStore from "./GameStore"
 
 export default class BoardStore extends BoardBase {
     @observable public pieces: Piece[]
     @observable public selectedCell: Majavashakki.IPosition
     @observable public moveTarget: Majavashakki.IPosition
 
-    private gameStore: Game
+    private gameStore: GameStore
 
-    constructor(gameStore: Game, pieces?: Piece[], moveHistory?: Majavashakki.IMove[]) {
+    constructor(gameStore: GameStore, pieces?: Piece[], moveHistory?: Majavashakki.IMove[]) {
         super(pieces, moveHistory)
         this.gameStore = gameStore
         // Decorate position in pieces, so it's changes will be noticed.

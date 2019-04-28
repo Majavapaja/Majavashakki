@@ -8,7 +8,7 @@ import GameBase from "../../common/GameBase"
 import AppContainer from "./AppContainer"
 
 // TODO: Extend /src/common/Game
-export default class Game extends GameBase {
+export default class GameStore extends GameBase {
   @observable
   public title: string
   @observable

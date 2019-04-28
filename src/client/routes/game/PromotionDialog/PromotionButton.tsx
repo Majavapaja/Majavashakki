@@ -4,12 +4,12 @@ import { Button, WithStyles, createStyles, withStyles } from "@material-ui/core"
 import { IAppStore } from "client/models/AppContainer"
 import ChessPiece from "../ChessPiece"
 import PromotionDialogStore from "client/models/PromotionDialogStore"
-import Game from "client/models/Game"
+import GameStore from "client/models/GameStore"
 import { PieceType } from "../../../../common/GamePieces"
 
 const PromotionButton = inject((stores: IAppStore) => ({
   dialog: stores.app.promotionDialog,
-  game: stores.app.game,
+  gameStore: stores.app.game,
 }))(observer((props: IPromotionButtonProps) => (
   <Button
     data-promote-type={props.type}
@@ -19,14 +19,14 @@ const PromotionButton = inject((stores: IAppStore) => ({
     variant="raised"
     color="primary"
   >
-    <ChessPiece color={props.game.currentTurn} type={props.type} />
+    <ChessPiece color={props.gameStore.currentTurn} type={props.type} />
   </Button>
 )))
 
 interface IPromotionButtonProps extends WithStyles<typeof styles> {
   type: PieceType
   dialog?: PromotionDialogStore,
-  game?: Game,
+  gameStore?: GameStore,
 }
 
 const styles = theme => createStyles({
