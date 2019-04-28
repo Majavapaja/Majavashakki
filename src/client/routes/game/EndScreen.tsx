@@ -3,6 +3,7 @@ import { withStyles, createStyles, Theme } from "@material-ui/core/styles"
 
 const styles = (theme: Theme) => createStyles({
   root: {
+    pointerEvents: "none",
     width: "100vw",
     height: "100vh",
     position: "fixed",
@@ -11,7 +12,6 @@ const styles = (theme: Theme) => createStyles({
   },
   timangi: {
     position: "absolute",
-    pointerEvents: "none",
     animation: "timangi 1.5s linear infinite",
   },
 })
