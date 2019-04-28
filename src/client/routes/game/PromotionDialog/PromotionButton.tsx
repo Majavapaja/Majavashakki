@@ -8,10 +8,12 @@ import Game from "client/models/Game"
 import { PieceType } from "../../../../common/GamePieces"
 
 const PromotionButton = inject((stores: IAppStore) => ({
+  id: string,
   dialog: stores.app.promotionDialog,
   game: stores.app.game,
 }))(observer((props: IPromotionButtonProps) => (
   <Button
+    id={id}
     onClick={() => props.dialog.choosePiece(props.type)}
     classes={{ label: props.classes.label }}
     className={props.classes.button}
