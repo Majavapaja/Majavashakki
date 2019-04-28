@@ -54,7 +54,7 @@ export let UserSchema: Schema = new Schema({
   email: String,
   name: String,
   password: String,
-  logins: {type: [] as LoginId[], default: []},
+  logins: {type: Array, default: []},
   gameIds: {type: Array, default: []},
 }, schemaOptions({
   collection: "users",
