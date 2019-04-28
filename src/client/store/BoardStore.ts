@@ -33,13 +33,9 @@ export default class BoardStore extends BoardBase {
     public onCellClick(position: Majavashakki.IPosition): any {
         if (!this.selectedCell && this.getPiece(position)) {
             this.selectedCell = position
-        }
-
-        if (position === this.selectedCell) {
+        } else if (position === this.selectedCell) {
             this.selectedCell = null
-        }
-
-        if (this.selectedCell) {
+        } else if (this.selectedCell) {
             this.gameStore.move(this.selectedCell, position)
             this.selectedCell = null
         }
