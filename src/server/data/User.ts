@@ -12,12 +12,31 @@ export interface IUser {
   email: string;
   name: string;
   gameIds: string[];
-  password: string;
+  logins: LoginId[];
+}
+
+export enum LoginType {
+  Local = "local",
+  Facebook = "facebook",
+}
+
+export class LoginId {
+  public id: string;
+  public type: LoginType;
+  public primary: boolean;
+  public password: string;
+
+  public constructor(id: string, type: LoginType, password: string = null, primary: boolean = true) {
+    this.id = id;
+    this.type = type;
+    this.primary = primary;
+    this.password = password;
+  }
 }
 
 export interface IUserDocument extends IUser, Document {
-  facebookId?: string;
   isCorrectPassword(password: string): Promise<boolean>;
+  primaryId(): LoginId;
 }
 
 export interface IUserModel extends Model<IUserDocument> {
@@ -32,25 +51,16 @@ export interface IUserModel extends Model<IUserDocument> {
 
 export let UserSchema: Schema = new Schema({
   createdAt: Date,
-  email: {
-    type: String,
-    unique: true,
-    index: true,
-  },
+  email: String,
   name: String,
   password: String,
-  facebookId: {
-    type: String,
-    index: true,
-    unique: true,
-    sparse: true,
-  },
+  logins: {type: [] as LoginId[], default: []},
   gameIds: {type: Array, default: []},
 }, schemaOptions({
   collection: "users",
 }));
 
-// Statics can be called straight from the model (find, search, create)
+UserSchema.index({"logins.id": 1}, {unique: true});
 
 // TODO passport session doesn't get methods set by mongoose for IUserDocument instances via UserSchema.methods...
 // unclear, if functions can be serialized / deserialized for passport session at all
@@ -58,19 +68,21 @@ UserSchema.statics.validProfile = (user: IUserDocument): boolean => {
   return !!user.name;
 }
 
+// TODO refactor local and facebook approaches into unified model
 UserSchema.statics.findOrCreate = async (facebookId: string): Promise<IUserDocument> => {
   console.log(`Find user by FBID '${facebookId}'`);
 
   const userObj = new User();
-  const result = await User.findOne({facebookId}).exec();
+  const result = await User.findOne({"logins.id": facebookId}).exec();
 
   if (!result) {
     console.log(`CREATING NEW USER ${facebookId}`); // Please don't yell :(
-    userObj.facebookId = facebookId;
+    const newLogin = new LoginId(facebookId, LoginType.Facebook);
+    userObj.logins.push(newLogin);
     await userObj.save();
     return userObj;
   } else {
-    console.log(`FOUND EXISTING USER ${result.facebookId} NAME: ${result.name}, ID: ${result._id}`);
+    console.log(`FOUND EXISTING USER ${facebookId} NAME: ${result.name}, ID: ${result._id}`);
     return result;
   }
 };
@@ -79,7 +91,9 @@ UserSchema.statics.registerUser = async (user: RegisterRequest): Promise<IUserDo
   const doc = new User();
   doc.name = user.name
   doc.email = user.email
-  doc.password = await bcrypt.hash(user.password, PASSWORD_SALT_ROUNDS)
+  const password = await bcrypt.hash(user.password, PASSWORD_SALT_ROUNDS)
+  const newLogin = new LoginId(user.email, LoginType.Local, password)
+  doc.logins.push(newLogin);
   return await doc.save();
 }
 
@@ -115,7 +129,12 @@ UserSchema.statics.findByIds = async (ids: string[]): Promise<IUserDocument[]> =
 // Methods are used for instance of items
 UserSchema.methods.isCorrectPassword = async function(password: string): Promise<boolean> {
   const self = this as IUserDocument;
-  return await bcrypt.compare(password, self.password)
+  return await bcrypt.compare(password, self.primaryId().password)
 };
+
+UserSchema.methods.primaryId = function(): LoginId {
+  const self = this as IUserDocument;
+  return self.logins.find(x => x.primary);
+}
 
 export const User: IUserModel = model<IUserDocument, IUserModel>("User", UserSchema);

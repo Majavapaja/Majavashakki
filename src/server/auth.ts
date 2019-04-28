@@ -47,7 +47,7 @@ export function initPassport(appUrl: string) {
 
   passport.use(new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
     try {
-      const user: IUserDocument = await User.findOne({ email })
+      const user: IUserDocument = await User.findOne({ "logins.id": email })
 
       if (!user) {
         console.log(`User '${email}' tried to log in with invalid email`)
