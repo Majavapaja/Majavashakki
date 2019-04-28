@@ -54,6 +54,7 @@ export default {
 
       return promise;
     } catch (e) {
+      console.log("ERROR Failed to register user:", e)
       if (isUniqueIndexViolation(e)) {
         throw new ValidationError([`Email '${user.email}' is already in use`])
       }
