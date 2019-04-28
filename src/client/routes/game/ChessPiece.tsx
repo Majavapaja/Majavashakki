@@ -41,19 +41,19 @@ const styles = () => createStyles({
     backgroundPositionX: "calc(0 * 20%)",
   },
   [PieceType.Queen]: {
-    backgroundPositionX: "calc(1 * 20%)"
+    backgroundPositionX: "calc(1 * 20%)",
   },
   [PieceType.Rook]: {
-    backgroundPositionX: "calc(2 * 20%)"
+    backgroundPositionX: "calc(2 * 20%)",
   },
   [PieceType.Bishop]: {
-    backgroundPositionX: "calc(3 * 20%)"
+    backgroundPositionX: "calc(3 * 20%)",
   },
   [PieceType.Knight]: {
-    backgroundPositionX: "calc(4 * 20%)"
+    backgroundPositionX: "calc(4 * 20%)",
   },
   [PieceType.Pawn]: {
-    backgroundPositionX: "calc(5 * 20%)"
+    backgroundPositionX: "calc(5 * 20%)",
   },
 })
 

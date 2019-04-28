@@ -30,8 +30,8 @@ interface IPromotionDialogProps extends WithStyles<typeof styles> {
 
 const styles = theme => createStyles({
   actions: {
-    justifyContent: "space-between"
-  }
+    justifyContent: "space-between",
+  },
 })
 
 export default withStyles(styles)(PromotionDialog)
