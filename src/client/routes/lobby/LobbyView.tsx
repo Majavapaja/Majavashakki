@@ -53,7 +53,7 @@ class LobbyView extends React.Component<ILobbyViewProps, never> {
 
         <GameList id="myGames" games={this.store.myGames} title="My games" openDialog={this.openNewForm} />
         <GameList id="availableGames" games={this.store.availableGames} title="Available games" openDialog={this.openNewForm} />
-        <GameList id="availableGames" games={this.store.finishedGames} title="Finished games" openDialog={this.openNewForm} />
+        <GameList id="finishedGames" games={this.store.finishedGames} title="Finished games" openDialog={this.openNewForm} />
       </div>
     );
   }
