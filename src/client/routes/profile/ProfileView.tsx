@@ -2,8 +2,8 @@ import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import {TextField, WithStyles, withStyles, createStyles, Theme, Button, Typography} from "@material-ui/core";
 import { inject, observer } from "mobx-react";
-import { IAppStore } from "client/models/AppContainer";
-import UserStore from "client/models/UserStore";
+import { IAppStore } from "client/store/AppStore";
+import UserStore from "client/store/UserStore";
 import { observable } from "mobx";
 
 class ProfileViewForm {

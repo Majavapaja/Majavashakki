@@ -11,7 +11,7 @@ export interface IGameModel extends Model<IGameDocument> {
   save(game: Game, isNew?: boolean): Promise<IGameDocument>;
   findGame(id: string): Promise<IGameDocument>;
   getAvailableGames(userId: string): Promise<IGameDocument[]>;
-  getGames(ids: string[]): Promise<IGameDocument[]>;
+  getGames(ids: string[], inProgress: boolean): Promise<IGameDocument[]>;
 }
 
 export let GameSchema: Schema = new Schema({
@@ -21,6 +21,7 @@ export let GameSchema: Schema = new Schema({
   playerIdWhite: String,
   playerIdBlack: String,
   board: Schema.Types.Mixed,
+  inProgress: Boolean,
 }, schemaOptions({
   collection: "gamemodels",
 }));
@@ -58,11 +59,15 @@ GameSchema.statics.getAvailableGames = async (userId: string): Promise<IGameDocu
       {$or: [{playerIdWhite: null}, {playerIdBlack: null}]},
       {playerIdWhite: { $ne: userId }},
       {playerIdBlack: { $ne: userId }},
+      {inProgress: true},
     ]).exec();
 }
 
-GameSchema.statics.getGames = async (ids: string[]): Promise<IGameDocument[]> => {
-  return await GameModel.find({_id: {$in: ids}}).exec()
+GameSchema.statics.getGames = async (ids: string[], inProgress: boolean): Promise<IGameDocument[]> => {
+  return await GameModel.find({
+    _id: {$in: ids},
+    inProgress,
+  }).exec()
 }
 
 export const GameModel: IGameModel = model<IGameDocument, IGameModel>("GameModel", GameSchema);

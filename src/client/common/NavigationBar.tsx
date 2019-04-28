@@ -8,7 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { withRouter } from "react-router-dom";
 import MajavapajaLogo from "./MajavapajaLogo";
-import {IAppStore} from "../models/AppContainer"
+import {IAppStore} from "../store/AppStore"
 import { inject, observer } from "mobx-react";
 
 const styles = createStyles({

@@ -1,33 +1,32 @@
 import * as React from "react"
 import { inject, observer } from "mobx-react"
 import { Button, WithStyles, createStyles, withStyles } from "@material-ui/core"
-import { IAppStore } from "client/models/AppContainer"
+import { IAppStore } from "client/store/AppStore"
 import ChessPiece from "../ChessPiece"
-import PromotionDialogStore from "client/models/PromotionDialogStore"
-import Game from "client/models/Game"
+import PromotionDialogStore from "client/store/PromotionDialogStore"
+import GameStore from "client/store/GameStore"
 import { PieceType } from "../../../../common/GamePieces"
 
 const PromotionButton = inject((stores: IAppStore) => ({
-  id: string,
   dialog: stores.app.promotionDialog,
-  game: stores.app.game,
+  gameStore: stores.app.game,
 }))(observer((props: IPromotionButtonProps) => (
   <Button
-    id={id}
+    data-promote-type={props.type}
     onClick={() => props.dialog.choosePiece(props.type)}
     classes={{ label: props.classes.label }}
     className={props.classes.button}
     variant="raised"
     color="primary"
   >
-    <ChessPiece color={props.game.currentTurn} type={props.type} />
+    <ChessPiece color={props.gameStore.currentTurn} type={props.type} />
   </Button>
 )))
 
 interface IPromotionButtonProps extends WithStyles<typeof styles> {
   type: PieceType
   dialog?: PromotionDialogStore,
-  game?: Game,
+  gameStore?: GameStore,
 }
 
 const styles = theme => createStyles({

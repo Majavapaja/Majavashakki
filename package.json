@@ -66,12 +66,14 @@
     "test": {
       "command": "mocha --timeout 999999 --require mocha_tsnode_hax.js test/**/*.spec.ts",
       "env": {
+        "DATABASE_NAME": "Testishakki",
         "MajavashakkiSessionSecret": "majestetic"
       }
     },
     "test:browser": {
       "command": "mocha --timeout 999999 --require mocha_tsnode_hax.js test/**/*.browser.ts",
       "env": {
+        "DATABASE_NAME": "Testishakki",
         "MajavashakkiSessionSecret": "majestetic"
       }
     }

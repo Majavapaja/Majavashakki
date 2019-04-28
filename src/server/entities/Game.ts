@@ -15,6 +15,7 @@ export default class Game extends GameBase {
         game.currentTurn = gameState.currentTurn
         game.isCheck = gameState.isCheck
         game.isCheckmate = gameState.isCheckmate
+        game.inProgress = gameState.inProgress
         return game;
     }
 
@@ -28,6 +29,7 @@ export default class Game extends GameBase {
             },
             playerIdWhite: game.playerIdWhite,
             playerIdBlack: game.playerIdBlack,
+            inProgress: game.inProgress,
         } as Majavashakki.IGame
     }
 }

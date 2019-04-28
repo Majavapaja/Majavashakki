@@ -9,6 +9,7 @@ class ChessPiece extends React.Component<IChessPieceProps, any> {
   public render() {
     return (
       <div
+        data-piece-type={this.props.type}
         className={classNames(
           this.props.classes.piece,
           this.props.classes[this.props.color],

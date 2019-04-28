@@ -2,18 +2,19 @@ import request from "request-promise";
 import * as Majavashakki from "../../common/GamePieces";
 import { ApiGameInfo, ApiUser, UserUpdateRequest, CreateGameRequest } from "../../common/types";
 import { action } from "mobx";
-import PopupNotification from "../models/PopupNotification";
+import PopupNotificationStore from "../store/PopupNotificationStore";
 
 const base = window.location.origin;
 
 export default class ApiService {
 
-  public error = new PopupNotification();
+  public error = new PopupNotificationStore();
 
   public read = {
     user:           async () => await this.getIt<ApiUser>("api/user"),
     availableGames: async () => await this.getIt<ApiGameInfo[]>("api/games"),
     myGames:        async () => await this.getIt<ApiGameInfo[]>("api/games/my-games"),
+    finishedGames:  async () => await this.getIt<ApiGameInfo[]>("api/games/finished"),
     game:           async (id: string) => await this.getIt<Majavashakki.IGame>(`api/games/get/${id}`),
   };
 

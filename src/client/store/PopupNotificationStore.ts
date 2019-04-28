@@ -1,6 +1,6 @@
 import { observable } from "mobx";
 
-export default class PopupNotification {
+export default class PopupNotificationStore {
   @observable
   public show: boolean = false;
   public message?: string

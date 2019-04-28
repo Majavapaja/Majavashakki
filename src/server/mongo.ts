@@ -31,7 +31,25 @@ export async function initTestData() {
   }
 
   await User.insertMany([
-    {name: "John Smith", email: "john.smith@example.com", password: await bcrypt.hash("johnsmith123", 10)},
-    {name: "John Doe", email: "john.doe@example.com", password: await bcrypt.hash("johndoe123", 10)},
+    {
+      name: "John Smith",
+      email: "john.smith@example.com",
+      logins: [{
+        id: "john.smith@example.com",
+        type: "local",
+        primary: true,
+        password: await bcrypt.hash("johnsmith123", 10),
+      }],
+    },
+    {
+      name: "John Doe",
+      email: "john.doe@example.com",
+      logins: [{
+        id: "john.doe@example.com",
+        type: "local",
+        primary: true,
+        password: await bcrypt.hash("johndoe123", 10),
+      }],
+    },
   ])
 }

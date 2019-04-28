@@ -28,17 +28,27 @@ export default {
     const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
     const players = await User.findByIds(playerIds)
 
-    return games.filter(inProgress).map(formatGamesListResponse(players))
+    return games.map(formatGamesListResponse(players))
   }),
 
   getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
     const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
-    const games = await GameModel.getGames(gameIds)
+    const games = await GameModel.getGames(gameIds, true)
 
     const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
     const players = await User.findByIds(playerIds)
 
-    return games.filter(inProgress).map(formatGamesListResponse(players))
+    return games.map(formatGamesListResponse(players))
+  }),
+
+  getFinishedGames: jsonAPI<ApiGameInfo[]>(async req => {
+    const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
+    const games = await GameModel.getGames(gameIds, false)
+
+    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
+    const players = await User.findByIds(playerIds)
+
+    return games.map(formatGamesListResponse(players))
   }),
 
   getGame: jsonAPI<any>(async req => {
@@ -125,6 +135,11 @@ async function applyMove(doc: IGameDocument, userId: string, data: any): Promise
     if (typeof moveResult.isCheckmate === "undefined") moveResult.isCheckmate = false
   }
 
+  if (moveResult.isCheckmate) {
+    console.log("Checkmate! Marking game as finished.")
+    game.inProgress = false
+  }
+
   return [game, moveResult]
 }
 
@@ -157,15 +172,11 @@ function gameDocumentToApiResult(doc: IGameDocument, players: IUserDocument[]): 
     playerWhite: userDocumentToPlayerDetails(players.find(p => String(p._id) === doc.playerIdWhite)),
     isCheck: isCheck(board, doc.currentTurn),
     isCheckmate: isCheckMate(board, doc.currentTurn),
+    inProgress: doc.inProgress,
   }
 }
 
 function userDocumentToPlayerDetails(doc?: IUserDocument): ApiPlayerDetails | undefined {
   if (!doc) return undefined
   return {id: doc._id, name: doc.name}
-}
-
-function inProgress(doc: IGameDocument): boolean {
-  const board = Game.MapFromDb(doc).board
-  return !isCheckMate(board, doc.currentTurn)
 }

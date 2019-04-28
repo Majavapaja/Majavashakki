@@ -82,12 +82,12 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
 })
 
 async function assertPieceType(page, position, pieceType) {
-  await page.waitForSelector(`div[data-position=${position}] div.piece.${pieceType}`)
+  await page.waitForSelector(`div[data-position=${position}] div[data-piece-type=${pieceType}]`)
 }
 
 async function promotePawn(page) {
-  await page.waitForSelector(`#promoteQueen`)
-  await page.click("#promoteQueen")
+  await page.waitForSelector(`[data-promote-type=queen]`)
+  await page.click(`[data-promote-type=queen]`)
 }
 
 async function checkText(page, selector, expected) {
@@ -119,13 +119,14 @@ async function joinGame(page, gameName) {
   const xpath = `//span[contains(., '${gameName}')]`
   const game = await page.waitForXPath(xpath)
   await game.click()
-  await page.waitForSelector(".board")
+  await page.waitForSelector("[data-test-ui-component=board]")
 }
 
 async function makeMove(page, start, destination) {
   await page.waitForSelector(`div[data-position=${start}]`)
   await page.click(`div[data-position=${start}]`)
   await page.click(`div[data-position=${destination}]`)
+  await page.waitForSelector(`div[data-position=${destination}] div[data-piece-type]`)
 }
 
 async function waitForTurn(page, color) {
