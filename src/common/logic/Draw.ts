@@ -59,10 +59,7 @@ const hasEnoughMaterialForCheckmate = (board: BoardBase): boolean => {
   const whiteBishop = board.pieces.find(piece => piece.type === PieceType.Bishop && piece.isWhite())
   // king and bishop versus king and bishop with the bishops on the same color.
   if (board.pieces.length === 4 && blackBishop && whiteBishop) {
-    const isOnWhite = (position: IPosition) => (
-      (["b", "d", "f", "h"].includes(position.col) && Number(position.row) % 2 !== 0) ||
-      (["a", "c", "e", "g"].includes(position.col) && Number(position.row) % 2 === 0)
-    )
+    const isOnWhite = (position: IPosition) => board.getCellColor(position) === PieceColor.White
 
     if (
       (isOnWhite(blackBishop.position) && isOnWhite(whiteBishop.position)) ||

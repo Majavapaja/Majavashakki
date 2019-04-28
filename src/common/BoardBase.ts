@@ -212,6 +212,16 @@ export default class BoardBase implements Majavashakki.IBoard {
         return move
     }
 
+    /** Returns the cell background color for a board cell. */
+    public getCellColor(position: Majavashakki.IPosition): Majavashakki.PieceColor {
+        const isOnWhite = (
+            (["b", "d", "f", "h"].includes(position.col) && Number(position.row) % 2 !== 0) ||
+            (["a", "c", "e", "g"].includes(position.col) && Number(position.row) % 2 === 0)
+        )
+
+        return isOnWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
+    }
+
     private isMoveEnpassant(piece: Majavashakki.IPiece, destination: Majavashakki.IPosition): boolean {
         if (piece.type !== Majavashakki.PieceType.Pawn) return false
         const pawn = piece as Pawn
