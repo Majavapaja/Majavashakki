@@ -2,13 +2,13 @@ import request from "request-promise";
 import * as Majavashakki from "../../common/GamePieces";
 import { ApiGameInfo, ApiUser, UserUpdateRequest, CreateGameRequest } from "../../common/types";
 import { action } from "mobx";
-import PopupNotification from "../models/PopupNotification";
+import PopupNotificationStore from "../models/PopupNotificationStore";
 
 const base = window.location.origin;
 
 export default class ApiService {
 
-  public error = new PopupNotification();
+  public error = new PopupNotificationStore();
 
   public read = {
     user:           async () => await this.getIt<ApiUser>("api/user"),
