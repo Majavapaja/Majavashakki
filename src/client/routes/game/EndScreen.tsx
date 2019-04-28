@@ -1,5 +1,30 @@
 import * as React from "react"
-import { withStyles, createStyles, Theme } from "@material-ui/core/styles"
+import { withStyles, createStyles, Theme, WithStyles } from "@material-ui/core/styles"
+
+const EndScreen = (props: IEndScreenProps) => (
+  <div id="timangit-sataa" className={props.classes.root}>
+    {Array.from(Array(75)).map((x, i) => {
+      const size = Math.random() * 100
+      const randomAnimationModifier = Math.floor(Math.random() * (98 - 1 + 1) + 1)
+      return (
+        <i
+          key={i}
+          className={props.classes.timangi}
+          style={{
+            left: `${Math.random() * 100}%`,
+            animationDelay: `0.${randomAnimationModifier}s`,
+            fontSize: `${size}px`,
+            animationDuration: `1.${randomAnimationModifier}s`,
+          }}
+        >
+          💎
+        </i>
+      )
+    })}
+  </div>
+)
+
+interface IEndScreenProps extends WithStyles<typeof styles> { }
 
 const styles = (theme: Theme) => createStyles({
   root: {
@@ -15,28 +40,5 @@ const styles = (theme: Theme) => createStyles({
     animation: "timangi 1.5s linear infinite",
   },
 })
-
-const EndScreen = ({ classes }) => (
-  <div id="timangit-sataa" className={classes.root}>
-    {Array.from(Array(75)).map((x, i) => {
-      const size = Math.random() * 100
-      const randomAnimationModifier = Math.floor(Math.random() * (98 - 1 + 1) + 1)
-      return (
-        <i
-          key={i}
-          className={classes.timangi}
-          style={{
-            left: `${Math.random() * 100}%`,
-            animationDelay: `0.${randomAnimationModifier}s`,
-            fontSize: `${size}px`,
-            animationDuration: `1.${randomAnimationModifier}s`,
-          }}
-        >
-          💎
-        </i>
-      )
-    })}
-  </div>
-)
 
 export default withStyles(styles)(EndScreen)
