@@ -6,7 +6,7 @@ import GameStore from "./GameStore"
 
 export default class BoardStore extends BoardBase {
     @observable public pieces: Piece[]
-    @observable public selectedCell: Majavashakki.IPosition
+    @observable.struct public selectedCell: Majavashakki.IPosition
 
     private gameStore: GameStore
 
