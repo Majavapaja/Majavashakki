@@ -6,6 +6,7 @@ import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
 import { IAppStore } from "client/store/AppStore";
 import UserStore from "client/store/UserStore";
+import ForgotPasswordDialog from "./ForgotPasswordDialog";
 
 @inject((stores: IAppStore) => ({userStore: stores.app.user}))
 @observer
@@ -67,6 +68,8 @@ class LoginView extends React.Component<ILoginViewProps, never> {
                     >
                         <Typography color="inherit">Register</Typography>
                     </Button>
+
+                    <ForgotPasswordDialog />
 
                     <hr className={classes.divider} />
 
