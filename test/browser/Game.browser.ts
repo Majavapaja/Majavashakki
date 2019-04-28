@@ -126,6 +126,7 @@ async function makeMove(page, start, destination) {
   await page.waitForSelector(`div[data-position=${start}]`)
   await page.click(`div[data-position=${start}]`)
   await page.click(`div[data-position=${destination}]`)
+  await page.waitForSelector(`div[data-position=${destination}] div[data-piece-type]`)
 }
 
 async function waitForTurn(page, color) {
