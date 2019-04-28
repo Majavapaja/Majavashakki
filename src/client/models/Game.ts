@@ -30,6 +30,7 @@ export default class Game extends GameBase {
   @observable
   public playerWhite?: ApiPlayerDetails
 
+  @observable
   public board: BoardModel
   private socket: SocketIOClient.Socket
   private gameId: string
@@ -42,8 +43,8 @@ export default class Game extends GameBase {
   }
 
   @action
-  public loadGame = async (gameId: string) => {
-    this.isLoading = true
+  public loadGame = async (gameId: string, showLoadingIndicator = true) => {
+    this.isLoading = showLoadingIndicator
 
     this.currentUser = await this.rootStore.api.read.user();
     const gameEntity = await this.rootStore.api.read.game(gameId);
@@ -101,15 +102,8 @@ export default class Game extends GameBase {
   ///
 
   @action
-  private onMoveResult = (move: Majavashakki.IMoveResponse) => {
-    if (move.status === Majavashakki.MoveStatus.Success) {
-      this.board.move(move.start, move.destination, move.promotionType)
-      this.error = ""
-      this.changeTurn()
-      this.isCheck = move.isCheck
-      this.isCheckmate = move.isCheckmate
-    } else {
-      this.error = move.error
-    }
+  private onMoveResult = async (move: Majavashakki.IMoveResponse) => {
+    await this.loadGame(this.gameId, false)
+    this.error = move.status === Majavashakki.MoveStatus.Error ? move.error : undefined
   }
 }

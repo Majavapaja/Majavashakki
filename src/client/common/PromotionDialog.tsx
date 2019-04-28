@@ -15,10 +15,10 @@ class PromotionDialog extends React.Component<IPromotionDialogProps, any> {
         <DialogTitle>Pawn promotion</DialogTitle>
         <DialogContent>Choose the piece you want to promote your pawn into</DialogContent>
         <DialogActions>
-          <Button onClick={() => this.props.dialog.choosePiece(PieceType.Queen)}>Queen</Button>
-          <Button onClick={() => this.props.dialog.choosePiece(PieceType.Knight)}>Knight</Button>
-          <Button onClick={() => this.props.dialog.choosePiece(PieceType.Rook)}>Rook</Button>
-          <Button onClick={() => this.props.dialog.choosePiece(PieceType.Bishop)}>Bishop</Button>
+          <Button id="promoteQueen" onClick={() => this.props.dialog.choosePiece(PieceType.Queen)}>Queen</Button>
+          <Button id="promoteKnight" onClick={() => this.props.dialog.choosePiece(PieceType.Knight)}>Knight</Button>
+          <Button id="promoteRook" onClick={() => this.props.dialog.choosePiece(PieceType.Rook)}>Rook</Button>
+          <Button id="promoteBishop" onClick={() => this.props.dialog.choosePiece(PieceType.Bishop)}>Bishop</Button>
         </DialogActions>
       </Dialog>
     )
