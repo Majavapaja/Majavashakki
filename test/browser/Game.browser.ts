@@ -32,7 +32,7 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     await checkText(page2, "#winMessage", "The winner is black")
   })
 
-  it.only("implments pawn promotion correctly", async function() {
+  it("implments pawn promotion correctly", async function() {
     const [page1, page2] = this.pages
 
     await login(page1, "john.smith@example.com", "johnsmith123")
@@ -80,8 +80,6 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     await assertPieceType(page2, "g8", "queen")
   })
 })
-
-// const sleep = ms => new Promise((resolve, reject) => setTimeout(resolve, ms))
 
 async function assertPieceType(page, position, pieceType) {
   await page.waitForSelector(`div[data-position=${position}] div.piece.${pieceType}`)
