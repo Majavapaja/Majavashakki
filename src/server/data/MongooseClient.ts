@@ -10,8 +10,9 @@ export class MongooseClient {
   private static hooksInitialized: boolean = false
 
   public static async InitMongoConnection() {
+    const DATABASE_NAME = process.env.DATABASE_NAME || "Majavashakki"
     await mongoose.connect(connectionString, {
-      dbName: "Majavashakki",
+      dbName: DATABASE_NAME,
       useNewUrlParser: true,
       useCreateIndex: true,
     });
