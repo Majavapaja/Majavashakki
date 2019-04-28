@@ -82,12 +82,12 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
 })
 
 async function assertPieceType(page, position, pieceType) {
-  await page.waitForSelector(`div[data-position=${position}] div.piece.${pieceType}`)
+  await page.waitForSelector(`div[data-position=${position}] div[data-piece-type=${pieceType}]`)
 }
 
 async function promotePawn(page) {
-  await page.waitForSelector(`#promoteQueen`)
-  await page.click("#promoteQueen")
+  await page.waitForSelector(`[data-promote-type=queen]`)
+  await page.click(`[data-promote-type=queen]`)
 }
 
 async function checkText(page, selector, expected) {

@@ -16,10 +16,10 @@ const PromotionDialog = inject((stores: IAppStore) => ({
       <DialogTitle>Pawn promotion</DialogTitle>
       <DialogContent>Choose the piece you want to promote your pawn into</DialogContent>
       <DialogActions className={props.classes.actions}>
-        <PromotionButton id="promoteQueen" type={PieceType.Queen} />
-        <PromotionButton id="promoteRook" type={PieceType.Rook} />
-        <PromotionButton id="promoteBishop" type={PieceType.Bishop} />
-        <PromotionButton id="promoteKnight" type={PieceType.Knight} />
+        <PromotionButton type={PieceType.Queen} />
+        <PromotionButton type={PieceType.Rook} />
+        <PromotionButton type={PieceType.Bishop} />
+        <PromotionButton type={PieceType.Knight} />
       </DialogActions>
     </Dialog>
 )))
