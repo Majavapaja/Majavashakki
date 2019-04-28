@@ -14,9 +14,12 @@ import EndScreen from "./EndScreen"
 class GameView extends React.Component<any, any> {
   constructor(props) {
     super(props)
+  }
 
-    props.game.loadGame(props.match.params.gameId)
-    if (!props.game.socket) props.game.connectSocket()
+  pubclic async componentDidMount() {
+    const {game, match} = this.props
+    await game.loadGame(match.params.gameId)
+    if (!game.socket) game.connectSocket()
   }
 
   public render() {

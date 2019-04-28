@@ -119,9 +119,11 @@ async function joinGame(page, gameName) {
   const xpath = `//span[contains(., '${gameName}')]`
   const game = await page.waitForXPath(xpath)
   await game.click()
+  await page.waitForSelector(".board")
 }
 
 async function makeMove(page, start, destination) {
+  await page.waitForSelector(`div[data-position=${start}]`)
   await page.click(`div[data-position=${start}]`)
   await page.click(`div[data-position=${destination}]`)
 }

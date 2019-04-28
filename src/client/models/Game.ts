@@ -43,7 +43,7 @@ export default class Game extends GameBase {
   }
 
   @action
-  public loadGame = async (gameId: string, showLoadingIndicator = true) => {
+  public loadGame = async (gameId: string, showLoadingIndicator: boolean = true) => {
     this.isLoading = showLoadingIndicator
 
     this.currentUser = await this.rootStore.api.read.user();
