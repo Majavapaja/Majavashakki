@@ -3,9 +3,9 @@ import { observable, action } from "mobx";
 import * as Majavashakki from "../../common/GamePieces"
 import {ApiPlayerDetails} from "../../common/types"
 import GameEntity from "../../server/entities/Game"
-import BoardModel from "./Board";
-import GameBase from "../../common/GameBase";
-import AppContainer from "./AppContainer";
+import BoardStore from "./BoardStore"
+import GameBase from "../../common/GameBase"
+import AppContainer from "./AppContainer"
 
 // TODO: Extend /src/common/Game
 export default class Game extends GameBase {
@@ -31,7 +31,7 @@ export default class Game extends GameBase {
   public playerWhite?: ApiPlayerDetails
 
   @observable
-  public board: BoardModel
+  public boardStore: BoardStore
   private socket: SocketIOClient.Socket
   private gameId: string
   private readonly rootStore: AppContainer
@@ -55,7 +55,7 @@ export default class Game extends GameBase {
     this.currentTurn = game.currentTurn
     this.playerIdBlack = game.playerIdBlack
     this.playerIdWhite = game.playerIdWhite
-    this.board = new BoardModel(this, game.board.pieces, game.board.moveHistory)
+    this.boardStore = new BoardStore(this, game.board.pieces, game.board.moveHistory)
     this.isCheck = gameEntity.isCheck
     this.isCheckmate = gameEntity.isCheckmate
     this.playerWhite = gameEntity.playerWhite
@@ -76,13 +76,7 @@ export default class Game extends GameBase {
     destination: Majavashakki.IPosition,
     promotionPiece?: Majavashakki.PieceType,
   ): Promise<Majavashakki.IMoveResponse> {
-    const piece = this.board.getPiece(start)
-    console.log(promotionPiece)
-
-    // if (promotionPiece) piece.position = start
-    if (!promotionPiece && this.board.isPromotion(start, destination)) {
-      // Do temporary move so it looks good
-      // piece.position = destination
+    if (!promotionPiece && this.boardStore.isPromotion(start, destination)) {
       this.rootStore.promotionDialog.openDialog(start, destination)
       return
     }

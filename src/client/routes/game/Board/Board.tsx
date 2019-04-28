@@ -3,9 +3,9 @@ import { observer, inject } from "mobx-react"
 import {IAppStore} from "../../../models/AppContainer"
 import Cell from "./Cell"
 import { WithStyles, createStyles, withStyles } from "@material-ui/core"
-import BoardStore from "../../../models/Board"
+import BoardStore from "../../../models/BoardStore"
 
-const Board = inject((stores: IAppStore) => ({ boardStore: stores.app.game.board }))(observer((props: IBoardProps) => (
+const Board = inject((stores: IAppStore) => ({ boardStore: stores.app.game.boardStore }))(observer((props: IBoardProps) => (
       <React.Fragment>
       <div className={props.classes.board} data-test-ui-component="board">
         {props.boardStore.cells.map(({position, piece}) => (

@@ -4,7 +4,7 @@ import Piece from "../../common/pieces/Piece"
 import BoardBase from "../../common/BoardBase"
 import Game from "./Game"
 
-export default class Board extends BoardBase {
+export default class BoardStore extends BoardBase {
     @observable public pieces: Piece[]
     @observable public selectedCell: Majavashakki.IPosition
     @observable public moveTarget: Majavashakki.IPosition
