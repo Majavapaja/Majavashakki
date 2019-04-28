@@ -39,7 +39,7 @@ export async function initTestData() {
         type: "local",
         primary: true,
         password: await bcrypt.hash("johnsmith123", 10),
-      }]
+      }],
     },
     {
       name: "John Doe",
@@ -49,7 +49,7 @@ export async function initTestData() {
         type: "local",
         primary: true,
         password: await bcrypt.hash("johndoe123", 10),
-      }]
+      }],
     },
   ])
 }
