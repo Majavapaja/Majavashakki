@@ -2,6 +2,7 @@ import * as React from "react";
 import { observer, inject } from "mobx-react"
 import * as Majavashakki from "../../../common/GamePieces"
 import {IAppStore} from "../../models/AppContainer"
+import ChessPiece from "./ChessPiece"
 
 @inject((stores: IAppStore) => ({game: stores.app.game}))
 @observer
@@ -69,14 +70,9 @@ function Cell({position, piece, selected, targeted, onClick}) {
 
   return (
     <div data-position={position.col + position.row} className={classes.join(" ")} onClick={onClick}>
-      {piece && <Piece piece={piece}/>}
+      {piece && <ChessPiece color={piece.color} type={piece.type} />}
     </div>
   );
-}
-
-function Piece({piece}) {
-  const {color, type} = piece;
-  return <div className={`piece ${color} ${type}`} />;
 }
 
 export default Board;
