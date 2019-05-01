@@ -47,6 +47,7 @@ export interface IUserModel extends Model<IUserDocument> {
   registerUser(user: RegisterRequest): Promise<IUserDocument | undefined>;
   getMyGames(userId: string): Promise<string[]>;
   findByIds(ids: string[]): Promise<IUserDocument[]>
+  findByLoginEmail(email: string): Promise<IUserDocument | undefined>
 }
 
 export let UserSchema: Schema = new Schema({
@@ -59,8 +60,6 @@ export let UserSchema: Schema = new Schema({
 }, schemaOptions({
   collection: "users",
 }));
-
-UserSchema.index({"logins.id": 1}, {unique: true});
 
 // TODO passport session doesn't get methods set by mongoose for IUserDocument instances via UserSchema.methods...
 // unclear, if functions can be serialized / deserialized for passport session at all
@@ -124,6 +123,17 @@ UserSchema.statics.getMyGames = async (_id: string): Promise<string[]> => {
 
 UserSchema.statics.findByIds = async (ids: string[]): Promise<IUserDocument[]> => {
   return await User.find({_id: {$in: ids}}).exec()
+}
+
+UserSchema.statics.findByLoginEmail = async (email: string): Promise<IUserDocument> => {
+  return await User.findOne({
+    logins: {
+      $elemMatch: {
+        type: LoginType.Local,
+        id: email,
+      },
+    },
+  })
 }
 
 // Methods are used for instance of items

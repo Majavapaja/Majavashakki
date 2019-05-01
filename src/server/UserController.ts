@@ -38,6 +38,10 @@ export default {
 
     try {
       console.log(`Registering user: ${user.email}`);
+      if (await User.findByLoginEmail(user.email)) {
+        throw new ValidationError([`Email '${user.email}' is already in use`])
+      }
+
       const registeredUser = await User.registerUser(user);
 
       console.log(`Logging in user: ${registeredUser.email}`);
@@ -55,9 +59,6 @@ export default {
       return promise;
     } catch (e) {
       console.log("ERROR Failed to register user:", e)
-      if (isUniqueIndexViolation(e)) {
-        throw new ValidationError([`Email '${user.email}' is already in use`])
-      }
       throw e
     }
   }),
