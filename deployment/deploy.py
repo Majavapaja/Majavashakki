@@ -6,6 +6,7 @@ import gpg
 
 FORMAT = '%(asctime)s %(levelname)s %(name)s %(message)s'
 logging.basicConfig(level=logging.INFO, format=FORMAT)
+logging.getLogger("adal-python").setLevel(logging.WARNING)
 log = logging.getLogger("deploy")
 
 from copy import deepcopy
