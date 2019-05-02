@@ -7,35 +7,35 @@ const user1 = {username: "matti", email: testEmail, password: "foobar"}
 
 Util.browserSpec("Game", {numBrowsers: 2}, function() {
   it("plays the shortest game ever", async function() {
-    const [page1, page2] = this.pages
+    const [white, black] = this.pages
 
-    await login(page1, "john.smith@example.com", "johnsmith123")
-    await createGame(page1, "foobar")
+    await login(white, "john.smith@example.com", "johnsmith123")
+    await createGame(white, "foobar")
 
-    await login(page2, "john.doe@example.com", "johndoe123")
-    await joinGame(page2, "foobar")
+    await login(black, "john.doe@example.com", "johndoe123")
+    await joinGame(black, "foobar")
 
-    await makeMoves(page1, page2, "white", [
+    await makeMoves(white, black, "white", [
       ["g2", "g4"],
       ["e7", "e6"],
       ["f2", "f3"],
     ])
 
-    await makeMove(page2, "d8", "h4")
-    await checkText(page1, "#winMessage", "The winner is black")
-    await checkText(page2, "#winMessage", "The winner is black")
+    await makeMove(black, "d8", "h4")
+    await checkText(white, "#winMessage", "The winner is black")
+    await checkText(black, "#winMessage", "The winner is black")
   })
 
   it("implments pawn promotion correctly", async function() {
-    const [page1, page2] = this.pages
+    const [white, black] = this.pages
 
-    await login(page1, "john.smith@example.com", "johnsmith123")
-    await createGame(page1, "foobar")
+    await login(white, "john.smith@example.com", "johnsmith123")
+    await createGame(white, "foobar")
 
-    await login(page2, "john.doe@example.com", "johndoe123")
-    await joinGame(page2, "foobar")
+    await login(black, "john.doe@example.com", "johndoe123")
+    await joinGame(black, "foobar")
 
-    await makeMoves(page1, page2, "white", [
+    await makeMoves(white, black, "white", [
       ["g2", "g4"],
       ["b8", "a6"],
       ["g4", "g5"],
@@ -46,11 +46,11 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
       ["a6", "b8"],
     ])
 
-    await makeMove(page1, "h7", "g8")
-    await promotePawn(page1)
+    await makeMove(white, "h7", "g8")
+    await promotePawn(white)
 
-    await assertPieceType(page1, "g8", "queen")
-    await assertPieceType(page2, "g8", "queen")
+    await assertPieceType(white, "g8", "queen")
+    await assertPieceType(black, "g8", "queen")
   })
 })
 
