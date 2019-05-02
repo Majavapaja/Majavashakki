@@ -26,6 +26,51 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     await checkText(black, "#winMessage", "The winner is black")
   })
 
+  // "This sample chess game was played between Paul Morphy and his two
+  // opponents, the Duke of Brunswick and Count Isouard, in 1858 during a
+  // performance of The Barber of Seville at the Paris Opera."
+  //
+  // https://www.family-games-treasurehouse.com/sample_chess_game.html
+  it("plays a complete chess game", async function() {
+    const [white, black] = this.pages
+    await Promise.all([
+      login(white, "john.smith@example.com", "johnsmith123"),
+      login(black, "john.doe@example.com", "johndoe123"),
+    ])
+    await createGame(white, "foobar")
+    await joinGame(black, "foobar")
+
+    await makeMoves(white, black, "white", [
+      ["e2", "e4"], ["e7", "e5"], // e4 e5
+      ["g1", "f3"], ["d7", "d6"], // Nf3 d6
+      ["d2", "d4"], ["c8", "g4"], // d4 Bg4
+      ["d4", "e5"], ["g4", "f3"], // d4xe5 Bxf3
+      ["d1", "f3"], ["d6", "e5"], // Qxf3 d6xe5
+      ["f1", "c4"], ["g8", "f6"], // Bc4 Nf6
+      ["f3", "b3"], ["d8", "e7"], // Qb3 Qe7
+      ["b1", "c3"], ["c7", "c6"], // Nc3 c6
+      ["c1", "g5"], ["b7", "b5"], // Bg5 b5
+      ["c3", "b5"], ["c6", "b5"], // Nxb5 c6xb5
+      ["c4", "b5"], ["b8", "d7"], // Bxb5+ Nd7
+    ])
+    // 0-0-0, custom checks for castling
+    await makeMoveWithAssertions(white, "e1", "c1", [
+      ["c1", "king"],
+      ["d1", "rook"],
+    ])
+    await makeMoves(white, black, "black", [
+      ["a8", "d8"], // Rd8
+      ["d1", "d7"], ["d8", "d7"], // Rxd7 Rxd7
+      ["h1", "d1"], ["e7", "e6"], // Rd1 Qe6
+      ["b5", "d7"], ["f6", "d7"], // Bxd7+ Nxd7
+      ["b3", "b8"], ["d7", "b8"], // Qb8+ Nxb8
+    ])
+    await makeMove(white, "d1", "d8")
+
+    await checkText(white, "#winMessage", "The winner is white")
+    await checkText(black, "#winMessage", "The winner is white")
+  })
+
   it("implments pawn promotion correctly", async function() {
     const [white, black] = this.pages
 
@@ -46,7 +91,7 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
       ["a6", "b8"],
     ])
 
-    await makeMove(white, "h7", "g8")
+    await makeMoveWithAssertions(white, "h7", "g8", [])
     await promotePawn(white)
 
     await assertPieceType(white, "g8", "queen")
@@ -108,11 +153,21 @@ async function joinGame(page, gameName) {
   await page.waitForSelector("[data-test-ui-component=board]")
 }
 
-async function makeMove(page, start, destination) {
-  await page.waitForSelector(`div[data-position=${start}]`)
+async function makeMove(page, start, destination: string) {
+  // If no checks are given, default to checking that the piece is moved
+  const startElem = await page.waitForSelector(`div[data-position=${start}] div[data-piece-type]`)
+  const pieceType = await page.evaluate(e => e.getAttribute("data-piece-type"), startElem)
+
+  await makeMoveWithAssertions(page, start, destination, [[destination, pieceType]])
+}
+
+async function makeMoveWithAssertions(page, start, destination: string, assertions: Array<[string, string]>) {
   await page.click(`div[data-position=${start}]`)
   await page.click(`div[data-position=${destination}]`)
-  await page.waitForSelector(`div[data-position=${destination}] div[data-piece-type]`)
+
+  for (const [position, pieceType] of assertions) {
+    await page.waitForSelector(`div[data-position=${position}] div[data-piece-type=${pieceType}]`)
+  }
 }
 
 async function waitForTurn(page, color) {

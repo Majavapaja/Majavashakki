@@ -81,11 +81,9 @@ export default class GameStore extends GameBase {
       return
     }
 
-    const result = await super.move(start, destination, this.currentUser.id, promotionPiece);
+    const result = await this.rootStore.api.write.makeMove(this.gameId, start, destination, promotionPiece)
 
-    if (result.status === Majavashakki.MoveStatus.Success) {
-      await this.rootStore.api.write.makeMove(this.gameId, start, destination, promotionPiece)
-    } else {
+    if (result.status === Majavashakki.MoveStatus.Error) {
       this.error = result.error
     }
 
