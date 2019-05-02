@@ -15,6 +15,7 @@ import { IMoveResponse } from "../common/GamePieces"
 import { IGame } from "../common/GamePieces"
 import { isCheck, isCheckMate } from "../common/logic/Checkmate"
 import { ApiGameInfo } from "../common/types"
+import applyMove from "../common/applyMove"
 
 const roomRepo = GameRoomsRepository.getInstance();
 
@@ -106,7 +107,7 @@ export default {
     const userId = String(req.user._id)
 
     const doc = await GameModel.findGame(id);
-    const [game, move] = await applyMove(doc, userId, data)
+    const [game, move] = await applyMove(Game.MapFromDb(doc), userId, data)
 
     if (move.status === Majavashakki.MoveStatus.Error) {
       const socket = SessionSocketMap[session.id];
@@ -118,29 +119,6 @@ export default {
     notifyGame(doc.id, "move_result", move)
     return move
   }),
-}
-
-// Wraps game document from database into Game class, tries to apply the given
-// move and returns the new game state and the result of the move
-async function applyMove(doc: IGameDocument, userId: string, data: any): Promise<[Game, Majavashakki.IMoveResponse]> {
-  const game = Game.MapFromDb(doc)
-  const moveResult = await game.move(data.from, data.dest, userId, data.promotionType)
-  if (moveResult.status !== Majavashakki.MoveStatus.Error) {
-    game.changeTurn()
-  }
-
-  // Purkkkaaa koska ei jaksa korjata muualla
-  if (moveResult.status !== "error") {
-    if (typeof moveResult.isCheck === "undefined") moveResult.isCheck = false
-    if (typeof moveResult.isCheckmate === "undefined") moveResult.isCheckmate = false
-  }
-
-  if (moveResult.isCheckmate) {
-    console.log("Checkmate! Marking game as finished.")
-    game.inProgress = false
-  }
-
-  return [game, moveResult]
 }
 
 function isPartOfTheGame(game: IGameDocument, userId: string): boolean {

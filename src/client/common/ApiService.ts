@@ -1,6 +1,6 @@
 import request from "request-promise";
 import * as Majavashakki from "../../common/GamePieces";
-import { ApiGameInfo, ApiUser, UserUpdateRequest, CreateGameRequest } from "../../common/types";
+import { ApiGameInfo, ApiUser, UserUpdateRequest, CreateGameRequest, MoveRequest} from "../../common/types";
 import { action } from "mobx";
 import PopupNotificationStore from "../store/PopupNotificationStore";
 
@@ -21,8 +21,8 @@ export default class ApiService {
   public write = {
     game:     async (title: string) => await this.postIt<CreateGameRequest, Majavashakki.IGame>("api/games", {title}),
     joinGame: async (id: string) => await this.postIt<CreateGameRequest, Majavashakki.IGame>(`api/games/${id}/join`),
-    makeMove: async (id: string, from: Majavashakki.IPosition, dest: Majavashakki.IPosition, promotionType: Majavashakki.PieceType) =>
-      await this.postIt<any, Majavashakki.IMoveResponse>(`api/games/${id}/move`, {from, dest, promotionType}),
+    makeMove: async (id: string, moveRequest: MoveRequest) =>
+      await this.postIt<MoveRequest, Majavashakki.IMoveResponse>(`api/games/${id}/move`, moveRequest),
     register: async (user: global.IUserContract) => await this.postIt<global.IUserContract, void>("api/user/register", user),
     login:    async (user: global.IUserContract) => await this.postIt<global.IUserContract, void>("api/login", user),
     user:     async (user: UserUpdateRequest) => await this.postIt<UserUpdateRequest, ApiUser>("api/user", user),

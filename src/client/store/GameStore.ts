@@ -1,7 +1,8 @@
 import socketIO from "socket.io-client"
 import { observable, action } from "mobx";
 import * as Majavashakki from "../../common/GamePieces"
-import {ApiPlayerDetails} from "../../common/types"
+import applyMove from "../../common/applyMove"
+import {ApiPlayerDetails, MoveRequest} from "../../common/types"
 import GameEntity from "../../server/entities/Game"
 import BoardStore from "./BoardStore"
 import GameBase from "../../common/GameBase"
@@ -36,6 +37,8 @@ export default class GameStore extends GameBase {
   private gameId: string
   private readonly rootStore: AppStore
 
+  private apiGame: Majavashakki.IGame
+
   constructor(rootStore: AppStore) {
     super("")
     this.isLoading = true
@@ -47,7 +50,8 @@ export default class GameStore extends GameBase {
     this.isLoading = showLoadingIndicator
 
     this.currentUser = await this.rootStore.api.read.user();
-    const gameEntity = await this.rootStore.api.read.game(gameId);
+    const gameEntity = await this.rootStore.api.read.game(gameId)
+    this.apiGame = gameEntity
 
     const game = GameEntity.MapFromDb(gameEntity)
     this.title = game.title
@@ -81,9 +85,16 @@ export default class GameStore extends GameBase {
       return
     }
 
-    const result = await this.rootStore.api.write.makeMove(this.gameId, start, destination, promotionPiece)
+    const moveRequest: MoveRequest = {
+      from: start,
+      dest: destination,
+      promotionType: promotionPiece,
+    }
 
-    if (result.status === Majavashakki.MoveStatus.Error) {
+    const [, result] = await applyMove(GameEntity.MapFromDb(this.apiGame), this.currentUser.id, moveRequest)
+    if (result.status === Majavashakki.MoveStatus.Success) {
+      await this.rootStore.api.write.makeMove(this.gameId, moveRequest)
+    } else {
       this.error = result.error
     }
 
