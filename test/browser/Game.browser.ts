@@ -8,12 +8,7 @@ const user1 = {username: "matti", email: testEmail, password: "foobar"}
 Util.browserSpec("Game", {numBrowsers: 2}, function() {
   it("plays the shortest game ever", async function() {
     const [white, black] = this.pages
-
-    await login(white, "john.smith@example.com", "johnsmith123")
-    await createGame(white, "foobar")
-
-    await login(black, "john.doe@example.com", "johndoe123")
-    await joinGame(black, "foobar")
+    await setupGame(white, black)
 
     await makeMoves(white, black, "white", [
       ["g2", "g4"],
@@ -33,12 +28,7 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
   // https://www.family-games-treasurehouse.com/sample_chess_game.html
   it("plays a complete chess game", async function() {
     const [white, black] = this.pages
-    await Promise.all([
-      login(white, "john.smith@example.com", "johnsmith123"),
-      login(black, "john.doe@example.com", "johndoe123"),
-    ])
-    await createGame(white, "foobar")
-    await joinGame(black, "foobar")
+    await setupGame(white, black)
 
     await makeMoves(white, black, "white", [
       ["e2", "e4"], ["e7", "e5"], // e4 e5
@@ -73,12 +63,7 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
 
   it("implments pawn promotion correctly", async function() {
     const [white, black] = this.pages
-
-    await login(white, "john.smith@example.com", "johnsmith123")
-    await createGame(white, "foobar")
-
-    await login(black, "john.doe@example.com", "johndoe123")
-    await joinGame(black, "foobar")
+    await setupGame(white, black)
 
     await makeMoves(white, black, "white", [
       ["g2", "g4"],
@@ -107,12 +92,13 @@ async function makeMoves(
   for (const move of moves) {
     await makeMove(currentTurn === "white" ? white : black, ...move)
     currentTurn = currentTurn === "white" ? "black" : "white"
+
     await waitForTurn(white, currentTurn)
     await waitForTurn(black, currentTurn)
   }
 }
 
-async function assertPieceType(page, position, pieceType) {
+async function assertPieceType(page, position, pieceType: string) {
   await page.waitForSelector(`div[data-position=${position}] div[data-piece-type=${pieceType}]`)
 }
 
@@ -168,6 +154,15 @@ async function makeMoveWithAssertions(page, start, destination: string, assertio
   for (const [position, pieceType] of assertions) {
     await page.waitForSelector(`div[data-position=${position}] div[data-piece-type=${pieceType}]`)
   }
+}
+
+async function setupGame(white, black) {
+  await Promise.all([
+    login(white, "john.smith@example.com", "johnsmith123"),
+    login(black, "john.doe@example.com", "johndoe123"),
+  ])
+  await createGame(white, "foobar")
+  await joinGame(black, "foobar")
 }
 
 async function waitForTurn(page, color) {
