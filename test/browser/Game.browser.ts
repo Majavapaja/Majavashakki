@@ -15,17 +15,11 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     await login(page2, "john.doe@example.com", "johndoe123")
     await joinGame(page2, "foobar")
 
-    await makeMove(page1, "g2", "g4")
-    await waitForTurn(page1, "black")
-    await waitForTurn(page2, "black")
-
-    await makeMove(page2, "e7", "e6")
-    await waitForTurn(page2, "white")
-    await waitForTurn(page1, "white")
-
-    await makeMove(page1, "f2", "f3")
-    await waitForTurn(page1, "black")
-    await waitForTurn(page2, "black")
+    await makeMoves(page1, page2, "white", [
+      ["g2", "g4"],
+      ["e7", "e6"],
+      ["f2", "f3"],
+    ])
 
     await makeMove(page2, "d8", "h4")
     await checkText(page1, "#winMessage", "The winner is black")
@@ -41,37 +35,16 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     await login(page2, "john.doe@example.com", "johndoe123")
     await joinGame(page2, "foobar")
 
-    await makeMove(page1, "g2", "g4")
-    await waitForTurn(page1, "black")
-    await waitForTurn(page2, "black")
-
-    await makeMove(page2, "b8", "a6")
-    await waitForTurn(page2, "white")
-    await waitForTurn(page1, "white")
-
-    await makeMove(page1, "g4", "g5")
-    await waitForTurn(page1, "black")
-    await waitForTurn(page2, "black")
-
-    await makeMove(page2, "a6", "b8")
-    await waitForTurn(page2, "white")
-    await waitForTurn(page1, "white")
-
-    await makeMove(page1, "g5", "g6")
-    await waitForTurn(page1, "black")
-    await waitForTurn(page2, "black")
-
-    await makeMove(page2, "b8", "a6")
-    await waitForTurn(page2, "white")
-    await waitForTurn(page1, "white")
-
-    await makeMove(page1, "g6", "h7")
-    await waitForTurn(page1, "black")
-    await waitForTurn(page2, "black")
-
-    await makeMove(page2, "a6", "b8")
-    await waitForTurn(page2, "white")
-    await waitForTurn(page1, "white")
+    await makeMoves(page1, page2, "white", [
+      ["g2", "g4"],
+      ["b8", "a6"],
+      ["g4", "g5"],
+      ["a6", "b8"],
+      ["g5", "g6"],
+      ["b8", "a6"],
+      ["g6", "h7"],
+      ["a6", "b8"],
+    ])
 
     await makeMove(page1, "h7", "g8")
     await promotePawn(page1)
@@ -80,6 +53,19 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     await assertPieceType(page2, "g8", "queen")
   })
 })
+
+async function makeMoves(
+  white, black,
+  currentTurn: "white" | "black",
+  moves: Array<[string, string]>,
+): Promise<void> {
+  for (const move of moves) {
+    await makeMove(currentTurn === "white" ? white : black, ...move)
+    currentTurn = currentTurn === "white" ? "black" : "white"
+    await waitForTurn(white, currentTurn)
+    await waitForTurn(black, currentTurn)
+  }
+}
 
 async function assertPieceType(page, position, pieceType) {
   await page.waitForSelector(`div[data-position=${position}] div[data-piece-type=${pieceType}]`)
