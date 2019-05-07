@@ -70,8 +70,10 @@ export default class GameStore extends GameBase {
   }
 
   public connectSocket = () => {
-    this.socket = socketIO()
-    this.socket.on("move_result", this.onMoveResult)
+    if (!this.socket) {
+      this.socket = socketIO()
+      this.socket.on("move_result", this.onMoveResult)
+    }
   }
 
   @action

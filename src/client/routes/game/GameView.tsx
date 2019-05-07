@@ -1,25 +1,25 @@
 import * as React from "react"
-import { withRouter } from "react-router-dom"
-import { withStyles, createStyles, Theme } from "@material-ui/core/styles"
+import { withRouter, RouteComponentProps } from "react-router-dom"
+import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Board from "./Board"
 import { observer, inject } from "mobx-react"
 import { Paper, Typography } from "@material-ui/core"
 import {IAppStore} from "../../store/AppStore"
-
+import GameStore from "../../store/GameStore"
 import PlayerBadge from "./PlayerBadge"
 import EndScreen from "./EndScreen"
 
 @inject((stores: IAppStore) => ({game: stores.app.game}))
 @observer
-class GameView extends React.Component<any, any> {
-  constructor(props) {
+class GameView extends React.Component<IGameViewProps, any> {
+  constructor(props: IGameViewProps) {
     super(props)
   }
 
   public async componentDidMount() {
     const {game, match} = this.props
     await game.loadGame(match.params.gameId)
-    if (!game.socket) game.connectSocket()
+    game.connectSocket()
   }
 
   public render() {
@@ -61,7 +61,7 @@ class GameView extends React.Component<any, any> {
               isWinner={game.isCheckmate && game.currentTurn === "white"}
             />
           </div>
-          <Board game={this.props.game} gameName={game.title}/>
+          <Board />
           {errorContainer}
         </Paper>
         {this.renderCheckmateInfo()}
@@ -129,5 +129,9 @@ const styles = (theme: Theme) => createStyles({
     padding: theme.spacing.unit * 4,
   },
 })
+
+interface IGameViewProps extends RouteComponentProps<any>, WithStyles<typeof styles>{
+  game: GameStore;
+}
 
 export default withStyles(styles)(withRouter(GameView));
