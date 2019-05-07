@@ -52,7 +52,7 @@ export default {
     return games.map(formatGamesListResponse(players))
   }),
 
-  getGame: jsonAPI<any>(async req => {
+  getGame: jsonAPI<IGame>(async req => {
     const {session, params: {id}} = req
     const socket = SessionSocketMap[session.id];
 
