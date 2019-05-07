@@ -1,11 +1,10 @@
-import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import sio from "socket.io";
 import {getSession} from "./session";
 import {User} from "./data/User"
 
-const roomRepo = GameRoomsRepository.getInstance()
 export const SocketServer: SocketIO.Server = sio({transports: ["websocket"]});
 export const SessionSocketMap = {};
+const MainRoom: string = "Lobby";
 
 // TODO better init / export chain
 export function initSockets() {
@@ -19,7 +18,7 @@ export function initSockets() {
     const gameIds = await User.getMyGames(userId)
     gameIds.forEach(gameId => socket.join(`game:${gameId}`))
     socket.join(`user:${userId}`)
-    socket.join(roomRepo.MainRoom)
+    socket.join(MainRoom)
   });
 }
 

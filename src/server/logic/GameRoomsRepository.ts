@@ -7,7 +7,6 @@ export class GameRoomsRepository {
         return GameRoomsRepository.instance;
     }
     private static instance: GameRoomsRepository = new GameRoomsRepository();
-    public MainRoom = "Lobby";
 
     private constructor() {
         if (GameRoomsRepository.instance) {
