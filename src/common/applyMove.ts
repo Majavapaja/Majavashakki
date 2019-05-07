@@ -7,7 +7,7 @@ export default async function applyMove(game: GameEntity, userId: string, data: 
     game.changeTurn()
   }
 
-  // Purkkkaaa koska ei jaksa korjata muualla I
+  // Purkkkaaa koska ei jaksa korjata muualla MI
   if (moveResult.status !== "error") {
     if (typeof moveResult.isCheck === "undefined") moveResult.isCheck = false
     if (typeof moveResult.isCheckmate === "undefined") moveResult.isCheckmate = false
