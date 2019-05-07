@@ -2,7 +2,7 @@ import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import { User } from "./data/User";
 import { GameModel, IGameDocument } from "./data/GameModel";
 import { IUserDocument } from "./data/User"
-import { SessionSocketMap, notifyGame } from "./Sockets";
+import { SessionSocketMap, notifyGame, notifyLobby } from "./Sockets";
 import Game from "./entities/Game";
 import { jsonAPI, NotFoundError, validate } from "./json"
 import {
@@ -77,6 +77,8 @@ export default {
     console.log(`Creating a new game '${body.title}'`);
 
     const game = await GameModel.findOrCreate(body.title)
+    // TODO create handler
+    notifyLobby("game_created", game.title);
     return gameDocumentToApiResult(game, [])
   }),
 

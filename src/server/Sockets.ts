@@ -6,7 +6,7 @@ export const SocketServer: SocketIO.Server = sio({transports: ["websocket"]});
 export const SessionSocketMap = {};
 const MainRoom: string = "Lobby";
 
-// TODO better init / export chain
+// TODO middleware or some other solution to handle connection setup for authed users vs non-auth user
 export function initSockets() {
   SocketServer.on("connection", async (socket: SocketIO.Socket) => {
     const session = getSession(socket.handshake)
@@ -25,4 +25,9 @@ export function initSockets() {
 export function notifyGame(gameId: string, message: string, data: any) {
   console.log(`Sending message to game: ${gameId}`)
   SocketServer.to(`game:${gameId}`).emit(message, data)
+}
+
+export function notifyLobby(message: string, data:any) {
+  console.log("Sending message to lobby")
+  SocketServer.to(MainRoom).emit(message, data);
 }

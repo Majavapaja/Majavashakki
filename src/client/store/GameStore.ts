@@ -69,6 +69,7 @@ export default class GameStore extends GameBase {
     this.isLoading = false
   }
 
+  // TODO init socket connection only once in AppStore startup (needs refactoring for server side)
   public connectSocket = () => {
     if (!this.socket) {
       this.socket = socketIO()
