@@ -42,7 +42,7 @@ const styles = theme => createStyles({
   },
   label: {
     height: "100%",
-    position: "absolute"
+    position: "absolute",
   },
 })
 
