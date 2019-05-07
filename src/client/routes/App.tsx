@@ -60,7 +60,7 @@ const styles = () => createStyles({
       "-webkit-font-smoothing": "antialiased",
       "background": `no-repeat fixed url(${background})`,
       "background-size": "cover",
-    }
+    },
   },
 })
 
