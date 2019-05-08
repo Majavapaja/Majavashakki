@@ -169,7 +169,7 @@ const styles = (theme: Theme) => createStyles({
   },
 })
 
-interface IGameViewProps extends RouteComponentProps<any>, WithStyles<typeof styles>{
+interface IGameViewProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
   game: GameStore;
 }
 

@@ -27,7 +27,7 @@ export function notifyGame(gameId: string, message: string, data: any) {
   SocketServer.to(`game:${gameId}`).emit(message, data)
 }
 
-export function notifyLobby(message: string, data:any) {
+export function notifyLobby(message: string, data: any) {
   console.log("Sending message to lobby")
   SocketServer.to(MainRoom).emit(message, data);
 }
