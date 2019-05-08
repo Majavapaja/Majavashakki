@@ -4,7 +4,7 @@ import { GameModel, IGameDocument } from "./data/GameModel";
 import { IUserDocument } from "./data/User"
 import { SessionSocketMap, notifyGame, notifyLobby } from "./Sockets";
 import Game from "./entities/Game";
-import { jsonAPI, NotFoundError, validate } from "./json"
+import { jsonAPI, NotFoundError, validate, ValidationError } from "./json"
 import {
   CreateGameRequestType, CreateGameRequest,
   MoveRequest, MoveRequestType,
@@ -121,6 +121,27 @@ export default {
     notifyGame(doc.id, "move_result", move)
     return move
   }),
+
+  surrender: jsonAPI<void>(async req => {
+    const {session, params: {gameId}} = req
+    const userId = String(req.user._id)
+
+    const doc = await GameModel.findGame(gameId);
+    if (!isCurrentTurn(doc, userId)) {
+      throw new ValidationError(["Can't surrender on your opponents turn"])
+    }
+
+    doc.inProgress = false
+    doc.surrenderer = userId
+    await doc.save()
+
+    notifyGame(doc._id, "surrender", { gameId, userId })
+  }),
+}
+
+function isCurrentTurn(doc: IGameDocument, userId: string): boolean {
+  const currentTurnUserId = doc.currentTurn === "black" ? doc.playerIdBlack : doc.playerIdWhite
+  return currentTurnUserId === userId
 }
 
 function isPartOfTheGame(game: IGameDocument, userId: string): boolean {
@@ -153,6 +174,7 @@ function gameDocumentToApiResult(doc: IGameDocument, players: IUserDocument[]): 
     isCheck: isCheck(board, doc.currentTurn),
     isCheckmate: isCheckMate(board, doc.currentTurn),
     inProgress: doc.inProgress,
+    surrenderer: doc.surrenderer,
   }
 }
 

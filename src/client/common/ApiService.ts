@@ -23,6 +23,7 @@ export default class ApiService {
     joinGame: async (id: string) => await this.postIt<CreateGameRequest, Majavashakki.IGame>(`api/games/${id}/join`),
     makeMove: async (id: string, moveRequest: MoveRequest) =>
       await this.postIt<MoveRequest, Majavashakki.IMoveResponse>(`api/games/${id}/move`, moveRequest),
+    surrenderGame: async (gameId: string) => await this.postIt<void, any>(`api/games/${gameId}/surrender`),
     register: async (user: global.IUserContract) => await this.postIt<global.IUserContract, void>("api/user/register", user),
     login:    async (user: global.IUserContract) => await this.postIt<global.IUserContract, void>("api/login", user),
     user:     async (user: UserUpdateRequest) => await this.postIt<UserUpdateRequest, ApiUser>("api/user", user),

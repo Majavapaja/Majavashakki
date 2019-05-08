@@ -16,6 +16,7 @@ export interface IGame {
   playerBlack?: ApiPlayerDetails
   playerWhite?: ApiPlayerDetails
   inProgress: boolean
+  surrenderer?: string
 }
 
 export interface IBoard {

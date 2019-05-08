@@ -16,6 +16,7 @@ export default class Game extends GameBase {
         game.isCheck = gameState.isCheck
         game.isCheckmate = gameState.isCheckmate
         game.inProgress = gameState.inProgress
+        game.surrenderer = gameState.surrenderer
         return game;
     }
 

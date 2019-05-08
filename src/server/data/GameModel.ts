@@ -22,6 +22,12 @@ export let GameSchema: Schema = new Schema({
   playerIdBlack: String,
   board: Schema.Types.Mixed,
   inProgress: Boolean,
+  surrenderer: {
+    type: String,
+    validate: function(surrenderer) {
+      return !surrenderer || (surrenderer === this.playerIdWhite || surrenderer === this.playerIdBlack)
+    },
+  },
 }, schemaOptions({
   collection: "gamemodels",
 }));

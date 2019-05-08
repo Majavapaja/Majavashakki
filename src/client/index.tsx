@@ -21,7 +21,7 @@ const app = new AppStore()
 
 ReactDOM.render(
   <JssProvider jss={jss} generateClassName={generateClassName}>
-    <Provider app={app}>
+    <Provider app={app} game={app.game}>
       <BrowserRouter>
         <MuiThemeProvider theme={theme}>
           <App />

@@ -30,6 +30,8 @@ export default class GameStore extends GameBase {
   public playerBlack?: ApiPlayerDetails
   @observable
   public playerWhite?: ApiPlayerDetails
+  @observable
+  public surrenderer?: string
 
   @observable
   public boardStore: BoardStore
@@ -65,6 +67,7 @@ export default class GameStore extends GameBase {
     this.playerWhite = gameEntity.playerWhite
     this.playerBlack = gameEntity.playerBlack
     this.inProgress = gameEntity.inProgress
+    this.surrenderer = gameEntity.surrenderer
 
     this.isLoading = false
   }
@@ -74,6 +77,7 @@ export default class GameStore extends GameBase {
     if (!this.socket) {
       this.socket = socketIO()
       this.socket.on("move_result", this.onMoveResult)
+      this.socket.on("surrender", this.onSurrenderMessage)
     }
   }
 
@@ -104,6 +108,27 @@ export default class GameStore extends GameBase {
     return result;
   }
 
+  // Surrender UI
+
+  @observable
+  public surrenderDialogOpen: boolean = false
+
+  @action.bound
+  public promptSurrender(): void {
+    this.surrenderDialogOpen = true
+  }
+
+  @action.bound
+  public confirmSurrender(): void {
+    this.rootStore.api.write.surrenderGame(this.gameId)
+    this.surrenderDialogOpen = false
+  }
+
+  @action.bound
+  public cancelSurrender(): void {
+    this.surrenderDialogOpen = false
+  }
+
   ///
   // Socket methods
   ///
@@ -112,5 +137,16 @@ export default class GameStore extends GameBase {
   private onMoveResult = async (move: Majavashakki.IMoveResponse) => {
     await this.loadGame(this.gameId, false)
     this.error = move.status === Majavashakki.MoveStatus.Error ? move.error : undefined
+  }
+
+  @action.bound
+  private async onSurrenderMessage(message): Promise<void> {
+    if (message.gameId !== this.gameId) {
+      console.log("Received surrender message for game that is not currently active")
+      return
+    }
+
+    console.log("Received surrender message. Reloading game state")
+    await this.loadGame(this.gameId, false)
   }
 }

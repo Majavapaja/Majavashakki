@@ -2,10 +2,12 @@ import * as React from "react"
 import { withRouter, RouteComponentProps } from "react-router-dom"
 import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Board from "./Board"
+import { observable } from "mobx"
 import { observer, inject } from "mobx-react"
-import { Paper, Typography } from "@material-ui/core"
+import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Paper, Typography } from "@material-ui/core"
 import {IAppStore} from "../../store/AppStore"
 import GameStore from "../../store/GameStore"
+import {ApiPlayerDetails} from "../../../common/types"
 import PlayerBadge from "./PlayerBadge"
 import EndScreen from "./EndScreen"
 
@@ -37,6 +39,10 @@ class GameView extends React.Component<IGameViewProps, any> {
       )
     }
 
+    const whiteIsWinner = (game.isCheckmate && game.currentTurn === "black") || (!!game.surrenderer && game.surrenderer === game.playerIdBlack)
+    const blackIsWinner = (game.isCheckmate && game.currentTurn === "white") || (!!game.surrenderer && game.surrenderer === game.playerIdWhite)
+    const winner = whiteIsWinner ? game.playerWhite : (blackIsWinner ? game.playerBlack : undefined)
+
     return (
       <div className={classes.root}>
         <div className={classes.gameContainer}>
@@ -49,7 +55,7 @@ class GameView extends React.Component<IGameViewProps, any> {
                 color: "white",
               }}
               isCurrentPlayer={game.currentTurn === "white"}
-              isWinner={game.isCheckmate && game.currentTurn === "black"}
+              isWinner={whiteIsWinner}
             />
             <PlayerBadge
               id="blackBadge"
@@ -58,16 +64,32 @@ class GameView extends React.Component<IGameViewProps, any> {
                 color: "black",
               }}
               isCurrentPlayer={game.currentTurn === "black"}
-              isWinner={game.isCheckmate && game.currentTurn === "white"}
+              isWinner={blackIsWinner}
             />
           </div>
           <Board />
           {errorContainer}
+          {game.inProgress && <SurrenderButton />}
         </Paper>
         {this.renderCheckmateInfo()}
+        {game.surrenderer && this.renderSurrenderInfo(winner)}
         </div>
       </div>
     );
+  }
+
+  private renderSurrenderInfo(winner?: ApiPlayerDetails) {
+    const {classes, game} = this.props
+
+    if (game.surrenderer) {
+      return (
+        <Paper className={[classes.paper, classes.checkmateInfo].join(" ")}>
+          <Typography id="winMessage" variant="display2">The winner is {winner ? winner.name : "N/A"}</Typography>
+          <Typography id="winMessage" variant="subheading">The other player surrendered.</Typography>
+          <EndScreen />
+        </Paper>
+      )
+    }
   }
 
   private renderCheckmateInfo() {
@@ -96,6 +118,23 @@ class GameView extends React.Component<IGameViewProps, any> {
     }
   }
 }
+
+const SurrenderButton = inject("game")(observer(({game}) => {
+  return (
+    <React.Fragment>
+      <Button onClick={game.promptSurrender}>Surrender</Button>
+
+      <Dialog open={game.surrenderDialogOpen}>
+        <DialogTitle>Surrender</DialogTitle>
+        <DialogContent>Are you sure you want to surrender?</DialogContent>
+        <DialogActions>
+          <Button onClick={game.confirmSurrender}>Yes</Button>
+          <Button onClick={game.cancelSurrender}>No</Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  )
+}))
 
 const styles = (theme: Theme) => createStyles({
   root: {
