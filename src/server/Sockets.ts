@@ -23,7 +23,7 @@ export function initSockets() {
 }
 
 export function notifyGame(gameId: string, message: string, data: any) {
-  console.log(`Sending message to game: ${gameId}`)
+  console.log(`Sending message to game: ${gameId} ${message} ${JSON.stringify(data, null, 2)}`)
   SocketServer.to(`game:${gameId}`).emit(message, data)
 }
 
