@@ -87,6 +87,7 @@ export interface ApiGameInfo {
   title: string
   playerWhite?: ApiPlayerDetails
   playerBlack?: ApiPlayerDetails
+  inProgress: boolean
 }
 
 export interface ApiPlayerDetails {

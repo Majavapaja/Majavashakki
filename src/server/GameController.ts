@@ -156,6 +156,7 @@ function formatGamesListResponse(players: IUserDocument[]) {
       title,
       playerWhite: userDocumentToPlayerDetails(players.find(p => String(p._id) === game.playerIdWhite)),
       playerBlack: userDocumentToPlayerDetails(players.find(p => String(p._id) === game.playerIdBlack)),
+      inProgress: game.inProgress,
     }
   }
 }

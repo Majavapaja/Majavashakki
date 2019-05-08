@@ -78,7 +78,8 @@ class GameList extends React.Component<IGameListProps, any> {
               .map(game => {
                 const whiteName = game.playerWhite ? game.playerWhite.name : undefined
                 const blackName = game.playerBlack ? game.playerBlack.name : undefined
-                const msg = !whiteName ? "Waiting for players..."
+                const msg = !game.inProgress ? "Game is finished"
+                  : !whiteName ? "Waiting for players..."
                   : !blackName ? `${whiteName} waiting for opponent...`
                   : `${whiteName} vs ${blackName}`
                 return <ListItem
