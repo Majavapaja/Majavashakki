@@ -2,15 +2,15 @@ import * as React from "react"
 import { withRouter, RouteComponentProps } from "react-router-dom"
 import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Board from "./Board"
-import { observable } from "mobx"
 import { observer, inject } from "mobx-react"
 import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Paper, Typography } from "@material-ui/core"
 import {IAppStore} from "../../store/AppStore"
 import GameStore from "../../store/GameStore"
 import {ApiPlayerDetails} from "../../../common/types"
-import PlayerBadge from "./PlayerBadge"
 import SidePanel from "./SidePanel"
 import EndScreen from "./EndScreen"
+import MessagePanel from "./MessagePanel"
+import Players from "./Players"
 
 @inject((stores: IAppStore) => ({game: stores.app.game}))
 @observer
@@ -31,144 +31,42 @@ class GameView extends React.Component<IGameViewProps, any> {
       return <div>Loading...</div>
     }
 
-    let errorContainer = null
-    if (game.error) {
-      errorContainer = (
-        <Paper className={classes.error}>
-          {game.error}
-        </Paper>
-      )
-    }
+    let messageProps
 
-    const whiteIsWinner = (game.isCheckmate && game.currentTurn === "black") || (!!game.surrenderer && game.surrenderer === game.playerIdBlack)
-    const blackIsWinner = (game.isCheckmate && game.currentTurn === "white") || (!!game.surrenderer && game.surrenderer === game.playerIdWhite)
-    const winner = whiteIsWinner ? game.playerWhite : (blackIsWinner ? game.playerBlack : undefined)
+    if (game.winner) messageProps = { message: `Winner is: ${game.winner}!`}
+    else if (game.error) messageProps = { message: game.error, type: "error" }
+    else if (game.isCheck) messageProps = { message: "Check!", type: "info" }
 
     return (
-      <div className={classes.root}>
-        <div className={classes.gameContainer}>
-          <Paper className={classes.paper}>
-            <div className={classes.playersContainer}>
-              <PlayerBadge
-                id="whiteBadge"
-                player={{
-                  name: game.playerWhite ? game.playerWhite.name : "N/A",
-                  color: "white",
-                }}
-                isCurrentPlayer={game.currentTurn === "white"}
-                isWinner={whiteIsWinner}
-              />
-              <PlayerBadge
-                id="blackBadge"
-                player={{
-                  name: game.playerBlack ? game.playerBlack.name : "N/A",
-                  color: "black",
-                }}
-                isCurrentPlayer={game.currentTurn === "black"}
-                isWinner={blackIsWinner}
-              />
-            </div>
-            <Board />
-            {errorContainer}
-            {game.inProgress && <SurrenderButton />}
-          </Paper>
-          <SidePanel />
-          {this.renderCheckmateInfo()}
-          {game.surrenderer && this.renderSurrenderInfo(winner)}
+      <Paper className={classes.gameContainer}>
+        {game.winner && <EndScreen />}
+        <div className={classes.leftContainer}>
+          <Players />
+          <Board />
+          <MessagePanel {...messageProps} />
         </div>
-      </div>
-    );
-  }
-
-  private renderSurrenderInfo(winner?: ApiPlayerDetails) {
-    const {classes, game} = this.props
-
-    if (game.surrenderer) {
-      return (
-        <Paper className={[classes.paper, classes.checkmateInfo].join(" ")}>
-          <Typography id="winMessage" variant="display2">The winner is {winner ? winner.name : "N/A"}</Typography>
-          <Typography id="winMessage" variant="subheading">The other player surrendered.</Typography>
-          <EndScreen />
-        </Paper>
-      )
-    }
-  }
-
-  private renderCheckmateInfo() {
-    const {classes, game} = this.props
-
-    if (game.isCheckmate || game.isCheck) {
-      let content
-      if (game.isCheckmate) {
-        const winner = game.currentTurn === "white" ? "black" : "white"
-        content = (
-          <React.Fragment>
-            <Typography id="winMessage" variant="display2">The winner is {winner}</Typography>
-            <EndScreen />
-          </React.Fragment>
-        )
-
-      } else if (game.isCheck) {
-        content = <Typography variant="display2">Check!</Typography>
-      }
-
-      return (
-        <Paper className={[classes.paper, classes.checkmateInfo].join(" ")}>
-          {content}
-        </Paper>
-      )
-    }
+        <div className={classes.rightContainer}>
+          <SidePanel />
+        </div>
+      </Paper>
+    )
   }
 }
 
-const SurrenderButton = inject("game")(observer(({game}) => {
-  return (
-    <React.Fragment>
-      <Button onClick={game.promptSurrender}>Surrender</Button>
-
-      <Dialog open={game.surrenderDialogOpen}>
-        <DialogTitle>Surrender</DialogTitle>
-        <DialogContent>Are you sure you want to surrender?</DialogContent>
-        <DialogActions>
-          <Button onClick={game.confirmSurrender}>Yes</Button>
-          <Button onClick={game.cancelSurrender}>No</Button>
-        </DialogActions>
-      </Dialog>
-    </React.Fragment>
-  )
-}))
-
 const styles = (theme: Theme) => createStyles({
-  root: {
-    display: "flex",
-    height: "100vh",
-    justifyContent: "center",
-    alignItems: "flex-start",
-  },
-  paper: {
-    margin: theme.spacing.unit,
-    padding: theme.spacing.unit,
-  },
-  checkmateInfo: {
-    textAlign: "center",
-  },
   gameContainer: {
-    marginTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    display: 'flex',
-  },
-  error: {
-      width: "60vmin",
-      color: "#4C0000",
-      background: "#D44040",
-      padding: 10,
-  },
-  playersContainer: {
     display: "flex",
-    justifyContent: "space-between",
-    padding: theme.spacing.unit * 4,
+    alignSelf: "center",
+    padding: 20,
+  },
+  leftContainer: {
+    display: "flex",
+    flexDirection: "column",
+    width: "60vmin",
+  },
+  rightContainer: {
+    display: "flex",
+    width: "20vmin",
   },
 })
 

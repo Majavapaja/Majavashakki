@@ -14,7 +14,7 @@ import background from "../assets/bg1.svg"
 class App extends React.Component<IAppProps, any> {
   public render() {
     return (
-      <div>
+      <div className={this.props.classes.root}>
         <NotificationView />
         <NavigationBar />
         <PromotionDialog />
@@ -55,11 +55,18 @@ class App extends React.Component<IAppProps, any> {
 interface IAppProps extends WithStyles<typeof styles> { }
 
 const styles = () => createStyles({
+  root: {
+    display: "flex",
+    flexDirection: "column",
+  },
   "@global": {
     html: {
       "-webkit-font-smoothing": "antialiased",
       "background": `no-repeat fixed url(${background})`,
       "background-size": "cover",
+    },
+    body: {
+      margin: 0,
     },
   },
 })
