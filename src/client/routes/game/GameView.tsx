@@ -9,6 +9,7 @@ import {IAppStore} from "../../store/AppStore"
 import GameStore from "../../store/GameStore"
 import {ApiPlayerDetails} from "../../../common/types"
 import PlayerBadge from "./PlayerBadge"
+import SidePanel from "./SidePanel"
 import EndScreen from "./EndScreen"
 
 @inject((stores: IAppStore) => ({game: stores.app.game}))
@@ -46,33 +47,34 @@ class GameView extends React.Component<IGameViewProps, any> {
     return (
       <div className={classes.root}>
         <div className={classes.gameContainer}>
-        <Paper className={classes.paper}>
-          <div className={classes.playersContainer}>
-            <PlayerBadge
-              id="whiteBadge"
-              player={{
-                name: game.playerWhite ? game.playerWhite.name : "N/A",
-                color: "white",
-              }}
-              isCurrentPlayer={game.currentTurn === "white"}
-              isWinner={whiteIsWinner}
-            />
-            <PlayerBadge
-              id="blackBadge"
-              player={{
-                name: game.playerBlack ? game.playerBlack.name : "N/A",
-                color: "black",
-              }}
-              isCurrentPlayer={game.currentTurn === "black"}
-              isWinner={blackIsWinner}
-            />
-          </div>
-          <Board />
-          {errorContainer}
-          {game.inProgress && <SurrenderButton />}
-        </Paper>
-        {this.renderCheckmateInfo()}
-        {game.surrenderer && this.renderSurrenderInfo(winner)}
+          <Paper className={classes.paper}>
+            <div className={classes.playersContainer}>
+              <PlayerBadge
+                id="whiteBadge"
+                player={{
+                  name: game.playerWhite ? game.playerWhite.name : "N/A",
+                  color: "white",
+                }}
+                isCurrentPlayer={game.currentTurn === "white"}
+                isWinner={whiteIsWinner}
+              />
+              <PlayerBadge
+                id="blackBadge"
+                player={{
+                  name: game.playerBlack ? game.playerBlack.name : "N/A",
+                  color: "black",
+                }}
+                isCurrentPlayer={game.currentTurn === "black"}
+                isWinner={blackIsWinner}
+              />
+            </div>
+            <Board />
+            {errorContainer}
+            {game.inProgress && <SurrenderButton />}
+          </Paper>
+          <SidePanel />
+          {this.renderCheckmateInfo()}
+          {game.surrenderer && this.renderSurrenderInfo(winner)}
         </div>
       </div>
     );
@@ -155,6 +157,7 @@ const styles = (theme: Theme) => createStyles({
     paddingBottom: theme.spacing.unit,
     paddingLeft: theme.spacing.unit,
     paddingRight: theme.spacing.unit,
+    display: 'flex',
   },
   error: {
       width: "60vmin",
