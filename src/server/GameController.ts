@@ -99,8 +99,11 @@ export default {
       // TODO: How does the player join the socket.io "room" of the game after reconnecting?
       socket.join(`game:${doc.id}`)
     }
+
     const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
-    return gameDocumentToApiResult(doc, players)
+    const response = gameDocumentToApiResult(doc, players)
+    notifyGame(doc.id, "game_updated", response)
+    return response
   }),
 
   makeMove: jsonAPI<IMoveResponse>(async req => {
@@ -122,7 +125,7 @@ export default {
     return move
   }),
 
-  surrender: jsonAPI<void>(async req => {
+  surrender: jsonAPI<IGame>(async req => {
     const {session, params: {gameId}} = req
     const userId = String(req.user._id)
 
@@ -135,7 +138,10 @@ export default {
     doc.surrenderer = userId
     await doc.save()
 
-    notifyGame(doc._id, "surrender", { gameId, userId })
+    const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
+    const response = gameDocumentToApiResult(doc, players)
+    notifyGame(doc._id, "game_updated", response)
+    return response
   }),
 }
 
