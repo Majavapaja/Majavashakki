@@ -53,11 +53,17 @@ export default class GameStore extends GameBase {
 
     this.currentUser = await this.rootStore.api.read.user();
     const gameEntity = await this.rootStore.api.read.game(gameId)
+    this.updateGameData(gameEntity)
+    this.isLoading = false
+  }
+
+  @action
+  public updateGameData = (gameEntity: Majavashakki.IGame) => {
     this.apiGame = gameEntity
 
     const game = GameEntity.MapFromDb(gameEntity)
     this.title = game.title
-    this.gameId = gameId
+    this.gameId = gameEntity.id
     this.currentTurn = game.currentTurn
     this.playerIdBlack = game.playerIdBlack
     this.playerIdWhite = game.playerIdWhite
@@ -68,8 +74,6 @@ export default class GameStore extends GameBase {
     this.playerBlack = gameEntity.playerBlack
     this.inProgress = gameEntity.inProgress
     this.surrenderer = gameEntity.surrenderer
-
-    this.isLoading = false
   }
 
   // TODO init socket connection only once in AppStore startup (needs refactoring for server side)
@@ -77,7 +81,7 @@ export default class GameStore extends GameBase {
     if (!this.socket) {
       this.socket = socketIO()
       this.socket.on("move_result", this.onMoveResult)
-      this.socket.on("surrender", this.onSurrenderMessage)
+      this.socket.on("game_updated", this.onGameUpdated)
     }
   }
 
@@ -140,13 +144,13 @@ export default class GameStore extends GameBase {
   }
 
   @action.bound
-  private async onSurrenderMessage(message): Promise<void> {
-    if (message.gameId !== this.gameId) {
-      console.log("Received surrender message for game that is not currently active")
+  private async onGameUpdated(game: Majavashakki.IGame): Promise<void> {
+    if (game.id !== this.gameId) {
+      console.log("Received game_updated message for game that is not open in browser")
       return
     }
 
-    console.log("Received surrender message. Reloading game state")
-    await this.loadGame(this.gameId, false)
+    console.log("Received game_updated message, setting game state")
+    await this.updateGameData(game)
   }
 }

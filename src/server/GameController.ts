@@ -25,31 +25,19 @@ const removeFalsy = xs => xs.filter(x => !!x)
 export default {
   getAvailableGames: jsonAPI<ApiGameInfo[]>(async req => {
     const games = await GameModel.getAvailableGames(req.user._id);
-
-    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
-    const players = await User.findByIds(playerIds)
-
-    return games.map(formatGamesListResponse(players))
+    return await gamesToGamesListResponse(games)
   }),
 
   getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
     const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
     const games = await GameModel.getGames(gameIds, true)
-
-    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
-    const players = await User.findByIds(playerIds)
-
-    return games.map(formatGamesListResponse(players))
+    return await gamesToGamesListResponse(games)
   }),
 
   getFinishedGames: jsonAPI<ApiGameInfo[]>(async req => {
     const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
     const games = await GameModel.getGames(gameIds, false)
-
-    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
-    const players = await User.findByIds(playerIds)
-
-    return games.map(formatGamesListResponse(players))
+    return await gamesToGamesListResponse(games)
   }),
 
   getGame: jsonAPI<IGame>(async req => {
@@ -77,8 +65,6 @@ export default {
     console.log(`Creating a new game '${body.title}'`);
 
     const game = await GameModel.findOrCreate(body.title)
-    // TODO create handler
-    notifyLobby("game_created", game.title);
     return gameDocumentToApiResult(game, [])
   }),
 
@@ -99,8 +85,13 @@ export default {
       // TODO: How does the player join the socket.io "room" of the game after reconnecting?
       socket.join(`game:${doc.id}`)
     }
+
+    notifyLobby("lobby_updated", await gamesToGamesListResponse([doc]))
+
     const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
-    return gameDocumentToApiResult(doc, players)
+    const response = gameDocumentToApiResult(doc, players)
+    notifyGame(doc.id, "game_updated", response)
+    return response
   }),
 
   makeMove: jsonAPI<IMoveResponse>(async req => {
@@ -122,7 +113,7 @@ export default {
     return move
   }),
 
-  surrender: jsonAPI<void>(async req => {
+  surrender: jsonAPI<IGame>(async req => {
     const {session, params: {gameId}} = req
     const userId = String(req.user._id)
 
@@ -135,8 +126,17 @@ export default {
     doc.surrenderer = userId
     await doc.save()
 
-    notifyGame(doc._id, "surrender", { gameId, userId })
+    const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
+    const response = gameDocumentToApiResult(doc, players)
+    notifyGame(doc._id, "game_updated", response)
+    return response
   }),
+}
+
+async function gamesToGamesListResponse(games: IGameDocument[]): Promise<ApiGameInfo[]> {
+    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
+    const players = await User.findByIds(playerIds)
+    return games.map(formatGamesListResponse(players))
 }
 
 function isCurrentTurn(doc: IGameDocument, userId: string): boolean {

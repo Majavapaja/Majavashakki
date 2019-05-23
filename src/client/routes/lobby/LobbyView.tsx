@@ -17,10 +17,16 @@ class LobbyView extends React.Component<ILobbyViewProps, never> {
     super(props);
     // Need to create socket here, otherwise server crashes on game join, because api/game/join needs socket
     props.game.connectSocket()
+    props.game.socket.on("lobby_updated", this.onLobbyUpdate)
   }
 
   public async componentDidMount() {
     this.fetchGames()
+  }
+
+  @action.bound
+  public async onLobbyUpdate(games: ApiGameInfo[]) {
+    await this.fetchGames()
   }
 
   @action.bound
