@@ -25,6 +25,6 @@ export class GameRoomsRepository {
 
         await User.addGame(userId, doc._id);
         game.addPlayer(userId);
-        return await GameModel.save(game);
+        return await GameModel.updateOrCreate(game);
     }
 }

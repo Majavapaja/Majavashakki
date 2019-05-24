@@ -29,13 +29,13 @@ export default {
   }),
 
   getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
+    const gameIds = await User.getMyGames(req.user._id)
     const games = await GameModel.getGames(gameIds, true)
     return await gamesToGamesListResponse(games)
   }),
 
   getFinishedGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
+    const gameIds = await User.getMyGames(req.user._id)
     const games = await GameModel.getGames(gameIds, false)
     return await gamesToGamesListResponse(games)
   }),
@@ -108,7 +108,7 @@ export default {
       return move
     }
 
-    await GameModel.save(game)
+    await GameModel.updateOrCreate(game)
     notifyGame(doc.id, "move_result", move)
     return move
   }),

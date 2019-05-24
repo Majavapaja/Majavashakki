@@ -8,7 +8,7 @@ export interface IGameDocument extends Majavashakki.IGame, Document {}
 
 export interface IGameModel extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<IGameDocument>;
-  save(game: Game, isNew?: boolean): Promise<IGameDocument>;
+  updateOrCreate(game: Game, isNew?: boolean): Promise<IGameDocument>
   findGame(id: string): Promise<IGameDocument>;
   getAvailableGames(userId: string): Promise<IGameDocument[]>;
   getGames(ids: string[], inProgress: boolean): Promise<IGameDocument[]>;
@@ -37,14 +37,14 @@ GameSchema.statics.findOrCreate = async (title: string): Promise<IGameDocument> 
 
   if (!result) {
     const game = new Game(title);
-    return await GameModel.save(game, true);
+    return await GameModel.updateOrCreate(game, true)
   } else {
     console.log(`FOUND EXISTING GAME ${result.id} NAME: ${result.title}, ID: ${result._id}`);
     return result
   }
 };
 
-GameSchema.statics.save = async (game: Game, isNew: boolean = false): Promise<IGameDocument> => {
+GameSchema.statics.updateOrCreate = async (game: Game, isNew: boolean = false): Promise<IGameDocument> => {
   return await GameModel.findOneAndUpdate(
     {title: game.title},
     Game.MapForDb(game),
