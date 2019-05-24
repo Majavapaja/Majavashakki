@@ -20,14 +20,16 @@ const jss = create({
 const app = new AppStore()
 
 ReactDOM.render(
-  <JssProvider jss={jss} generateClassName={generateClassName}>
-    <Provider app={app} game={app.game}>
-      <BrowserRouter>
-        <MuiThemeProvider theme={theme}>
-          <App />
-        </MuiThemeProvider>
-      </BrowserRouter>
-    </Provider>
-  </JssProvider>,
+  (
+    <JssProvider jss={jss} generateClassName={generateClassName}>
+      <Provider app={app} game={app.game}>
+        <BrowserRouter>
+          <MuiThemeProvider theme={theme}>
+            <App />
+          </MuiThemeProvider>
+        </BrowserRouter>
+      </Provider>
+    </JssProvider>
+  ),
   document.querySelector("#app"),
 )
