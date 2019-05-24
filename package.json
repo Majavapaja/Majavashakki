@@ -46,7 +46,7 @@
     "tsc": "tsc",
     "dev": "better-npm-run dev",
     "watch:client": "parcel watch src/client/index.html --public-url /",
-    "watch:server": "nodemon --watch src --watch public --ext ts,tsx --ignore src/client/**/* app.js",
+    "watch:server": "nodemon --watch src --watch public --ext ts,tsx --ignore src/client app.js",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "build": "parcel build src/client/index.html --public-url /",
     "start": "node app.js",
