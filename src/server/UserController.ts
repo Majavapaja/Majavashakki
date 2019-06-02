@@ -1,4 +1,4 @@
-import { User } from "./data/User";
+import { User, LoginType } from "./models/User"
 import passport from "passport";
 import { jsonAPI, validate, ValidationError } from "./json"
 import {
@@ -37,24 +37,24 @@ export default {
     const user = validate<RegisterRequest>(RegisterRequestType, req.body)
 
     try {
-      console.log(`Registering user: ${user.email}`);
-      if (await User.findByLoginEmail(user.email)) {
+      console.log(`Registering user: ${user.email}`)
+      if (await User.findByLoginId(user.email)) {
         throw new ValidationError([`Email '${user.email}' is already in use`])
       }
 
-      const registeredUser = await User.registerUser(user);
+      const registeredUser = await User.registerUser(user.email, LoginType.Local, user.password, user.email, user.name)
 
-      console.log(`Logging in user: ${registeredUser.email}`);
+      console.log(`Logging in user: ${registeredUser.email}`)
       const promise = new Promise((resolve, reject) => {
         req.login(registeredUser, loginError => {
           if (loginError) {
-            console.log(`Login error ${loginError}`);
-            reject("Couldn't log in");
+            console.log(`Login error ${loginError}`)
+            reject("Couldn't log in")
           } else {
-            resolve({ status: "OK" });
+            resolve({ status: "OK" })
           }
         })
-      });
+      })
 
       return promise;
     } catch (e) {

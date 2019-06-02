@@ -1,5 +1,4 @@
 import Game from "../entities/Game";
-import {User} from "../data/User";
 import {GameModel, IGameDocument} from "../data/GameModel";
 
 export class GameRoomsRepository {
@@ -23,7 +22,6 @@ export class GameRoomsRepository {
 
         if (game.isFull()) throw new Error(`User '${userId}' is trying to join game '${doc.id}' which is already full!`);
 
-        await User.addGame(userId, doc._id);
         game.addPlayer(userId);
         return await GameModel.updateOrCreate(game);
     }

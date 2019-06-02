@@ -1,6 +1,5 @@
 import sio from "socket.io";
 import {getSession} from "./session";
-import {User} from "./data/User"
 
 export const SocketServer: SocketIO.Server = sio({transports: ["websocket"]});
 export const SessionSocketMap = {};
@@ -15,8 +14,9 @@ export function initSockets() {
     // Join user to Socket.io rooms for their own games
     // TODO: Fail if not logged in?
     const userId = session.passport.user
-    const gameIds = await User.getMyGames(userId)
-    gameIds.forEach(gameId => socket.join(`game:${gameId}`))
+    // TODO: Why do we join all users games here?
+    // const gameIds = await User.getMyGames(userId)
+    // gameIds.forEach(gameId => socket.join(`game:${gameId}`))
     socket.join(`user:${userId}`)
     socket.join(MainRoom)
   });

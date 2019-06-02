@@ -3,12 +3,11 @@ import { apiAuth, uiAuth } from "./auth";
 import { resolve } from "path";
 import UserController from "./UserController";
 import GameController from "./GameController";
-import { User } from "./data/User";
 
 const router = express.Router();
 
 // Root with first level authentication
-router.get("/", uiAuth, (req, res, next) => User.validProfile(req.user) ? next() : res.redirect("/profile"));
+router.get("/", uiAuth, (req, res, next) => req.user.name ? next() : res.redirect("/profile"));
 
 // Important!! Resolve serving of static files before catch-a-fish *
 // but only after authentication has been resolved by root
