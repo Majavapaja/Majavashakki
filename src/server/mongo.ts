@@ -35,8 +35,8 @@ export async function initTestData() {
       name: "John Smith",
       email: "john.smith@example.com",
       logins: [{
-        id: "john.smith@example.com",
-        type: "local",
+        _id: "john.smith@example.com",
+        type: "Local",
         primary: true,
         password: await bcrypt.hash("johnsmith123", 10),
       }],
@@ -45,8 +45,8 @@ export async function initTestData() {
       name: "John Doe",
       email: "john.doe@example.com",
       logins: [{
-        id: "john.doe@example.com",
-        type: "local",
+        _id: "john.doe@example.com",
+        type: "Local",
         primary: true,
         password: await bcrypt.hash("johndoe123", 10),
       }],
