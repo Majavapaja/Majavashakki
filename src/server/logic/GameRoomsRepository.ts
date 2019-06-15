@@ -1,5 +1,5 @@
 import Game from "../entities/Game";
-import {GameModel, IGameDocument} from "../data/GameModel";
+import {GameModel, IGameDocument} from "../models/Game";
 
 export class GameRoomsRepository {
     public static getInstance(): GameRoomsRepository {
