@@ -68,8 +68,7 @@ GameSchema.statics.findGame = async (id: string): Promise<IGameDocument> => {
 }
 
 GameSchema.statics.getGameList = async (userId: string): Promise<IGameDocument[]> => {
-  console.log("player ID " + userId)
-  const games = await Game.find()
+  return await Game.find()
     .and([
       {
         // Game must have an empty slot or the user must be in it.
@@ -81,10 +80,6 @@ GameSchema.statics.getGameList = async (userId: string): Promise<IGameDocument[]
     ])
     .select({ title: true, playerIdBlack: true, playerIdWhite: true })
     .exec()
-
-  console.log(games)
-
-  return games
 }
 
 GameSchema.statics.getFinishedGames = async (userId: string): Promise<IGameDocument[]> => {
