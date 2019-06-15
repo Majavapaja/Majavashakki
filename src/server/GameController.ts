@@ -1,7 +1,6 @@
-import {GameRoomsRepository} from "./logic/GameRoomsRepository";
-import { User } from "./data/User";
-import { GameModel, IGameDocument } from "./data/GameModel";
-import { IUserDocument } from "./data/User"
+import { GameRoomsRepository } from "./logic/GameRoomsRepository";
+import { User, IUserDocument } from "./models/User";
+import { GameModel, IGameDocument } from "./models/Game";
 import { SessionSocketMap, notifyGame, notifyLobby } from "./Sockets";
 import Game from "./entities/Game";
 import { jsonAPI, NotFoundError, validate, ValidationError } from "./json"
