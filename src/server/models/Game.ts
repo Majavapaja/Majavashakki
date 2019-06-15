@@ -26,12 +26,13 @@ const BoardSchema = new Schema({
 }, { _id: false })
 
 const GameSchema: Schema = new Schema({
-  title: { type: String, unique: true },
+  title: { type: String, index: true, unique: true },
   playerIdWhite: { type: String, index: true },
   playerIdBlack: { type: String, index: true },
   board: BoardSchema,
   currentTurn: String,
-  inProgress: Boolean,
+  // Indexed because it is in frequent use
+  inProgress: { type: Boolean, index: true },
   surrenderer: {
     type: String,
     validate: function(surrenderer) {
@@ -77,7 +78,7 @@ GameSchema.statics.getGameList = async (userId: string): Promise<IGameDocument[]
         ],
       }, { inProgress: true },
     ])
-    .select({ name: true, playerIdBlack: true, playerIdWhite: true })
+    .select({ title: true, playerIdBlack: true, playerIdWhite: true })
     .exec()
 }
 
@@ -92,7 +93,7 @@ GameSchema.statics.getFinishedGames = async (userId: string): Promise<IGameDocum
         ],
       }, { inProgress: false },
     ])
-    .select({ name: true, playerIdBlack: true, playerIdWhite: true })
+    .select({ title: true, playerIdBlack: true, playerIdWhite: true })
     .exec()
 }
 
