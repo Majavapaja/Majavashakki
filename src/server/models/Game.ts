@@ -1,5 +1,5 @@
 import {Document, Schema, Model, model, Types} from "mongoose"
-import Game from "../entities/Game"
+import GameEntity from "../entities/Game"
 import * as Majavashakki from "../../common/GamePieces"
 
 const PositionSchema = new Schema({
@@ -41,33 +41,33 @@ const GameSchema: Schema = new Schema({
 })
 
 GameSchema.statics.findOrCreate = async (title: string): Promise<IGameDocument> => {
-  const result = await GameModel.findOne({title}).exec();
+  const result = await Game.findOne({title}).exec();
 
   if (!result) {
-    const game = new Game(title);
-    return await GameModel.updateOrCreate(game, true)
+    const game = new GameEntity(title);
+    return await Game.updateOrCreate(game, true)
   } else {
     console.log(`FOUND EXISTING GAME ${result.id} NAME: ${result.title}, ID: ${result._id}`);
     return result
   }
 }
 
-GameSchema.statics.updateOrCreate = async (game: Game, isNew: boolean = false): Promise<IGameDocument> => {
-  return await GameModel.findOneAndUpdate(
+GameSchema.statics.updateOrCreate = async (game: GameEntity, isNew: boolean = false): Promise<IGameDocument> => {
+  return await Game.findOneAndUpdate(
     {title: game.title},
-    Game.MapForDb(game),
+    GameEntity.MapForDb(game),
     {new: true, upsert: isNew},
   ).exec();
 }
 
 GameSchema.statics.findGame = async (id: string): Promise<IGameDocument> => {
   if (Types.ObjectId.isValid(id)) {
-    return await await GameModel.findById(id)
+    return await await Game.findById(id)
   }
 }
 
 GameSchema.statics.getGameList = async (userId: string): Promise<IGameDocument[]> => {
-  return await GameModel.find()
+  return await Game.find()
     .and([
       {
         // Game must have an empty slot or the user must be in it.
@@ -83,7 +83,7 @@ GameSchema.statics.getGameList = async (userId: string): Promise<IGameDocument[]
 
 GameSchema.statics.getAvailableGames = async (userId: string): Promise<IGameDocument[]> => {
   // Beautiful! Check for games that are neither full and doesn't contain active user already
-  return await GameModel.find()
+  return await Game.find()
     .and([
       { $or: [{ playerIdWhite: null }, { playerIdBlack: null }] },
       { playerIdWhite: { $ne: userId } },
@@ -93,7 +93,7 @@ GameSchema.statics.getAvailableGames = async (userId: string): Promise<IGameDocu
 }
 
 GameSchema.statics.getGames = async (ids: string[], inProgress: boolean): Promise<IGameDocument[]> => {
-  return await GameModel.find({
+  return await Game.find({
     _id: {$in: ids},
     inProgress,
   }).exec()
@@ -101,13 +101,13 @@ GameSchema.statics.getGames = async (ids: string[], inProgress: boolean): Promis
 
 export interface IGameDocument extends Majavashakki.IGame, Document {}
 
-export interface IGameModel extends Model<IGameDocument> {
+export interface IGame extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<IGameDocument>
-  updateOrCreate(game: Game, isNew?: boolean): Promise<IGameDocument>
+  updateOrCreate(game: GameEntity, isNew?: boolean): Promise<IGameDocument>
   findGame(id: string): Promise<IGameDocument>
   getAvailableGames(userId: string): Promise<IGameDocument[]>
   getGames(ids: string[], inProgress: boolean): Promise<IGameDocument[]>
   getGames(userId: string): Promise<IGameDocument[]>
 }
 
-export const GameModel: IGameModel = model<IGameDocument, IGameModel>("GameModel", GameSchema)
+export const Game: IGame = model<IGameDocument, IGame>("Game", GameSchema, "games")
