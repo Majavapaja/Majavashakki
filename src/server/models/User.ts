@@ -10,13 +10,12 @@ export enum LoginType {
 }
 
 export interface ILogin {
-  id: string
+  _id: string
   type: LoginType
   primary: boolean
   password?: string
 }
 const LoginSchema = new Schema({
-  id: { type: String, index: true, unique: true },
   type: {
     type: String,
     validate: {
@@ -27,6 +26,10 @@ const LoginSchema = new Schema({
   primary: Boolean,
   password: String,
 })
+export interface ILoginDocument extends ILogin, Document {
+  // Defined ID here again, because TypeScript complains otherwise
+  _id: string
+}
 
 export interface IUser {
   name: string
@@ -38,7 +41,6 @@ const UserSchema = new Schema({
   email: String,
   logins: [ LoginSchema ],
 })
-
 export interface IUserDocument extends IUser, Document {
   isCorrectPassword(password: string): Promise<boolean>
 }
@@ -59,8 +61,9 @@ export interface IUserModel extends Model<IUserDocument> {
 /* Middleware */
 
 LoginSchema.pre("save", async function() {
-  if (this.password && this.isModified("password")) {
-    this.password = await bcrypt.hash(this.password, PASSWORD_SALT_ROUNDS)
+  const self = this as ILoginDocument
+  if (self.password && self.isModified("password")) {
+    self.password = await bcrypt.hash(self.password, PASSWORD_SALT_ROUNDS)
   }
 })
 
@@ -78,7 +81,7 @@ UserSchema.statics.registerUser = async (
   name?: string,
 ): Promise<IUserDocument | undefined> => {
   const login = {
-    id,
+    _id: id,
     type: loginType,
     password,
     primary: true,
@@ -102,7 +105,7 @@ UserSchema.statics.findByLoginId = async (id: string): Promise<IUserDocument> =>
   return await User.findOne({
     logins: {
       $elemMatch: {
-        id,
+        _id: id,
       },
     },
   })
