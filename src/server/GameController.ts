@@ -23,7 +23,7 @@ const removeFalsy = xs => xs.filter(x => !!x)
 
 export default {
   getGameList: jsonAPI<ApiGameInfo[]>(async req => {
-    const games = await Game.getAvailableGames(req.user._id)
+    const games = await Game.getGameList(req.user._id)
     return await gamesToGamesListResponse(games)
   }),
 

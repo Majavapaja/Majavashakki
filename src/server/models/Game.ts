@@ -1,4 +1,4 @@
-import {Document, Schema, Model, model, Types} from "mongoose"
+import { Document, Schema, Model, model, Types } from "mongoose"
 import GameEntity from "../entities/Game"
 import * as Majavashakki from "../../common/GamePieces"
 
@@ -68,7 +68,8 @@ GameSchema.statics.findGame = async (id: string): Promise<IGameDocument> => {
 }
 
 GameSchema.statics.getGameList = async (userId: string): Promise<IGameDocument[]> => {
-  return await Game.find()
+  console.log("player ID " + userId)
+  const games = await Game.find()
     .and([
       {
         // Game must have an empty slot or the user must be in it.
@@ -80,6 +81,10 @@ GameSchema.statics.getGameList = async (userId: string): Promise<IGameDocument[]
     ])
     .select({ title: true, playerIdBlack: true, playerIdWhite: true })
     .exec()
+
+  console.log(games)
+
+  return games
 }
 
 GameSchema.statics.getFinishedGames = async (userId: string): Promise<IGameDocument[]> => {
@@ -117,14 +122,14 @@ GameSchema.statics.getGames = async (ids: string[], inProgress: boolean): Promis
 
 export interface IGameDocument extends Majavashakki.IGame, Document {}
 
-export interface IGame extends Model<IGameDocument> {
+export interface IGameModel extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<IGameDocument>
   updateOrCreate(game: GameEntity, isNew?: boolean): Promise<IGameDocument>
   findGame(id: string): Promise<IGameDocument>
-  getAvailableGames(userId: string): Promise<IGameDocument[]>
+  getGameList(userId: string): Promise<IGameDocument[]>
   getFinishedGames(userId: string): Promise<IGameDocument[]>
   getGames(ids: string[], inProgress: boolean): Promise<IGameDocument[]>
   getGames(userId: string): Promise<IGameDocument[]>
 }
 
-export const Game: IGame = model<IGameDocument, IGame>("Game", GameSchema, "games")
+export const Game: IGameModel = model<IGameDocument, IGameModel>("Game", GameSchema, "games")
