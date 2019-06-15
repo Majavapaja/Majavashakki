@@ -97,24 +97,6 @@ GameSchema.statics.getFinishedGames = async (userId: string): Promise<IGameDocum
     .exec()
 }
 
-GameSchema.statics.getAvailableGames = async (userId: string): Promise<IGameDocument[]> => {
-  // Beautiful! Check for games that are neither full and doesn't contain active user already
-  return await Game.find()
-    .and([
-      { $or: [{ playerIdWhite: null }, { playerIdBlack: null }] },
-      { playerIdWhite: { $ne: userId } },
-      { playerIdBlack: { $ne: userId } },
-      { inProgress: true },
-    ]).exec()
-}
-
-GameSchema.statics.getGames = async (ids: string[], inProgress: boolean): Promise<IGameDocument[]> => {
-  return await Game.find({
-    _id: {$in: ids},
-    inProgress,
-  }).exec()
-}
-
 export interface IGameDocument extends Majavashakki.IGame, Document {}
 
 export interface IGameModel extends Model<IGameDocument> {
@@ -123,8 +105,6 @@ export interface IGameModel extends Model<IGameDocument> {
   findGame(id: string): Promise<IGameDocument>
   getGameList(userId: string): Promise<IGameDocument[]>
   getFinishedGames(userId: string): Promise<IGameDocument[]>
-  getGames(ids: string[], inProgress: boolean): Promise<IGameDocument[]>
-  getGames(userId: string): Promise<IGameDocument[]>
 }
 
 export const Game: IGameModel = model<IGameDocument, IGameModel>("Game", GameSchema, "games")
