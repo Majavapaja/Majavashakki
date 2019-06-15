@@ -71,7 +71,7 @@ LoginSchema.pre("save", async function() {
 /** Statics */
 
 UserSchema.statics.save = async (user: global.IUserContract): Promise<IUserDocument> => {
-  return await User.findOneAndUpdate({_id: user.id}, {name: user.name, email: user.email}).exec()
+  return await User.findByIdAndUpdate(user.id, {name: user.name, email: user.email}).exec()
 }
 
 UserSchema.statics.registerUser = async (
