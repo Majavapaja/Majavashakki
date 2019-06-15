@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { SchemaOptions } from "mongoose";
 import {isProd} from "./util"
-import {User} from "./data/User"
+import { User } from "./models/User"
 import bcrypt from "bcryptjs"
 
 export const schemaOptions = (overrides = {}): SchemaOptions => {
