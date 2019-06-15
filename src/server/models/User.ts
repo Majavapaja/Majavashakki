@@ -5,8 +5,8 @@ import bcrypt from "bcryptjs"
 const PASSWORD_SALT_ROUNDS = 10
 
 export enum LoginType {
-  Local = "local",
-  Facebook = "facebook",
+  Local = "Local",
+  Facebook = "Facebook",
 }
 
 export interface ILogin {
