@@ -16,6 +16,7 @@ export interface ILogin {
   password?: string
 }
 const LoginSchema = new Schema({
+  _id: String,
   type: {
     type: String,
     validate: {
