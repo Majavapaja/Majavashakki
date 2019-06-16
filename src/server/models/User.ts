@@ -1,4 +1,4 @@
-import {Document, Schema, Model, model} from "mongoose"
+import { Document, Schema, Model, model } from "mongoose"
 import * as _ from "lodash"
 import bcrypt from "bcryptjs"
 
@@ -10,12 +10,12 @@ export enum LoginType {
 }
 
 export interface ILogin {
-  _id: string
+  loginId: string
   type: LoginType
   password?: string
 }
 const LoginSchema = new Schema({
-  _id: String,
+  loginId: String,
   type: {
     type: String,
     validate: {
@@ -24,11 +24,8 @@ const LoginSchema = new Schema({
     },
   },
   password: String,
-})
-export interface ILoginDocument extends ILogin, Document {
-  // Defined ID here again, because TypeScript complains otherwise
-  _id: string
-}
+}, { _id: false })
+export interface ILoginDocument extends ILogin, Document { }
 
 export interface IUser {
   name: string
@@ -47,14 +44,14 @@ export interface IUserDocument extends IUser, Document {
 export interface IUserModel extends Model<IUserDocument> {
   save(user: global.IUserContract): Promise<IUserDocument>
   registerUser(
-    id: string,
+    loginId: string,
     loginType: LoginType,
     password?: string,
     email?: string,
     name?: string,
   ): Promise<IUserDocument | undefined>
   findByIds(ids: string[]): Promise<IUserDocument[]>
-  findByLoginId(id: string): Promise<IUserDocument | undefined>
+  findByLoginId(loginId: string): Promise<IUserDocument | undefined>
 }
 
 /* Middleware */
@@ -73,14 +70,14 @@ UserSchema.statics.save = async (user: global.IUserContract): Promise<IUserDocum
 }
 
 UserSchema.statics.registerUser = async (
-  id: string,
+  loginId: string,
   loginType: LoginType,
   password?: string,
   email?: string,
   name?: string,
 ): Promise<IUserDocument | undefined> => {
   const login = {
-    _id: id,
+    loginId,
     type: loginType,
     password,
   } as ILogin
@@ -99,11 +96,11 @@ UserSchema.statics.findByIds = async (ids: string[]): Promise<IUserDocument[]> =
   return await User.find({ _id: { $in: ids } }).exec()
 }
 
-UserSchema.statics.findByLoginId = async (id: string): Promise<IUserDocument> => {
+UserSchema.statics.findByLoginId = async (loginId: string): Promise<IUserDocument> => {
   return await User.findOne({
     logins: {
       $elemMatch: {
-        _id: id,
+        loginId,
       },
     },
   })
