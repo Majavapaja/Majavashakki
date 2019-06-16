@@ -32,11 +32,11 @@ export default class LobbyStore {
     await this._user.refreshFromServer()
 
     try {
-      const games = await this._api.read.games()
+      const games = await this._api.read.games(true)
       this.myGames = games.filter(this.isMyGame)
       this.availableGames = games.filter(game => !this.isMyGame(game))
 
-      this.finishedGames = await this._api.read.finishedGames()
+      this.finishedGames = await this._api.read.games(false)
     } catch (error) {
       this.error = true
     }

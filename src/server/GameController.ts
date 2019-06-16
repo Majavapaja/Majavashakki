@@ -23,13 +23,9 @@ const removeFalsy = xs => xs.filter(x => !!x)
 
 export default {
   getGameList: jsonAPI<ApiGameInfo[]>(async req => {
-    const games = await Game.getGameList(req.user._id)
+    const inProgress = parseBoolean(req.query.inProgress)
+    const games = await Game.getGameList(req.user._id, inProgress)
     return await gamesToGamesListResponse(games)
-  }),
-
-  getFinishedGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const finishedGames = await Game.getFinishedGames(req.user._id)
-    return await gamesToGamesListResponse(finishedGames)
   }),
 
   getGame: jsonAPI<IGame>(async req => {
@@ -174,4 +170,14 @@ function gameDocumentToApiResult(doc: IGameDocument, players: IUserDocument[]): 
 function userDocumentToPlayerDetails(doc?: IUserDocument): ApiPlayerDetails | undefined {
   if (!doc) return undefined
   return {id: doc._id, name: doc.name}
+}
+
+function parseBoolean(value: any): boolean {
+  if (value === "true") {
+    return true
+  } else if (value === "false") {
+    return false
+  } else {
+    throw new Error(`Failed to parse boolean from '${value}'`)
+  }
 }

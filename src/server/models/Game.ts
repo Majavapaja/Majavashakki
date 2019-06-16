@@ -67,7 +67,7 @@ GameSchema.statics.findGame = async (id: string): Promise<IGameDocument> => {
   }
 }
 
-GameSchema.statics.getGameList = async (userId: string): Promise<IGameDocument[]> => {
+GameSchema.statics.getGameList = async (userId: string, inProgress: boolean): Promise<IGameDocument[]> => {
   return await Game.find()
     .and([
       {
@@ -76,22 +76,7 @@ GameSchema.statics.getGameList = async (userId: string): Promise<IGameDocument[]
           { $or: [{ playerIdWhite: null }, { playerIdBlack: null }] },
           { $or: [{ playerIdWhite: userId, playerIdBlack: userId }] },
         ],
-      }, { inProgress: true },
-    ])
-    .select({ title: true, playerIdBlack: true, playerIdWhite: true })
-    .exec()
-}
-
-GameSchema.statics.getFinishedGames = async (userId: string): Promise<IGameDocument[]> => {
-  return await Game.find()
-    .and([
-      {
-        $and: [
-          { playerIdWhite: null },
-          { playerIdBlack: null },
-          { $or: [{ playerIdWhite: userId, playerIdBlack: userId }] },
-        ],
-      }, { inProgress: false },
+      }, { inProgress },
     ])
     .select({ title: true, playerIdBlack: true, playerIdWhite: true })
     .exec()
@@ -103,8 +88,7 @@ export interface IGameModel extends Model<IGameDocument> {
   findOrCreate(title: string): Promise<IGameDocument>
   updateOrCreate(game: GameEntity, isNew?: boolean): Promise<IGameDocument>
   findGame(id: string): Promise<IGameDocument>
-  getGameList(userId: string): Promise<IGameDocument[]>
-  getFinishedGames(userId: string): Promise<IGameDocument[]>
+  getGameList(userId: string, inProgress: boolean): Promise<IGameDocument[]>
 }
 
 export const Game: IGameModel = model<IGameDocument, IGameModel>("Game", GameSchema, "games")

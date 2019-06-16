@@ -21,7 +21,6 @@ router.get("/authFacebook",       UserController.loginFacebook);
 router.get("/logout",             UserController.logout)
 
 router.get("/api/games",           apiAuth, GameController.getGameList);
-router.get("/api/games/finished",  apiAuth, GameController.getFinishedGames);
 router.get("/api/games/get/:id",   apiAuth, GameController.getGame)
 router.post("/api/games",          apiAuth, GameController.postGame)
 router.post("/api/games/:id/join", apiAuth, GameController.joinGame)

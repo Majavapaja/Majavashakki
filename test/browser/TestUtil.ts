@@ -69,6 +69,12 @@ export async function countInPage(page, selector, count) {
   assert.strictEqual(elements.length, count);
 }
 
+// Waits until the element exists and clicks it
+export async function click(page, selector) {
+  await page.waitForSelector(selector)
+  await page.click(selector)
+}
+
 async function timesAsync(n, func) {
   const results = []
   for (let i = 0; i < n; i++) {
