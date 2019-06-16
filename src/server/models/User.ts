@@ -12,7 +12,6 @@ export enum LoginType {
 export interface ILogin {
   _id: string
   type: LoginType
-  primary: boolean
   password?: string
 }
 const LoginSchema = new Schema({
@@ -24,7 +23,6 @@ const LoginSchema = new Schema({
       message: props => `${props.value} is not valid login type`,
     },
   },
-  primary: Boolean,
   password: String,
 })
 export interface ILoginDocument extends ILogin, Document {
@@ -85,7 +83,6 @@ UserSchema.statics.registerUser = async (
     _id: id,
     type: loginType,
     password,
-    primary: true,
   } as ILogin
 
   const user = {
@@ -116,15 +113,13 @@ UserSchema.statics.findByLoginId = async (id: string): Promise<IUserDocument> =>
 
 UserSchema.methods.isCorrectPassword = async function(password: string): Promise<boolean> {
   const self = this as IUserDocument
-  const primaryLogin = self.logins.find(x => x.primary)
-  if (!primaryLogin || !primaryLogin.password) {
-    console.log("No primary login with password!")
-    // TODO: Throw error instead of console.log?
-    // TODO: Is this even a valid situation? Does the code even ever go here?
+  const login = self.logins.find(x => x.type === LoginType.Local)
+  if (!login || !login.password) {
+    console.log("User has no login with password, password can't be correct")
     return false
   }
 
-  return await bcrypt.compare(password, primaryLogin.password)
+  return await bcrypt.compare(password, login.password)
 }
 
 export const User: IUserModel = model<IUserDocument, IUserModel>("User", UserSchema, "users");
