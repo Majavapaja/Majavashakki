@@ -14,9 +14,6 @@ export function initSockets() {
     // Join user to Socket.io rooms for their own games
     // TODO: Fail if not logged in?
     const userId = session.passport.user
-    // TODO: Why do we join all users games here?
-    // const gameIds = await User.getMyGames(userId)
-    // gameIds.forEach(gameId => socket.join(`game:${gameId}`))
     socket.join(`user:${userId}`)
     socket.join(MainRoom)
   });
