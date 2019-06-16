@@ -39,13 +39,16 @@ class GameView extends React.Component<IGameViewProps, any> {
     else if (game.error) messageProps = { message: game.error, type: "error" }
     else if (game.isCheck) messageProps = { message: "Check!", type: "info" }
 
+    const currentPlayer = game.currentUser.id === game.playerIdWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
+    const opponentPlayer = game.currentUser.id !== game.playerIdWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
+
     return (
       <div className={classes.gameContainer}>
         {game.winner && <EndScreen />}
         <div className={classes.playArea}>
-          <PlayerBadge color={Majavashakki.PieceColor.White} />
+          <PlayerBadge color={currentPlayer} />
           <Board />
-          <PlayerBadge color={Majavashakki.PieceColor.Black} />
+          <PlayerBadge color={opponentPlayer} />
         </div>
         <MessagePanel />
       </div>
