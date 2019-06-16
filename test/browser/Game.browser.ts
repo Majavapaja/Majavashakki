@@ -126,9 +126,9 @@ async function login(page, email, password) {
 
 async function createGame(page, gameName) {
   await Util.navigate(page, "/")
-  await page.click("#createGame")
+  await Util.click(page, "#createGame")
   await page.type("input[name=name]", gameName)
-  await page.click("#createGameDialog #createButton")
+  await Util.click(page, "#createGameDialog #createButton")
 }
 
 async function joinGame(page, gameName) {

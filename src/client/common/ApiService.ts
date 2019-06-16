@@ -12,9 +12,7 @@ export default class ApiService {
 
   public read = {
     user:           async () => await this.getIt<ApiUser>("api/user"),
-    availableGames: async () => await this.getIt<ApiGameInfo[]>("api/games"),
-    myGames:        async () => await this.getIt<ApiGameInfo[]>("api/games/my-games"),
-    finishedGames:  async () => await this.getIt<ApiGameInfo[]>("api/games/finished"),
+    games:          async (inProgress: boolean) => await this.getIt<ApiGameInfo[]>(`api/games?inProgress=${inProgress}`),
     game:           async (id: string) => await this.getIt<Majavashakki.IGame>(`api/games/get/${id}`),
   };
 

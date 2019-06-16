@@ -1,5 +1,5 @@
-import * as React from "react";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import * as React from "react"
+import { withRouter, RouteComponentProps } from "react-router-dom"
 import {
   List,
   ListItem,
@@ -17,21 +17,21 @@ import {
   InputAdornment,
   AppBar,
   Avatar,
-} from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
+} from "@material-ui/core"
+import AddIcon from "@material-ui/icons/Add"
 import FilterIcon from "@material-ui/icons/Search"
-import ApiService from "../../common/ApiService";
-import { ApiGameInfo } from "../../../common/types";
+import ApiService from "../../common/ApiService"
+import { ApiGameInfo } from "../../../common/types"
 
 import Player1Avatar from "../../assets/player1.jpg"
 import Player2Avatar from "../../assets/player2.jpg"
 import { inject } from "mobx-react";
-import { IAppStore } from "client/store/AppStore";
+import { IAppStore } from "client/store/AppStore"
 
-@inject((stores: IAppStore) => ({game: stores.app.game, api: stores.app.api}))
+@inject((stores: IAppStore) => ({ api: stores.app.api }))
 class GameList extends React.Component<IGameListProps, any> {
   constructor(props: any) {
-    super(props);
+    super(props)
 
     this.state = {
       filter: "",
@@ -141,6 +141,6 @@ const styles = (theme: Theme) => createStyles({
   playerAvatarsContainer: {
     display: "flex",
   },
-});
+})
 
 export default withStyles(styles)(withRouter(GameList));

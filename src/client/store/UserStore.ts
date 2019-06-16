@@ -3,6 +3,7 @@ import ApiService from "../common/ApiService";
 import { UserUpdateRequest } from "common/types";
 
 export default class UserStore {
+  @observable public id: string
   @observable public name: string;
   @observable public email: string;
 
@@ -21,8 +22,8 @@ export default class UserStore {
   @action
   public async refreshFromServer() {
     const user = await this._api.read.user();
-    console.log(user)
 
+    this.id = user.id
     this.name = user.name
     this.email = user.email
   }

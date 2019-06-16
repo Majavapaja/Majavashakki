@@ -1,6 +1,5 @@
-import Game from "../entities/Game";
-import {User} from "../data/User";
-import {GameModel, IGameDocument} from "../data/GameModel";
+import GameEntity from "../entities/Game";
+import { Game , IGameDocument } from "../models/Game";
 
 export class GameRoomsRepository {
     public static getInstance(): GameRoomsRepository {
@@ -18,13 +17,12 @@ export class GameRoomsRepository {
     // TODO make sense into different game interfaces (one too many? move some of the Game class logic into IGameDocument?)
     // also don't pass around sockets, too late too lazy
     public async joinRoom(doc: IGameDocument, socket: any, userId: string): Promise<IGameDocument> {
-        const game = Game.MapFromDb(doc.toObject());
+        const game = GameEntity.MapFromDb(doc.toObject());
         if (game.containsUser(userId)) return doc;
 
         if (game.isFull()) throw new Error(`User '${userId}' is trying to join game '${doc.id}' which is already full!`);
 
-        await User.addGame(userId, doc._id);
         game.addPlayer(userId);
-        return await GameModel.updateOrCreate(game);
+        return await Game.updateOrCreate(game);
     }
 }

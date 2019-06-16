@@ -1,9 +1,8 @@
-import {GameRoomsRepository} from "./logic/GameRoomsRepository";
-import { User } from "./data/User";
-import { GameModel, IGameDocument } from "./data/GameModel";
-import { IUserDocument } from "./data/User"
+import { GameRoomsRepository } from "./logic/GameRoomsRepository";
+import { User, IUserDocument } from "./models/User";
+import { Game, IGameDocument } from "./models/Game";
 import { SessionSocketMap, notifyGame, notifyLobby } from "./Sockets";
-import Game from "./entities/Game";
+import GameEntity from "./entities/Game";
 import { jsonAPI, NotFoundError, validate, ValidationError } from "./json"
 import {
   CreateGameRequestType, CreateGameRequest,
@@ -23,20 +22,9 @@ const flatten = xs => [].concat(...xs)
 const removeFalsy = xs => xs.filter(x => !!x)
 
 export default {
-  getAvailableGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const games = await GameModel.getAvailableGames(req.user._id);
-    return await gamesToGamesListResponse(games)
-  }),
-
-  getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const gameIds = await User.getMyGames(req.user._id)
-    const games = await GameModel.getGames(gameIds, true)
-    return await gamesToGamesListResponse(games)
-  }),
-
-  getFinishedGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const gameIds = await User.getMyGames(req.user._id)
-    const games = await GameModel.getGames(gameIds, false)
+  getGameList: jsonAPI<ApiGameInfo[]>(async req => {
+    const inProgress = parseBoolean(req.query.inProgress)
+    const games = await Game.getGameList(req.user._id, inProgress)
     return await gamesToGamesListResponse(games)
   }),
 
@@ -44,7 +32,7 @@ export default {
     const {session, params: {id}} = req
     const socket = SessionSocketMap[session.id];
 
-    const game = await GameModel.findGame(id)
+    const game = await Game.findGame(id)
     if (!game) throw new NotFoundError(`Game '${id}' not found`)
 
     if (!isPartOfTheGame(game, req.user.id)) {
@@ -64,7 +52,7 @@ export default {
     const body = validate<CreateGameRequest>(CreateGameRequestType, req.body)
     console.log(`Creating a new game '${body.title}'`);
 
-    const game = await GameModel.findOrCreate(body.title)
+    const game = await Game.findOrCreate(body.title)
     return gameDocumentToApiResult(game, [])
   }),
 
@@ -73,7 +61,7 @@ export default {
     const socket = SessionSocketMap[session.id];
     const userId = req.user._id
 
-    let doc = await GameModel.findGame(id);
+    let doc = await Game.findGame(id);
     if (!doc) throw new NotFoundError(`Game '${id}' not found`)
 
     console.log(`User '${req.user.email}' is joining game '${doc.title}'`)
@@ -99,8 +87,8 @@ export default {
     const data = validate<MoveRequest>(MoveRequestType, req.body)
     const userId = String(req.user._id)
 
-    const doc = await GameModel.findGame(id);
-    const [game, move] = await applyMove(Game.MapFromDb(doc), userId, data)
+    const doc = await Game.findGame(id);
+    const [game, move] = await applyMove(GameEntity.MapFromDb(doc), userId, data)
 
     if (move.status === Majavashakki.MoveStatus.Error) {
       const socket = SessionSocketMap[session.id];
@@ -108,7 +96,7 @@ export default {
       return move
     }
 
-    await GameModel.updateOrCreate(game)
+    await Game.updateOrCreate(game)
     notifyGame(doc.id, "move_result", move)
     return move
   }),
@@ -117,7 +105,7 @@ export default {
     const {session, params: {gameId}} = req
     const userId = String(req.user._id)
 
-    const doc = await GameModel.findGame(gameId);
+    const doc = await Game.findGame(gameId);
     if (!isCurrentTurn(doc, userId)) {
       throw new ValidationError(["Can't surrender on your opponents turn"])
     }
@@ -162,7 +150,7 @@ function formatGamesListResponse(players: IUserDocument[]) {
 }
 
 function gameDocumentToApiResult(doc: IGameDocument, players: IUserDocument[]): IGame {
-  const board = Game.MapFromDb(doc).board
+  const board = GameEntity.MapFromDb(doc).board
   return {
     id: doc._id,
     title: doc.title,
@@ -182,4 +170,14 @@ function gameDocumentToApiResult(doc: IGameDocument, players: IUserDocument[]): 
 function userDocumentToPlayerDetails(doc?: IUserDocument): ApiPlayerDetails | undefined {
   if (!doc) return undefined
   return {id: doc._id, name: doc.name}
+}
+
+function parseBoolean(value: any): boolean {
+  if (value === "true") {
+    return true
+  } else if (value === "false") {
+    return false
+  } else {
+    throw new Error(`Failed to parse boolean from '${value}'`)
+  }
 }
