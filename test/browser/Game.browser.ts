@@ -17,8 +17,8 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     ])
 
     await makeMove(black, "d8", "h4")
-    await checkText(white, "#winMessage", "The winner is black")
-    await checkText(black, "#winMessage", "The winner is black")
+    await checkText(white, "[data-message-panel]", "Winner is: black!")
+    await checkText(black, "[data-message-panel]", "Winner is: black!")
   })
 
   // "This sample chess game was played between Paul Morphy and his two
@@ -57,8 +57,8 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     ])
     await makeMove(white, "d1", "d8")
 
-    await checkText(white, "#winMessage", "The winner is white")
-    await checkText(black, "#winMessage", "The winner is white")
+    await checkText(white, "[data-message-panel]", "Winner is: white!")
+    await checkText(black, "[data-message-panel]", "Winner is: white!")
   })
 
   it("implments pawn promotion correctly", async function() {

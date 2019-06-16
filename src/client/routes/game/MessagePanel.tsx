@@ -5,7 +5,7 @@ import { Typography } from "@material-ui/core"
 class MessagePanel extends React.Component<IMessagePanelProps, any> {
     public render() {
         return (
-            <div className={this.props.classes.sidePanel}>
+            <div data-message-panel className={this.props.classes.sidePanel}>
                 <Typography
                     className={this.props.type === "error" && this.props.classes.error}
                 >
