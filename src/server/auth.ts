@@ -35,7 +35,7 @@ export function initPassport(appUrl: string) {
           console.log(`User '${profile.displayName}' logged in successfully.`)
 
           try {
-            let user = await User.findByLoginId(profile.id)
+            let user = await User.findByLoginId(LoginType.Facebook, profile.id)
 
             if (!user) {
               user = await User.registerUser(profile.id, LoginType.Facebook)
@@ -53,7 +53,7 @@ export function initPassport(appUrl: string) {
 
   passport.use(new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
     try {
-      const user = await User.findByLoginId(email)
+      const user = await User.findByLoginId(LoginType.Local, email)
 
       if (!user) {
         console.log(`User '${email}' tried to log in with invalid email`)

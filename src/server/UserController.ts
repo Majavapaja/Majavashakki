@@ -38,7 +38,7 @@ export default {
 
     try {
       console.log(`Registering user: ${user.email}`)
-      if (await User.findByLoginId(user.email)) {
+      if (await User.findByLoginId(LoginType.Local, user.email)) {
         throw new ValidationError([`Email '${user.email}' is already in use`])
       }
 

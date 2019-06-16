@@ -51,7 +51,7 @@ export interface IUserModel extends Model<IUserDocument> {
     name?: string,
   ): Promise<IUserDocument | undefined>
   findByIds(ids: string[]): Promise<IUserDocument[]>
-  findByLoginId(loginId: string): Promise<IUserDocument | undefined>
+  findByLoginId(loginType: LoginType, loginId: string): Promise<IUserDocument | undefined>
 }
 
 /* Middleware */
@@ -96,10 +96,11 @@ UserSchema.statics.findByIds = async (ids: string[]): Promise<IUserDocument[]> =
   return await User.find({ _id: { $in: ids } }).exec()
 }
 
-UserSchema.statics.findByLoginId = async (loginId: string): Promise<IUserDocument> => {
+UserSchema.statics.findByLoginId = async (loginType: LoginType, loginId: string): Promise<IUserDocument> => {
   return await User.findOne({
     logins: {
       $elemMatch: {
+        type: loginType,
         loginId,
       },
     },
