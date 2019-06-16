@@ -4,14 +4,6 @@ import {isProd} from "./util"
 import { User } from "./models/User"
 import bcrypt from "bcryptjs"
 
-export const schemaOptions = (overrides = {}): SchemaOptions => {
-  return {
-    shardKey: { _id: "hashed" },
-    timestamps: true,
-    ...overrides,
-  }
-}
-
 export async function clearDatabase() {
   if (isProd()) {
     throw new Error("How about you stop calling clearDatabase in production!")
