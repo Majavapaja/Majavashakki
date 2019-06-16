@@ -68,7 +68,6 @@ export default class LobbyStore {
   }
 
   private isMyGame(game): boolean {
-    console.log("Current user id", this._user.id)
     if (game.playerBlack && game.playerBlack.id === this._user.id) return true
     if (game.playerWhite && game.playerWhite.id === this._user.id) return true
     return false
