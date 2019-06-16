@@ -33,7 +33,7 @@ export default class LobbyStore {
 
     try {
       const games = await this._api.read.games(true)
-      this.myGames = games.filter(this.isMyGame)
+      this.myGames = games.filter(game => this.isMyGame(game))
       this.availableGames = games.filter(game => !this.isMyGame(game))
 
       this.finishedGames = await this._api.read.games(false)
