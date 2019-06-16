@@ -47,7 +47,7 @@ class GameView extends React.Component<IGameViewProps, any> {
           <Board />
           <PlayerBadge color={Majavashakki.PieceColor.Black} />
         </div>
-        <MessagePanel {...messageProps} />
+        <MessagePanel />
       </div>
     )
   }
