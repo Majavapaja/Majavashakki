@@ -16,8 +16,6 @@ class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
 
         const player = color === Majavashakki.PieceColor.White ? game.playerWhite : game.playerBlack
 
-        if (!player) return null
-
         const rootClasses = classNames(
             classes.root,
             { active: game.currentTurn === color, winner: game.winner === color },
@@ -28,7 +26,7 @@ class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
                 id={`${color}Badge`}
                 className={rootClasses}
                 avatar={<Avatar className={[classes.playerColor, color].join(" ")} />}
-                label={player.name}
+                label={player ? player.name : "N/A"}
             />
         )
     }
@@ -36,6 +34,7 @@ class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
 
 const styles = theme => ({
     root: {
+        margin: "0 20px",
         "&.active": {
             backgroundColor: theme.palette.primary.main,
             color: theme.palette.primary.contrastText,
