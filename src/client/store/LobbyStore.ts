@@ -33,23 +33,15 @@ export default class LobbyStore {
 
     try {
       const games = await this._api.read.games()
-      this.myGames = []
-      this.availableGames = []
-
-      games.map(game => {
-        if (this.isMyGame(game)) {
-          this.myGames.push(game)
-        } else {
-          this.availableGames.push(game)
-        }
-      })
+      this.myGames = games.filter(this.isMyGame)
+      this.availableGames = games.filter(game => !this.isMyGame(game))
 
       this.finishedGames = await this._api.read.finishedGames()
     } catch (error) {
       this.error = true
-    } finally {
-      this.isLoading = false
     }
+
+    this.isLoading = false
   }
 
   @action.bound
