@@ -1,17 +1,13 @@
 import * as React from "react"
 import { WithStyles, withStyles, createStyles } from "@material-ui/core/styles"
-import { Typography } from "@material-ui/core"
+import { Typography, Paper } from "@material-ui/core"
 
 class MessagePanel extends React.Component<IMessagePanelProps, any> {
     public render() {
         return (
-            <div data-message-panel className={this.props.classes.sidePanel}>
-                <Typography
-                    className={this.props.type === "error" && this.props.classes.error}
-                >
-                    {this.props.message}
-                </Typography>
-            </div>
+            <Paper>
+                MESSSAGESS
+            </Paper>
         )
     }
 }

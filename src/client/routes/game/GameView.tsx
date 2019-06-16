@@ -11,6 +11,8 @@ import SidePanel from "./SidePanel"
 import EndScreen from "./EndScreen"
 import MessagePanel from "./MessagePanel"
 import Players from "./Players"
+import PlayerBadge from "./PlayerBadge"
+import * as Majavashakki from "../../../common/GamePieces"
 
 @inject((stores: IAppStore) => ({game: stores.app.game}))
 @observer
@@ -38,17 +40,15 @@ class GameView extends React.Component<IGameViewProps, any> {
     else if (game.isCheck) messageProps = { message: "Check!", type: "info" }
 
     return (
-      <Paper className={classes.gameContainer}>
+      <div className={classes.gameContainer}>
         {game.winner && <EndScreen />}
-        <div className={classes.leftContainer}>
-          <Players />
+        <div className={classes.playArea}>
+          <PlayerBadge color={Majavashakki.PieceColor.White} />
           <Board />
-          <MessagePanel {...messageProps} />
+          <PlayerBadge color={Majavashakki.PieceColor.Black} />
         </div>
-        <div className={classes.rightContainer}>
-          <SidePanel />
-        </div>
-      </Paper>
+        <MessagePanel {...messageProps} />
+      </div>
     )
   }
 }
@@ -57,16 +57,13 @@ const styles = (theme: Theme) => createStyles({
   gameContainer: {
     display: "flex",
     alignSelf: "center",
+    flexDirection: "column",
     padding: 20,
   },
-  leftContainer: {
+  playArea: {
     display: "flex",
-    flexDirection: "column",
-    width: "60vmin",
-  },
-  rightContainer: {
-    display: "flex",
-    width: "20vmin",
+    flexDirection: "row",
+    marginBottom: "20px",
   },
 })
 

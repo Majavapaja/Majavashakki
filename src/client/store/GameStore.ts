@@ -8,7 +8,6 @@ import BoardStore from "./BoardStore"
 import GameBase from "../../common/GameBase"
 import AppStore from "./AppStore"
 
-// TODO: Extend /src/common/Game
 export default class GameStore extends GameBase {
   @observable
   public title: string

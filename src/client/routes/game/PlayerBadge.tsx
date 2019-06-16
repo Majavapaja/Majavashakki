@@ -1,26 +1,33 @@
 import * as React from "react"
-import { withRouter } from "react-router-dom"
-import { withStyles, createStyles } from "@material-ui/core/styles"
+import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Board from "./Board"
-import { observer } from "mobx-react"
+import { observer, inject } from "mobx-react"
 import { Chip, Typography, Avatar } from "@material-ui/core"
 import classNames from "classnames"
+import { IAppStore } from "../../store/AppStore";
+import GameStore from "../../store/GameStore";
+import * as Majavashakki from "../../../common/GamePieces"
 
+@inject((stores: IAppStore) => ({game: stores.app.game}))
 @observer
-class PlayerBadge extends React.Component<any, any> {
+class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
     public render() {
-        const { classes, player, isCurrentPlayer, isWinner, id } = this.props
+        const { classes, color, game } = this.props
+
+        const player = color === Majavashakki.PieceColor.White ? game.playerWhite : game.playerBlack
+
+        if (!player) return null
 
         const rootClasses = classNames(
             classes.root,
-            { active: isCurrentPlayer, winner: isWinner },
+            { active: game.currentTurn === color, winner: game.winner === color },
         )
 
         return (
             <Chip
-                id={id}
+                id={`${color}Badge`}
                 className={rootClasses}
-                avatar={<Avatar className={[classes.playerColor, player.color].join(" ")} />}
+                avatar={<Avatar className={[classes.playerColor, color].join(" ")} />}
                 label={player.name}
             />
         )
@@ -51,5 +58,10 @@ const styles = theme => ({
         },
     },
 })
+
+interface IPlayerBadgeProps extends WithStyles<typeof styles> {
+  game?: GameStore,
+  color: Majavashakki.PieceColor
+}
 
 export default withStyles(styles)(PlayerBadge);
