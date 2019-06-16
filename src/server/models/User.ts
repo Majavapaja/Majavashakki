@@ -37,7 +37,7 @@ export interface IUser {
 }
 const UserSchema = new Schema({
   name: { type: String, index: true },
-  email: String,
+  email: { type: String, index: true},
   logins: [ LoginSchema ],
 })
 export interface IUserDocument extends IUser, Document {
