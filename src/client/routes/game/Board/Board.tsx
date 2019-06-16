@@ -28,6 +28,7 @@ const styles = theme => createStyles({
     display: "flex",
     flexFlow: "row wrap",
     width: "60vmin",
+    border: "5px solid #000",
   },
 })
 
