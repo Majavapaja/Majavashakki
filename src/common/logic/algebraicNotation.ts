@@ -1,7 +1,7 @@
 import * as Majavashakki from "../GamePieces"
 import BoardBase from "../BoardBase";
 
-const getPieceType = (type: Majavashakki.PieceType): string => {
+const getPieceNotation = (type: Majavashakki.PieceType): string => {
   switch (type) {
     case Majavashakki.PieceType.King:
       return "K"
@@ -15,6 +15,23 @@ const getPieceType = (type: Majavashakki.PieceType): string => {
       return "N"
     case Majavashakki.PieceType.Pawn:
       return ""
+  }
+}
+
+const getPieceType = (type: string): Majavashakki.PieceType => {
+  switch (type) {
+    case "K":
+      return Majavashakki.PieceType.King;
+    case "Q":
+      return Majavashakki.PieceType.Queen;
+    case "R":
+      return Majavashakki.PieceType.Rook;
+    case "B":
+      return Majavashakki.PieceType.Bishop;
+    case "N":
+      return Majavashakki.PieceType.Knight;
+    default:
+      return Majavashakki.PieceType.Pawn;
   }
 }
 
@@ -53,7 +70,7 @@ const getDisambiguation = (board: BoardBase, start: Majavashakki.IPosition, dest
 export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveResponse, promotionPiece?: Majavashakki.PieceType): Majavashakki.AlgebraicNotation => {
   const startPiece = board.getPiece(move.start)
 
-  let notation: Majavashakki.AlgebraicNotation = getPieceType(startPiece.type)
+  let notation: Majavashakki.AlgebraicNotation = getPieceNotation(startPiece.type)
   notation += getDisambiguation(board, move.start, move.destination)
   if (move.result === Majavashakki.MoveType.Capture || move.result === Majavashakki.MoveType.Enpassant) {
     notation += "x"
@@ -70,7 +87,7 @@ export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveR
   notation += move.destination.col + move.destination.row
 
   // Add special moves at the end of the notation
-  if (move.result === Majavashakki.MoveType.Promotion) notation += getPieceType(promotionPiece)
+  if (move.result === Majavashakki.MoveType.Promotion) notation += getPieceNotation(promotionPiece)
   else if (move.result === Majavashakki.MoveType.Enpassant) notation += "e.p."
 
   if (move.result === Majavashakki.MoveType.Castling) {
