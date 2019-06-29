@@ -56,7 +56,7 @@ class ProfileView extends React.Component<IProfileViewProps, never> {
         />
         <br/>
         <Button
-          variant="raised"
+          variant="contained"
           color="primary"
           className={this.props.classes.button}
           onClick={this.handleSubmit}

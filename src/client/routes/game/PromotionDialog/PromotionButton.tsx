@@ -16,7 +16,7 @@ const PromotionButton = inject((stores: IAppStore) => ({
     onClick={() => props.dialog.choosePiece(props.type)}
     classes={{ label: props.classes.label }}
     className={props.classes.button}
-    variant="raised"
+    variant="contained"
     color="primary"
   >
     <ChessPiece color={props.gameStore.currentTurn} type={props.type} />

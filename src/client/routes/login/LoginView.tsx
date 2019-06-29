@@ -48,7 +48,7 @@ class LoginView extends React.Component<ILoginViewProps, never> {
 
                     <Button
                         id="loginButton"
-                        variant="raised"
+                        variant="contained"
                         color="primary"
                         className={classes.button}
                         type="submit"
@@ -60,7 +60,7 @@ class LoginView extends React.Component<ILoginViewProps, never> {
 
                     <Button
                         id="registerButton"
-                        variant="raised"
+                        variant="contained"
                         color="primary"
                         className={classes.button}
                         href="/signup"
@@ -70,7 +70,7 @@ class LoginView extends React.Component<ILoginViewProps, never> {
 
                     <hr className={classes.divider} />
 
-                    <Button variant="raised" className={classes.facebookButton} href="/authFacebook">
+                    <Button variant="contained" className={classes.facebookButton} href="/authFacebook">
                         Sign in with Facebook
                     </Button>
                 </Paper>

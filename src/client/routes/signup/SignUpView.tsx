@@ -70,7 +70,7 @@ class SignUpView extends React.Component<any, never> {
                 />
                 <Button
                     id="signupButton"
-                    variant="raised"
+                    variant="contained"
                     color="primary"
                     type="submit"
                     className={classes.button}
