@@ -1,8 +1,10 @@
 import * as React from "react"
 import { withStyles, WithStyles } from "@material-ui/core/styles"
 import { Typography } from "@material-ui/core"
-import classnames from 'classnames'
+import classnames from "classnames"
 import { IMessage } from "./MessagePanelStore"
+import ChessPiece from "../ChessPiece";
+import * as Majavashakki from "../../../../common/GamePieces"
 
 class Message extends React.Component<IMessageProps, any> {
     public render() {
@@ -15,12 +17,14 @@ class Message extends React.Component<IMessageProps, any> {
                 <Typography component="span" className={playerClasses}>
                     {content.actor.name + ": "}
                 </Typography>
-                {this.buildMessage(content.body)}
+                {this.buildMessage()}
             </Typography>
         )
     }
 
-    private buildMessage(message: string) {
+    private buildMessage() {
+        let message = this.props.content.body;
+        console.log(message)
         const iconRegex = /:(.*?):/
         const components = []
         while (iconRegex.test(message)) {
@@ -29,9 +33,16 @@ class Message extends React.Component<IMessageProps, any> {
             if (before) {
                 components.push(<Typography className={this.props.classes.messagePart} component="span">{before}</Typography>)
             }
+            const piece = (
+              <span className={this.props.classes.icon}>
+                <ChessPiece
+                  type={iconStr.replace(/:/g, "") as Majavashakki.PieceType}
+                  color={this.props.content.actor.pieceColor}
+                />
+              </span>
+            )
 
-            components.push(<Typography className={this.props.classes.messagePart} component="span">{iconStr}</Typography>)
-
+            components.push(piece)
             message = message.replace(before, "").replace(iconStr, "")
         }
 
@@ -53,6 +64,10 @@ const styles = () => ({
     },
     messagePart: {
         marginRight: "5px",
+    },
+    icon: {
+      width: "15px",
+      height: "15px",
     },
 })
 

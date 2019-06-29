@@ -15,6 +15,7 @@ export default class MessagePanelStore {
     return this._appStore.game.boardStore.moveHistory.map((move, index) => {
       const moveColor = index % 2 === 0 ?  Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black;
       const actor = {
+        pieceColor: moveColor,
         isCurrentUser: currentColor === moveColor,
         name: moveColor === Majavashakki.PieceColor.White ? this._appStore.game.playerWhite.name : this._appStore.game.playerBlack.name,
       } as IActor;
@@ -32,6 +33,7 @@ function positionStr(pos: Majavashakki.IPosition) {
 export interface IActor {
   name: string;
   isCurrentUser: boolean;
+  pieceColor: Majavashakki.PieceColor;
 }
 
 export interface IMessage {
