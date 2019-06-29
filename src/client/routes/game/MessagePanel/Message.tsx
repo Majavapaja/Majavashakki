@@ -2,7 +2,7 @@ import * as React from "react"
 import { withStyles, WithStyles } from "@material-ui/core/styles"
 import { observer, inject } from "mobx-react"
 import { Typography } from "@material-ui/core"
-import { IAppStore } from "../../../store/AppStore";
+import { IRootStore } from "../../../store/AppStore";
 import * as Majavashakki from "../../../../common/GamePieces"
 
 class Message extends React.Component<IMessageProps, any> {

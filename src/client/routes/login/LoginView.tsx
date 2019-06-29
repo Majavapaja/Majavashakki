@@ -4,10 +4,10 @@ import {TextField, Typography, withStyles, createStyles, Paper, Button, WithStyl
 import Majava from "../../common/Majava";
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
-import { IAppStore } from "client/store/AppStore";
+import { IRootStore } from "client/store/AppStore";
 import UserStore from "client/store/UserStore";
 
-@inject((stores: IAppStore) => ({userStore: stores.app.user}))
+@inject((stores: IRootStore) => ({userStore: stores.app.user}))
 @observer
 class LoginView extends React.Component<ILoginViewProps, never> {
   private submitField: any = React.createRef();

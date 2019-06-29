@@ -10,8 +10,9 @@ export default class AppStore {
   public game = new GameStore(this)
   public promotionDialog = new PromotionDialogStore(this)
   public lobby = new LobbyStore(this)
+  public UI
 }
 
-export interface IAppStore {
+export interface IRootStore {
   app: AppStore;
 }

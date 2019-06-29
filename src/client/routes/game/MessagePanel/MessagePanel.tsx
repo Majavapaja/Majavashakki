@@ -1,13 +1,13 @@
 import * as React from "react"
 import { WithStyles, withStyles, createStyles } from "@material-ui/core/styles"
 import { Typography, Paper } from "@material-ui/core"
-import { IAppStore } from "client/store/AppStore"
+import { IRootStore } from "client/store/AppStore"
 import { observer, inject } from "mobx-react"
 import GameStore from "client/store/GameStore"
 import Message from "./Message"
 import * as Majavashakki from "../../../../common/GamePieces"
 
-@inject((stores: IAppStore) => ({game: stores.app.game}))
+@inject((stores: IRootStore) => ({game: stores.app.game}))
 @observer
 class MessagePanel extends React.Component<IMessagePanelProps, any> {
     public render() {

@@ -2,7 +2,7 @@ import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
 import {TextField, WithStyles, withStyles, createStyles, Theme, Button, Typography} from "@material-ui/core";
 import { inject, observer } from "mobx-react";
-import { IAppStore } from "client/store/AppStore";
+import { IRootStore } from "client/store/AppStore";
 import UserStore from "client/store/UserStore";
 import { observable } from "mobx";
 
@@ -11,7 +11,7 @@ class ProfileViewForm {
   @observable public name: string = ""
 }
 
-@inject((stores: IAppStore) => ({ userStore: stores.app.user }))
+@inject((stores: IRootStore) => ({ userStore: stores.app.user }))
 @observer
 class ProfileView extends React.Component<IProfileViewProps, never> {
   private submitField: any = React.createRef();

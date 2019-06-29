@@ -2,11 +2,11 @@ import * as React from "react"
 import { WithStyles, withStyles, createStyles } from "@material-ui/core/styles"
 import { observer, inject } from "mobx-react"
 import PlayerBadge from "./PlayerBadge"
-import {IAppStore} from "../../store/AppStore"
+import {IRootStore} from "../../store/AppStore"
 import GameStore from "../../store/GameStore"
 import { PieceColor } from "../../../common/GamePieces"
 
-@inject((stores: IAppStore) => ({ game: stores.app.game }))
+@inject((stores: IRootStore) => ({ game: stores.app.game }))
 @observer
 class Players extends React.Component<IPlayers, any> {
   public render() {

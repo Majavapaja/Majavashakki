@@ -4,12 +4,12 @@ import GameList from "./GameList"
 import NewGameForm from "./NewGameForm"
 import ApiService from "../../common/ApiService"
 import { inject, observer } from "mobx-react"
-import {IAppStore} from "../../store/AppStore"
+import {IRootStore} from "../../store/AppStore"
 import LobbyStore from "../../store/LobbyStore"
 import Majava from "../../common/Majava"
 import { Paper, Button, Typography } from "@material-ui/core";
 
-@inject((stores: IAppStore) => ({ lobby: stores.app.lobby, game: stores.app.game, api: stores.app.api}))
+@inject((stores: IRootStore) => ({ lobby: stores.app.lobby, game: stores.app.game, api: stores.app.api}))
 @observer
 class LobbyView extends React.Component<ILobbyViewProps, never> {
   constructor(props: any) {

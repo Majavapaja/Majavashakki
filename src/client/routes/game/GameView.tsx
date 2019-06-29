@@ -3,14 +3,14 @@ import { withRouter, RouteComponentProps } from "react-router-dom"
 import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Board from "./Board"
 import { observer, inject } from "mobx-react"
-import {IAppStore} from "../../store/AppStore"
+import {IRootStore} from "../../store/AppStore"
 import GameStore from "../../store/GameStore"
 import EndScreen from "./EndScreen"
 import MessagePanel from "./MessagePanel"
 import PlayerBadge from "./PlayerBadge"
 import * as Majavashakki from "../../../common/GamePieces"
 
-@inject((stores: IAppStore) => ({game: stores.app.game}))
+@inject((stores: IRootStore) => ({game: stores.app.game}))
 @observer
 class GameView extends React.Component<IGameViewProps, any> {
   constructor(props: IGameViewProps) {

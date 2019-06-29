@@ -26,9 +26,9 @@ import { ApiGameInfo } from "../../../common/types"
 import Player1Avatar from "../../assets/player1.jpg"
 import Player2Avatar from "../../assets/player2.jpg"
 import { inject } from "mobx-react";
-import { IAppStore } from "client/store/AppStore"
+import { IRootStore } from "client/store/AppStore"
 
-@inject((stores: IAppStore) => ({ api: stores.app.api }))
+@inject((stores: IRootStore) => ({ api: stores.app.api }))
 class GameList extends React.Component<IGameListProps, any> {
   constructor(props: any) {
     super(props)

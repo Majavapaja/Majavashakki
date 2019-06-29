@@ -4,11 +4,11 @@ import Board from "./Board"
 import { observer, inject } from "mobx-react"
 import { Chip, Typography, Avatar } from "@material-ui/core"
 import classNames from "classnames"
-import { IAppStore } from "../../store/AppStore";
+import { IRootStore } from "../../store/AppStore";
 import GameStore from "../../store/GameStore";
 import * as Majavashakki from "../../../common/GamePieces"
 
-@inject((stores: IAppStore) => ({game: stores.app.game}))
+@inject((stores: IRootStore) => ({game: stores.app.game}))
 @observer
 class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
     public render() {
