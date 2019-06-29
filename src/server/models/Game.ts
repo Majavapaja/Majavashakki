@@ -80,6 +80,24 @@ GameSchema.statics.getGameList = async (userId: string, inProgress: boolean): Pr
     .exec()
 }
 
+export function isFull(doc: IGameDocument): boolean {
+  return !!doc.playerIdWhite && !!doc.playerIdBlack
+}
+
+export function userInGame(doc: IGameDocument, userId: string): boolean {
+  return doc.playerIdWhite === userId || doc.playerIdBlack === userId
+}
+
+export function addPlayer(doc: IGameDocument, userId: string): void {
+  if (!doc.playerIdWhite) {
+    doc.playerIdWhite = userId
+  } else if (!doc.playerIdBlack) {
+    doc.playerIdBlack = userId
+  } else {
+    throw new Error("Paskaa täynnä, ei mahu - shit has hit fan even though it should not be possible, call Avengers")
+  }
+}
+
 export interface IGameDocument extends Majavashakki.IGame, Document {}
 
 export interface IGameModel extends Model<IGameDocument> {

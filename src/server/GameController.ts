@@ -1,6 +1,5 @@
-import { GameRoomsRepository } from "./logic/GameRoomsRepository";
 import { User, IUserDocument } from "./models/User";
-import { Game, IGameDocument } from "./models/Game";
+import { Game, IGameDocument, addPlayer, isFull, userInGame } from "./models/Game";
 import { SessionSocketMap, notifyGame, notifyLobby, notifyUser } from "./Sockets";
 import GameEntity from "./entities/Game";
 import { jsonAPI, NotFoundError, validate, ValidationError } from "./json"
@@ -16,8 +15,6 @@ import { isCheck, isCheckMate } from "../common/logic/Checkmate"
 import { ApiGameInfo } from "../common/types"
 import applyMove from "../common/applyMove"
 import { removeFalsy } from "./util"
-
-const roomRepo = GameRoomsRepository.getInstance();
 
 const flatten = xs => [].concat(...xs)
 
@@ -59,14 +56,19 @@ export default {
   joinGame: jsonAPI<IGame>(async req => {
     const {session, params: {id}} = req
     const socket = SessionSocketMap[session.id];
-    const userId = req.user._id
+    const userId = String(req.user._id)
 
-    let doc = await Game.findGame(id);
+    const doc = await Game.findGame(id);
     if (!doc) throw new NotFoundError(`Game '${id}' not found`)
 
     console.log(`User '${req.user.email}' is joining game '${doc.title}'`)
 
-    doc = await roomRepo.joinRoom(doc, socket, String(userId)) // TODO: Handle full room exception
+    if (!userInGame(doc, userId)) {
+      if (isFull(doc)) throw new Error(`User '${userId}' is trying to join game '${doc.id}' which is already full!`);
+
+      addPlayer(doc, userId);
+      await doc.save()
+    }
 
     if (socket) {
       // Socket connection might not always be active e.g. from network error or during tests.
