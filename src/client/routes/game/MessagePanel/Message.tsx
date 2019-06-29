@@ -1,34 +1,31 @@
 import * as React from "react"
 import { withStyles, WithStyles } from "@material-ui/core/styles"
-import { observer, inject } from "mobx-react"
 import { Typography } from "@material-ui/core"
-import { IRootStore } from "../../../store/AppStore";
-import * as Majavashakki from "../../../../common/GamePieces"
+import { IMessage } from "./MessagePanelStore";
 
 class Message extends React.Component<IMessageProps, any> {
     public render() {
-        const { classes, content, color } = this.props
+        const { classes, content } = this.props
 
         return (
-            <Typography className={classes[color]}>
-                {content}
+            <Typography className={content.actor.isCurrentUser ? classes.activePlayer : classes.inactivePlayer}>
+                {content.actor.name + ": " + content.body}
             </Typography>
         )
     }
 }
 
 const styles = theme => ({
-    [Majavashakki.PieceColor.White]: {
+    activePlayer: {
         color: "#00C",
     },
-    [Majavashakki.PieceColor.Black]: {
+    inactivePlayer: {
         color: "#0C0",
     },
 })
 
 interface IMessageProps extends WithStyles<typeof styles> {
-  content: string,
-  color: Majavashakki.PieceColor
+  content: IMessage;
 }
 
 export default withStyles(styles)(Message);

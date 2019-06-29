@@ -18,7 +18,7 @@ const getPieceNotation = (type: Majavashakki.PieceType): string => {
   }
 }
 
-const getPieceType = (type: string): Majavashakki.PieceType => {
+export const getPieceType = (type: string): Majavashakki.PieceType => {
   switch (type) {
     case "K":
       return Majavashakki.PieceType.King;

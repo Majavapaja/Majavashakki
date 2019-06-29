@@ -161,4 +161,11 @@ export default class GameStore extends GameBase {
     console.log("Received game_updated message, setting game state")
     await this.updateGameData(game)
   }
+
+  @computed
+  get currentUserColor(): Majavashakki.PieceColor {
+    return this.playerIdBlack === this.currentUser.id ?
+      Majavashakki.PieceColor.Black :
+      Majavashakki.PieceColor.White
+  }
 }
