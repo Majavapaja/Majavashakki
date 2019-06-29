@@ -23,32 +23,41 @@ class Message extends React.Component<IMessageProps, any> {
     }
 
     private buildMessage() {
-        let message = this.props.content.body;
-        console.log(message)
-        const iconRegex = /:(.*?):/
-        const components = []
-        while (iconRegex.test(message)) {
-            const iconStr = message.match(iconRegex)[0]
-            const before = message.substr(0, message.indexOf(iconStr))
-            if (before) {
-                components.push(<Typography className={this.props.classes.messagePart} component="span">{before}</Typography>)
-            }
-            const piece = (
-              <span className={this.props.classes.icon}>
-                <ChessPiece
-                  type={iconStr.replace(/:/g, "") as Majavashakki.PieceType}
-                  color={this.props.content.actor.pieceColor}
-                />
-              </span>
-            )
-
-            components.push(piece)
-            message = message.replace(before, "").replace(iconStr, "")
+      let message = this.props.content.body;
+      console.log(message)
+      const iconRegex = /:(.*?):/
+      const components = []
+      while (iconRegex.test(message)) {
+        const iconStr = message.match(iconRegex)[0]
+        const before = message.substr(0, message.indexOf(iconStr))
+        if (before) {
+          const txtBefore = (
+            <Typography className={this.props.classes.messagePart} component="span" key={components.length}>
+              {before}
+            </Typography>
+          )
+          components.push(txtBefore)
         }
+        const piece = (
+          <span className={this.props.classes.icon} key={components.length}>
+            <ChessPiece
+              type={iconStr.replace(/:/g, "") as Majavashakki.PieceType}
+              color={this.props.content.actor.pieceColor}
+            />
+          </span>
+        )
 
-        if (message) components.push(<Typography className={this.props.classes.messagePart} component="span">{message}</Typography>)
+        components.push(piece)
+        message = message.replace(before, "").replace(iconStr, "")
+      }
+      const txtAfter = (
+        <Typography className={this.props.classes.messagePart} component="span" key={components.length}>
+          {message}
+        </Typography>
+      )
+      if (message) components.push(txtAfter)
 
-        return components
+      return components
     }
 }
 
@@ -68,6 +77,7 @@ const styles = () => ({
     icon: {
       width: "15px",
       height: "15px",
+      display: "block",
     },
 })
 

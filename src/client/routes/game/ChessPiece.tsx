@@ -8,7 +8,7 @@ import chessSprites from "../../assets/sprites.png"
 class ChessPiece extends React.Component<IChessPieceProps, any> {
   public render() {
     return (
-      <div
+      <span
         data-piece-type={this.props.type}
         className={classNames(
           this.props.classes.piece,
@@ -31,6 +31,7 @@ const styles = () => createStyles({
     width: "100%",
     height: "100%",
     backgroundSize: "600%",
+    display: "block",
   },
   [PieceColor.Black]: {
     backgroundPositionY: "calc(1 * 100%)",
