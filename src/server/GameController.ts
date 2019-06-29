@@ -1,7 +1,7 @@
 import { GameRoomsRepository } from "./logic/GameRoomsRepository";
 import { User, IUserDocument } from "./models/User";
 import { Game, IGameDocument } from "./models/Game";
-import { SessionSocketMap, notifyGame, notifyLobby } from "./Sockets";
+import { SessionSocketMap, notifyGame, notifyLobby, notifyUser } from "./Sockets";
 import GameEntity from "./entities/Game";
 import { jsonAPI, NotFoundError, validate, ValidationError } from "./json"
 import {
@@ -15,11 +15,11 @@ import { IGame } from "../common/GamePieces"
 import { isCheck, isCheckMate } from "../common/logic/Checkmate"
 import { ApiGameInfo } from "../common/types"
 import applyMove from "../common/applyMove"
+import { removeFalsy } from "./util"
 
 const roomRepo = GameRoomsRepository.getInstance();
 
 const flatten = xs => [].concat(...xs)
-const removeFalsy = xs => xs.filter(x => !!x)
 
 export default {
   getGameList: jsonAPI<ApiGameInfo[]>(async req => {
@@ -78,7 +78,7 @@ export default {
 
     const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
     const response = gameDocumentToApiResult(doc, players)
-    notifyGame(doc.id, "game_updated", response)
+    notifyGame(doc, "game_updated", response)
     return response
   }),
 
@@ -91,13 +91,12 @@ export default {
     const [game, move] = await applyMove(GameEntity.MapFromDb(doc), userId, data)
 
     if (move.status === Majavashakki.MoveStatus.Error) {
-      const socket = SessionSocketMap[session.id];
-      if (socket) socket.emit("move_result", move)
+      notifyUser(userId, "move_result", move)
       return move
     }
 
     await Game.updateOrCreate(game)
-    notifyGame(doc.id, "move_result", move)
+    notifyGame(doc, "move_result", move)
     return move
   }),
 
@@ -116,7 +115,7 @@ export default {
 
     const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
     const response = gameDocumentToApiResult(doc, players)
-    notifyGame(doc._id, "game_updated", response)
+    notifyGame(doc, "game_updated", response)
     return response
   }),
 }

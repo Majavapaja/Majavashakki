@@ -1,5 +1,7 @@
 import sio from "socket.io";
+import { IGameDocument } from "./models/Game";
 import {getSession} from "./session";
+import { removeFalsy } from "./util";
 
 export const SocketServer: SocketIO.Server = sio({transports: ["websocket"]});
 export const SessionSocketMap = {};
@@ -19,9 +21,16 @@ export function initSockets() {
   });
 }
 
-export function notifyGame(gameId: string, message: string, data: any) {
-  console.log(`Sending message to game: ${gameId} ${message} ${JSON.stringify(data, null, 2)}`)
-  SocketServer.to(`game:${gameId}`).emit(message, data)
+export function notifyGame(doc: IGameDocument, message: string, data: any) {
+  console.log(`Sending message to game: ${doc.id} ${message} ${JSON.stringify(data, null, 2)}`)
+
+  const userIds = removeFalsy([doc.playerIdBlack, doc.playerIdWhite])
+  userIds.forEach(userId => SocketServer.to(`user:${userId}`).emit(message, data))
+}
+
+export function notifyUser(userId: string, message: string, data: any) {
+  console.log(`Sending message to user: ${userId} ${message} ${JSON.stringify(data, null, 2)}`)
+  SocketServer.to(`user:${userId}`).emit(message, data)
 }
 
 export function notifyLobby(message: string, data: any) {
