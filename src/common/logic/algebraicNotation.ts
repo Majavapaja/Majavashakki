@@ -89,3 +89,15 @@ export const setCheck = (notation: Majavashakki.AlgebraicNotation, move: Majavas
 
   return notation
 }
+
+export const getMoveTypes = (algebraicNotation: Majavashakki.AlgebraicNotation): string[] => {
+  const types = [];
+
+  if (algebraicNotation.includes("0-0")) types.push("castling");
+  if (algebraicNotation.includes("e.p.")) types.push("enpassant");
+  if (algebraicNotation.includes("x")) types.push("capture");
+  if (algebraicNotation.includes("+")) types.push("check");
+  if (algebraicNotation.includes("#")) types.push("checkmate");
+
+  return types
+}
