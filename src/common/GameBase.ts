@@ -20,25 +20,6 @@ export default abstract class GameBase implements Majavashakki.IGame {
     this.currentTurn = Majavashakki.PieceColor.White;
   }
 
-  public isFull(): boolean {
-    return !!this.playerIdWhite && !!this.playerIdBlack;
-  }
-
-  public containsUser(userId: string): boolean {
-    return this.playerIdWhite === userId || this.playerIdBlack === userId;
-  }
-
-  public addPlayer(playerId: string) {
-    if (!this.playerIdWhite) {
-      this.playerIdWhite = playerId;
-    } else if (!this.playerIdBlack) {
-      this.playerIdBlack = playerId;
-    } else {
-      throw new Error("Paskaa täynnä, ei mahu - shit has hit fan even though it should not be possible, call Avengers")
-    }
-    return true;
-  }
-
   public async move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string, promotionPiece?: Majavashakki.PieceType): Promise<Majavashakki.IMoveResponse> {
     if (!this.doesUserOwnPiece(userId, start)) {
       return {

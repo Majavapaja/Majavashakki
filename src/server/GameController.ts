@@ -1,7 +1,6 @@
-import { GameRoomsRepository } from "./logic/GameRoomsRepository";
 import { User, IUserDocument } from "./models/User";
-import { Game, IGameDocument } from "./models/Game";
-import { SessionSocketMap, notifyGame, notifyLobby } from "./Sockets";
+import { Game, IGameDocument, addPlayer, isFull, userInGame } from "./models/Game";
+import { SessionSocketMap, notifyGame, notifyLobby, notifyUser } from "./Sockets";
 import GameEntity from "./entities/Game";
 import { jsonAPI, NotFoundError, validate, ValidationError } from "./json"
 import {
@@ -15,11 +14,9 @@ import { IGame } from "../common/GamePieces"
 import { isCheck, isCheckMate } from "../common/logic/Checkmate"
 import { ApiGameInfo } from "../common/types"
 import applyMove from "../common/applyMove"
-
-const roomRepo = GameRoomsRepository.getInstance();
+import { removeFalsy } from "./util"
 
 const flatten = xs => [].concat(...xs)
-const removeFalsy = xs => xs.filter(x => !!x)
 
 export default {
   getGameList: jsonAPI<ApiGameInfo[]>(async req => {
@@ -59,14 +56,19 @@ export default {
   joinGame: jsonAPI<IGame>(async req => {
     const {session, params: {id}} = req
     const socket = SessionSocketMap[session.id];
-    const userId = req.user._id
+    const userId = String(req.user._id)
 
-    let doc = await Game.findGame(id);
+    const doc = await Game.findGame(id);
     if (!doc) throw new NotFoundError(`Game '${id}' not found`)
 
     console.log(`User '${req.user.email}' is joining game '${doc.title}'`)
 
-    doc = await roomRepo.joinRoom(doc, socket, String(userId)) // TODO: Handle full room exception
+    if (!userInGame(doc, userId)) {
+      if (isFull(doc)) throw new Error(`User '${userId}' is trying to join game '${doc.id}' which is already full!`);
+
+      addPlayer(doc, userId);
+      await doc.save()
+    }
 
     if (socket) {
       // Socket connection might not always be active e.g. from network error or during tests.
@@ -78,7 +80,7 @@ export default {
 
     const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
     const response = gameDocumentToApiResult(doc, players)
-    notifyGame(doc.id, "game_updated", response)
+    notifyGame(doc, "game_updated", response)
     return response
   }),
 
@@ -91,13 +93,12 @@ export default {
     const [game, move] = await applyMove(GameEntity.MapFromDb(doc), userId, data)
 
     if (move.status === Majavashakki.MoveStatus.Error) {
-      const socket = SessionSocketMap[session.id];
-      if (socket) socket.emit("move_result", move)
+      notifyUser(userId, "move_result", move)
       return move
     }
 
     await Game.updateOrCreate(game)
-    notifyGame(doc.id, "move_result", move)
+    notifyGame(doc, "move_result", move)
     return move
   }),
 
@@ -116,7 +117,7 @@ export default {
 
     const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
     const response = gameDocumentToApiResult(doc, players)
-    notifyGame(doc._id, "game_updated", response)
+    notifyGame(doc, "game_updated", response)
     return response
   }),
 }
