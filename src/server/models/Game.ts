@@ -69,11 +69,11 @@ GameSchema.statics.findGame = async (id: string): Promise<IGameDocument> => {
 
 GameSchema.statics.getGameList = async (userId: string, inProgress: boolean): Promise<IGameDocument[]> => {
   const hasFreeSeat = { $or: [{ playerIdWhite: null }, { playerIdBlack: null }] }
-  const userInGame = { $or: [{ playerIdWhite: userId }, { playerIdBlack: userId }] }
+  const inGame = { $or: [{ playerIdWhite: userId }, { playerIdBlack: userId }] }
 
   return await Game.find()
     .and([
-      { $or: [hasFreeSeat, userInGame] },
+      { $or: [hasFreeSeat, inGame] },
       { inProgress },
     ])
     .select({ title: true, playerIdBlack: true, playerIdWhite: true })
