@@ -3,16 +3,14 @@ import { withRouter, RouteComponentProps } from "react-router-dom"
 import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Board from "./Board"
 import { observer, inject } from "mobx-react"
-import { Button, Dialog, DialogTitle, DialogContent, DialogActions, Paper, Typography } from "@material-ui/core"
-import {IAppStore} from "../../store/AppStore"
+import {IRootStore} from "../../store/AppStore"
 import GameStore from "../../store/GameStore"
-import {ApiPlayerDetails} from "../../../common/types"
-import SidePanel from "./SidePanel"
 import EndScreen from "./EndScreen"
 import MessagePanel from "./MessagePanel"
-import Players from "./Players"
+import PlayerBadge from "./PlayerBadge"
+import * as Majavashakki from "../../../common/GamePieces"
 
-@inject((stores: IAppStore) => ({game: stores.app.game}))
+@inject((stores: IRootStore) => ({game: stores.app.game}))
 @observer
 class GameView extends React.Component<IGameViewProps, any> {
   constructor(props: IGameViewProps) {
@@ -37,18 +35,19 @@ class GameView extends React.Component<IGameViewProps, any> {
     else if (game.error) messageProps = { message: game.error, type: "error" }
     else if (game.isCheck) messageProps = { message: "Check!", type: "info" }
 
+    const currentPlayer = game.currentUser.id === game.playerIdWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
+    const opponentPlayer = game.currentUser.id !== game.playerIdWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
+
     return (
-      <Paper className={classes.gameContainer}>
+      <div className={classes.gameContainer}>
         {game.winner && <EndScreen />}
-        <div className={classes.leftContainer}>
-          <Players />
+        <div className={classes.playArea}>
+          <PlayerBadge color={currentPlayer} />
           <Board />
-          <MessagePanel {...messageProps} />
+          <PlayerBadge color={opponentPlayer} />
         </div>
-        <div className={classes.rightContainer}>
-          <SidePanel />
-        </div>
-      </Paper>
+        <MessagePanel />
+      </div>
     )
   }
 }
@@ -57,16 +56,13 @@ const styles = (theme: Theme) => createStyles({
   gameContainer: {
     display: "flex",
     alignSelf: "center",
+    flexDirection: "column",
     padding: 20,
   },
-  leftContainer: {
+  playArea: {
     display: "flex",
-    flexDirection: "column",
-    width: "60vmin",
-  },
-  rightContainer: {
-    display: "flex",
-    width: "20vmin",
+    flexDirection: "row",
+    marginBottom: "20px",
   },
 })
 

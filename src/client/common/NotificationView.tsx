@@ -1,10 +1,10 @@
 import * as React from "react";
 import { inject, observer } from "mobx-react";
-import { IAppStore } from "client/store/AppStore";
+import { IRootStore } from "client/store/AppStore";
 import Snackbar from "@material-ui/core/Snackbar";
 import ApiService from "./ApiService";
 
-@inject((stores: IAppStore) => ({api: stores.app.api}))
+@inject((stores: IRootStore) => ({api: stores.app.api}))
 @observer
 class NotificationView extends React.Component<INotificationProps, any> {
 

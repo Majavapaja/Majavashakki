@@ -4,10 +4,10 @@ import { Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField } 
 import ApiService from "../../common/ApiService";
 import { action, observable } from "mobx";
 import { inject } from "mobx-react";
-import { IAppStore } from "client/store/AppStore";
+import { IRootStore } from "client/store/AppStore";
 import { IGame } from "../../../common/GamePieces";
 
-@inject((stores: IAppStore) => ({ api: stores.app.api }))
+@inject((stores: IRootStore) => ({ api: stores.app.api }))
 class NewGameForm extends React.Component<INewGameProps, never> {
   private store = new NewGameFormStore()
 

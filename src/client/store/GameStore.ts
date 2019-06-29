@@ -8,7 +8,6 @@ import BoardStore from "./BoardStore"
 import GameBase from "../../common/GameBase"
 import AppStore from "./AppStore"
 
-// TODO: Extend /src/common/Game
 export default class GameStore extends GameBase {
   @observable
   public title: string
@@ -161,5 +160,12 @@ export default class GameStore extends GameBase {
 
     console.log("Received game_updated message, setting game state")
     await this.updateGameData(game)
+  }
+
+  @computed
+  get currentUserColor(): Majavashakki.PieceColor {
+    return this.playerIdBlack === this.currentUser.id ?
+      Majavashakki.PieceColor.Black :
+      Majavashakki.PieceColor.White
   }
 }

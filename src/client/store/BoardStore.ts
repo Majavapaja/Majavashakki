@@ -7,6 +7,7 @@ import GameStore from "./GameStore"
 export default class BoardStore extends BoardBase {
     @observable public pieces: Piece[]
     @observable.struct public selectedCell: Majavashakki.IPosition
+    @observable public moveHistory: Majavashakki.IMove[]
 
     private gameStore: GameStore
 

@@ -4,10 +4,10 @@ import {TextField, Typography, withStyles, createStyles, Paper, Button, WithStyl
 import Majava from "../../common/Majava";
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
-import { IAppStore } from "client/store/AppStore";
+import { IRootStore } from "client/store/AppStore";
 import UserStore from "client/store/UserStore";
 
-@inject((stores: IAppStore) => ({userStore: stores.app.user}))
+@inject((stores: IRootStore) => ({userStore: stores.app.user}))
 @observer
 class LoginView extends React.Component<ILoginViewProps, never> {
   private submitField: any = React.createRef();
@@ -48,7 +48,7 @@ class LoginView extends React.Component<ILoginViewProps, never> {
 
                     <Button
                         id="loginButton"
-                        variant="raised"
+                        variant="contained"
                         color="primary"
                         className={classes.button}
                         type="submit"
@@ -56,11 +56,11 @@ class LoginView extends React.Component<ILoginViewProps, never> {
                         <Typography color="inherit">Sign in</Typography>
                     </Button>
 
-                    <Typography variant="subheading">or</Typography>
+                    <Typography variant="subtitle1">or</Typography>
 
                     <Button
                         id="registerButton"
-                        variant="raised"
+                        variant="contained"
                         color="primary"
                         className={classes.button}
                         href="/signup"
@@ -70,7 +70,7 @@ class LoginView extends React.Component<ILoginViewProps, never> {
 
                     <hr className={classes.divider} />
 
-                    <Button variant="raised" className={classes.facebookButton} href="/authFacebook">
+                    <Button variant="contained" className={classes.facebookButton} href="/authFacebook">
                         Sign in with Facebook
                     </Button>
                 </Paper>

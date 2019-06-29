@@ -26,9 +26,9 @@ import { ApiGameInfo } from "../../../common/types"
 import Player1Avatar from "../../assets/player1.jpg"
 import Player2Avatar from "../../assets/player2.jpg"
 import { inject } from "mobx-react";
-import { IAppStore } from "client/store/AppStore"
+import { IRootStore } from "client/store/AppStore"
 
-@inject((stores: IAppStore) => ({ api: stores.app.api }))
+@inject((stores: IRootStore) => ({ api: stores.app.api }))
 class GameList extends React.Component<IGameListProps, any> {
   constructor(props: any) {
     super(props)
@@ -51,7 +51,7 @@ class GameList extends React.Component<IGameListProps, any> {
     return (
       <Paper id={id} className={classes.root}>
         <AppBar position="static" className={classes.header}>
-          <Typography className={classes.contrastText} variant="headline">{this.props.title}</Typography>
+          <Typography className={classes.contrastText} variant="h6">{this.props.title}</Typography>
           <Button id="createGame" onClick={this.props.openDialog} className={classes.contrastText}>
             <AddIcon /> Game
           </Button>

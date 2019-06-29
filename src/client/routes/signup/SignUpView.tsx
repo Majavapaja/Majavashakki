@@ -5,9 +5,9 @@ import {TextField, Typography, withStyles, createStyles, Paper, Button} from "@m
 import Majava from "../../common/Majava";
 import { observable } from "mobx";
 import { inject, observer } from "mobx-react";
-import { IAppStore } from "client/store/AppStore";
+import { IRootStore } from "client/store/AppStore";
 
-@inject((stores: IAppStore) => ({api: stores.app.api}))
+@inject((stores: IRootStore) => ({api: stores.app.api}))
 @observer
 class SignUpView extends React.Component<any, never> {
     private emailField: any = React.createRef();
@@ -70,7 +70,7 @@ class SignUpView extends React.Component<any, never> {
                 />
                 <Button
                     id="signupButton"
-                    variant="raised"
+                    variant="contained"
                     color="primary"
                     type="submit"
                     className={classes.button}

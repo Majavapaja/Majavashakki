@@ -8,7 +8,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
 import { withRouter } from "react-router-dom";
 import MajavapajaLogo from "./MajavapajaLogo";
-import {IAppStore} from "../store/AppStore"
+import {IRootStore} from "../store/AppStore"
 import { inject, observer } from "mobx-react";
 
 const styles = createStyles({
@@ -71,7 +71,7 @@ class LoginMenu extends React.Component<any, any> {
   }
 }
 
-@inject((stores: IAppStore) => ({ api: stores.app.api, userStore: stores.app.user }))
+@inject((stores: IRootStore) => ({ api: stores.app.api, userStore: stores.app.user }))
 @observer
 class NavigationBar extends React.Component<any, any> {
   constructor(props: any) {
