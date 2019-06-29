@@ -1,7 +1,7 @@
-import passport from "passport";
-import { Strategy as FbStrategy } from "passport-facebook";
-import { Strategy as LocalStrategy } from "passport-local";
-import { User, IUserDocument } from "./data/User";
+import passport from "passport"
+import { Strategy as FbStrategy } from "passport-facebook"
+import { Strategy as LocalStrategy } from "passport-local"
+import { User, LoginType } from "./models/User"
 
 export function requireAuth(onFailure) {
   return (req, res, next) => {
@@ -33,8 +33,14 @@ export function initPassport(appUrl: string) {
       },
       async (accessToken, refreshToken, profile, done) => {
           console.log(`User '${profile.displayName}' logged in successfully.`)
+
           try {
-            const user = await User.findOrCreate(profile.id)
+            let user = await User.findByLoginId(LoginType.Facebook, profile.id)
+
+            if (!user) {
+              user = await User.registerUser(profile.id, LoginType.Facebook)
+            }
+
             done(null, user)
           } catch (err) {
             done(err)
@@ -47,7 +53,7 @@ export function initPassport(appUrl: string) {
 
   passport.use(new LocalStrategy({ usernameField: "email" }, async (email, password, done) => {
     try {
-      const user: IUserDocument = await User.findOne({ "logins.id": email })
+      const user = await User.findByLoginId(LoginType.Local, email)
 
       if (!user) {
         console.log(`User '${email}' tried to log in with invalid email`)

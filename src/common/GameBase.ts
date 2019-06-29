@@ -10,6 +10,7 @@ export default abstract class GameBase implements Majavashakki.IGame {
   public isCheck: boolean;
   public isCheckmate: boolean;
   public inProgress: boolean = true;
+  public surrenderer?: string
 
   constructor(title: string) {
     this.title = title;

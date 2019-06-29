@@ -33,6 +33,7 @@ const styles = theme => createStyles({
   button: {
     width: "20%",
     height: "100%",
+    padding: 0,
     "&:before": {
       content: "\"\"",
       display: "block",
@@ -41,6 +42,7 @@ const styles = theme => createStyles({
   },
   label: {
     height: "100%",
+    position: "absolute",
   },
 })
 

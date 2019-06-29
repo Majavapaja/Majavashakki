@@ -29,9 +29,7 @@ export function jsonAPI<ResponseT>(handler: (req: Request) => Promise<ResponseT>
       if (e instanceof ValidationError) {
         const errors = e.errors
         console.log("Validation errors:", errors)
-        writeJSON(res, 400, isProd()
-          ? {error: "Bad Request"}
-          : {error: "Bad Request", errors},
+        writeJSON(res, 400, {error: "Bad Request", errors},
         )
       } else if (e instanceof NotFoundError) {
         writeJSON(res, 404, {error: "Not Found", message: e.message})

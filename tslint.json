@@ -6,6 +6,7 @@
     ],
     "jsRules": {},
     "rules": {
+      "object-literal-shorthand": false,
       "only-arrow-functions": false,
       "arrow-parens": false,
       "curly": [true, "ignore-same-line"],

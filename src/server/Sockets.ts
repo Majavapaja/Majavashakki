@@ -1,13 +1,11 @@
-import {GameRoomsRepository} from "./logic/GameRoomsRepository";
 import sio from "socket.io";
 import {getSession} from "./session";
-import {User} from "./data/User"
 
-const roomRepo = GameRoomsRepository.getInstance()
 export const SocketServer: SocketIO.Server = sio({transports: ["websocket"]});
 export const SessionSocketMap = {};
+const MainRoom: string = "Lobby";
 
-// TODO better init / export chain
+// TODO middleware or some other solution to handle connection setup for authed users vs non-auth user
 export function initSockets() {
   SocketServer.on("connection", async (socket: SocketIO.Socket) => {
     const session = getSession(socket.handshake)
@@ -16,14 +14,17 @@ export function initSockets() {
     // Join user to Socket.io rooms for their own games
     // TODO: Fail if not logged in?
     const userId = session.passport.user
-    const gameIds = await User.getMyGames(userId)
-    gameIds.forEach(gameId => socket.join(`game:${gameId}`))
     socket.join(`user:${userId}`)
-    socket.join(roomRepo.MainRoom)
+    socket.join(MainRoom)
   });
 }
 
 export function notifyGame(gameId: string, message: string, data: any) {
-  console.log(`Sending message to game: ${gameId}`)
+  console.log(`Sending message to game: ${gameId} ${message} ${JSON.stringify(data, null, 2)}`)
   SocketServer.to(`game:${gameId}`).emit(message, data)
+}
+
+export function notifyLobby(message: string, data: any) {
+  console.log("Sending message to lobby")
+  SocketServer.to(MainRoom).emit(message, data);
 }

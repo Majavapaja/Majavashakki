@@ -1,10 +1,9 @@
-import {GameRoomsRepository} from "./logic/GameRoomsRepository";
-import { User } from "./data/User";
-import { GameModel, IGameDocument } from "./data/GameModel";
-import { IUserDocument } from "./data/User"
-import { SessionSocketMap, notifyGame } from "./Sockets";
-import Game from "./entities/Game";
-import { jsonAPI, NotFoundError, validate } from "./json"
+import { GameRoomsRepository } from "./logic/GameRoomsRepository";
+import { User, IUserDocument } from "./models/User";
+import { Game, IGameDocument } from "./models/Game";
+import { SessionSocketMap, notifyGame, notifyLobby } from "./Sockets";
+import GameEntity from "./entities/Game";
+import { jsonAPI, NotFoundError, validate, ValidationError } from "./json"
 import {
   CreateGameRequestType, CreateGameRequest,
   MoveRequest, MoveRequestType,
@@ -15,6 +14,7 @@ import { IMoveResponse } from "../common/GamePieces"
 import { IGame } from "../common/GamePieces"
 import { isCheck, isCheckMate } from "../common/logic/Checkmate"
 import { ApiGameInfo } from "../common/types"
+import applyMove from "../common/applyMove"
 
 const roomRepo = GameRoomsRepository.getInstance();
 
@@ -22,40 +22,17 @@ const flatten = xs => [].concat(...xs)
 const removeFalsy = xs => xs.filter(x => !!x)
 
 export default {
-  getAvailableGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const games = await GameModel.getAvailableGames(req.user._id);
-
-    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
-    const players = await User.findByIds(playerIds)
-
-    return games.map(formatGamesListResponse(players))
+  getGameList: jsonAPI<ApiGameInfo[]>(async req => {
+    const inProgress = parseBoolean(req.query.inProgress)
+    const games = await Game.getGameList(req.user._id, inProgress)
+    return await gamesToGamesListResponse(games)
   }),
 
-  getMyGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
-    const games = await GameModel.getGames(gameIds, true)
-
-    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
-    const players = await User.findByIds(playerIds)
-
-    return games.map(formatGamesListResponse(players))
-  }),
-
-  getFinishedGames: jsonAPI<ApiGameInfo[]>(async req => {
-    const gameIds = await User.getMyGames(req.user._id); // TODO active rule for fetch
-    const games = await GameModel.getGames(gameIds, false)
-
-    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
-    const players = await User.findByIds(playerIds)
-
-    return games.map(formatGamesListResponse(players))
-  }),
-
-  getGame: jsonAPI<any>(async req => {
+  getGame: jsonAPI<IGame>(async req => {
     const {session, params: {id}} = req
     const socket = SessionSocketMap[session.id];
 
-    const game = await GameModel.findGame(id)
+    const game = await Game.findGame(id)
     if (!game) throw new NotFoundError(`Game '${id}' not found`)
 
     if (!isPartOfTheGame(game, req.user.id)) {
@@ -75,7 +52,7 @@ export default {
     const body = validate<CreateGameRequest>(CreateGameRequestType, req.body)
     console.log(`Creating a new game '${body.title}'`);
 
-    const game = await GameModel.findOrCreate(body.title)
+    const game = await Game.findOrCreate(body.title)
     return gameDocumentToApiResult(game, [])
   }),
 
@@ -84,7 +61,7 @@ export default {
     const socket = SessionSocketMap[session.id];
     const userId = req.user._id
 
-    let doc = await GameModel.findGame(id);
+    let doc = await Game.findGame(id);
     if (!doc) throw new NotFoundError(`Game '${id}' not found`)
 
     console.log(`User '${req.user.email}' is joining game '${doc.title}'`)
@@ -96,8 +73,13 @@ export default {
       // TODO: How does the player join the socket.io "room" of the game after reconnecting?
       socket.join(`game:${doc.id}`)
     }
+
+    notifyLobby("lobby_updated", await gamesToGamesListResponse([doc]))
+
     const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
-    return gameDocumentToApiResult(doc, players)
+    const response = gameDocumentToApiResult(doc, players)
+    notifyGame(doc.id, "game_updated", response)
+    return response
   }),
 
   makeMove: jsonAPI<IMoveResponse>(async req => {
@@ -105,8 +87,8 @@ export default {
     const data = validate<MoveRequest>(MoveRequestType, req.body)
     const userId = String(req.user._id)
 
-    const doc = await GameModel.findGame(id);
-    const [game, move] = await applyMove(doc, userId, data)
+    const doc = await Game.findGame(id);
+    const [game, move] = await applyMove(GameEntity.MapFromDb(doc), userId, data)
 
     if (move.status === Majavashakki.MoveStatus.Error) {
       const socket = SessionSocketMap[session.id];
@@ -114,33 +96,40 @@ export default {
       return move
     }
 
-    await GameModel.save(game)
+    await Game.updateOrCreate(game)
     notifyGame(doc.id, "move_result", move)
     return move
   }),
+
+  surrender: jsonAPI<IGame>(async req => {
+    const {session, params: {gameId}} = req
+    const userId = String(req.user._id)
+
+    const doc = await Game.findGame(gameId);
+    if (!isCurrentTurn(doc, userId)) {
+      throw new ValidationError(["Can't surrender on your opponents turn"])
+    }
+
+    doc.inProgress = false
+    doc.surrenderer = userId
+    await doc.save()
+
+    const players = await User.findByIds(removeFalsy([doc.playerIdBlack, doc.playerIdWhite]))
+    const response = gameDocumentToApiResult(doc, players)
+    notifyGame(doc._id, "game_updated", response)
+    return response
+  }),
 }
 
-// Wraps game document from database into Game class, tries to apply the given
-// move and returns the new game state and the result of the move
-async function applyMove(doc: IGameDocument, userId: string, data: any): Promise<[Game, Majavashakki.IMoveResponse]> {
-  const game = Game.MapFromDb(doc)
-  const moveResult = await game.move(data.from, data.dest, userId, data.promotionType)
-  if (moveResult.status !== Majavashakki.MoveStatus.Error) {
-    game.changeTurn()
-  }
+async function gamesToGamesListResponse(games: IGameDocument[]): Promise<ApiGameInfo[]> {
+    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
+    const players = await User.findByIds(playerIds)
+    return games.map(formatGamesListResponse(players))
+}
 
-  // Purkkkaaa koska ei jaksa korjata muualla
-  if (moveResult.status !== "error") {
-    if (typeof moveResult.isCheck === "undefined") moveResult.isCheck = false
-    if (typeof moveResult.isCheckmate === "undefined") moveResult.isCheckmate = false
-  }
-
-  if (moveResult.isCheckmate) {
-    console.log("Checkmate! Marking game as finished.")
-    game.inProgress = false
-  }
-
-  return [game, moveResult]
+function isCurrentTurn(doc: IGameDocument, userId: string): boolean {
+  const currentTurnUserId = doc.currentTurn === "black" ? doc.playerIdBlack : doc.playerIdWhite
+  return currentTurnUserId === userId
 }
 
 function isPartOfTheGame(game: IGameDocument, userId: string): boolean {
@@ -155,12 +144,13 @@ function formatGamesListResponse(players: IUserDocument[]) {
       title,
       playerWhite: userDocumentToPlayerDetails(players.find(p => String(p._id) === game.playerIdWhite)),
       playerBlack: userDocumentToPlayerDetails(players.find(p => String(p._id) === game.playerIdBlack)),
+      inProgress: game.inProgress,
     }
   }
 }
 
 function gameDocumentToApiResult(doc: IGameDocument, players: IUserDocument[]): IGame {
-  const board = Game.MapFromDb(doc).board
+  const board = GameEntity.MapFromDb(doc).board
   return {
     id: doc._id,
     title: doc.title,
@@ -173,10 +163,21 @@ function gameDocumentToApiResult(doc: IGameDocument, players: IUserDocument[]): 
     isCheck: isCheck(board, doc.currentTurn),
     isCheckmate: isCheckMate(board, doc.currentTurn),
     inProgress: doc.inProgress,
+    surrenderer: doc.surrenderer,
   }
 }
 
 function userDocumentToPlayerDetails(doc?: IUserDocument): ApiPlayerDetails | undefined {
   if (!doc) return undefined
   return {id: doc._id, name: doc.name}
+}
+
+function parseBoolean(value: any): boolean {
+  if (value === "true") {
+    return true
+  } else if (value === "false") {
+    return false
+  } else {
+    throw new Error(`Failed to parse boolean from '${value}'`)
+  }
 }

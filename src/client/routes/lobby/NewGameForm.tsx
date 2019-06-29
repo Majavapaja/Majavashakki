@@ -7,7 +7,7 @@ import { inject } from "mobx-react";
 import { IAppStore } from "client/store/AppStore";
 import { IGame } from "../../../common/GamePieces";
 
-@inject((stores: IAppStore) => ({api: stores.app.api}))
+@inject((stores: IAppStore) => ({ api: stores.app.api }))
 class NewGameForm extends React.Component<INewGameProps, never> {
   private store = new NewGameFormStore()
 

@@ -1,7 +1,8 @@
 import socketIO from "socket.io-client"
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import * as Majavashakki from "../../common/GamePieces"
-import {ApiPlayerDetails} from "../../common/types"
+import applyMove from "../../common/applyMove"
+import {ApiPlayerDetails, MoveRequest} from "../../common/types"
 import GameEntity from "../../server/entities/Game"
 import BoardStore from "./BoardStore"
 import GameBase from "../../common/GameBase"
@@ -29,6 +30,8 @@ export default class GameStore extends GameBase {
   public playerBlack?: ApiPlayerDetails
   @observable
   public playerWhite?: ApiPlayerDetails
+  @observable
+  public surrenderer?: string
 
   @observable
   public boardStore: BoardStore
@@ -36,10 +39,21 @@ export default class GameStore extends GameBase {
   private gameId: string
   private readonly rootStore: AppStore
 
+  private apiGame: Majavashakki.IGame
+
   constructor(rootStore: AppStore) {
     super("")
     this.isLoading = true
     this.rootStore = rootStore
+  }
+
+  @computed.struct
+  get winner(): Majavashakki.PieceColor | undefined {
+    if (this.isCheckmate || this.surrenderer) {
+      return this.currentTurn === Majavashakki.PieceColor.White ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White
+    } else if (this.surrenderer) {
+      return this.surrenderer === this.playerIdBlack ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White
+    }
   }
 
   @action
@@ -47,11 +61,18 @@ export default class GameStore extends GameBase {
     this.isLoading = showLoadingIndicator
 
     this.currentUser = await this.rootStore.api.read.user();
-    const gameEntity = await this.rootStore.api.read.game(gameId);
+    const gameEntity = await this.rootStore.api.read.game(gameId)
+    this.updateGameData(gameEntity)
+    this.isLoading = false
+  }
+
+  @action
+  public updateGameData = (gameEntity: Majavashakki.IGame) => {
+    this.apiGame = gameEntity
 
     const game = GameEntity.MapFromDb(gameEntity)
     this.title = game.title
-    this.gameId = gameId
+    this.gameId = gameEntity.id
     this.currentTurn = game.currentTurn
     this.playerIdBlack = game.playerIdBlack
     this.playerIdWhite = game.playerIdWhite
@@ -61,13 +82,16 @@ export default class GameStore extends GameBase {
     this.playerWhite = gameEntity.playerWhite
     this.playerBlack = gameEntity.playerBlack
     this.inProgress = gameEntity.inProgress
-
-    this.isLoading = false
+    this.surrenderer = gameEntity.surrenderer
   }
 
+  // TODO init socket connection only once in AppStore startup (needs refactoring for server side)
   public connectSocket = () => {
-    this.socket = socketIO()
-    this.socket.on("move_result", this.onMoveResult)
+    if (!this.socket) {
+      this.socket = socketIO()
+      this.socket.on("move_result", this.onMoveResult)
+      this.socket.on("game_updated", this.onGameUpdated)
+    }
   }
 
   @action
@@ -81,15 +105,41 @@ export default class GameStore extends GameBase {
       return
     }
 
-    const result = await super.move(start, destination, this.currentUser.id, promotionPiece);
+    const moveRequest: MoveRequest = {
+      from: start,
+      dest: destination,
+      promotionType: promotionPiece,
+    }
 
+    const [, result] = await applyMove(GameEntity.MapFromDb(this.apiGame), this.currentUser.id, moveRequest)
     if (result.status === Majavashakki.MoveStatus.Success) {
-      await this.rootStore.api.write.makeMove(this.gameId, start, destination, promotionPiece)
+      await this.rootStore.api.write.makeMove(this.gameId, moveRequest)
     } else {
       this.error = result.error
     }
 
     return result;
+  }
+
+  // Surrender UI
+
+  @observable
+  public surrenderDialogOpen: boolean = false
+
+  @action.bound
+  public promptSurrender(): void {
+    this.surrenderDialogOpen = true
+  }
+
+  @action.bound
+  public confirmSurrender(): void {
+    this.rootStore.api.write.surrenderGame(this.gameId)
+    this.surrenderDialogOpen = false
+  }
+
+  @action.bound
+  public cancelSurrender(): void {
+    this.surrenderDialogOpen = false
   }
 
   ///
@@ -100,5 +150,16 @@ export default class GameStore extends GameBase {
   private onMoveResult = async (move: Majavashakki.IMoveResponse) => {
     await this.loadGame(this.gameId, false)
     this.error = move.status === Majavashakki.MoveStatus.Error ? move.error : undefined
+  }
+
+  @action.bound
+  private async onGameUpdated(game: Majavashakki.IGame): Promise<void> {
+    if (game.id !== this.gameId) {
+      console.log("Received game_updated message for game that is not open in browser")
+      return
+    }
+
+    console.log("Received game_updated message, setting game state")
+    await this.updateGameData(game)
   }
 }

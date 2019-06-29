@@ -6,7 +6,7 @@ import GameStore from "./GameStore"
 
 export default class BoardStore extends BoardBase {
     @observable public pieces: Piece[]
-    @observable public selectedCell: Majavashakki.IPosition
+    @observable.struct public selectedCell: Majavashakki.IPosition
 
     private gameStore: GameStore
 
@@ -33,7 +33,7 @@ export default class BoardStore extends BoardBase {
     public onCellClick(position: Majavashakki.IPosition): any {
         if (!this.selectedCell && this.getPiece(position)) {
             this.selectedCell = position
-        } else if (position === this.selectedCell) {
+        } else if (this.comparePos(position, this.selectedCell)) {
             this.selectedCell = null
         } else if (this.selectedCell) {
             this.gameStore.move(this.selectedCell, position)
@@ -56,6 +56,9 @@ export default class BoardStore extends BoardBase {
                 cells.push({
                     position,
                     piece,
+                    onClick: () => this.onCellClick(position),
+                    cellColor: this.getCellColor(position),
+                    isSelected: this.comparePos(this.selectedCell, position),
                 })
             }
         }
