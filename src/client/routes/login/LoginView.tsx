@@ -56,7 +56,7 @@ class LoginView extends React.Component<ILoginViewProps, never> {
                         <Typography color="inherit">Sign in</Typography>
                     </Button>
 
-                    <Typography variant="subheading">or</Typography>
+                    <Typography variant="subtitle1">or</Typography>
 
                     <Button
                         id="registerButton"
