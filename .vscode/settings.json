@@ -1,6 +1,7 @@
 {
     "files.trimTrailingWhitespace": true,
     "editor.tabSize": 2,
+    "editor.detectIndentation": false,
     "typescript.preferences.quoteStyle": "double",
     "typescript.format.enable": true,
     "typescript.validate.enable": true
