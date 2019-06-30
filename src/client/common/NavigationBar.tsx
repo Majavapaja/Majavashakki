@@ -72,16 +72,9 @@ class LoginMenu extends React.Component<any, any> {
 
 @inject((stores: IRootStore) => ({ api: stores.app.api, userStore: stores.app.user }))
 @observer
-class NavigationBar extends React.Component<any, any> {
-  constructor(props: any) {
-    super(props);
-    this.state = {logged: false};
-    this.init();
-  }
-
+class NavigationBar extends React.Component<any, never> {
   public logout = () => {
     window.location.href = "/logout"
-    this.setState({ logged: false });
   };
 
   public login = () => {
@@ -92,7 +85,7 @@ class NavigationBar extends React.Component<any, any> {
     this.props.history.push("/profile");
   };
 
-  public navigateToMain = (event: any) => {
+  public navigateToMain = () => {
     this.props.history.push("/")
   }
 
@@ -103,17 +96,11 @@ class NavigationBar extends React.Component<any, any> {
         <AppBar position="static">
           <Toolbar>
             <MajavapajaLogo />
-            {/* TODO: Show only if user is logged in */}
-            {<LoginMenu logout={this.logout} profile={this.profile} />}
+            {this.props.userStore.name && <LoginMenu logout={this.logout} profile={this.profile} />}
           </Toolbar>
         </AppBar>
       </div>
     );
-  }
-
-  private init = async () => {
-    const result = await this.props.api.read.user();
-    this.setState({ logged: !!result });
   }
 }
 

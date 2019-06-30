@@ -11,6 +11,7 @@ export default class UserStore {
 
   constructor(api: ApiService) {
     this._api = api;
+    this.refreshFromServer()
   }
 
   @action
@@ -22,6 +23,7 @@ export default class UserStore {
   @action
   public async refreshFromServer() {
     const user = await this._api.read.user();
+    if (!user) return
 
     this.id = user.id
     this.name = user.name
