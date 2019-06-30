@@ -76,7 +76,7 @@ GameSchema.statics.getGameList = async (userId: string, inProgress: boolean): Pr
       { $or: [hasFreeSeat, inGame] },
       { inProgress },
     ])
-    .select({ title: true, playerIdBlack: true, playerIdWhite: true })
+    .select({ title: true, playerIdBlack: true, playerIdWhite: true, inProgress: true })
     .exec()
 }
 
