@@ -63,7 +63,7 @@ class LoginView extends React.Component<ILoginViewProps, never> {
                         variant="contained"
                         color="primary"
                         className={classes.button}
-                        href="/signup"
+                        onClick={this.navigateToSignup}
                     >
                         <Typography color="inherit">Register</Typography>
                     </Button>
@@ -96,6 +96,10 @@ class LoginView extends React.Component<ILoginViewProps, never> {
         event.preventDefault();
         await this.props.userStore.login(this.loginStore.email, this.loginStore.password);
         this.props.history.push("/");
+    }
+
+    private navigateToSignup = () => {
+      this.props.history.push("/signup");
     }
 }
 
