@@ -1,7 +1,44 @@
 import * as React from "react"
-import { withStyles, createStyles } from "@material-ui/core/styles"
+import { withStyles, createStyles, WithStyles } from "@material-ui/core/styles"
 import Typography from "@material-ui/core/Typography"
 import * as logo from "../assets/majavapajalogo.png"
+
+class MajavapajaLogo extends React.Component<IMajavapajaLogoProps, never> {
+    constructor(props: any) {
+        super(props)
+    }
+
+    public render() {
+        const { classes } = this.props
+
+        return (
+            <a className={classes.root} onClick={this.props.onClick}>
+                <img src={logo.default} className={classes.logo} />
+                <Typography className={classes.title} component="div">
+                    Majavapaja
+                </Typography>
+                <Typography className={classes.description} component="div">
+                    {this.getSlogan()}
+                </Typography>
+            </a>
+        );
+    }
+
+    private getSlogan = () => {
+        const slogans = [
+            "Exactly as programmed",
+            "Hard work is money",
+            "Hard code is money",
+            "Oispa kaljaa",
+        ]
+        const randomIndex = Math.floor(Math.random() * slogans.length)
+        return slogans[randomIndex]
+    }
+}
+
+interface IMajavapajaLogoProps extends WithStyles<typeof styles> {
+  onClick: () => {},
+}
 
 const styles = createStyles({
     root: {
@@ -36,38 +73,5 @@ const styles = createStyles({
         whiteSpace: "nowrap",
     },
 })
-
-class MajavapajaLogo extends React.Component<any, any> {
-    constructor(props: any) {
-        super(props)
-    }
-
-    public render() {
-        const { classes } = this.props
-
-        return (
-            <a className={classes.root} onClick={this.props.onClick}>
-                <img src={logo.default} className={classes.logo} />
-                <Typography className={classes.title} component="div">
-                    Majavapaja
-                </Typography>
-                <Typography className={classes.description} component="div">
-                    {this.getSlogan()}
-                </Typography>
-            </a>
-        );
-    }
-
-    private getSlogan = () => {
-        const slogans = [
-            "Exactly as programmed",
-            "Hard work is money",
-            "Hard code is money",
-            "Oispa kaljaa",
-        ]
-        const randomIndex = Math.floor(Math.random() * slogans.length)
-        return slogans[randomIndex]
-    }
-}
 
 export default withStyles(styles)(MajavapajaLogo)
