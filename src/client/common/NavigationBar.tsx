@@ -45,7 +45,6 @@ class LoginMenu extends React.Component<any, any> {
           onClose={this.handleClose}
         >
           <MenuItem onClick={this.profile}>Profile</MenuItem>
-          <MenuItem onClick={this.handleClose}>My account</MenuItem>
           <MenuItem onClick={this.logout}>Logout</MenuItem>
         </Menu>
       </div>
