@@ -86,7 +86,8 @@ class NavigationBar extends React.Component<any, never> {
   };
 
   public navigateToMain = () => {
-    this.props.history.push("/")
+    if (this.props.userStore.name) this.props.history.push("/")
+    else this.login()
   }
 
   public render() {
@@ -95,7 +96,7 @@ class NavigationBar extends React.Component<any, never> {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <MajavapajaLogo />
+            <MajavapajaLogo onClick={this.navigateToMain} />
             {this.props.userStore.name && <LoginMenu logout={this.logout} profile={this.profile} />}
           </Toolbar>
         </AppBar>

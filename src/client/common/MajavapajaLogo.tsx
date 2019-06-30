@@ -11,6 +11,7 @@ const styles = createStyles({
         "&:hover $logo": {
             transform: "rotate(45deg)",
         },
+        cursor: "pointer",
     },
     logo: {
         width: 50,
@@ -45,7 +46,7 @@ class MajavapajaLogo extends React.Component<any, any> {
         const { classes } = this.props
 
         return (
-            <a className={classes.root} href="/">
+            <a className={classes.root} onClick={this.props.onClick}>
                 <img src={logo.default} className={classes.logo} />
                 <Typography className={classes.title} component="div">
                     Majavapaja
