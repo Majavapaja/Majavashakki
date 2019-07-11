@@ -24,7 +24,7 @@
     "express-session": "1.16.1",
     "express-socket.io-session": "1.3.5",
     "io-ts": "1.8.6",
-    "lodash": "4.17.11",
+    "lodash": "4.17.13",
     "mobx": "5.9.4",
     "mobx-react": "5.4.4",
     "mongodb": "3.2.6",
