@@ -7,7 +7,7 @@ jobs:
       only:
         - master
     docker:
-      - image: ubuntu:18.04
+      - image: majavapaja/majavashakki-ci
       - image: mongo:3.2.21-jessie
     steps:
       - checkout
