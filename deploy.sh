@@ -4,7 +4,7 @@ set -o errexit -o nounset -o pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-npm ci
+npm --prefer-offline ci
 npm run lint
 npm run build
 TS_NODE_FILES=true npm run test
