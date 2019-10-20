@@ -17,8 +17,8 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     ])
 
     await makeMove(black, "d8", "h4")
-    await checkText(white, "[data-message-panel]", "Winner is: black!")
-    await checkText(black, "[data-message-panel]", "Winner is: black!")
+    await checkText(white, "#blackBadge.winner", "John Doe")
+    await checkText(black, "#blackBadge.winner", "John Doe")
   })
 
   // "This sample chess game was played between Paul Morphy and his two
@@ -57,8 +57,8 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     ])
     await makeMove(white, "d1", "d8")
 
-    await checkText(white, "[data-message-panel]", "Winner is: white!")
-    await checkText(black, "[data-message-panel]", "Winner is: white!")
+    await checkText(white, "#whiteBadge.winner", "John Smith")
+    await checkText(black, "#whiteBadge.winner", "John Smith")
   })
 
   it("implments pawn promotion correctly", async function() {
@@ -99,7 +99,7 @@ async function makeMoves(
 }
 
 async function assertPieceType(page, position, pieceType: string) {
-  await page.waitForSelector(`div[data-position=${position}] div[data-piece-type=${pieceType}]`)
+  await page.waitForSelector(`div[data-position=${position}] span[data-piece-type=${pieceType}]`)
 }
 
 async function promotePawn(page) {
@@ -140,8 +140,9 @@ async function joinGame(page, gameName) {
 }
 
 async function makeMove(page, start, destination: string) {
+  console.log(`Making move ${start} -> ${destination}`)
   // If no checks are given, default to checking that the piece is moved
-  const startElem = await page.waitForSelector(`div[data-position=${start}] div[data-piece-type]`)
+  const startElem = await page.waitForSelector(`div[data-position=${start}] span[data-piece-type]`)
   const pieceType = await page.evaluate(e => e.getAttribute("data-piece-type"), startElem)
 
   await makeMoveWithAssertions(page, start, destination, [[destination, pieceType]])
@@ -152,7 +153,7 @@ async function makeMoveWithAssertions(page, start, destination: string, assertio
   await page.click(`div[data-position=${destination}]`)
 
   for (const [position, pieceType] of assertions) {
-    await page.waitForSelector(`div[data-position=${position}] div[data-piece-type=${pieceType}]`)
+    await page.waitForSelector(`div[data-position=${position}] span[data-piece-type=${pieceType}]`)
   }
 }
 
