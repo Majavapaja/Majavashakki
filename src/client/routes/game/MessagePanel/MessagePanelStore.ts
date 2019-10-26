@@ -20,15 +20,16 @@ export default class MessagePanelStore {
         name: moveColor === Majavashakki.PieceColor.White ? this._appStore.game.playerWhite.name : this._appStore.game.playerBlack.name,
       } as IActor;
 
-      const pieceType = getPieceType(move.algebraicNotation)
-      const capturedPiece = move.capturedPieceType ? `:${move.capturedPieceType}: ` : ''
+      const pieceType = `:${getPieceType(move.algebraicNotation)}-${moveColor}:`
+      const capturedPieceType = move.capturedPieceType ? `:${move.capturedPieceType}-${getOppositeColor(moveColor)}: ` : ''
 
-      return {actor, body: `:${pieceType}: ${positionStr(move.start)} -> ${capturedPiece}${positionStr(move.destination)}`}
+      return {actor, body: `${pieceType} ${positionStr(move.start)} ____ ${capturedPieceType}${positionStr(move.destination)}`}
     })
   }
 }
 
 const positionStr = (pos: Majavashakki.IPosition) => `${pos.col + pos.row}`;
+const getOppositeColor = (color: Majavashakki.PieceColor) => color === Majavashakki.PieceColor.White ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White
 
 export interface IActor {
   name: string;

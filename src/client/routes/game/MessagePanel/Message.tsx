@@ -34,18 +34,20 @@ class Message extends React.Component<IMessageProps, any> {
         const before = message.substr(0, message.indexOf(iconStr))
         if (before) {
           const txtBefore = (
-            <Typography className={this.props.classes.messagePart} component="span" key={components.length}>
+            <Typography component="span" key={components.length}>
               {before}
             </Typography>
           )
           components.push(txtBefore)
         }
 
+        const [type, color] = iconStr.replace(/:/g, "").split('-')
+
         const piece = (
           <span className={this.props.classes.icon} key={components.length}>
             <ChessPiece
-              type={iconStr.replace(/:/g, "") as Majavashakki.PieceType}
-              color={this.props.content.actor.pieceColor}
+              type={type as Majavashakki.PieceType}
+              color={color as Majavashakki.PieceColor}
             />
           </span>
         )
@@ -55,7 +57,7 @@ class Message extends React.Component<IMessageProps, any> {
       }
 
       const txtAfter = (
-        <Typography className={this.props.classes.messagePart} component="span" key={components.length}>
+        <Typography component="span" key={components.length}>
           {message}
         </Typography>
       )
