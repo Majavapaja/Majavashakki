@@ -200,11 +200,13 @@ export default class BoardBase implements Majavashakki.IBoard {
         // Set check and checkmate to the algebraic notation
         algebraicNotation = setCheck(algebraicNotation, move)
 
+        const capturedPiece: Majavashakki.IPiece = this.getPiece(destination)
         // Move history move must be created before actually moving the piece on board
         this.moveHistory.push({
             start,
             destination,
             algebraicNotation,
+            capturedPieceType: capturedPiece?.type,
         })
 
         // Check draw after move has been added to moveHistory, because we need the latest move to be there
