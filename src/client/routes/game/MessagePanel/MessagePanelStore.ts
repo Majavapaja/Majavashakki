@@ -27,9 +27,7 @@ export default class MessagePanelStore {
   }
 }
 
-function positionStr(pos: Majavashakki.IPosition) {
-  return `${pos.col + pos.row}`
-}
+const positionStr = (pos: Majavashakki.IPosition) => `${pos.col + pos.row}`;
 
 export interface IActor {
   name: string;
