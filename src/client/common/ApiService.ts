@@ -9,7 +9,7 @@ const base = window.location.origin;
 
 export default class ApiService {
 
-  constructor(public error: PopupNotificationStore) {}
+  constructor(private error: PopupNotificationStore) {}
 
   public read = {
     user:           async () => await this.getIt<ApiUser>("api/user"),
