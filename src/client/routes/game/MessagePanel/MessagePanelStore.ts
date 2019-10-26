@@ -1,7 +1,7 @@
 import AppStore from "client/store/AppStore"
 import { computed } from "mobx"
 import * as Majavashakki from "../../../../common/GamePieces"
-import { getPieceType } from "../../../../common/logic/algebraicNotation"
+import { getPieceType, getMoveMetadata } from "../../../../common/logic/algebraicNotation"
 
 export default class MessagePanelStore {
   private _appStore: AppStore;
@@ -20,7 +20,8 @@ export default class MessagePanelStore {
         name: moveColor === Majavashakki.PieceColor.White ? this._appStore.game.playerWhite.name : this._appStore.game.playerBlack.name,
       } as IActor;
 
-      const pieceType = getPieceType(move.algebraicNotation[0])
+      const pieceType = getPieceType(move.algebraicNotation)
+
       return {actor, body: `:${pieceType}: ${positionStr(move.start)} -> ${positionStr(move.destination)}`}
     })
   }

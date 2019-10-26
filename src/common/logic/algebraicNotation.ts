@@ -18,8 +18,10 @@ const getPieceNotation = (type: Majavashakki.PieceType): string => {
   }
 }
 
-export const getPieceType = (type: string): Majavashakki.PieceType => {
-  switch (type) {
+export const getPieceType = (algebraicNotation: string): Majavashakki.PieceType => {
+  const typeChar = algebraicNotation[0];
+
+  switch (typeChar) {
     case "K":
       return Majavashakki.PieceType.King;
     case "Q":
