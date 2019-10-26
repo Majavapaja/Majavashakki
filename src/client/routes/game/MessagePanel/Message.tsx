@@ -1,7 +1,6 @@
 import * as React from "react"
 import { withStyles, WithStyles } from "@material-ui/core/styles"
 import { Typography } from "@material-ui/core"
-import classnames from "classnames"
 import { IMessage } from "./MessagePanelStore"
 import ChessPiece from "../ChessPiece";
 import * as Majavashakki from "../../../../common/GamePieces"
@@ -82,6 +81,7 @@ const styles = () => ({
     textContainer: {
       display: "flex",
       flex: 7,
+      whitespace: "pre"
     },
     icon: {
       width: "15px",

@@ -1,7 +1,7 @@
 import AppStore from "client/store/AppStore"
 import { computed } from "mobx"
 import * as Majavashakki from "../../../../common/GamePieces"
-import { getPieceType } from "../../../../common/logic/algebraicNotation"
+import { getPieceType, getMoveMetadata, MoveMetadata } from "../../../../common/logic/algebraicNotation"
 
 export default class MessagePanelStore {
   private _appStore: AppStore;
@@ -22,8 +22,17 @@ export default class MessagePanelStore {
 
       const pieceType = `:${getPieceType(move.algebraicNotation)}-${moveColor}:`
       const capturedPieceType = move.capturedPieceType ? `:${move.capturedPieceType}-${getOppositeColor(moveColor)}: ` : ''
+      const moveMetadata = getMoveMetadata(move.algebraicNotation)
+      const enpassant = (moveMetadata & MoveMetadata.Enpassant) === MoveMetadata.Enpassant ? ' en passant' : ''
+      const check = (moveMetadata & MoveMetadata.Check) === MoveMetadata.Check ? ' check' : ''
+      const checkMate = (moveMetadata & MoveMetadata.Checkmate) === MoveMetadata.Checkmate ? ' checkmate' : ''
 
-      return {actor, body: `${pieceType} ${positionStr(move.start)} ____ ${capturedPieceType}${positionStr(move.destination)}`}
+      return {
+        actor,
+        body: `${pieceType} ${positionStr(move.start)}  ->  ${positionStr(move.destination)} ${capturedPieceType}` +
+              enpassant +
+              (checkMate || check)
+      }
     })
   }
 }
