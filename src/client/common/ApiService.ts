@@ -1,4 +1,4 @@
-import  request from "request-promise";
+import request from "request-promise";
 import { StatusCodeError } from "request-promise/errors";
 import * as Majavashakki from "../../common/GamePieces";
 import { ApiGameInfo, ApiUser, UserUpdateRequest, CreateGameRequest, MoveRequest} from "../../common/types";
