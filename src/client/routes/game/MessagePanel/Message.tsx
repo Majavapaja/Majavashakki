@@ -10,14 +10,15 @@ class Message extends React.Component<IMessageProps, any> {
     public render() {
         const { classes, content } = this.props
         const playerClass = content.actor.isCurrentUser ? classes.activePlayer : classes.inactivePlayer
-        const playerClasses = classnames(classes.messagePart, playerClass)
 
         return (
             <Typography className={classes.text}>
-                <Typography component="span" className={playerClasses}>
-                    {content.actor.name + ": "}
+                <Typography component="span" className={playerClass}>
+                    {content.actor.name.substr(0,15)}
                 </Typography>
-                {this.buildMessage()}
+                <Typography component="span" className={classes.textContainer}>
+                  {this.buildMessage()}
+                </Typography>
             </Typography>
         )
     }
@@ -27,6 +28,7 @@ class Message extends React.Component<IMessageProps, any> {
       console.log(message)
       const iconRegex = /:(.*?):/
       const components = []
+
       while (iconRegex.test(message)) {
         const iconStr = message.match(iconRegex)[0]
         const before = message.substr(0, message.indexOf(iconStr))
@@ -38,6 +40,7 @@ class Message extends React.Component<IMessageProps, any> {
           )
           components.push(txtBefore)
         }
+
         const piece = (
           <span className={this.props.classes.icon} key={components.length}>
             <ChessPiece
@@ -50,6 +53,7 @@ class Message extends React.Component<IMessageProps, any> {
         components.push(piece)
         message = message.replace(before, "").replace(iconStr, "")
       }
+
       const txtAfter = (
         <Typography className={this.props.classes.messagePart} component="span" key={components.length}>
           {message}
@@ -63,16 +67,19 @@ class Message extends React.Component<IMessageProps, any> {
 
 const styles = () => ({
     activePlayer: {
-        color: "#50A450",
+      color: "#50A450",
+      flex: 1,
     },
     inactivePlayer: {
-        color: "#A45050",
+      color: "#A45050",
+      flex: 1,
     },
     text: {
-        display: "flex",
+      display: "flex",
     },
-    messagePart: {
-        marginRight: "5px",
+    textContainer: {
+      display: "flex",
+      flex: 7,
     },
     icon: {
       width: "15px",

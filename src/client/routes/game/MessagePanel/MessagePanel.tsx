@@ -29,6 +29,7 @@ interface IMessagePanelProps extends WithStyles<typeof styles> {
 const styles = () => createStyles({
   container: {
     height: "20vmin",
+    padding: 10,
   },
 })
 
