@@ -9,10 +9,11 @@ import { IGame } from "../../../common/GamePieces";
 
 @inject((stores: IRootStore) => ({ api: stores.app.api }))
 class NewGameForm extends React.Component<INewGameProps, never> {
-  private store = new NewGameFormStore()
+  private store: NewGameFormStore;
 
   constructor(props: any) {
     super(props);
+    this.store = new NewGameFormStore(props.api);
   }
 
   public onSubmitNewRoom = async (event) => {
@@ -68,7 +69,7 @@ class NewGameForm extends React.Component<INewGameProps, never> {
 class NewGameFormStore {
   @observable public name: string = ""
 
-  private api = new ApiService()
+  constructor(private api: ApiService) {}
 
   @action
   public async createAndJoin(gameName: string): Promise<IGame> {
