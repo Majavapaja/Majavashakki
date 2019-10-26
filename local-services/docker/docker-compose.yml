@@ -13,5 +13,7 @@ services:
     restart: always
     ports:
       - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_SERVER: majavashakki-mongo
 volumes:
   majavashakki-data:
