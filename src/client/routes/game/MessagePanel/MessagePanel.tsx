@@ -4,7 +4,7 @@ import { Paper } from "@material-ui/core"
 import { IRootStore } from "client/store/AppStore"
 import { observer, inject } from "mobx-react"
 import Message from "./Message"
-import MessagePanelStore from "./MessagePanelStore";
+import MessagePanelStore from "./MessagePanelStore"
 
 @inject((stores: IRootStore) => ({store: stores.app.messagePanel}))
 @observer
@@ -30,6 +30,7 @@ const styles = () => createStyles({
   container: {
     height: "20vmin",
     padding: 10,
+    overflow: 'auto',
   },
 })
 
