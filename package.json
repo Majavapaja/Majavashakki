@@ -87,7 +87,7 @@
     "@types/lodash": "4.14.132",
     "@types/mocha": "5.2.6",
     "@types/mongodb": "3.1.27",
-    "@types/mongoose": "5.5.2",
+    "@types/mongoose": "5.5.23",
     "@types/passport": "1.0.0",
     "@types/passport-facebook": "2.1.9",
     "@types/passport-local": "^1.0.33",
