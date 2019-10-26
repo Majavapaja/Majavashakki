@@ -1,5 +1,6 @@
 import { observable } from "mobx";
 
+/** Shows popup notifications using Snackbar */
 export default class PopupNotificationStore {
   @observable
   public show: boolean = false;
