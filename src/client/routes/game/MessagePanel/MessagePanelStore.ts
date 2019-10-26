@@ -1,7 +1,7 @@
 import AppStore from "client/store/AppStore"
 import { computed } from "mobx"
 import * as Majavashakki from "../../../../common/GamePieces"
-import { getPieceType, getMoveMetadata } from "../../../../common/logic/algebraicNotation"
+import { getPieceType } from "../../../../common/logic/algebraicNotation"
 
 export default class MessagePanelStore {
   private _appStore: AppStore;
@@ -21,8 +21,9 @@ export default class MessagePanelStore {
       } as IActor;
 
       const pieceType = getPieceType(move.algebraicNotation)
+      const capturedPiece = move.capturedPieceType ? `:${move.capturedPieceType}: ` : ''
 
-      return {actor, body: `:${pieceType}: ${positionStr(move.start)} -> ${positionStr(move.destination)}`}
+      return {actor, body: `:${pieceType}: ${positionStr(move.start)} -> ${capturedPiece}${positionStr(move.destination)}`}
     })
   }
 }
