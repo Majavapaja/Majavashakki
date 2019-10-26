@@ -107,16 +107,22 @@ export const setCheck = (notation: Majavashakki.AlgebraicNotation, move: Majavas
   return notation
 }
 
-export type MoveType = "castling" | "enpassant" | "capture" | "check" | "checkmate"
+export enum MoveMetadata {
+  Castling = 1 << 0,
+  Enpassant = 1 << 1,
+  Capture = 1 << 2,
+  Check = 1 << 3,
+  Checkmate = 1 << 4,
+}
 
-export const getMoveTypes = (algebraicNotation: Majavashakki.AlgebraicNotation): MoveType[] => {
-  const types = [];
+export const getMoveMetadata = (algebraicNotation: Majavashakki.AlgebraicNotation): MoveMetadata => {
+  let metadata: MoveMetadata;
 
-  if (algebraicNotation.includes("0-0")) types.push("castling");
-  if (algebraicNotation.includes("e.p.")) types.push("enpassant");
-  if (algebraicNotation.includes("x")) types.push("capture");
-  if (algebraicNotation.includes("+")) types.push("check");
-  if (algebraicNotation.includes("#")) types.push("checkmate");
+  if (algebraicNotation.includes("0-0")) metadata |= MoveMetadata.Castling;
+  if (algebraicNotation.includes("e.p.")) metadata |= MoveMetadata.Enpassant;
+  if (algebraicNotation.includes("x")) metadata |= MoveMetadata.Capture;
+  if (algebraicNotation.includes("+")) metadata |= MoveMetadata.Check;
+  if (algebraicNotation.includes("#")) metadata |= MoveMetadata.Checkmate;
 
-  return types
+  return metadata
 }
