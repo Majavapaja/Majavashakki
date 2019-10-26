@@ -1,5 +1,9 @@
-# Mursushakki
-The amazing sequel to the fantastic Majavashakki. With this new version we are planning to add several new bugs and more unreadable code!
+# Majavashakki
+The amazing Node.js sequel to the fantastic MaJAVAshakki (for Java). With this new version we are planning to add several new bugs and more unreadable code!
+
+## Browser compatibility
+
+Majavashakki doesn't guarantee support for any specific browser. Chrome and Firefox may work.
 
 ## Business hours
 Mon-Fri 17-18
@@ -7,6 +11,10 @@ Mon-Fri 17-18
 Sat 15-16
 
 Sun Closed
+
+### Install Node
+
+The officially supported version is 10.6 (64-bit).
 
 ### Install MongoDB using Vagrant ###
 
