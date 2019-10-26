@@ -5,5 +5,5 @@
     "typescript.preferences.quoteStyle": "double",
     "typescript.format.enable": true,
     "typescript.validate.enable": true,
-    "typescript.tsdk": "node_modules\\typescript\\lib"
+    "typescript.tsdk": "node_modules/typescript/lib"
 }
