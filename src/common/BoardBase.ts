@@ -160,6 +160,7 @@ export default class BoardBase implements Majavashakki.IBoard {
 
         let startPiece = this.getPiece(start)
         let algebraicNotation = getAlgebraicNotation(this, move, promotionPiece)
+        const capturedPiece: Majavashakki.IPiece = this.getPiece(destination)
 
         if (move.result === Majavashakki.MoveType.Enpassant) {
             // Remove target of en passant, which is in the destination of the previous move
@@ -200,7 +201,6 @@ export default class BoardBase implements Majavashakki.IBoard {
         // Set check and checkmate to the algebraic notation
         algebraicNotation = setCheck(algebraicNotation, move)
 
-        const capturedPiece: Majavashakki.IPiece = this.getPiece(destination)
         // Move history move must be created before actually moving the piece on board
         this.moveHistory.push({
             start,
