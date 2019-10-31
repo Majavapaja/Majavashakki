@@ -4,6 +4,11 @@ set -o errexit -o nounset -o pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+pushd "$repo/deployment"
+npm --prefer-offline ci
+npm run deploy
+popd
+
 npm --prefer-offline ci
 npm run lint
 npm run build

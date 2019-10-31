@@ -1,0 +1,23 @@
+{
+  "name": "deployment",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "deploy": "ts-node src/deploy.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@azure/arm-appservice": "^5.8.0",
+    "@azure/arm-containerregistry": "^7.0.0",
+    "@azure/arm-cosmosdb": "^4.0.0",
+    "@azure/arm-keyvault": "^1.2.1",
+    "@azure/cosmos": "^3.4.0",
+    "@azure/identity": "^1.0.0",
+    "@azure/keyvault-secrets": "^4.0.0-preview.9",
+    "@azure/ms-rest-nodeauth": "^2.0.5",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
+  }
+}

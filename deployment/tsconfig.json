@@ -1,0 +1,6 @@
+{
+  "invlude": ["src"],
+  "compilerOptions": {
+    "strict": true
+  }
+}
