@@ -5,6 +5,7 @@ import * as msRestNodeAuth from "@azure/ms-rest-nodeauth"
 import { SecretClient } from "@azure/keyvault-secrets"
 import { EnvironmentCredential } from "@azure/identity"
 import * as cosmosdb from "@azure/arm-cosmosdb"
+import { ContainerRegistryManagementClient } from "@azure/arm-containerregistry"
 
 const subscriptionId: string = env("AZURE_SUBSCRIPTION_ID")
 const clientId: string = env("AZURE_CLIENT_ID")
@@ -16,6 +17,7 @@ export interface Context {
   webapps: appservice.WebApps,
   secrets: SecretClient,
   cosmosdb: cosmosdb.CosmosDBManagementClient,
+  containerregistry: ContainerRegistryManagementClient,
 }
 
 export async function login(): Promise<Context> {
@@ -26,10 +28,11 @@ export async function login(): Promise<Context> {
     webapps: new appservice.WebApps(websites),
     secrets: new SecretClient(`https://majavashakki-vault.vault.azure.net`, new EnvironmentCredential()),
     cosmosdb: new cosmosdb.CosmosDBManagementClient(creds as any, subscriptionId),
+    containerregistry: new ContainerRegistryManagementClient(creds as any, subscriptionId),
   }
 }
 
-function env(key: string): string {
+export function env(key: string): string {
   const value = process.env[key]
   if (!value) throw Error(`Environment variable ${key} required`)
   return value

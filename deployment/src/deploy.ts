@@ -1,4 +1,7 @@
-import {login, Context} from "./context"
+import * as path from "path"
+import { spawnSync } from "child_process"
+
+import {login, Context, env} from "./context"
 
 const resourceGroup = "Majavashakki"
 const location = "North Europe"
@@ -6,7 +9,23 @@ const dbName = "majavashakkimongo"
 const appName = "majavashakki-kontti"
 
 async function main() {
+  const gitSha = env("GIT_SHA")
+  const fbClientId = env("SECRET_MajavashakkiFbClientId")
+  const fbSecret = env("SECRET_MajavashakkiFbSecret")
+  const sessionSecret = env("SECRET_MajavashakkiSessionSecret")
+  const tag = containerTag(gitSha)
+
   const ctx = await login()
+
+  console.log("Ensuring container registry exists")
+  const registry = await createRegistry(ctx, "majavashakki")
+
+  console.log("Building and pushing container image")
+  const fullContainerTag = `${registry.server}/majavashakki:${tag}`
+  await loginRegistry(registry)
+  shellSync(["docker", "build", "--tag", fullContainerTag, "."], resolve("."))
+  shellSync(["docker", "push", fullContainerTag], resolve("."))
+  console.log(await ctx.webapps.get(resourceGroup, appName))
 
   console.log("Getting Cosmos DB connection details")
   const [password, connectionString] = await getCosmosConnectionDetails(ctx)
@@ -30,17 +49,41 @@ async function main() {
       alwaysOn: true,
       appSettings: [
         {name: "MajavaMongoPassword", value: password},
-        {name: "MajavashakkiFbClientId", value: process.env.SECRET_MajavashakkiFbClientId},
-        {name: "MajavashakkiFbSecret", value: process.env.SECRET_MajavashakkiFbSecret},
+        {name: "MajavashakkiFbClientId", value: fbClientId},
+        {name: "MajavashakkiFbSecret", value: fbSecret},
         {name: "MajavashakkiMongoConnectionString", value: connectionString},
-        {name: "MajavashakkiSessionSecret", value: process.env.SECRET_MajavashakkiSessionSecret},
+        {name: "MajavashakkiSessionSecret", value: sessionSecret},
       ],
-      linuxFxVersion: "DOCKER|majavapaja/majavashakki:latest",
+      linuxFxVersion: `DOCKER|${fullContainerTag}`,
     },
   })
   console.log(app)
 
   console.log(await ctx.webapps.restart(resourceGroup, appName))
+}
+
+async function createRegistry(ctx: Context, registryName: string): Promise<DockerCredentials> {
+  const repository = await ctx.containerregistry.registries.create(resourceGroup, registryName, {
+    location,
+    sku: { name: "Basic" },
+    adminUserEnabled: true,
+  })
+
+  const creds = await ctx.containerregistry.registries.listCredentials(resourceGroup, registryName)
+  return {
+    server: repository.loginServer!,
+    username: creds.username!,
+    password: creds.passwords![0].value!,
+  }
+}
+
+async function loginRegistry(creds: DockerCredentials): Promise<void> {
+  shellSync([ "docker", "login", "--username", creds.username, "--password", creds.password, creds.server ])
+}
+
+async function shellSync(command: string[], cwd?: string): Promise<void> {
+  const [cmd, ...args] = command
+  spawnSync(cmd, args, { cwd, stdio: "inherit" })
 }
 
 async function getCosmosConnectionDetails(ctx: Context): Promise<[string, string]> {
@@ -51,13 +94,33 @@ async function getCosmosConnectionDetails(ctx: Context): Promise<[string, string
   return [password, primaryConnection.connectionString!]
 }
 
+function containerTag(sha: string): string {
+  if (process.env.CI) {
+    return "ci-" + sha
+  } else if (process.env.USER) {
+    return process.env.USER + "-" + sha
+  } else {
+    return "local-" + sha
+  }
+}
+
 const strContains = (needle: string, haystack: string): boolean =>
   haystack.indexOf(needle) !== -1
+
+function resolve(filepath: string): string {
+  return path.resolve(__dirname, "../..", filepath)
+}
 
 // TODO: Currently the deploy user does not have permission to get secrets from vault :|
 async function secret(ctx: Context, secretName: string): Promise<string> {
   const latest = await ctx.secrets.getSecret(secretName)
   return latest.value!
+}
+
+interface DockerCredentials {
+  server: string
+  username: string
+  password: string
 }
 
 main().catch(err => {

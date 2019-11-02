@@ -1,5 +1,5 @@
 {
-  "invlude": ["src"],
+  "include": ["src"],
   "compilerOptions": {
     "strict": true
   }
