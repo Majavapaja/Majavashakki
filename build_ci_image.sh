@@ -7,5 +7,6 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 org="majavapaja"
 image="majavashakki-ci"
 
+cd "$repo/deployment"
 docker build --tag $org/$image:latest --file Dockerfile.ci .
 docker push $org/$image:latest
