@@ -1,13 +1,14 @@
-// import * as acr from "@azure/arm-containerregistry"
-
-import * as rstJs from "@azure/ms-rest-js"
 import {login, Context} from "./context"
 
 const resourceGroup = "Majavashakki"
 const location = "North Europe"
+const dbName = "majavashakkimongo"
 
 async function main() {
   const ctx = await login()
+
+  console.log("Getting Cosmos DB connection details")
+  const [password, connectionString] = await getCosmosConnectionDetails(ctx)
 
   const plan = await ctx.websites.appServicePlans.createOrUpdate(resourceGroup, "majavashakki-linux", {
     location,
@@ -25,10 +26,10 @@ async function main() {
       webSocketsEnabled: true,
       alwaysOn: true,
       appSettings: [
-        {name: "MajavaMongoPassword", value: process.env.SECRET_MajavaMongoPassword},
+        {name: "MajavaMongoPassword", value: password},
         {name: "MajavashakkiFbClientId", value: process.env.SECRET_MajavashakkiFbClientId},
         {name: "MajavashakkiFbSecret", value: process.env.SECRET_MajavashakkiFbSecret},
-        {name: "MajavashakkiMongoConnectionString", value: process.env.SECRET_MajavashakkiMongoConnectionString},
+        {name: "MajavashakkiMongoConnectionString", value: connectionString},
         {name: "MajavashakkiSessionSecret", value: process.env.SECRET_MajavashakkiSessionSecret},
       ],
       linuxFxVersion: "DOCKER|majavapaja/majavashakki:latest",
@@ -36,6 +37,17 @@ async function main() {
   })
   console.log(app)
 }
+
+async function getCosmosConnectionDetails(ctx: Context): Promise<[string, string]> {
+  const keys = await ctx.cosmosdb.databaseAccounts.listKeys(resourceGroup, dbName)
+  const password = keys.primaryMasterKey!
+  const connectionStrings = await ctx.cosmosdb.databaseAccounts.listConnectionStrings(resourceGroup, dbName)
+  const primaryConnection = connectionStrings.connectionStrings!.find(c => strContains(password, c.connectionString!))!
+  return [password, primaryConnection.connectionString!]
+}
+
+const strContains = (needle: string, haystack: string): boolean =>
+  haystack.indexOf(needle) !== -1
 
 // TODO: Currently the deploy user does not have permission to get secrets from vault :|
 async function secret(ctx: Context, secretName: string): Promise<string> {

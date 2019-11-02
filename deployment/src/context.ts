@@ -4,6 +4,7 @@ import * as msRestAzureJs from "@azure/ms-rest-azure-js"
 import * as msRestNodeAuth from "@azure/ms-rest-nodeauth"
 import { SecretClient } from "@azure/keyvault-secrets"
 import { EnvironmentCredential } from "@azure/identity"
+import * as cosmosdb from "@azure/arm-cosmosdb"
 
 const subscriptionId: string = env("AZURE_SUBSCRIPTION_ID")
 const clientId: string = env("AZURE_CLIENT_ID")
@@ -14,6 +15,7 @@ export interface Context {
   websites: appservice.WebSiteManagementClient,
   webapps: appservice.WebApps,
   secrets: SecretClient,
+  cosmosdb: cosmosdb.CosmosDBManagementClient,
 }
 
 export async function login(): Promise<Context> {
@@ -23,6 +25,7 @@ export async function login(): Promise<Context> {
     websites,
     webapps: new appservice.WebApps(websites),
     secrets: new SecretClient(`https://majavashakki-vault.vault.azure.net`, new EnvironmentCredential()),
+    cosmosdb: new cosmosdb.CosmosDBManagementClient(creds as any, subscriptionId),
   }
 }
 
