@@ -81,7 +81,7 @@ async function loginRegistry(creds: DockerCredentials): Promise<void> {
   shellSync([ "docker", "login", "--username", creds.username, "--password", creds.password, creds.server ])
 }
 
-async function shellSync(command: string[], cwd?: string): Promise<void> {
+function shellSync(command: string[], cwd?: string): void {
   const [cmd, ...args] = command
   const p = spawnSync(cmd, args, { cwd, stdio: "inherit" })
   if (p.status !== 0) {
