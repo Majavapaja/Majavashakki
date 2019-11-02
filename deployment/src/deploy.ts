@@ -3,6 +3,7 @@ import {login, Context} from "./context"
 const resourceGroup = "Majavashakki"
 const location = "North Europe"
 const dbName = "majavashakkimongo"
+const appName = "majavashakki-kontti"
 
 async function main() {
   const ctx = await login()
@@ -10,6 +11,7 @@ async function main() {
   console.log("Getting Cosmos DB connection details")
   const [password, connectionString] = await getCosmosConnectionDetails(ctx)
 
+  console.log("Ensuring App Service Plan exists")
   const plan = await ctx.websites.appServicePlans.createOrUpdate(resourceGroup, "majavashakki-linux", {
     location,
     kind: "linux",
@@ -17,7 +19,8 @@ async function main() {
   })
   console.log(plan)
 
-  const app = await ctx.webapps.createOrUpdate(resourceGroup, "majavashakki-kontti", {
+  console.log("Ensuring Container App exists")
+  const app = await ctx.webapps.createOrUpdate(resourceGroup, appName, {
     location,
     kind: "app,linux,container",
     serverFarmId: plan.id,
@@ -36,6 +39,8 @@ async function main() {
     },
   })
   console.log(app)
+
+  console.log(await ctx.webapps.restart(resourceGroup, appName))
 }
 
 async function getCosmosConnectionDetails(ctx: Context): Promise<[string, string]> {
