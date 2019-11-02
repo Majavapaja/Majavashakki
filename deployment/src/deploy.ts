@@ -48,6 +48,9 @@ async function main() {
       webSocketsEnabled: true,
       alwaysOn: true,
       appSettings: [
+        {name: "DOCKER_REGISTRY_SERVER_PASSWORD", value: registry.password},
+        {name: "DOCKER_REGISTRY_SERVER_URL", value: registry.server},
+        {name: "DOCKER_REGISTRY_SERVER_USERNAME", value: registry.username},
         {name: "MajavaMongoPassword", value: password},
         {name: "MajavashakkiFbClientId", value: fbClientId},
         {name: "MajavashakkiFbSecret", value: fbSecret},
