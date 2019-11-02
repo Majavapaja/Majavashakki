@@ -83,7 +83,10 @@ async function loginRegistry(creds: DockerCredentials): Promise<void> {
 
 async function shellSync(command: string[], cwd?: string): Promise<void> {
   const [cmd, ...args] = command
-  spawnSync(cmd, args, { cwd, stdio: "inherit" })
+  const p = spawnSync(cmd, args, { cwd, stdio: "inherit" })
+  if (p.status !== 0) {
+    throw new Error("command exited with non-zero code: " + p.status)
+  }
 }
 
 async function getCosmosConnectionDetails(ctx: Context): Promise<[string, string]> {
