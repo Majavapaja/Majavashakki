@@ -9,5 +9,12 @@ RUN npm ci
 COPY . /app
 RUN npm run build
 
-RUN which npm
+RUN npm prune --production
+
+FROM node:10.17.0-buster
+WORKDIR /app
+
+ENV NODE_ENV=prod
+COPY --from=0 /app .
+
 ENTRYPOINT [ "/usr/local/bin/node", "app.js" ]
