@@ -12,7 +12,7 @@ jobs:
     - name: Setup Node.js for use with actions
       uses: actions/setup-node@v1.1.0
     - name: Start MongoDB As Docker
-      uses: wbari/start-mongoDB@v0.2
+      run: docker run --name mongo -d -p 27017:27017
     - name: Install packages
       run: npm ci
     - name: Run lint
