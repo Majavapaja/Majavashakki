@@ -18,8 +18,8 @@ jobs:
     - name: Run lint
       run: npm run lint
     - name: Run tests
-      run: npm run test
+      run: TS_NODE_FILES=true npm run test
     - name: Run browser tests
-      run: npm run test:browser
+      run: TS_NODE_FILES=true npm run test:browser
     - name: Build
       run: npm run build
