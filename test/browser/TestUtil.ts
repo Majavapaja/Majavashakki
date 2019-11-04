@@ -3,7 +3,7 @@ import puppeteer from "puppeteer"
 import {start} from "../../src/server/app"
 import {clearDatabase, initTestData} from "../../src/server/mongo"
 
-const PORT = "3001"
+const PORT = process.env.TEST_PORT || "3001"
 const runHeadless = !!process.env.CI
 
 export function browserSpec(name, {numBrowsers}, func) {
