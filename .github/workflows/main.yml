@@ -17,6 +17,8 @@ jobs:
       run: npm ci
     - name: Run lint
       run: npm run lint
+    - name: Build
+      run: npm run build
     - name: Run tests
       env:
         TS_NODE_FILES: true
@@ -28,5 +30,3 @@ jobs:
         TEST_PORT: 3002
         DEBUG: "puppeteer:*"
       run: npm run test:browser
-    - name: Build
-      run: npm run build
