@@ -25,6 +25,7 @@ jobs:
       env:
         TS_NODE_FILES: true
         CI: true
+        TEST_PORT: 3002
       run: npm run test:browser
     - name: Build
       run: npm run build
