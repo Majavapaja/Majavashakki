@@ -13,16 +13,18 @@ jobs:
       uses: actions/setup-node@v1.1.0
     - name: Start MongoDB As Docker
       run: docker run --name mongo -d -p 27017:27017 mongo:latest
-    - name: Set environment variables
-      run: |
-        export CI=true
     - name: Install packages
       run: npm ci
     - name: Run lint
       run: npm run lint
     - name: Run tests
-      run: TS_NODE_FILES=true npm run test
+      env:
+        TS_NODE_FILES: true
+      run: npm run test
     - name: Run browser tests
-      run: TS_NODE_FILES=true npm run test:browser
+      env:
+        TS_NODE_FILES: true
+        CI: true
+      run: npm run test:browser
     - name: Build
       run: npm run build
