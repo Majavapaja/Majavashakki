@@ -27,6 +27,4 @@ jobs:
       env:
         TS_NODE_FILES: true
         CI: true
-        TEST_PORT: 3002
-        DEBUG: "puppeteer:*"
       run: npm run test:browser
