@@ -11,15 +11,13 @@ jobs:
     - uses: actions/checkout@v1
     - name: Setup Node.js for use with actions
       uses: actions/setup-node@v1.1.0
-    - name: Start?
-      run: echo "START"
-    - name: Run tests?
-      run: npm run test
-    - name: Run kliksuttelu tests?
-      run: npm run test:browser
+    - name: Install packages
+      run: npm ci
     - name: Run lint
       run: npm run lint
+    - name: Run tests
+      run: npm run test
+    - name: Run browser tests
+      run: npm run test:browser
     - name: Build
       run: npm run build
-    - name: Finished?
-      run: echo "DONE"
