@@ -54,7 +54,7 @@
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-jss": "^8.6.1",
-    "react-router-dom": "^5.0.0",
+    "react-router-dom": "^5.1.2",
     "request": "^2.88.0",
     "request-promise": "^4.2.4",
     "socket.io": "^2.2.0",
