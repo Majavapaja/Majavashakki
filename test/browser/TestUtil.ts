@@ -8,6 +8,8 @@ const runHeadless = !!process.env.CI
 
 export function browserSpec(name, {numBrowsers}, func) {
   describe(name, function() {
+    this.timeout(60_000)
+
     before(async function() {
       this.closeServer = await start(PORT)
       this.browsers = await timesAsync(numBrowsers, mkBrowser)
