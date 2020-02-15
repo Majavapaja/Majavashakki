@@ -1,3 +1,5 @@
+![Deploy to production](https://github.com/Majavapaja/Majavashakki/workflows/Deploy%20to%20production/badge.svg)
+
 # Majavashakki
 The amazing Node.js sequel to the fantastic MaJAVAshakki (for Java). With this new version we are planning to add several new bugs and more unreadable code!
 
