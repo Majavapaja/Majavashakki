@@ -17,8 +17,13 @@ export function browserSpec(name, {numBrowsers}, func) {
     })
 
     after(async function() {
-      await mapAsync(this.browsers, b => b.close())
-      await this.closeServer()
+      if (this.browsers) {
+        await mapAsync(this.browsers, b => b.close())
+      }
+j
+      if (this.closeServer) {
+        await this.closeServer()
+      }
     })
 
     beforeEach(async function() {
