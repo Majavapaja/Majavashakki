@@ -8,8 +8,6 @@ const runHeadless = !!process.env.CI
 
 export function browserSpec(name, {numBrowsers}, func) {
   describe(name, function() {
-    this.timeout(60_000)
-
     before(async function() {
       this.closeServer = await start(PORT)
       this.browsers = await timesAsync(numBrowsers, mkBrowser)
@@ -20,7 +18,7 @@ export function browserSpec(name, {numBrowsers}, func) {
       if (this.browsers) {
         await mapAsync(this.browsers, b => b.close())
       }
-j
+
       if (this.closeServer) {
         await this.closeServer()
       }
@@ -51,7 +49,7 @@ export async function mkBrowser() {
     args: runHeadless ? ["--no-sandbox", "--disable-setuid-sandbox"] : [],
     slowMo: 0,
     headless: runHeadless,
-    timeout: 2000,
+    timeout: 10000,
     defaultViewport: { width: 1920, height: 1080 },
   })
 }
