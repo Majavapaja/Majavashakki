@@ -45,7 +45,7 @@
     "io-ts": "^1.10.4",
     "lodash": "^4.17.15",
     "mobx": "^5.15.4",
-    "mobx-react": "^5.4.4",
+    "mobx-react": "^6.1.8",
     "mongodb": "^3.5.3",
     "mongoose": "^5.9.1",
     "passport": "^0.4.1",
