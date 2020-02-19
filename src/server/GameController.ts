@@ -20,20 +20,22 @@ const flatten = xs => [].concat(...xs)
 
 export default {
   getGameList: jsonAPI<ApiGameInfo[]>(async req => {
+    const user = req.user as IUserDocument
     const inProgress = parseBoolean(req.query.inProgress)
-    const games = await Game.getGameList(req.user._id, inProgress)
+    const games = await Game.getGameList(user._id, inProgress)
     return await gamesToGamesListResponse(games)
   }),
 
   getGame: jsonAPI<IGame>(async req => {
     const {session, params: {id}} = req
+    const user = req.user as IUserDocument
     const socket = SessionSocketMap[session.id];
 
     const game = await Game.findGame(id)
     if (!game) throw new NotFoundError(`Game '${id}' not found`)
 
-    if (!isPartOfTheGame(game, req.user.id)) {
-      console.log(`Player attempted to look at a game he is not part of (userId: ${req.user.id}, gameId: ${game.id})`)
+    if (!isPartOfTheGame(game, user.id)) {
+      console.log(`Player attempted to look at a game he is not part of (userId: ${user.id}, gameId: ${game.id})`)
       throw new NotFoundError(`Game '${id}' not found`)
     }
 
@@ -55,13 +57,14 @@ export default {
 
   joinGame: jsonAPI<IGame>(async req => {
     const {session, params: {id}} = req
+    const user = req.user as IUserDocument
     const socket = SessionSocketMap[session.id];
-    const userId = String(req.user._id)
+    const userId = String(user._id)
 
     const doc = await Game.findGame(id);
     if (!doc) throw new NotFoundError(`Game '${id}' not found`)
 
-    console.log(`User '${req.user.email}' is joining game '${doc.title}'`)
+    console.log(`User '${user.email}' is joining game '${doc.title}'`)
 
     if (!userInGame(doc, userId)) {
       if (isFull(doc)) throw new Error(`User '${userId}' is trying to join game '${doc.id}' which is already full!`);
@@ -86,8 +89,9 @@ export default {
 
   makeMove: jsonAPI<IMoveResponse>(async req => {
     const {session, params: {id}} = req
+    const user = req.user as IUserDocument
     const data = validate<MoveRequest>(MoveRequestType, req.body)
-    const userId = String(req.user._id)
+    const userId = String(user._id)
 
     const doc = await Game.findGame(id);
     const [game, move] = await applyMove(GameEntity.MapFromDb(doc), userId, data)
@@ -104,7 +108,8 @@ export default {
 
   surrender: jsonAPI<IGame>(async req => {
     const {session, params: {gameId}} = req
-    const userId = String(req.user._id)
+    const user = req.user as IUserDocument
+    const userId = String(user._id)
 
     const doc = await Game.findGame(gameId);
     if (!isCurrentTurn(doc, userId)) {
