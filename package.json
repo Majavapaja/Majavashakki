@@ -25,7 +25,7 @@
     "@types/lodash": "^4.14.149",
     "@types/mocha": "^7.0.1",
     "@types/mongodb": "^3.1.27",
-    "@types/mongoose": "^5.5.2",
+    "@types/mongoose": "^5.7.1",
     "@types/passport": "^1.0.0",
     "@types/passport-facebook": "^2.1.9",
     "@types/passport-local": "^1.0.33",
