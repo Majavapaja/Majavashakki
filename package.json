@@ -108,6 +108,6 @@
     "parcel-bundler": "^1.12.4",
     "puppeteer": "^2.1.1",
     "tslint": "^5.20.1",
-    "tslint-react": "^4.0.0"
+    "tslint-react": "^4.2.0"
   }
 }
