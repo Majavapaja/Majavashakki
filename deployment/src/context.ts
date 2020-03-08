@@ -1,6 +1,4 @@
 import * as appservice from "@azure/arm-appservice"
-import * as msRestJs from "@azure/ms-rest-js"
-import * as msRestAzureJs from "@azure/ms-rest-azure-js"
 import * as msRestNodeAuth from "@azure/ms-rest-nodeauth"
 import { SecretClient } from "@azure/keyvault-secrets"
 import { EnvironmentCredential } from "@azure/identity"
