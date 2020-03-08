@@ -83,7 +83,7 @@ class ProfileView extends React.Component<IProfileViewProps, never> {
   }
 
   private handleEnterKey = (event: any) => {
-    if (!(event.target instanceof HTMLInputElement) || event.key !== "Enter") return;
+    if (event.key !== "Enter") return;
     return (event.target.id === this.submitField.current.id) ? this.handleSubmit() : this.submitField.current.focus();
   }
 }
