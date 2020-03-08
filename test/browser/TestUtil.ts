@@ -1,7 +1,7 @@
 import assert from "assert"
 import puppeteer from "puppeteer"
 import {start} from "../../src/server/app"
-import {clearDatabase, initTestData} from "../../src/server/mongo"
+import {clearDatabase, initTestData} from "./MongoUtil"
 
 const PORT = process.env.TEST_PORT || "3001"
 const runHeadless = !!process.env.CI
