@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import {isProd} from "../server/util"
-import { IUser, User, LoginType } from "../server/models/User"
+import {isProd} from "../../src/server/util"
+import { IUser, User, LoginType } from "../../src/server/models/User"
 import bcrypt from "bcryptjs"
 
 export async function clearDatabase() {
