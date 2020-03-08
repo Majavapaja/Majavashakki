@@ -29,12 +29,6 @@ class GameView extends React.Component<IGameViewProps, any> {
       return <div>Loading...</div>
     }
 
-    let messageProps
-
-    if (game.winner) messageProps = { message: `Winner is: ${game.winner}!`}
-    else if (game.error) messageProps = { message: game.error, type: "error" }
-    else if (game.isCheck) messageProps = { message: "Check!", type: "info" }
-
     const currentPlayer = game.currentUser.id === game.playerIdWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
     const opponentPlayer = game.currentUser.id !== game.playerIdWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
 
