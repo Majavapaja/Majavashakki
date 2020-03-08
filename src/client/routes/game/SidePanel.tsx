@@ -1,6 +1,5 @@
 import * as React from "react"
 import { WithStyles, withStyles, createStyles } from "@material-ui/core/styles"
-import { Paper } from "@material-ui/core"
 import { observer } from "mobx-react"
 import SurrenderButton from "./SurrenderButton"
 
