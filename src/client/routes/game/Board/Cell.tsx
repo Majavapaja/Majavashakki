@@ -2,6 +2,9 @@ import * as React from "react";
 import * as Majavashakki from "../../../../common/GamePieces"
 import ChessPiece from "../ChessPiece"
 import { WithStyles, createStyles, withStyles } from "@material-ui/core"
+import {IRootStore} from "../../../store/AppStore"
+import { observer, inject } from "mobx-react"
+import BoardStore from "../../../store/BoardStore"
 
 const Cell = (props: ICellProps) => {
   const dataPosition = props.position.col + props.position.row
@@ -13,7 +16,7 @@ const Cell = (props: ICellProps) => {
       data-position={dataPosition}
       className={props.classes.cell}
       style={{ backgroundColor }}
-      onClick={props.onClick}
+      onClick={() => props.boardStore.onCellClick(props.position)}
     >
       {props.piece && <ChessPiece color={props.piece.color} type={props.piece.type} />}
     </div>
@@ -25,7 +28,7 @@ interface ICellProps extends WithStyles<typeof styles> {
   cellColor: Majavashakki.PieceColor,
   piece: Majavashakki.IPiece,
   isSelected: boolean,
-  onClick: any,
+  boardStore?: BoardStore,
 }
 
 const styles = theme => createStyles({
@@ -40,4 +43,5 @@ const styles = theme => createStyles({
   },
 })
 
-export default withStyles(styles)(Cell)
+const boardStore = (stores: IRootStore) => ({ boardStore: stores.app.game.boardStore})
+export default inject(boardStore)(withStyles(styles)(Cell))
