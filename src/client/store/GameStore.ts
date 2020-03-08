@@ -159,7 +159,7 @@ export default class GameStore extends GameBase {
     }
 
     console.log("Received game_updated message, setting game state")
-    await this.updateGameData(game)
+    this.updateGameData(game)
   }
 
   @computed
