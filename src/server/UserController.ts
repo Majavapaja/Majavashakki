@@ -21,7 +21,7 @@ export default {
 
   postUser: jsonAPI<void>(async req => {
     const userUpdate = validate<UserUpdateRequest>(UserUpdateRequestType, req.body)
-    const {_id, name} = req.user as IUserDocument
+    const {_id} = req.user as IUserDocument
     try {
       console.log(`Updating user ${_id}:`, userUpdate);
       await User.findOneAndUpdate({_id}, userUpdate).exec()

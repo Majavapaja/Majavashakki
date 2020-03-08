@@ -88,7 +88,7 @@ export default {
   }),
 
   makeMove: jsonAPI<IMoveResponse>(async req => {
-    const {session, params: {id}} = req
+    const {params: {id}} = req
     const user = req.user as IUserDocument
     const data = validate<MoveRequest>(MoveRequestType, req.body)
     const userId = String(user._id)
@@ -107,7 +107,7 @@ export default {
   }),
 
   surrender: jsonAPI<IGame>(async req => {
-    const {session, params: {gameId}} = req
+    const {params: {gameId}} = req
     const user = req.user as IUserDocument
     const userId = String(user._id)
 
