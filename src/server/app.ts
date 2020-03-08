@@ -6,7 +6,7 @@ import { MongooseClient } from "./data/MongooseClient";
 import { enableSessions } from "./session";
 import { SocketServer, initSockets} from "./Sockets";
 import { initPassport } from "./auth"
-import Routes from "./Routes";
+import router from "./router";
 
 const siteName = process.env.WEBSITE_SITE_NAME; // Azure default
 
@@ -25,7 +25,7 @@ export const start = async (port: string) => {
   const server = createServer(app);
   SocketServer.attach(server);
 
-  app.use(Routes);
+  app.use(router);
 
   await new Promise(resolve => {
     server.listen(port, () => {

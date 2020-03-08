@@ -3,7 +3,7 @@ import * as Majavashakki from "../../../../common/GamePieces"
 import ChessPiece from "../ChessPiece"
 import { WithStyles, createStyles, withStyles } from "@material-ui/core"
 import {IRootStore} from "../../../store/AppStore"
-import { observer, inject } from "mobx-react"
+import { inject } from "mobx-react"
 import BoardStore from "../../../store/BoardStore"
 
 const Cell = (props: ICellProps) => {
