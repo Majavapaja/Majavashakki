@@ -132,10 +132,10 @@ const styles = (theme: Theme) => createStyles({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
   },
   content: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
   },
   contrastText: {
     color: theme.palette.primary.contrastText,

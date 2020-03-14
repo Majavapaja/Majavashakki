@@ -45,7 +45,7 @@ const styles = theme => createStyles({
   playersContainer: {
     display: "flex",
     justifyContent: "space-between",
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing(4),
   },
 })
 
