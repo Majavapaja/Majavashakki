@@ -7,6 +7,7 @@ import GameStore from "./GameStore"
 export default class BoardStore extends BoardBase {
   @observable public pieces: Piece[]
   @observable.struct public selectedCell: Majavashakki.IPosition
+  @observable.struct public erroredCell: Majavashakki.IPosition
   @observable public moveHistory: Majavashakki.IMove[]
 
   private gameStore: GameStore
@@ -31,13 +32,18 @@ export default class BoardStore extends BoardBase {
   }
 
   @action
-  public onCellClick(position: Majavashakki.IPosition): any {
+  public async onCellClick(position: Majavashakki.IPosition): Promise<any> {
+    this.erroredCell = null
+
     if (!this.selectedCell && this.getPiece(position)) {
       this.selectedCell = position
     } else if (this.comparePos(position, this.selectedCell)) {
       this.selectedCell = null
     } else if (this.selectedCell) {
-      this.gameStore.move(this.selectedCell, position)
+      const result = await this.gameStore.move(this.selectedCell, position)
+      if (result.status === Majavashakki.MoveStatus.Error) {
+        this.erroredCell = position
+      }
       this.selectedCell = null
     }
   }
@@ -59,6 +65,7 @@ export default class BoardStore extends BoardBase {
           piece,
           cellColor: this.getCellColor(position),
           isSelected: this.comparePos(this.selectedCell, position),
+          isError: this.comparePos(this.erroredCell, position),
         })
       }
     }
