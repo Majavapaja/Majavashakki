@@ -5,6 +5,7 @@ import { getPieceType, getMoveMetadata, MoveMetadata } from "../../../../common/
 
 export default class MessagePanelStore {
   private _appStore: AppStore;
+
   public constructor(appStore: AppStore) {
     this._appStore = appStore;
   }
@@ -15,17 +16,11 @@ export default class MessagePanelStore {
       const moveColor = index % 2 === 0 ?  Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black;
 
       const pieceType = `:${getPieceType(move.algebraicNotation)}-${moveColor}:`
-      const capturedPieceType = move.capturedPieceType ? `:${move.capturedPieceType}-${getOppositeColor(moveColor)}: ` : ""
-      const moveMetadata = getMoveMetadata(move.algebraicNotation)
-      const enpassant = (moveMetadata & MoveMetadata.Enpassant) === MoveMetadata.Enpassant ? " en passant" : ""
-      const check = (moveMetadata & MoveMetadata.Check) === MoveMetadata.Check ? " check" : ""
-      const checkMate = (moveMetadata & MoveMetadata.Checkmate) === MoveMetadata.Checkmate ? " checkmate" : ""
+      const moveMessage = `${pieceType} ${positionStr(move.start)} -> ${positionStr(move.destination)}`
 
       return {
         actor: this.getPlayerActor(moveColor),
-        body: `${pieceType} ${positionStr(move.start)} -> ${positionStr(move.destination)} ${capturedPieceType}` +
-              enpassant +
-              (checkMate || check),
+        body: moveMessage + this.getOptionalMoveData(move, moveColor)
       }
     })
   }
@@ -34,7 +29,18 @@ export default class MessagePanelStore {
     pieceColor: color,
     isCurrentUser: this._appStore.game.currentUserColor === color,
     name: color === Majavashakki.PieceColor.White ? this._appStore.game.playerWhite.name : this._appStore.game.playerBlack.name,
-  });
+  })
+
+  private getOptionalMoveData = (move: Majavashakki.IMove, moveColor: Majavashakki.PieceColor) => {
+      const capturedPieceType = move.capturedPieceType ? ` :${move.capturedPieceType}-${getOppositeColor(moveColor)}: ` : ""
+
+      const moveMetadata = getMoveMetadata(move.algebraicNotation)
+      const enpassant = (moveMetadata & MoveMetadata.Enpassant) === MoveMetadata.Enpassant ? " en passant" : ""
+      const check = (moveMetadata & MoveMetadata.Check) === MoveMetadata.Check ? " check" : ""
+      const checkMate = (moveMetadata & MoveMetadata.Checkmate) === MoveMetadata.Checkmate ? " checkmate" : ""
+
+      return capturedPieceType + enpassant + (checkMate || check)
+  }
 
 }
 
