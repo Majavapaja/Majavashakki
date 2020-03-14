@@ -13,8 +13,8 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     ])
 
     await makeMove(black, "d8", "h4")
-    await checkText(white, "#blackBadge.winner", "John Doe")
-    await checkText(black, "#blackBadge.winner", "John Doe")
+    await checkText(white, "#blackBadge.isWinner", "John Doe")
+    await checkText(black, "#blackBadge.isWinner", "John Doe")
   })
 
   // "This sample chess game was played between Paul Morphy and his two
@@ -53,8 +53,8 @@ Util.browserSpec("Game", {numBrowsers: 2}, function() {
     ])
     await makeMove(white, "d1", "d8")
 
-    await checkText(white, "#whiteBadge.winner", "John Smith")
-    await checkText(black, "#whiteBadge.winner", "John Smith")
+    await checkText(white, "#whiteBadge.isWinner", "John Smith")
+    await checkText(black, "#whiteBadge.isWinner", "John Smith")
   })
 
   it("implments pawn promotion correctly", async function() {
@@ -163,5 +163,5 @@ async function setupGame(white, black) {
 }
 
 async function waitForTurn(page, color) {
-  await page.waitForSelector(`#${color}Badge.active`)
+  await page.waitForSelector(`#${color}Badge.isActive`)
 }

@@ -33,7 +33,7 @@ Util.browserSpec("Login", {numBrowsers: 1}, function() {
     await page.waitForNavigation()
     await checkLocation(page, "/")
 
-    await Util.countInPage(page, "#game-filter", 3)
+    await Util.countInPage(page, "input[id^='game-filter']", 3)
   })
 
   it("login works", async function() {
@@ -55,7 +55,7 @@ Util.browserSpec("Login", {numBrowsers: 1}, function() {
     ])
 
     await checkLocation(page, "/")
-    await Util.countInPage(page, "#game-filter", 3)
+    await Util.countInPage(page, "input[id^='game-filter']", 3)
   })
 
   it("error if registering user with existing email", async function() {
