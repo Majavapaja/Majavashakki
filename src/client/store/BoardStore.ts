@@ -14,7 +14,7 @@ export default class BoardStore extends BoardBase {
     constructor(gameStore: GameStore, pieces?: Piece[], moveHistory?: Majavashakki.IMove[]) {
         super(pieces, moveHistory)
         this.gameStore = gameStore
-        // Decorate position in pieces, so it's changes will be noticed.
+        // Decorate position in pieces, so their changes will be noticed.
         pieces.forEach(piece => decorate(piece, { position: observable }))
     }
 
