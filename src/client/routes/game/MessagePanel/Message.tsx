@@ -11,11 +11,11 @@ class Message extends React.Component<IMessageProps, any> {
         const playerClass = content.actor.isCurrentUser ? classes.activePlayer : classes.inactivePlayer
 
         return (
-            <Typography className={classes.text}>
+            <Typography className={classes.messageRow}>
                 <Typography component="span" className={playerClass}>
                     {content.actor.name.substr(0, 15)}
                 </Typography>
-                <Typography component="span" className={classes.textContainer}>
+                <Typography component="span" className={classes.messageContent}>
                   {this.buildMessage()}
                 </Typography>
             </Typography>
@@ -33,7 +33,7 @@ class Message extends React.Component<IMessageProps, any> {
         const before = message.substr(0, message.indexOf(iconStr))
         if (before) {
           const txtBefore = (
-            <Typography component="span" key={components.length}>
+            <Typography className={this.props.classes.messageText} component="span" key={components.length}>
               {before}
             </Typography>
           )
@@ -56,7 +56,7 @@ class Message extends React.Component<IMessageProps, any> {
       }
 
       const txtAfter = (
-        <Typography component="span" key={components.length}>
+        <Typography className={this.props.classes.messageText} component="span" key={components.length}>
           {message}
         </Typography>
       )
@@ -75,20 +75,23 @@ const styles = () => ({
       color: "#A45050",
       flex: 1,
     },
-    text: {
+    messageRow: {
       display: "flex",
     },
-    textContainer: {
+    messageContent: {
       display: "flex",
       alignItems: "center",
       flex: 7,
       whiteSpace: "pre",
     },
+    messageText:  {
+      fontFamily: "monospace",
+    },
     icon: {
       width: "15px",
       height: "15px",
       display: "block",
-      backgroundColor: "grey",
+      backgroundColor: "#b9b9b9",
       borderRadius: "12px",
       padding: "1px",
     },

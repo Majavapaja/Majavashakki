@@ -29,7 +29,7 @@ export default class MessagePanelStore {
 
       return {
         actor,
-        body: `${pieceType} ${positionStr(move.start)}  ->  ${positionStr(move.destination)} ${capturedPieceType}` +
+        body: `${pieceType} ${positionStr(move.start)} -> ${positionStr(move.destination)} ${capturedPieceType}` +
               enpassant +
               (checkMate || check)
       }
