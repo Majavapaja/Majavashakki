@@ -9,9 +9,25 @@ import MessagePanelStore from "./MessagePanelStore"
 @inject((stores: IRootStore) => ({ store: stores.app.messagePanel }))
 @observer
 class MessagePanel extends React.Component<IMessagePanelProps, any> {
+  private _containerRef: Element
+  private setContainerRef = (element: Element) => this._containerRef = element
+  private scrollToBottom = () => this._containerRef.scrollTo({ top: this._containerRef.scrollHeight })
+
+  public componentDidMount() {
+    this.scrollToBottom()
+  }
+
+  public componentDidUpdate() {
+    this.scrollToBottom()
+  }
+
   public render() {
+
     return (
-      <Paper className={this.props.classes.container}>
+      <Paper
+        className={this.props.classes.container}
+        ref={this.setContainerRef}
+      >
         {this.props.store.parsedMoves.map((message, index) => {
           return (
             <Message content={message} key={index} />
