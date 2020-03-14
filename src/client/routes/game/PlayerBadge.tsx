@@ -1,7 +1,7 @@
 import * as React from "react"
 import { withStyles, WithStyles, Theme, createStyles } from "@material-ui/core/styles"
 import { observer, inject } from "mobx-react"
-import { Chip, Avatar, Button } from "@material-ui/core"
+import { Chip, Avatar } from "@material-ui/core"
 import classNames from "classnames"
 import { IRootStore } from "../../store/AppStore"
 import GameStore from "../../store/GameStore"
