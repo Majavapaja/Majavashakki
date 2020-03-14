@@ -110,17 +110,19 @@ export const setCheck = (notation: Majavashakki.AlgebraicNotation, move: Majavas
 }
 
 export enum MoveMetadata {
-  Castling = 1 << 0,
-  Enpassant = 1 << 1,
-  Capture = 1 << 2,
-  Check = 1 << 3,
-  Checkmate = 1 << 4,
+  KingCastling = 1 << 0,
+  QueenCastling = 1 << 1,
+  Enpassant = 1 << 2,
+  Capture = 1 << 3,
+  Check = 1 << 4,
+  Checkmate = 1 << 5,
 }
 
 export const getMoveMetadata = (algebraicNotation: Majavashakki.AlgebraicNotation): MoveMetadata => {
   let metadata: MoveMetadata;
 
-  if (algebraicNotation.includes("0-0")) metadata |= MoveMetadata.Castling;
+  if (algebraicNotation === "0-0") metadata |= MoveMetadata.KingCastling;
+  if (algebraicNotation === "0-0-0") metadata |= MoveMetadata.QueenCastling;
   if (algebraicNotation.includes("e.p.")) metadata |= MoveMetadata.Enpassant;
   if (algebraicNotation.includes("x")) metadata |= MoveMetadata.Capture;
   if (algebraicNotation.includes("+")) metadata |= MoveMetadata.Check;
