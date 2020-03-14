@@ -34,9 +34,11 @@ class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
 const styles = (theme: Theme) => ({
   root: {
     margin: "0 20px",
+    opacity: 0.5,
     "&.active": {
-      backgroundColor: theme.palette.primary.main,
-      color: theme.palette.primary.contrastText,
+      backgroundColor: "#EBEBEB",
+      color: "#000",
+      opacity: 1,
     },
     "&.winner": {
       backgroundColor: "green",
