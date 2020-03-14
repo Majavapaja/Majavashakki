@@ -1,12 +1,12 @@
 import assert from "assert"
 import puppeteer from "puppeteer"
-import {start} from "../../src/server/app"
-import {clearDatabase, initTestData} from "./MongoUtil"
+import { start } from "../../src/server/app"
+import { clearDatabase, initTestData } from "./MongoUtil"
 
 const PORT = process.env.TEST_PORT || "3001"
 const runHeadless = !!process.env.CI
 
-export function browserSpec(name, {numBrowsers}, func) {
+export function browserSpec(name, { numBrowsers }, func) {
   describe(name, function() {
     this.timeout(60_000)
 
@@ -71,9 +71,9 @@ export async function existsInPage(page, selector) {
 }
 
 export async function countInPage(page, selector, count) {
-  await page.waitForSelector(selector, {visible: true})
+  await page.waitForSelector(selector, { visible: true })
   const elements = await page.$$(selector)
-  assert.strictEqual(elements.length, count);
+  assert.strictEqual(elements.length, count)
 }
 
 // Waits until the element exists and clicks it

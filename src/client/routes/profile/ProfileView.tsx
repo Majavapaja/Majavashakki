@@ -1,10 +1,10 @@
-import * as React from "react";
-import { withRouter, RouteComponentProps } from "react-router-dom";
-import {TextField, WithStyles, withStyles, createStyles, Button, Typography, Paper} from "@material-ui/core";
-import { inject, observer } from "mobx-react";
-import { IRootStore } from "client/store/AppStore";
-import UserStore from "client/store/UserStore";
-import { observable } from "mobx";
+import * as React from "react"
+import { withRouter, RouteComponentProps } from "react-router-dom"
+import { TextField, WithStyles, withStyles, createStyles, Button, Typography, Paper } from "@material-ui/core"
+import { inject, observer } from "mobx-react"
+import { IRootStore } from "client/store/AppStore"
+import UserStore from "client/store/UserStore"
+import { observable } from "mobx"
 
 class ProfileViewForm {
   @observable public email: string = ""
@@ -14,11 +14,11 @@ class ProfileViewForm {
 @inject((stores: IRootStore) => ({ userStore: stores.app.user }))
 @observer
 class ProfileView extends React.Component<IProfileViewProps, never> {
-  private submitField: any = React.createRef();
+  private submitField: any = React.createRef()
   private form = new ProfileViewForm()
 
   constructor(props: IProfileViewProps) {
-    super(props);
+    super(props)
   }
 
   public async componentDidMount() {
@@ -32,9 +32,7 @@ class ProfileView extends React.Component<IProfileViewProps, never> {
       <div className={this.props.classes.root}>
         <Paper className={this.props.classes.container}>
           <Typography variant="h5">Profile</Typography>
-          <form
-            onKeyPress={this.handleEnterKey}
-          >
+          <form onKeyPress={this.handleEnterKey}>
             <TextField
               autoFocus
               required
@@ -71,7 +69,7 @@ class ProfileView extends React.Component<IProfileViewProps, never> {
     )
   }
 
-  public onInputChange = ({target}) => {
+  public onInputChange = ({ target }) => {
     this.form[target.id] = target.value
   }
 
@@ -83,34 +81,35 @@ class ProfileView extends React.Component<IProfileViewProps, never> {
   }
 
   private handleEnterKey = (event: any) => {
-    if (event.key !== "Enter") return;
-    return (event.target.id === this.submitField.current.id) ? this.handleSubmit() : this.submitField.current.focus();
+    if (event.key !== "Enter") return
+    return event.target.id === this.submitField.current.id ? this.handleSubmit() : this.submitField.current.focus()
   }
 }
 
 interface IProfileViewProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
-  userStore: UserStore;
+  userStore: UserStore
 }
 
-const styles = () => createStyles({
-  root: {
-    height: "100vh",
-    display: "flex",
-    alignItems: "flex-start",
-    justifyContent: "center",
-    paddingTop: 20,
-  },
-  container: {
-    width: "60vmin",
-    textAlign: "center",
-    padding: 20,
-  },
-  textField: {
-    width: "50%",
-  },
-  button: {
-    margin: "10px 0",
-  },
-});
+const styles = () =>
+  createStyles({
+    root: {
+      height: "100vh",
+      display: "flex",
+      alignItems: "flex-start",
+      justifyContent: "center",
+      paddingTop: 20,
+    },
+    container: {
+      width: "60vmin",
+      textAlign: "center",
+      padding: 20,
+    },
+    textField: {
+      width: "50%",
+    },
+    button: {
+      margin: "10px 0",
+    },
+  })
 
-export default withStyles(styles)(withRouter(ProfileView));
+export default withStyles(styles)(withRouter(ProfileView))

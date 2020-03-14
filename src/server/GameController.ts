@@ -1,11 +1,13 @@
-import { User, IUserDocument } from "./models/User";
-import { Game, IGameDocument, addPlayer, isFull, userInGame } from "./models/Game";
-import { SessionSocketMap, notifyGame, notifyLobby, notifyUser } from "./Sockets";
-import GameEntity from "./entities/Game";
+import { User, IUserDocument } from "./models/User"
+import { Game, IGameDocument, addPlayer, isFull, userInGame } from "./models/Game"
+import { SessionSocketMap, notifyGame, notifyLobby, notifyUser } from "./Sockets"
+import GameEntity from "./entities/Game"
 import { jsonAPI, NotFoundError, validate, ValidationError } from "./json"
 import {
-  CreateGameRequestType, CreateGameRequest,
-  MoveRequest, MoveRequestType,
+  CreateGameRequestType,
+  CreateGameRequest,
+  MoveRequest,
+  MoveRequestType,
   ApiPlayerDetails,
 } from "../common/types"
 import * as Majavashakki from "../common/GamePieces"
@@ -27,9 +29,12 @@ export default {
   }),
 
   getGame: jsonAPI<IGame>(async req => {
-    const {session, params: {id}} = req
+    const {
+      session,
+      params: { id },
+    } = req
     const user = req.user as IUserDocument
-    const socket = SessionSocketMap[session.id];
+    const socket = SessionSocketMap[session.id]
 
     const game = await Game.findGame(id)
     if (!game) throw new NotFoundError(`Game '${id}' not found`)
@@ -49,27 +54,30 @@ export default {
 
   postGame: jsonAPI<IGame>(async req => {
     const body = validate<CreateGameRequest>(CreateGameRequestType, req.body)
-    console.log(`Creating a new game '${body.title}'`);
+    console.log(`Creating a new game '${body.title}'`)
 
     const game = await Game.findOrCreate(body.title)
     return gameDocumentToApiResult(game, [])
   }),
 
   joinGame: jsonAPI<IGame>(async req => {
-    const {session, params: {id}} = req
+    const {
+      session,
+      params: { id },
+    } = req
     const user = req.user as IUserDocument
-    const socket = SessionSocketMap[session.id];
+    const socket = SessionSocketMap[session.id]
     const userId = String(user._id)
 
-    const doc = await Game.findGame(id);
+    const doc = await Game.findGame(id)
     if (!doc) throw new NotFoundError(`Game '${id}' not found`)
 
     console.log(`User '${user.email}' is joining game '${doc.title}'`)
 
     if (!userInGame(doc, userId)) {
-      if (isFull(doc)) throw new Error(`User '${userId}' is trying to join game '${doc.id}' which is already full!`);
+      if (isFull(doc)) throw new Error(`User '${userId}' is trying to join game '${doc.id}' which is already full!`)
 
-      addPlayer(doc, userId);
+      addPlayer(doc, userId)
       await doc.save()
     }
 
@@ -88,12 +96,14 @@ export default {
   }),
 
   makeMove: jsonAPI<IMoveResponse>(async req => {
-    const {params: {id}} = req
+    const {
+      params: { id },
+    } = req
     const user = req.user as IUserDocument
     const data = validate<MoveRequest>(MoveRequestType, req.body)
     const userId = String(user._id)
 
-    const doc = await Game.findGame(id);
+    const doc = await Game.findGame(id)
     const [game, move] = await applyMove(GameEntity.MapFromDb(doc), userId, data)
 
     if (move.status === Majavashakki.MoveStatus.Error) {
@@ -107,11 +117,13 @@ export default {
   }),
 
   surrender: jsonAPI<IGame>(async req => {
-    const {params: {gameId}} = req
+    const {
+      params: { gameId },
+    } = req
     const user = req.user as IUserDocument
     const userId = String(user._id)
 
-    const doc = await Game.findGame(gameId);
+    const doc = await Game.findGame(gameId)
     if (!isCurrentTurn(doc, userId)) {
       throw new ValidationError(["Can't surrender on your opponents turn"])
     }
@@ -128,9 +140,9 @@ export default {
 }
 
 async function gamesToGamesListResponse(games: IGameDocument[]): Promise<ApiGameInfo[]> {
-    const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
-    const players = await User.findByIds(playerIds)
-    return games.map(formatGamesListResponse(players))
+  const playerIds = removeFalsy(flatten(games.map(g => [g.playerIdBlack, g.playerIdWhite])))
+  const players = await User.findByIds(playerIds)
+  return games.map(formatGamesListResponse(players))
 }
 
 function isCurrentTurn(doc: IGameDocument, userId: string): boolean {
@@ -144,7 +156,7 @@ function isPartOfTheGame(game: IGameDocument, userId: string): boolean {
 
 function formatGamesListResponse(players: IUserDocument[]) {
   return function(game: IGameDocument): ApiGameInfo {
-    const {_id, title} = game
+    const { _id, title } = game
     return {
       id: _id,
       title,
@@ -175,7 +187,7 @@ function gameDocumentToApiResult(doc: IGameDocument, players: IUserDocument[]): 
 
 function userDocumentToPlayerDetails(doc?: IUserDocument): ApiPlayerDetails | undefined {
   if (!doc) return undefined
-  return {id: doc._id, name: doc.name}
+  return { id: doc._id, name: doc.name }
 }
 
 function parseBoolean(value: any): boolean {

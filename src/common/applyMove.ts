@@ -1,7 +1,11 @@
 import GameEntity from "../server/entities/Game"
 import * as Majavashakki from "./GamePieces"
 
-export default async function applyMove(game: GameEntity, userId: string, data: any): Promise<[GameEntity, Majavashakki.IMoveResponse]> {
+export default async function applyMove(
+  game: GameEntity,
+  userId: string,
+  data: any
+): Promise<[GameEntity, Majavashakki.IMoveResponse]> {
   const moveResult = await game.move(data.from, data.dest, userId, data.promotionType)
   if (moveResult.status !== Majavashakki.MoveStatus.Error) {
     game.changeTurn()

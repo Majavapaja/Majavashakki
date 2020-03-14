@@ -13,18 +13,21 @@ export interface ILogin {
   type: LoginType
   password?: string
 }
-const LoginSchema = new Schema({
-  loginId: String,
-  type: {
-    type: String,
-    validate: {
-      validator: value => Boolean(LoginType[value]),
-      message: props => `${props.value} is not valid login type`,
-    } as any,
+const LoginSchema = new Schema(
+  {
+    loginId: String,
+    type: {
+      type: String,
+      validate: {
+        validator: value => Boolean(LoginType[value]),
+        message: props => `${props.value} is not valid login type`,
+      } as any,
+    },
+    password: String,
   },
-  password: String,
-}, { _id: false })
-export interface ILoginDocument extends ILogin, Document { }
+  { _id: false }
+)
+export interface ILoginDocument extends ILogin, Document {}
 
 export interface IUser {
   name: string
@@ -33,8 +36,8 @@ export interface IUser {
 }
 const UserSchema = new Schema({
   name: { type: String, index: true },
-  email: { type: String, index: true},
-  logins: [ LoginSchema ],
+  email: { type: String, index: true },
+  logins: [LoginSchema],
 })
 export interface IUserDocument extends IUser, Document {
   isCorrectPassword(password: string): Promise<boolean>
@@ -47,7 +50,7 @@ export interface IUserModel extends Model<IUserDocument> {
     loginType: LoginType,
     password?: string,
     email?: string,
-    name?: string,
+    name?: string
   ): Promise<IUserDocument | undefined>
   findByIds(ids: string[]): Promise<IUserDocument[]>
   findByLoginId(loginType: LoginType, loginId: string): Promise<IUserDocument | undefined>
@@ -65,7 +68,7 @@ LoginSchema.pre("save", async function() {
 /** Statics */
 
 UserSchema.statics.save = async (user: global.IUserContract): Promise<IUserDocument> => {
-  return await User.findByIdAndUpdate(user.id, {name: user.name, email: user.email}).exec()
+  return await User.findByIdAndUpdate(user.id, { name: user.name, email: user.email }).exec()
 }
 
 UserSchema.statics.registerUser = async (
@@ -73,7 +76,7 @@ UserSchema.statics.registerUser = async (
   loginType: LoginType,
   password?: string,
   email?: string,
-  name?: string,
+  name?: string
 ): Promise<IUserDocument | undefined> => {
   const login = {
     loginId,
@@ -84,7 +87,7 @@ UserSchema.statics.registerUser = async (
   const user = {
     email,
     name,
-    logins: [ login ],
+    logins: [login],
   } as IUser
 
   const doc = new User(user)
@@ -119,4 +122,4 @@ UserSchema.methods.isCorrectPassword = async function(password: string): Promise
   return await bcrypt.compare(password, login.password)
 }
 
-export const User: IUserModel = model<IUserDocument, IUserModel>("User", UserSchema, "users");
+export const User: IUserModel = model<IUserDocument, IUserModel>("User", UserSchema, "users")

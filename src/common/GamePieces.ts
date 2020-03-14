@@ -1,17 +1,17 @@
-import {ApiPlayerDetails} from "./types"
+import { ApiPlayerDetails } from "./types"
 
 export interface IGame {
   // error TS2320: Interface 'IGameDocument' cannot simultaneously extend types 'IGame' and 'Document'.
   // Named property 'id' of types 'IGame' and 'Document' are not identical.
-  id?: any;
+  id?: any
 
-  title: string;
-  currentTurn: PieceColor;
-  playerIdWhite?: string;
-  playerIdBlack?: string;
-  board: IBoard;
-  isCheck: boolean;
-  isCheckmate: boolean;
+  title: string
+  currentTurn: PieceColor
+  playerIdWhite?: string
+  playerIdBlack?: string
+  board: IBoard
+  isCheck: boolean
+  isCheckmate: boolean
 
   playerBlack?: ApiPlayerDetails
   playerWhite?: ApiPlayerDetails
@@ -20,42 +20,42 @@ export interface IGame {
 }
 
 export interface IBoard {
-  pieces: IPiece[];
-  moveHistory: IMove[];
+  pieces: IPiece[]
+  moveHistory: IMove[]
 }
 
 export interface IPosition {
-  col: string;
-  row: string;
+  col: string
+  row: string
 }
 
 export interface IPiece {
-  type: PieceType;
+  type: PieceType
   color: PieceColor
-  position: IPosition;
-  hasMoved: boolean;
+  position: IPosition
+  hasMoved: boolean
 }
 
 export interface IMoveResponse {
-  status: MoveStatus;
-  result: MoveType;
-  start: IPosition;
-  destination: IPosition;
-  error?: string;
-  isCheck: boolean;
-  isCheckmate: boolean;
-  isDraw: boolean;
-  promotionType: PieceType;
+  status: MoveStatus
+  result: MoveType
+  start: IPosition
+  destination: IPosition
+  error?: string
+  isCheck: boolean
+  isCheckmate: boolean
+  isDraw: boolean
+  promotionType: PieceType
 }
 
 // Check https://en.wikipedia.org/wiki/Algebraic_notation_(chess)
 export type AlgebraicNotation = string
 
 export interface IMove {
-  start: IPosition;
-  destination: IPosition;
-  algebraicNotation: AlgebraicNotation;
-  capturedPieceType?: PieceType;
+  start: IPosition
+  destination: IPosition
+  algebraicNotation: AlgebraicNotation
+  capturedPieceType?: PieceType
 }
 
 export enum PieceType {

@@ -2,25 +2,30 @@ import BoardBase from "./BoardBase"
 import * as Majavashakki from "./GamePieces"
 
 export default abstract class GameBase implements Majavashakki.IGame {
-  public title: string;
-  public currentTurn: Majavashakki.PieceColor;
-  public playerIdWhite: string;
-  public playerIdBlack: string;
-  public board: BoardBase;
-  public isCheck: boolean;
-  public isCheckmate: boolean;
-  public inProgress: boolean = true;
+  public title: string
+  public currentTurn: Majavashakki.PieceColor
+  public playerIdWhite: string
+  public playerIdBlack: string
+  public board: BoardBase
+  public isCheck: boolean
+  public isCheckmate: boolean
+  public inProgress: boolean = true
   public surrenderer?: string
 
   constructor(title: string) {
-    this.title = title;
-    this.board = new BoardBase();
+    this.title = title
+    this.board = new BoardBase()
 
     // White always starts in chess
-    this.currentTurn = Majavashakki.PieceColor.White;
+    this.currentTurn = Majavashakki.PieceColor.White
   }
 
-  public async move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, userId: string, promotionPiece?: Majavashakki.PieceType): Promise<Majavashakki.IMoveResponse> {
+  public async move(
+    start: Majavashakki.IPosition,
+    destination: Majavashakki.IPosition,
+    userId: string,
+    promotionPiece?: Majavashakki.PieceType
+  ): Promise<Majavashakki.IMoveResponse> {
     if (!this.doesUserOwnPiece(userId, start)) {
       return {
         status: Majavashakki.MoveStatus.Error,

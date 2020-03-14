@@ -10,7 +10,7 @@ import MessagePanelStore from "./MessagePanelStore"
 @observer
 class MessagePanel extends React.Component<IMessagePanelProps, any> {
   private _containerRef: Element
-  private setContainerRef = (element: Element) => this._containerRef = element
+  private setContainerRef = (element: Element) => (this._containerRef = element)
   private scrollToBottom = () => this._containerRef.scrollTo({ top: this._containerRef.scrollHeight })
 
   public componentDidMount() {
@@ -22,16 +22,10 @@ class MessagePanel extends React.Component<IMessagePanelProps, any> {
   }
 
   public render() {
-
     return (
-      <Paper
-        className={this.props.classes.container}
-        ref={this.setContainerRef}
-      >
+      <Paper className={this.props.classes.container} ref={this.setContainerRef}>
         {this.props.store.parsedMoves.map((message, index) => {
-          return (
-            <Message content={message} key={index} />
-          )
+          return <Message content={message} key={index} />
         })}
       </Paper>
     )
@@ -39,15 +33,16 @@ class MessagePanel extends React.Component<IMessagePanelProps, any> {
 }
 
 interface IMessagePanelProps extends WithStyles<typeof styles> {
-  store?: MessagePanelStore,
+  store?: MessagePanelStore
 }
 
-const styles = () => createStyles({
-  container: {
-    height: "20vmin",
-    padding: 10,
-    overflow: "auto",
-  },
-})
+const styles = () =>
+  createStyles({
+    container: {
+      height: "20vmin",
+      padding: 10,
+      overflow: "auto",
+    },
+  })
 
 export default withStyles(styles)(MessagePanel)

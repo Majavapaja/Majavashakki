@@ -24,32 +24,33 @@ const EndScreen = (props: IEndScreenProps) => (
   </div>
 )
 
-interface IEndScreenProps extends WithStyles<typeof styles> { }
+interface IEndScreenProps extends WithStyles<typeof styles> {}
 
-const styles = (theme: Theme) => createStyles({
-  "@keyframes timangi": {
-    "0%": {
-      transform: "translateY(0vh)",
+const styles = (theme: Theme) =>
+  createStyles({
+    "@keyframes timangi": {
+      "0%": {
+        transform: "translateY(0vh)",
+      },
+      "75%": {
+        transform: "translateY(95vh)",
+      },
+      "100%": {
+        transform: "translateY(100vh)",
+      },
     },
-    "75%": {
-      transform: "translateY(95vh)",
+    root: {
+      pointerEvents: "none",
+      width: "100vw",
+      height: "100vh",
+      position: "fixed",
+      top: 0,
+      left: 0,
     },
-    "100%": {
-      transform: "translateY(100vh)",
+    timangi: {
+      position: "absolute",
+      animation: "timangi 1.5s linear infinite",
     },
-  },
-  root: {
-    pointerEvents: "none",
-    width: "100vw",
-    height: "100vh",
-    position: "fixed",
-    top: 0,
-    left: 0,
-  },
-  timangi: {
-    position: "absolute",
-    animation: "timangi 1.5s linear infinite",
-  },
-})
+  })
 
 export default withStyles(styles)(EndScreen)

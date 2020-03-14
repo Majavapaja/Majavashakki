@@ -1,5 +1,5 @@
 import * as Majavashakki from "../GamePieces"
-import BoardBase from "../BoardBase";
+import BoardBase from "../BoardBase"
 
 const getPieceNotation = (type: Majavashakki.PieceType): string => {
   switch (type) {
@@ -19,34 +19,40 @@ const getPieceNotation = (type: Majavashakki.PieceType): string => {
 }
 
 export const getPieceType = (algebraicNotation: string): Majavashakki.PieceType => {
-  const typeChar = algebraicNotation[0];
+  const typeChar = algebraicNotation[0]
 
   switch (typeChar) {
     case "K":
-      return Majavashakki.PieceType.King;
+      return Majavashakki.PieceType.King
     case "Q":
-      return Majavashakki.PieceType.Queen;
+      return Majavashakki.PieceType.Queen
     case "R":
-      return Majavashakki.PieceType.Rook;
+      return Majavashakki.PieceType.Rook
     case "B":
-      return Majavashakki.PieceType.Bishop;
+      return Majavashakki.PieceType.Bishop
     case "N":
-      return Majavashakki.PieceType.Knight;
+      return Majavashakki.PieceType.Knight
     default:
-      return Majavashakki.PieceType.Pawn;
+      return Majavashakki.PieceType.Pawn
   }
 }
 
-const getDisambiguation = (board: BoardBase, start: Majavashakki.IPosition, destination: Majavashakki.IPosition): string => {
+const getDisambiguation = (
+  board: BoardBase,
+  start: Majavashakki.IPosition,
+  destination: Majavashakki.IPosition
+): string => {
   const startPiece = board.getPiece(start)
-  const possibleConflicts = board.pieces
-    .filter(piece => piece !== startPiece && piece.type === startPiece.type && piece.color === startPiece.color)
+  const possibleConflicts = board.pieces.filter(
+    piece => piece !== startPiece && piece.type === startPiece.type && piece.color === startPiece.color
+  )
 
   if (possibleConflicts.length === 0) return ""
 
   // Check if any of the conflicting pieces can move to the destination
-  const conflicts = possibleConflicts
-    .filter(piece => board.isValidMove(piece.position, destination).status === Majavashakki.MoveStatus.Success)
+  const conflicts = possibleConflicts.filter(
+    piece => board.isValidMove(piece.position, destination).status === Majavashakki.MoveStatus.Success
+  )
 
   if (conflicts.length === 0) return ""
 
@@ -69,7 +75,11 @@ const getDisambiguation = (board: BoardBase, start: Majavashakki.IPosition, dest
   return startPiece.position.col + startPiece.position.row
 }
 
-export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveResponse, promotionPiece?: Majavashakki.PieceType): Majavashakki.AlgebraicNotation => {
+export const getAlgebraicNotation = (
+  board: BoardBase,
+  move: Majavashakki.IMoveResponse,
+  promotionPiece?: Majavashakki.PieceType
+): Majavashakki.AlgebraicNotation => {
   const startPiece = board.getPiece(move.start)
 
   let notation: Majavashakki.AlgebraicNotation = getPieceNotation(startPiece.type)
@@ -102,7 +112,10 @@ export const getAlgebraicNotation = (board: BoardBase, move: Majavashakki.IMoveR
   return notation
 }
 
-export const setCheck = (notation: Majavashakki.AlgebraicNotation, move: Majavashakki.IMoveResponse): Majavashakki.AlgebraicNotation => {
+export const setCheck = (
+  notation: Majavashakki.AlgebraicNotation,
+  move: Majavashakki.IMoveResponse
+): Majavashakki.AlgebraicNotation => {
   if (move.isCheckmate) notation += "#"
   else if (move.isCheck) notation += "+"
 
@@ -122,14 +135,14 @@ export enum MoveMetadata {
 export const getMoveMetadata = (algebraicNotation: Majavashakki.AlgebraicNotation): MoveMetadata => {
   console.log(algebraicNotation)
 
-  let metadata: MoveMetadata;
+  let metadata: MoveMetadata
 
-  if (algebraicNotation === "0-0") metadata |= MoveMetadata.KingCastling;
-  if (algebraicNotation === "0-0-0") metadata |= MoveMetadata.QueenCastling;
-  if (algebraicNotation.includes("e.p.")) metadata |= MoveMetadata.Enpassant;
-  if (algebraicNotation.includes("x")) metadata |= MoveMetadata.Capture;
-  if (algebraicNotation.includes("+")) metadata |= MoveMetadata.Check;
-  if (algebraicNotation.includes("#")) metadata |= MoveMetadata.Checkmate;
+  if (algebraicNotation === "0-0") metadata |= MoveMetadata.KingCastling
+  if (algebraicNotation === "0-0-0") metadata |= MoveMetadata.QueenCastling
+  if (algebraicNotation.includes("e.p.")) metadata |= MoveMetadata.Enpassant
+  if (algebraicNotation.includes("x")) metadata |= MoveMetadata.Capture
+  if (algebraicNotation.includes("+")) metadata |= MoveMetadata.Check
+  if (algebraicNotation.includes("#")) metadata |= MoveMetadata.Checkmate
   if (/[QNBR]/.test(algebraicNotation.substr(1, algebraicNotation.length))) metadata |= MoveMetadata.Promotion
 
   return metadata

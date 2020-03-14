@@ -3,14 +3,14 @@ import { withRouter, RouteComponentProps } from "react-router-dom"
 import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core/styles"
 import Board from "./Board"
 import { observer, inject } from "mobx-react"
-import {IRootStore} from "../../store/AppStore"
+import { IRootStore } from "../../store/AppStore"
 import GameStore from "../../store/GameStore"
 import EndScreen from "./EndScreen"
 import MessagePanel from "./MessagePanel"
 import PlayerBadge from "./PlayerBadge"
 import * as Majavashakki from "../../../common/GamePieces"
 
-@inject((stores: IRootStore) => ({game: stores.app.game}))
+@inject((stores: IRootStore) => ({ game: stores.app.game }))
 @observer
 class GameView extends React.Component<IGameViewProps, any> {
   constructor(props: IGameViewProps) {
@@ -18,7 +18,7 @@ class GameView extends React.Component<IGameViewProps, any> {
   }
 
   public async componentDidMount() {
-    const {game, match} = this.props
+    const { game, match } = this.props
     await game.loadGame(match.params.gameId)
     game.connectSocket()
   }
@@ -29,8 +29,10 @@ class GameView extends React.Component<IGameViewProps, any> {
       return <div>Loading...</div>
     }
 
-    const currentPlayer = game.currentUser.id === game.playerIdWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
-    const opponentPlayer = game.currentUser.id !== game.playerIdWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
+    const currentPlayer =
+      game.currentUser.id === game.playerIdWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
+    const opponentPlayer =
+      game.currentUser.id !== game.playerIdWhite ? Majavashakki.PieceColor.White : Majavashakki.PieceColor.Black
 
     return (
       <div className={classes.gameContainer}>
@@ -46,22 +48,23 @@ class GameView extends React.Component<IGameViewProps, any> {
   }
 }
 
-const styles = (theme: Theme) => createStyles({
-  gameContainer: {
-    display: "flex",
-    alignSelf: "center",
-    flexDirection: "column",
-    padding: 20,
-  },
-  playArea: {
-    display: "flex",
-    flexDirection: "row",
-    marginBottom: "20px",
-  },
-})
+const styles = (theme: Theme) =>
+  createStyles({
+    gameContainer: {
+      display: "flex",
+      alignSelf: "center",
+      flexDirection: "column",
+      padding: 20,
+    },
+    playArea: {
+      display: "flex",
+      flexDirection: "row",
+      marginBottom: "20px",
+    },
+  })
 
 interface IGameViewProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
-  game: GameStore;
+  game: GameStore
 }
 
-export default withStyles(styles)(withRouter(GameView));
+export default withStyles(styles)(withRouter(GameView))

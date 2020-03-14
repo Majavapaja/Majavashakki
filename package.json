@@ -65,6 +65,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
+    "prettier": "prettier --write '**/*.{js,jsx,ts,tsx,css,json}'",
     "npm-check": "npm-check --skip-unused",
     "tsc": "tsc",
     "dev": "better-npm-run dev",
@@ -109,6 +110,7 @@
     "nodemon": "^2.0.2",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.12.4",
+    "prettier": "^1.19.1",
     "puppeteer": "^2.1.1",
     "tslint": "^5.20.1",
     "tslint-react": "^4.2.0"

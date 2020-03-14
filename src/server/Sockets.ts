@@ -1,11 +1,11 @@
-import sio from "socket.io";
-import { IGameDocument } from "./models/Game";
-import {getSession} from "./session";
-import { removeFalsy } from "./util";
+import sio from "socket.io"
+import { IGameDocument } from "./models/Game"
+import { getSession } from "./session"
+import { removeFalsy } from "./util"
 
-export const SocketServer: SocketIO.Server = sio({transports: ["websocket"]});
-export const SessionSocketMap = {};
-const MainRoom: string = "Lobby";
+export const SocketServer: SocketIO.Server = sio({ transports: ["websocket"] })
+export const SessionSocketMap = {}
+const MainRoom: string = "Lobby"
 
 // TODO middleware or some other solution to handle connection setup for authed users vs non-auth user
 export function initSockets() {
@@ -18,7 +18,7 @@ export function initSockets() {
     const userId = session.passport.user
     socket.join(`user:${userId}`)
     socket.join(MainRoom)
-  });
+  })
 }
 
 export function notifyGame(doc: IGameDocument, message: string, data: any) {
@@ -35,5 +35,5 @@ export function notifyUser(userId: string, message: string, data: any) {
 
 export function notifyLobby(message: string, data: any) {
   console.log("Sending message to lobby")
-  SocketServer.to(MainRoom).emit(message, data);
+  SocketServer.to(MainRoom).emit(message, data)
 }
