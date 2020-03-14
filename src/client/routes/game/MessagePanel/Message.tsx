@@ -13,7 +13,7 @@ class Message extends React.Component<IMessageProps, any> {
         return (
             <Typography className={classes.text}>
                 <Typography component="span" className={playerClass}>
-                    {content.actor.name.substr(0,15)}
+                    {content.actor.name.substr(0, 15)}
                 </Typography>
                 <Typography component="span" className={classes.textContainer}>
                   {this.buildMessage()}
@@ -80,13 +80,17 @@ const styles = () => ({
     },
     textContainer: {
       display: "flex",
+      alignItems: "center",
       flex: 7,
-      whitespace: "pre"
+      whiteSpace: "pre",
     },
     icon: {
       width: "15px",
       height: "15px",
       display: "block",
+      backgroundColor: "grey",
+      borderRadius: "12px",
+      padding: "1px",
     },
 })
 
