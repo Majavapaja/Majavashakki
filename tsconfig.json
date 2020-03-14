@@ -3,7 +3,7 @@
     "compilerOptions": {
         "strictFunctionTypes": true,
         "target": "es6",
-        "lib": ["es6", "es2017"],
+        "lib": ["es6", "es2017", "DOM"],
         "moduleResolution":"node",
         "jsx": "preserve",
         "sourceMap":true,
