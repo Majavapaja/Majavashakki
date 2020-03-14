@@ -2,7 +2,7 @@ import * as React from "react";
 import * as Majavashakki from "../../../../common/GamePieces"
 import ChessPiece from "../ChessPiece"
 import { WithStyles, createStyles, withStyles } from "@material-ui/core"
-import {IRootStore} from "../../../store/AppStore"
+import { IRootStore } from "../../../store/AppStore"
 import { inject } from "mobx-react"
 import BoardStore from "../../../store/BoardStore"
 
@@ -31,7 +31,7 @@ interface ICellProps extends WithStyles<typeof styles> {
   boardStore?: BoardStore,
 }
 
-const styles = theme => createStyles({
+const styles = createStyles({
   cell: {
     display: "flex",
     justifyContent: "center",
@@ -43,5 +43,5 @@ const styles = theme => createStyles({
   },
 })
 
-const boardStore = (stores: IRootStore) => ({ boardStore: stores.app.game.boardStore})
+const boardStore = (stores: IRootStore) => ({ boardStore: stores.app.game.boardStore })
 export default inject(boardStore)(withStyles(styles)(Cell))
