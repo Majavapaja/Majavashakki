@@ -160,6 +160,7 @@ export default class BoardBase implements Majavashakki.IBoard {
 
         let startPiece = this.getPiece(start)
         let algebraicNotation = getAlgebraicNotation(this, move, promotionPiece)
+        const capturedPiece: Majavashakki.IPiece = this.getPiece(destination)
 
         if (move.result === Majavashakki.MoveType.Enpassant) {
             // Remove target of en passant, which is in the destination of the previous move
@@ -205,6 +206,7 @@ export default class BoardBase implements Majavashakki.IBoard {
             start,
             destination,
             algebraicNotation,
+            capturedPieceType: capturedPiece?.type,
         })
 
         // Check draw after move has been added to moveHistory, because we need the latest move to be there

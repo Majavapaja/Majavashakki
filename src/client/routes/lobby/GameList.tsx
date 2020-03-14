@@ -58,9 +58,9 @@ class GameList extends React.Component<IGameListProps, any> {
         </AppBar>
         <div className={classes.content}>
           <FormControl>
-            <InputLabel htmlFor="game-filter">Filter</InputLabel>
+            <InputLabel htmlFor={`game-filter${id}`}>Filter</InputLabel>
             <Input
-              id="game-filter"
+              id={`game-filter${id}`}
               type="text"
               value={this.state.filter}
               onChange={this.handleFilterChange}
@@ -132,10 +132,10 @@ const styles = (theme: Theme) => createStyles({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
   },
   content: {
-    padding: theme.spacing.unit,
+    padding: theme.spacing(1),
   },
   contrastText: {
     color: theme.palette.primary.contrastText,

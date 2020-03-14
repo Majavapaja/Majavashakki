@@ -22,7 +22,7 @@ export function initSockets() {
 }
 
 export function notifyGame(doc: IGameDocument, message: string, data: any) {
-  console.log(`Sending message to game: ${doc.id} ${message} ${JSON.stringify(data, null, 2)}`)
+  console.log(`Sending message to game: ${doc.id} ${message}`)
 
   const userIds = removeFalsy([doc.playerIdBlack, doc.playerIdWhite])
   userIds.forEach(userId => SocketServer.to(`user:${userId}`).emit(message, data))

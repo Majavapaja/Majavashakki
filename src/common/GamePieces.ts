@@ -55,6 +55,7 @@ export interface IMove {
   start: IPosition;
   destination: IPosition;
   algebraicNotation: AlgebraicNotation;
+  capturedPieceType?: PieceType;
 }
 
 export enum PieceType {

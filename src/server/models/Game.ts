@@ -18,6 +18,7 @@ const MoveSchema = new Schema({
   start: PositionSchema,
   destination: PositionSchema,
   algebraicNotation: String,
+  capturedPieceType: String,
 }, { _id: false })
 
 const BoardSchema = new Schema({

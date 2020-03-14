@@ -18,8 +18,10 @@ const getPieceNotation = (type: Majavashakki.PieceType): string => {
   }
 }
 
-export const getPieceType = (type: string): Majavashakki.PieceType => {
-  switch (type) {
+export const getPieceType = (algebraicNotation: string): Majavashakki.PieceType => {
+  const typeChar = algebraicNotation[0];
+
+  switch (typeChar) {
     case "K":
       return Majavashakki.PieceType.King;
     case "Q":
@@ -107,16 +109,33 @@ export const setCheck = (notation: Majavashakki.AlgebraicNotation, move: Majavas
   return notation
 }
 
-export type MoveType = "castling" | "enpassant" | "capture" | "check" | "checkmate"
+export enum MoveMetadata {
+  KingCastling = 1 << 0,
+  QueenCastling = 1 << 1,
+  Enpassant = 1 << 2,
+  Capture = 1 << 3,
+  Check = 1 << 4,
+  Checkmate = 1 << 5,
+  Promotion = 1 << 6,
+}
 
-export const getMoveTypes = (algebraicNotation: Majavashakki.AlgebraicNotation): MoveType[] => {
-  const types = [];
+export const getMoveMetadata = (algebraicNotation: Majavashakki.AlgebraicNotation): MoveMetadata => {
+  console.log(algebraicNotation)
 
-  if (algebraicNotation.includes("0-0")) types.push("castling");
-  if (algebraicNotation.includes("e.p.")) types.push("enpassant");
-  if (algebraicNotation.includes("x")) types.push("capture");
-  if (algebraicNotation.includes("+")) types.push("check");
-  if (algebraicNotation.includes("#")) types.push("checkmate");
+  let metadata: MoveMetadata;
 
-  return types
+  if (algebraicNotation === "0-0") metadata |= MoveMetadata.KingCastling;
+  if (algebraicNotation === "0-0-0") metadata |= MoveMetadata.QueenCastling;
+  if (algebraicNotation.includes("e.p.")) metadata |= MoveMetadata.Enpassant;
+  if (algebraicNotation.includes("x")) metadata |= MoveMetadata.Capture;
+  if (algebraicNotation.includes("+")) metadata |= MoveMetadata.Check;
+  if (algebraicNotation.includes("#")) metadata |= MoveMetadata.Checkmate;
+  if (/[QNBR]/.test(algebraicNotation.substr(1, algebraicNotation.length))) metadata |= MoveMetadata.Promotion
+
+  return metadata
+}
+
+export const getPromotionPieceType = (algebraicNotation: Majavashakki.AlgebraicNotation): Majavashakki.PieceType => {
+  const pieceNotation = algebraicNotation.match(/[QNBR]/)[0]
+  return getPieceType(pieceNotation)
 }

@@ -29,7 +29,8 @@
       "jsx-wrap-multiline": false,
       "semicolon": false,
       "trailing-comma": [true, {"multiline": "always", "singleline": "never"}],
-      "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"]
+      "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"],
+	  "no-bitwise": false
     },
     "rulesDirectory": []
 }

@@ -20,7 +20,7 @@ const LoginSchema = new Schema({
     validate: {
       validator: value => Boolean(LoginType[value]),
       message: props => `${props.value} is not valid login type`,
-    },
+    } as any,
   },
   password: String,
 }, { _id: false })

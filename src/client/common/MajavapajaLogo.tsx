@@ -30,6 +30,7 @@ class MajavapajaLogo extends React.Component<IMajavapajaLogoProps, never> {
             "Hard work is money",
             "Hard code is money",
             "Oispa kaljaa",
+            "Mennään mistä aita on Majavin",
         ]
         const randomIndex = Math.floor(Math.random() * slogans.length)
         return slogans[randomIndex]
