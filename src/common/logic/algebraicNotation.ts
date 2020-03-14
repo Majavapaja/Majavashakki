@@ -116,9 +116,12 @@ export enum MoveMetadata {
   Capture = 1 << 3,
   Check = 1 << 4,
   Checkmate = 1 << 5,
+  Promotion = 1 << 6,
 }
 
 export const getMoveMetadata = (algebraicNotation: Majavashakki.AlgebraicNotation): MoveMetadata => {
+  console.log(algebraicNotation)
+
   let metadata: MoveMetadata;
 
   if (algebraicNotation === "0-0") metadata |= MoveMetadata.KingCastling;
@@ -127,6 +130,12 @@ export const getMoveMetadata = (algebraicNotation: Majavashakki.AlgebraicNotatio
   if (algebraicNotation.includes("x")) metadata |= MoveMetadata.Capture;
   if (algebraicNotation.includes("+")) metadata |= MoveMetadata.Check;
   if (algebraicNotation.includes("#")) metadata |= MoveMetadata.Checkmate;
+  if (/[QNBR]/.test(algebraicNotation.substr(1, algebraicNotation.length))) metadata |= MoveMetadata.Promotion
 
   return metadata
+}
+
+export const getPromotionPieceType = (algebraicNotation: Majavashakki.AlgebraicNotation): Majavashakki.PieceType => {
+  const pieceNotation = algebraicNotation.match(/[QNBR]/)[0]
+  return getPieceType(pieceNotation)
 }

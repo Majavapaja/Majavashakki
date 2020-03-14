@@ -1,7 +1,7 @@
 import AppStore from "client/store/AppStore"
 import { computed } from "mobx"
 import * as Majavashakki from "../../../../common/GamePieces"
-import { getPieceType, getMoveMetadata, MoveMetadata } from "../../../../common/logic/algebraicNotation"
+import { getPieceType, getMoveMetadata, MoveMetadata, getPromotionPieceType } from "../../../../common/logic/algebraicNotation"
 
 export default class MessagePanelStore {
   private _appStore: AppStore;
@@ -46,12 +46,17 @@ export default class MessagePanelStore {
   private getOptionalMoveData = (move: Majavashakki.IMove, moveColor: Majavashakki.PieceColor) => {
       const moveMetadata = getMoveMetadata(move.algebraicNotation)
 
-      const capturedPieceType = move.capturedPieceType ? ` :${move.capturedPieceType}-${getOppositeColor(moveColor)}: ` : ""
-      const enpassant = (moveMetadata & MoveMetadata.Enpassant) === MoveMetadata.Enpassant ? " en passant" : ""
-      const check = (moveMetadata & MoveMetadata.Check) === MoveMetadata.Check ? " check" : ""
-      const checkMate = (moveMetadata & MoveMetadata.Checkmate) === MoveMetadata.Checkmate ? " checkmate" : ""
+      const capturedPieceType = move.capturedPieceType ? ` :${move.capturedPieceType}-${getOppositeColor(moveColor)}:` : ""
 
-      return capturedPieceType + enpassant + (checkMate || check)
+      const promotion = (moveMetadata & MoveMetadata.Promotion) === MoveMetadata.Promotion ?
+        ` | promoted to :${getPromotionPieceType(move.algebraicNotation)}-${moveColor}:`
+        : ""
+
+      const enpassant = (moveMetadata & MoveMetadata.Enpassant) === MoveMetadata.Enpassant ? " | en passant" : ""
+      const check = (moveMetadata & MoveMetadata.Check) === MoveMetadata.Check ? " | check" : ""
+      const checkMate = (moveMetadata & MoveMetadata.Checkmate) === MoveMetadata.Checkmate ? " | checkmate" : ""
+
+      return capturedPieceType + promotion + enpassant + (checkMate || check)
   }
 
 }
