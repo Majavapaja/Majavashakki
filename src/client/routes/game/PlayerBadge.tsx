@@ -7,7 +7,7 @@ import { IRootStore } from "../../store/AppStore";
 import GameStore from "../../store/GameStore";
 import * as Majavashakki from "../../../common/GamePieces"
 
-@inject((stores: IRootStore) => ({game: stores.app.game}))
+@inject((stores: IRootStore) => ({ game: stores.app.game }))
 @observer
 class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
   public render() {
@@ -15,10 +15,11 @@ class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
 
     const player = color === Majavashakki.PieceColor.White ? game.playerWhite : game.playerBlack
 
-    const rootClasses = classNames(
-      classes.root,
-      { active: game.currentTurn === color, winner: game.winner === color },
-    )
+    const rootClasses = classNames({
+      [classes.root]: true,
+      active: game.currentTurn === color,
+      winner: game.winner === color
+    })
 
     return (
       <Chip
