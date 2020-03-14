@@ -1,9 +1,5 @@
 import assert from "assert"
-
 import * as Util from "./TestUtil"
-
-const testEmail = "foo@bar"
-const user1 = {username: "matti", email: testEmail, password: "foobar"}
 
 Util.browserSpec("Game", {numBrowsers: 2}, function() {
   it("plays the shortest game ever", async function() {

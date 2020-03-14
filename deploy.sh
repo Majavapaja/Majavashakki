@@ -19,3 +19,8 @@ source "$repo/deployment/.venv/bin/activate"
 set -o nounset
 pip install -r "$repo/deployment/requirements.txt" &> /dev/null
 python "$repo/deployment/deploy.py"
+
+pushd "$repo/deployment"
+npm --prefer-offline ci
+npm run deploy
+popd

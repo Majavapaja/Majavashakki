@@ -10,6 +10,7 @@ jobs:
       - image: majavapaja/majavashakki-ci
       - image: mongo:3.2.21-jessie
     steps:
+      - setup_remote_docker
       - checkout
       - restore_cache:
           keys:

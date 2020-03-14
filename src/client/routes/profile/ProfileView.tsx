@@ -1,6 +1,6 @@
 import * as React from "react";
 import { withRouter, RouteComponentProps } from "react-router-dom";
-import {TextField, WithStyles, withStyles, createStyles, Theme, Button, Typography, Paper} from "@material-ui/core";
+import {TextField, WithStyles, withStyles, createStyles, Button, Typography, Paper} from "@material-ui/core";
 import { inject, observer } from "mobx-react";
 import { IRootStore } from "client/store/AppStore";
 import UserStore from "client/store/UserStore";
@@ -83,7 +83,7 @@ class ProfileView extends React.Component<IProfileViewProps, never> {
   }
 
   private handleEnterKey = (event: any) => {
-    if (!(event.target instanceof HTMLInputElement) || event.key !== "Enter") return;
+    if (event.key !== "Enter") return;
     return (event.target.id === this.submitField.current.id) ? this.handleSubmit() : this.submitField.current.focus();
   }
 }

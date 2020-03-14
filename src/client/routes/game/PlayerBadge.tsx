@@ -1,8 +1,7 @@
 import * as React from "react"
-import { withStyles, WithStyles, createStyles, Theme } from "@material-ui/core/styles"
-import Board from "./Board"
+import { withStyles, WithStyles, Theme } from "@material-ui/core/styles"
 import { observer, inject } from "mobx-react"
-import { Chip, Typography, Avatar } from "@material-ui/core"
+import { Chip, Avatar } from "@material-ui/core"
 import classNames from "classnames"
 import { IRootStore } from "../../store/AppStore";
 import GameStore from "../../store/GameStore";
@@ -32,7 +31,7 @@ class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
     }
 }
 
-const styles = theme => ({
+const styles = (theme: Theme) => ({
     root: {
         margin: "0 20px",
         "&.active": {

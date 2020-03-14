@@ -1,13 +1,15 @@
 import assert from "assert"
 import puppeteer from "puppeteer"
 import {start} from "../../src/server/app"
-import {clearDatabase, initTestData} from "../../src/server/mongo"
+import {clearDatabase, initTestData} from "./MongoUtil"
 
-const PORT = "3001"
+const PORT = process.env.TEST_PORT || "3001"
 const runHeadless = !!process.env.CI
 
 export function browserSpec(name, {numBrowsers}, func) {
   describe(name, function() {
+    this.timeout(60_000)
+
     before(async function() {
       this.closeServer = await start(PORT)
       this.browsers = await timesAsync(numBrowsers, mkBrowser)
@@ -15,8 +17,13 @@ export function browserSpec(name, {numBrowsers}, func) {
     })
 
     after(async function() {
-      await mapAsync(this.browsers, b => b.close())
-      await this.closeServer()
+      if (this.browsers) {
+        await mapAsync(this.browsers, b => b.close())
+      }
+
+      if (this.closeServer) {
+        await this.closeServer()
+      }
     })
 
     beforeEach(async function() {
@@ -44,7 +51,7 @@ export async function mkBrowser() {
     args: runHeadless ? ["--no-sandbox", "--disable-setuid-sandbox"] : [],
     slowMo: 0,
     headless: runHeadless,
-    timeout: 2000,
+    timeout: 10000,
     defaultViewport: { width: 1920, height: 1080 },
   })
 }

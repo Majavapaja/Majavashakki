@@ -1,4 +1,4 @@
-import { User, LoginType } from "./models/User"
+import { IUserDocument, User, LoginType } from "./models/User"
 import passport from "passport";
 import { jsonAPI, validate, ValidationError } from "./json"
 import {
@@ -9,7 +9,7 @@ import {
 
 export default {
   getUser: jsonAPI<ApiUser | undefined>(async req => {
-    const user = req.user;
+    const user = req.user as IUserDocument;
     if (user) {
       return {
         id: user._id,
@@ -21,7 +21,7 @@ export default {
 
   postUser: jsonAPI<void>(async req => {
     const userUpdate = validate<UserUpdateRequest>(UserUpdateRequestType, req.body)
-    const {_id, name} = req.user
+    const {_id} = req.user as IUserDocument
     try {
       console.log(`Updating user ${_id}:`, userUpdate);
       await User.findOneAndUpdate({_id}, userUpdate).exec()

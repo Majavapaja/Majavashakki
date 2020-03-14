@@ -1,5 +1,4 @@
 import { Document, Schema, Model, model } from "mongoose"
-import * as _ from "lodash"
 import bcrypt from "bcryptjs"
 
 const PASSWORD_SALT_ROUNDS = 10

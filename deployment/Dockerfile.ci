@@ -1,6 +1,6 @@
 FROM ubuntu:18.04
 
-RUN apt-get -qq update && apt-get -qq install -y git gnupg python3-pip python3-venv curl
+RUN apt-get -qq update && apt-get -qq install -y git gnupg python3-pip python3-venv curl docker.io
 
 # Headless Chrome dependencies for puppeteer
 # https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#chrome-headless-doesnt-launch-on-unix
