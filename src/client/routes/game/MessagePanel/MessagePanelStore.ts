@@ -23,7 +23,7 @@ export default class MessagePanelStore {
       ) {
         return {
           actor,
-          body: (moveMetadata & MoveMetadata.QueenCastling) === MoveMetadata.QueenCastling ? 'Castling (queen side)' : 'Castling (king side)'
+          body: (moveMetadata & MoveMetadata.QueenCastling) === MoveMetadata.QueenCastling ? "Castling (queen side)" : "Castling (king side)",
         }
       }
 
@@ -32,7 +32,7 @@ export default class MessagePanelStore {
 
       return {
         actor,
-        body: moveMessage + this.getOptionalMoveData(move, moveColor)
+        body: moveMessage + this.getOptionalMoveData(move, moveColor),
       }
     })
   }

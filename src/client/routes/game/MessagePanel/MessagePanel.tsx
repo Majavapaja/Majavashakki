@@ -46,7 +46,7 @@ const styles = () => createStyles({
   container: {
     height: "20vmin",
     padding: 10,
-    overflow: 'auto',
+    overflow: "auto",
   },
 })
 

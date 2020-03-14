@@ -1,5 +1,5 @@
 import * as React from "react"
-import { withStyles, WithStyles } from "@material-ui/core/styles"
+import { withStyles, WithStyles, createStyles } from "@material-ui/core/styles"
 import { Typography } from "@material-ui/core"
 import { IMessage } from "./MessagePanelStore"
 import ChessPiece from "../ChessPiece";
@@ -40,7 +40,7 @@ class Message extends React.Component<IMessageProps, any> {
           components.push(txtBefore)
         }
 
-        const [type, color] = iconStr.replace(/:/g, "").split('-')
+        const [type, color] = iconStr.replace(/:/g, "").split("-")
 
         const piece = (
           <span className={this.props.classes.icon} key={components.length}>
@@ -66,7 +66,7 @@ class Message extends React.Component<IMessageProps, any> {
     }
 }
 
-const styles = () => ({
+const styles = createStyles({
     activePlayer: {
       color: "#50A450",
       flex: 1,

@@ -1,5 +1,5 @@
 import * as React from "react"
-import classnames from 'classnames'
+import classnames from "classnames"
 import * as Majavashakki from "../../../../common/GamePieces"
 import ChessPiece from "../ChessPiece"
 import { WithStyles, createStyles, withStyles } from "@material-ui/core"
@@ -48,17 +48,17 @@ const styles = createStyles({
     textAlign: "center",
   },
   black: {
-    backgroundColor: "#333"
+    backgroundColor: "#333",
   },
   white: {
-    backgroundColor: "#EEE"
+    backgroundColor: "#EEE",
   },
   selected: {
-    backgroundColor: "#0D0"
+    backgroundColor: "#0D0",
   },
-  '@keyframes flashRed': {
+  "@keyframes flashRed": {
     "0%": {
-      backgroundColor: "#F00"
+      backgroundColor: "#F00",
     },
   },
   error: {
