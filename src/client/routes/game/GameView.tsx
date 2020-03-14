@@ -36,7 +36,7 @@ class GameView extends React.Component<IGameViewProps, any> {
       <div className={classes.gameContainer}>
         {game.winner && <EndScreen />}
         <div className={classes.playArea}>
-          <PlayerBadge color={currentPlayer} />
+          <PlayerBadge color={currentPlayer} renderSurrender />
           <Board />
           <PlayerBadge color={opponentPlayer} />
         </div>

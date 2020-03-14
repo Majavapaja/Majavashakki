@@ -1,11 +1,12 @@
 import * as React from "react"
-import { withStyles, WithStyles, Theme } from "@material-ui/core/styles"
+import { withStyles, WithStyles, Theme, createStyles } from "@material-ui/core/styles"
 import { observer, inject } from "mobx-react"
-import { Chip, Avatar } from "@material-ui/core"
+import { Chip, Avatar, Button } from "@material-ui/core"
 import classNames from "classnames"
-import { IRootStore } from "../../store/AppStore";
-import GameStore from "../../store/GameStore";
+import { IRootStore } from "../../store/AppStore"
+import GameStore from "../../store/GameStore"
 import * as Majavashakki from "../../../common/GamePieces"
+import SurrenderButton from "./SurrenderButton"
 
 @inject((stores: IRootStore) => ({ game: stores.app.game }))
 @observer
@@ -14,34 +15,39 @@ class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
     const { classes, color, game } = this.props
 
     const player = color === Majavashakki.PieceColor.White ? game.playerWhite : game.playerBlack
-
-    const rootClasses = classNames({
-      [classes.root]: true,
-      active: game.currentTurn === color,
-      winner: game.winner === color
-    })
+    const isActive = game.currentTurn === color
+    const isWinner = game.winner === color
 
     return (
-      <Chip
-        id={`${color}Badge`}
-        className={rootClasses}
-        avatar={<Avatar className={[classes.playerColor, color].join(" ")} />}
-        label={player ? player.name : "N/A"}
-      />
+      <div className={classes.container}>
+        <Chip
+          id={`${color}Badge`}
+          className={classNames(classes.badge, { isActive, isWinner })}
+          avatar={<Avatar className={[classes.playerColor, color].join(" ")} />}
+          label={player ? player.name : "N/A"}
+        />
+        {this.props.renderSurrender &&
+          <SurrenderButton disabled={!isActive} />
+        }
+      </div>
     )
   }
 }
 
-const styles = (theme: Theme) => ({
-  root: {
+const styles = (theme: Theme) => createStyles({
+  container: {
+    display: "flex",
+    flexDirection: "column",
     margin: "0 20px",
+  },
+  badge: {
     opacity: 0.5,
-    "&.active": {
+    "&.isActive": {
       backgroundColor: "#EBEBEB",
       color: "#000",
       opacity: 1,
     },
-    "&.winner": {
+    "&.isWinner": {
       backgroundColor: "green",
       color: theme.palette.primary.contrastText,
     },
@@ -62,7 +68,8 @@ const styles = (theme: Theme) => ({
 
 interface IPlayerBadgeProps extends WithStyles<typeof styles> {
   game?: GameStore,
-  color: Majavashakki.PieceColor
+  renderSurrender?: boolean,
+  color: Majavashakki.PieceColor,
 }
 
-export default withStyles(styles)(PlayerBadge);
+export default withStyles(styles)(PlayerBadge)
