@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from "react"
 import * as Majavashakki from "../../../../common/GamePieces"
 import ChessPiece from "../ChessPiece"
 import { WithStyles, createStyles, withStyles } from "@material-ui/core"
