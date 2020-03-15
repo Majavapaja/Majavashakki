@@ -53,6 +53,44 @@ export default class BoardFactory {
     return new BoardBase(pieces)
   }
 
+  /*  Board Description
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊♝⚊♝⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+  */
+  public static setupBishopMovement() {
+    const pieces = [
+      createPiece("c2", PieceType.Bishop, PieceColor.White, true, null),
+      createPiece("e2", PieceType.Bishop, PieceColor.White, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  /*  Board Description
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ♗⚊⚊⚊⚊⚊⚊⚊
+    ⚊♗⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊♝⚊⚊⚊
+    ⚊⚊⚊♝⚊⚊⚊⚊
+  */
+  public static setupBishopCapture() {
+    const pieces = [
+      createPiece("e2", PieceType.Bishop, PieceColor.White, true, null),
+      createPiece("d1", PieceType.Bishop, PieceColor.White, true, null),
+      createPiece("a6", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("b5", PieceType.Bishop, PieceColor.Black, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
   /*  Board Description Enpassant
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ♙⚊⚊⚊⚊⚊⚊⚊

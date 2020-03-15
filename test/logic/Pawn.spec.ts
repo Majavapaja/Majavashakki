@@ -1,5 +1,5 @@
 import boardFactory from "./setup/BoardFactory";
-import {moveSequence} from "./setup/BoardHelper";
+import { moveSequence } from "./setup/BoardHelper";
 import BoardBase from "common/BoardBase";
 
 describe("Pawn", () => {
