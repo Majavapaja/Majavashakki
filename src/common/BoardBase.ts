@@ -27,7 +27,7 @@ export default class BoardBase implements Majavashakki.IBoard {
         return this.pieces.find((piece) => this.comparePos(piece.position, pos))
     }
 
-    public getKing(color): King {
+    public getKing(color: Majavashakki.PieceColor): King {
         return this.pieces.find(piece => piece.color === color && piece.type === Majavashakki.PieceType.King) as King
     }
 
@@ -40,7 +40,7 @@ export default class BoardBase implements Majavashakki.IBoard {
         return BoardBase.cols.indexOf(pos.col) !== -1 && BoardBase.rows.indexOf(pos.row) !== -1
     }
 
-    public getCoordinateByIndex(type: "col"|"row", index): string {
+    public getCoordinateByIndex(type: "col"|"row", index: number): string {
         if (index < 0 || index >= BoardBase.rows.length) return null
 
         return type === "col" ? BoardBase.cols[index] : BoardBase.rows[index]
