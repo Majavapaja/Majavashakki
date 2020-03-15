@@ -103,15 +103,13 @@ describe("AlgebraicNotation", () => {
         })
     })
 
-    it("should have correct notation when enpassant", done => {
-        enPassantFactory.build("board-enpassant").then(board => {
-            moveSequence(board, [["c2", "c4"], ["d4", "c3"]])
+    it("should have correct notation when enpassant", () => {
 
-            board.moveHistory[0].algebraicNotation.should.equal("c4")
-            board.moveHistory[1].algebraicNotation.should.equal("dxc3e.p.")
+      const subject = enPassantFactory.setupEnpassant()
+      moveSequence(subject, [["c2", "c4"], ["d4", "c3"]])
+      subject.moveHistory[0].algebraicNotation.should.equal("c4")
+      subject.moveHistory[1].algebraicNotation.should.equal("dxc3e.p.")
 
-            done()
-        })
     })
 
     it("should have correct notation for check", done => {

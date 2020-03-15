@@ -9,8 +9,8 @@ import King from "../../src/common/pieces/King"
 import Knight from "../../src/common/pieces/Knight"
 import * as Majavashakki from "../../src/common/GamePieces"
 
-export function moveSequence(board: BoardBase, moves: string[][]) {
-    const results = [];
+export function moveSequence(board: BoardBase, moves: string[][]): string[] {
+    const results: string [] = [];
 
     for (const move of moves) {
         let pieceType
