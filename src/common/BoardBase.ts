@@ -19,13 +19,8 @@ export default class BoardBase implements Majavashakki.IBoard {
     public moveHistory: Majavashakki.IMove[]
 
     constructor(pieces?: Piece[], moveHistory?: Majavashakki.IMove[]) {
-        if (pieces && moveHistory) {
-            this.pieces = pieces
-            this.moveHistory = moveHistory
-        } else {
-            this.pieces = createInitialPieces(this)
-            this.moveHistory = []
-        }
+        this.pieces = pieces ?? createInitialPieces(this)
+        this.moveHistory = moveHistory ?? []
     }
 
     public getPiece(pos: Majavashakki.IPosition): Piece {
