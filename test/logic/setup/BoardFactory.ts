@@ -53,7 +53,7 @@ export default class BoardFactory {
     return new BoardBase(pieces)
   }
 
-  /*  Board Description
+  /*  Board Description bishop movement
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
@@ -71,7 +71,7 @@ export default class BoardFactory {
     return new BoardBase(pieces)
   }
 
-  /*  Board Description
+  /*  Board Description bishop capture
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ♗⚊⚊⚊⚊⚊⚊⚊
@@ -87,6 +87,27 @@ export default class BoardFactory {
       createPiece("d1", PieceType.Bishop, PieceColor.White, true, null),
       createPiece("a6", PieceType.Bishop, PieceColor.Black, true, null),
       createPiece("b5", PieceType.Bishop, PieceColor.Black, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  /*  Board Description King
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊♚⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊♟♔⚊⚊⚊⚊⚊
+    ⚊♟♙⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+  */
+  public static setupKing() {
+    const pieces = [
+      createPiece("c7", PieceType.King, PieceColor.Black, true, null),
+      createPiece("c3", PieceType.King, PieceColor.White, true, null),
+      createPiece("c2", PieceType.Pawn, PieceColor.White, true, null),
+      createPiece("b2", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("b3", PieceType.Pawn, PieceColor.Black, true, null),
     ]
     return new BoardBase(pieces)
   }
