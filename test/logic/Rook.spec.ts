@@ -1,72 +1,71 @@
-import chai from "chai";
-import chaiAsPromised from "chai-as-promised";
-import factory from "./RookFactory";
-import {moveSequence} from "./setup/BoardHelper";
-chai.should();
-chai.use(chaiAsPromised);
+import boardFactory from "./setup/BoardFactory";
+import { moveSequence } from "./setup/BoardHelper";
+import BoardBase from "common/BoardBase";
 
 describe("Rook", () => {
-    describe("Basic movement", () => {
-        it("should allow rook to move left [e2, a2]", done => {
-            const promise = factory.build("board-rook-movement")
-                .then(board => moveSequence(board, [["e2", "a2"]]));
-            promise.should.eventually.have.same.members(["move"]).notify(done);
-        });
+  let subject: BoardBase
 
-        it("should allow rook to move right [e2, h2]", done => {
-            const promise = factory.build("board-rook-movement")
-                .then(board => moveSequence(board, [["e2", "h2"]]));
-            promise.should.eventually.have.same.members(["move"]).notify(done);
-        });
+  describe("Basic movement", () => {
 
-        it("should allow rook to move up [e2, e8]", done => {
-            const promise = factory.build("board-rook-movement")
-                .then(board => moveSequence(board, [["e2", "e8"]]));
-            promise.should.eventually.have.same.members(["move"]).notify(done);
-        });
+    beforeEach(() => {
+      subject = boardFactory.setupRookMovement()
+    })
 
-        it("should allow rook to move down [e2, e1]", done => {
-            const promise = factory.build("board-rook-movement")
-                .then(board => moveSequence(board, [["e2", "e1"]]));
-            promise.should.eventually.have.same.members(["move"]).notify(done);
-        });
-
-        it("should not allow rook to move through pieces [e2, e1], [e1, a1]", done => {
-            const promise = factory.build("board-rook-movement")
-                .then(board => moveSequence(board, [["e2", "e1"], ["e1", "a1"]]));
-            promise.should.eventually.have.same.members(["move", "error"]).notify(done);
-        });
-
-        it("should not allow rook to move diagonally [e2, d3]", done => {
-            const promise = factory.build("board-rook-movement")
-                .then(board => moveSequence(board, [["e2", "d3"]]));
-            promise.should.eventually.have.same.members(["error"]).notify(done);
-        });
-
-        it("should not allow rook to move like bishop [e2, a6]", done => {
-            const promise = factory.build("board-rook-movement")
-                .then(board => moveSequence(board, [["e2", "a6"]]));
-            promise.should.eventually.have.same.members(["error"]).notify(done);
-        });
+    it("should allow rook to move left [e2, a2]", () => {
+      const results = moveSequence(subject, [["e2", "a2"]])
+      results.should.eql(["move"])
     });
 
-    describe("Capturing", () => {
-        it("should allow rook to capture at the end of movement [e2, e5]", done => {
-            const promise = factory.build("board-rook-capture")
-                .then(board => moveSequence(board, [["e2", "e5"]]));
-            promise.should.eventually.have.same.members(["capture"]).notify(done);
-        });
-
-        it("should not allow rook to capture over other pieces [e2, e6]", done => {
-            const promise = factory.build("board-rook-capture")
-                .then(board => moveSequence(board, [["e2", "e6"]]));
-            promise.should.eventually.have.same.members(["error"]).notify(done);
-        });
-
-        it("should not allow rook to capture an ally [e2, e1]", done => {
-            const promise = factory.build("board-rook-capture")
-                .then(board => moveSequence(board, [["e2", "e1"]]));
-            promise.should.eventually.have.same.members(["error"]).notify(done);
-        });
+    it("should allow rook to move right [e2, h2]", () => {
+      const results = moveSequence(subject, [["e2", "h2"]])
+      results.should.eql(["move"])
     });
+
+    it("should allow rook to move up [e2, e8]", () => {
+      const results = moveSequence(subject, [["e2", "e8"]])
+      results.should.eql(["move"])
+    });
+
+    it("should allow rook to move down [e2, e1]", () => {
+      const results = moveSequence(subject, [["e2", "e1"]])
+      results.should.eql(["move"])
+    });
+
+    it("should not allow rook to move through pieces [e2, e1], [e1, a1]", () => {
+      const results = moveSequence(subject, [["e2", "e1"], ["e1", "a1"]])
+      results.should.eql(["move", "error"])
+    });
+
+    it("should not allow rook to move diagonally [e2, d3]", () => {
+      const results = moveSequence(subject, [["e2", "d4"]])
+      results.should.eql(["error"])
+    });
+
+    it("should not allow rook to move like bishop [e2, a6]", () => {
+      const results = moveSequence(subject, [["e2", "a6"]])
+      results.should.eql(["error"])
+    });
+  });
+
+  describe("Capturing", () => {
+
+    beforeEach(() => {
+      subject = boardFactory.setupRookCapture()
+    })
+
+    it("should allow rook to capture at the end of movement [e2, e5]", () => {
+      const results = moveSequence(subject, [["e2", "e5"]])
+      results.should.eql(["capture"])
+    });
+
+    it("should not allow rook to capture over other pieces [e2, e6]", () => {
+      const results = moveSequence(subject, [["e2", "e6"]])
+      results.should.eql(["error"])
+    });
+
+    it("should not allow rook to capture an ally [e2, e1]", () => {
+      const results = moveSequence(subject, [["e2", "e1"]])
+      results.should.eql(["error"])
+    });
+  });
 });

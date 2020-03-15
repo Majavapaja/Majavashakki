@@ -53,6 +53,44 @@ export default class BoardFactory {
     return new BoardBase(pieces)
   }
 
+  /*  Board Description rook movement
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊♜⚊⚊⚊
+    ⚊⚊♜⚊⚊⚊⚊⚊
+  */
+  public static setupRookMovement() {
+    const pieces = [
+      createPiece("e2", PieceType.Rook, PieceColor.White, true, null),
+      createPiece("c1", PieceType.Rook, PieceColor.White, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  /*  Board Description
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊♖⚊⚊⚊
+    ⚊⚊⚊⚊♖⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊♜⚊⚊⚊
+    ⚊⚊⚊⚊♜⚊⚊⚊
+  */
+  public static setupRookCapture() {
+    const pieces = [
+      createPiece("e2", PieceType.Rook, PieceColor.White, true, null),
+      createPiece("e1", PieceType.Rook, PieceColor.White, true, null),
+      createPiece("e6", PieceType.Rook, PieceColor.Black, true, null),
+      createPiece("e5", PieceType.Rook, PieceColor.Black, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
   /*  Board Description bishop movement
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊

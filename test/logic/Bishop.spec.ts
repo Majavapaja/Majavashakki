@@ -63,7 +63,7 @@ describe("Bishop", () => {
       results.should.eql(["error"])
     });
 
-    it("should not allow rook to capture an ally [e2, d1]", () => {
+    it("should not allow bishop to capture an ally [e2, d1]", () => {
       const results = moveSequence(subject, [["e2", "d1"]])
       results.should.eql(["error"])
     });
