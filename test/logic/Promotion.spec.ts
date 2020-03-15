@@ -1,7 +1,7 @@
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
 import factory from "./PromotionFactory"
-import {moveSequence} from "./BoardHelper"
+import {moveSequence} from "./setup/BoardHelper"
 import * as Majavashakki from "../../src/common/GamePieces"
 
 chai.should()

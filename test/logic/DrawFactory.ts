@@ -1,7 +1,7 @@
 import { factory } from "factory-girl"
 import BoardBase from "../../src/common/BoardBase"
 import { PieceColor, PieceType } from "../../src/common/GamePieces"
-import { createPiece, stringToPosition } from "./BoardHelper"
+import { createPiece, stringToPosition } from "./setup/BoardHelper"
 
 // king vs king
 factory.define("board-draw-notenoughpieces-1", BoardBase, {}, {

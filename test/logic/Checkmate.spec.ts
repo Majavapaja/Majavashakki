@@ -1,7 +1,7 @@
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
 import factory from "./CheckmateFactory"
-import {moveSequence} from "./BoardHelper"
+import {moveSequence} from "./setup/BoardHelper"
 chai.should()
 chai.use(chaiAsPromised)
 

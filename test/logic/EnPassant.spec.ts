@@ -1,5 +1,5 @@
-import factory from "./EnPassantFactory";
-import {moveSequence} from "./BoardHelper";
+import factory from "./setup/BoardFactory";
+import {moveSequence} from "./setup/BoardHelper";
 import { expect } from "chai";
 import BoardBase from "common/BoardBase";
 

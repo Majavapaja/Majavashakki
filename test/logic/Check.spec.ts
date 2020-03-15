@@ -1,7 +1,7 @@
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
 import factory from "./CheckFactory"
-import {moveSequence} from "./BoardHelper"
+import {moveSequence} from "./setup/BoardHelper"
 import { PieceType } from "../../src/common/GamePieces"
 chai.should()
 chai.use(chaiAsPromised)

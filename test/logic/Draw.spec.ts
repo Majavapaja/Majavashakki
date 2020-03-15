@@ -1,7 +1,7 @@
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
 import factory from "./DrawFactory"
-import { moveSequence, stringToPosition } from "./BoardHelper"
+import { moveSequence, stringToPosition } from "./setup/BoardHelper"
 chai.should()
 chai.use(chaiAsPromised)
 

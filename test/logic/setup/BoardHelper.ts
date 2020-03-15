@@ -1,13 +1,13 @@
-import BoardBase from "../../src/common/BoardBase"
-import { PieceColor, PieceType, MoveStatus, IPosition } from "../../src/common/GamePieces"
-import Piece from "../../src/common/pieces/Piece"
-import Pawn from "../../src/common/pieces/Pawn"
-import Rook from "../../src/common/pieces/Rook"
-import Bishop from "../../src/common/pieces/Bishop"
-import Queen from "../../src/common/pieces/Queen"
-import King from "../../src/common/pieces/King"
-import Knight from "../../src/common/pieces/Knight"
-import * as Majavashakki from "../../src/common/GamePieces"
+import BoardBase from "../../../src/common/BoardBase"
+import { PieceColor, PieceType, MoveStatus, IPosition } from "../../../src/common/GamePieces"
+import Piece from "../../../src/common/pieces/Piece"
+import Pawn from "../../../src/common/pieces/Pawn"
+import Rook from "../../../src/common/pieces/Rook"
+import Bishop from "../../../src/common/pieces/Bishop"
+import Queen from "../../../src/common/pieces/Queen"
+import King from "../../../src/common/pieces/King"
+import Knight from "../../../src/common/pieces/Knight"
+import * as Majavashakki from "../../../src/common/GamePieces"
 
 export function moveSequence(board: BoardBase, moves: string[][]): string[] {
     const results: string [] = [];

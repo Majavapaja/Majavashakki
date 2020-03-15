@@ -3,10 +3,10 @@ import chaiAsPromised from "chai-as-promised"
 import factory from "./AlgebraicNotationFactory"
 import promotionFactory from "./PromotionFactory"
 import castlingFactory from "./CastlingFactory"
-import enPassantFactory from "./EnPassantFactory"
+import enPassantFactory from "./setup/BoardFactory"
 import checkFactory from "./CheckFactory"
 import checkmateFactory from "./CheckmateFactory"
-import {moveSequence} from "./BoardHelper"
+import {moveSequence} from "./setup/BoardHelper"
 import { PieceType } from "../../src/common/GamePieces"
 chai.should()
 chai.use(chaiAsPromised)

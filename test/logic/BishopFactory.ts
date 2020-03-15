@@ -1,7 +1,7 @@
 import { factory } from "factory-girl";
 import BoardBase from "../../src/common/BoardBase";
 import { PieceColor, PieceType } from "../../src/common/GamePieces"
-import { createPiece } from "./BoardHelper"
+import { createPiece } from "./setup/BoardHelper"
 
 /*  Board Description
     ⚊⚊⚊⚊⚊⚊⚊⚊
