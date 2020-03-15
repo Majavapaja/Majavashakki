@@ -1,5 +1,5 @@
-import factory from "./setup/BoardFactory";
-import {moveSequence} from "./setup/BoardHelper";
+import boardFactory from "./setup/BoardFactory";
+import { moveSequence } from "./setup/BoardHelper";
 import BoardBase from "common/BoardBase";
 
 describe("EnPassant", () => {
@@ -7,7 +7,7 @@ describe("EnPassant", () => {
   let subject: BoardBase;
 
   beforeEach(() => {
-    subject = factory.setupEnpassant()
+    subject = boardFactory.setupEnpassant()
   })
 
   it("should allow en passant", () => {

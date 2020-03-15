@@ -1,14 +1,14 @@
-import factory from "./setup/BoardFactory";
+import boardFactory from "./setup/BoardFactory";
 import { moveSequence } from "./setup/BoardHelper";
 import BoardBase from "common/BoardBase";
 
-describe.only("Castling", () => {
+describe("Castling", () => {
   let subject: BoardBase;
 
   describe("Basics", () => {
 
     beforeEach(() => {
-      subject = factory.setupCastling()
+      subject = boardFactory.setupCastling()
     })
 
     it("should allow castling with left rook", () => {
@@ -45,7 +45,7 @@ describe.only("Castling", () => {
   describe("Under attack", () => {
 
     beforeEach(() => {
-      subject = factory.setupCastlingUnderAttack()
+      subject = boardFactory.setupCastlingUnderAttack()
     })
 
     it("should not allow castling if king is in check", () => {
