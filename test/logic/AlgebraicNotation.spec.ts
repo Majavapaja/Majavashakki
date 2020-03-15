@@ -2,8 +2,7 @@ import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
 import factory from "./AlgebraicNotationFactory"
 import promotionFactory from "./PromotionFactory"
-import castlingFactory from "./CastlingFactory"
-import enPassantFactory from "./setup/BoardFactory"
+import boardFactory from "./setup/BoardFactory"
 import checkFactory from "./CheckFactory"
 import checkmateFactory from "./CheckmateFactory"
 import {moveSequence} from "./setup/BoardHelper"
@@ -83,33 +82,23 @@ describe("AlgebraicNotation", () => {
         })
     })
 
-    it("should have correct notation when castling to queenside", done => {
-        castlingFactory.build("board-castling").then(board => {
-            moveSequence(board, [ ["e1", "c1"] ])
-
-            board.moveHistory[0].algebraicNotation.should.equal("0-0-0")
-
-            done()
-        })
+    it("should have correct notation when castling to queenside", () => {
+      const subject = boardFactory.setupCastling()
+      moveSequence(subject, [["e1", "c1"]])
+      subject.moveHistory[0].algebraicNotation.should.equal("0-0-0")
     })
 
-    it("should have correct notation when castling to kingside", done => {
-        castlingFactory.build("board-castling").then(board => {
-            moveSequence(board, [ ["e1", "g1"] ])
-
-            board.moveHistory[0].algebraicNotation.should.equal("0-0")
-
-            done()
-        })
+    it("should have correct notation when castling to kingside", () => {
+      const subject = boardFactory.setupCastling()
+      moveSequence(subject, [["e1", "g1"]])
+      subject.moveHistory[0].algebraicNotation.should.equal("0-0")
     })
 
     it("should have correct notation when enpassant", () => {
-
-      const subject = enPassantFactory.setupEnpassant()
+      const subject = boardFactory.setupEnpassant()
       moveSequence(subject, [["c2", "c4"], ["d4", "c3"]])
       subject.moveHistory[0].algebraicNotation.should.equal("c4")
       subject.moveHistory[1].algebraicNotation.should.equal("dxc3e.p.")
-
     })
 
     it("should have correct notation for check", done => {
