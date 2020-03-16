@@ -1,4 +1,5 @@
 ![Deploy to production](https://github.com/Majavapaja/Majavashakki/workflows/Deploy%20to%20production/badge.svg) ![Dependencies](https://david-dm.org/majavapaja/Majavashakki/status.svg)
+![Code style](https://img.shields.io/badge/code%20style-none-brightgreen)
 
 # Majavashakki
 The amazing Node.js sequel to the fantastic MaJAVAshakki (for Java). With this new version we are planning to add several new bugs and more unreadable code!
