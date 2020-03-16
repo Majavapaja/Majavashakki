@@ -54,7 +54,7 @@
     "passport-local": "^1.0.0",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-jss": "^10.0.4",
+    "react-jss": "^10.1.1",
     "react-router-dom": "^5.1.2",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
