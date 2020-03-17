@@ -74,7 +74,9 @@
     "start": "node app.js",
     "test": "better-npm-run test",
     "test:browser": "better-npm-run test:browser",
-    "test:watch": "nodemon --watch src --watch test --ext ts,tsx --exec npm test || true"
+    "test:watch": "nodemon --watch src --watch test --ext ts,tsx --exec npm test || true",
+    "services": "docker-compose -f local-services/docker-compose.yml up -d",
+    "services:down": "docker-compose -f local-services/docker-compose.yml down"
   },
   "betterScripts": {
     "dev": {
