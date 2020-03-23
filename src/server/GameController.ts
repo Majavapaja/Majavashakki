@@ -155,7 +155,7 @@ function isPartOfTheGame(game: IGameDocument, userId: string): boolean {
 }
 
 function formatGamesListResponse(players: IUserDocument[]) {
-  return function(game: IGameDocument): ApiGameInfo {
+  return function (game: IGameDocument): ApiGameInfo {
     const { _id, title } = game
     return {
       id: _id,

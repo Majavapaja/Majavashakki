@@ -58,7 +58,7 @@ export interface IUserModel extends Model<IUserDocument> {
 
 /* Middleware */
 
-LoginSchema.pre("save", async function() {
+LoginSchema.pre("save", async function () {
   const self = this as ILoginDocument
   if (self.password && self.isModified("password")) {
     self.password = await bcrypt.hash(self.password, PASSWORD_SALT_ROUNDS)
@@ -111,7 +111,7 @@ UserSchema.statics.findByLoginId = async (loginType: LoginType, loginId: string)
 
 /* Methods */
 
-UserSchema.methods.isCorrectPassword = async function(password: string): Promise<boolean> {
+UserSchema.methods.isCorrectPassword = async function (password: string): Promise<boolean> {
   const self = this as IUserDocument
   const login = self.logins.find(x => x.type === LoginType.Local)
   if (!login || !login.password) {

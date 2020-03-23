@@ -48,7 +48,7 @@ const GameSchema: Schema = new Schema({
   inProgress: { type: Boolean, index: true },
   surrenderer: {
     type: String,
-    validate: function(surrenderer) {
+    validate: function (surrenderer) {
       return !surrenderer || surrenderer === this.playerIdWhite || surrenderer === this.playerIdBlack
     },
   },

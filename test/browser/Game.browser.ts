@@ -1,8 +1,8 @@
 import assert from "assert"
 import * as Util from "./TestUtil"
 
-Util.browserSpec("Game", { numBrowsers: 2 }, function() {
-  it("plays the shortest game ever", async function() {
+Util.browserSpec("Game", { numBrowsers: 2 }, function () {
+  it("plays the shortest game ever", async function () {
     const [white, black] = this.pages
     await setupGame(white, black)
 
@@ -22,7 +22,7 @@ Util.browserSpec("Game", { numBrowsers: 2 }, function() {
   // performance of The Barber of Seville at the Paris Opera."
   //
   // https://www.family-games-treasurehouse.com/sample_chess_game.html
-  it("plays a complete chess game", async function() {
+  it("plays a complete chess game", async function () {
     const [white, black] = this.pages
     await setupGame(white, black)
 
@@ -72,7 +72,7 @@ Util.browserSpec("Game", { numBrowsers: 2 }, function() {
     await checkText(black, "#whiteBadge.isWinner", "John Smith")
   })
 
-  it("implments pawn promotion correctly", async function() {
+  it("implments pawn promotion correctly", async function () {
     const [white, black] = this.pages
     await setupGame(white, black)
 

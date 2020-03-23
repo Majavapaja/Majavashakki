@@ -7,16 +7,16 @@ const PORT = process.env.TEST_PORT || "3001"
 const runHeadless = !!process.env.CI
 
 export function browserSpec(name, { numBrowsers }, func) {
-  describe(name, function() {
+  describe(name, function () {
     this.timeout(60_000)
 
-    before(async function() {
+    before(async function () {
       this.closeServer = await start(PORT)
       this.browsers = await timesAsync(numBrowsers, mkBrowser)
       this.browser = this.browsers[0]
     })
 
-    after(async function() {
+    after(async function () {
       if (this.browsers) {
         await mapAsync(this.browsers, b => b.close())
       }
@@ -26,7 +26,7 @@ export function browserSpec(name, { numBrowsers }, func) {
       }
     })
 
-    beforeEach(async function() {
+    beforeEach(async function () {
       await clearDatabase()
       await initTestData()
 
@@ -38,7 +38,7 @@ export function browserSpec(name, { numBrowsers }, func) {
       })
     })
 
-    afterEach(async function() {
+    afterEach(async function () {
       await mapAsync(this.pages, p => p.close())
     })
 

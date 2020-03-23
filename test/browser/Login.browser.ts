@@ -5,15 +5,15 @@ import * as Util from "./TestUtil"
 const testEmail = "foo@bar"
 const user1 = { username: "matti", email: testEmail, password: "foobar" }
 
-Util.browserSpec("Login", { numBrowsers: 1 }, function() {
-  it("redirects to login from front page", async function() {
+Util.browserSpec("Login", { numBrowsers: 1 }, function () {
+  it("redirects to login from front page", async function () {
     const { page } = this
 
     await Util.navigate(page, "/")
     await checkLocation(page, "/login")
   })
 
-  it("can access registration page from front page", async function() {
+  it("can access registration page from front page", async function () {
     const { page } = this
 
     await Util.navigate(page, "/login")
@@ -23,7 +23,7 @@ Util.browserSpec("Login", { numBrowsers: 1 }, function() {
     await checkLocation(page, "/signup")
   })
 
-  it("registration works", async function() {
+  it("registration works", async function () {
     const { page } = this
 
     await signup(page, testEmail, "matti", "foobar")
@@ -33,7 +33,7 @@ Util.browserSpec("Login", { numBrowsers: 1 }, function() {
     await Util.countInPage(page, "input[id^='game-filter']", 3)
   })
 
-  it("login works", async function() {
+  it("login works", async function () {
     const { page } = this
     const { username, email, password } = user1
 
@@ -52,7 +52,7 @@ Util.browserSpec("Login", { numBrowsers: 1 }, function() {
     await Util.countInPage(page, "input[id^='game-filter']", 3)
   })
 
-  it("error if registering user with existing email", async function() {
+  it("error if registering user with existing email", async function () {
     const { page } = this
     const email = testEmail
 

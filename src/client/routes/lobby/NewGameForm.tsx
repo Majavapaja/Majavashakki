@@ -28,10 +28,7 @@ class NewGameForm extends React.Component<INewGameProps, never> {
   }
 
   public cleanInput(input: string): string {
-    return input
-      .trim()
-      .replace("<", "")
-      .replace(">", "")
+    return input.trim().replace("<", "").replace(">", "")
   }
 
   @action.bound
