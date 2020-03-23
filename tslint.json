@@ -27,7 +27,8 @@
     "semicolon": false,
     "trailing-comma": false,
     "variable-name": [true, "allow-leading-underscore", "allow-pascal-case"],
-    "no-bitwise": false
+    "no-bitwise": false,
+    "space-before-function-paren": false
   },
   "rulesDirectory": []
 }
