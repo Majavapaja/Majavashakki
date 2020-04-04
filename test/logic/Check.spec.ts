@@ -1,12 +1,7 @@
 import boardFactory from "./setup/BoardFactory";
 import BoardBase from "common/BoardBase";
-import chai from "chai"
-import chaiAsPromised from "chai-as-promised"
-import factory from "./CheckFactory"
-import {moveSequence} from "./setup/BoardHelper"
+import { moveSequence } from "./setup/BoardHelper"
 import { PieceType } from "../../src/common/GamePieces"
-chai.should()
-chai.use(chaiAsPromised)
 
 describe("Check", () => {
   let subject: BoardBase
@@ -125,10 +120,10 @@ describe("Check", () => {
   })
 
   describe("Two kings", () => {
-      it("should not be able to move in range of another king", done => {
-          const promise = factory.build("board-check-two-kings")
-              .then(board => moveSequence(board, [["a8", "a7"]]))
-          promise.should.eventually.have.same.members(["error"]).notify(done)
-      })
+    it("should not be able to move in range of another king", () => {
+      subject = boardFactory.setupCheckWithTwoKings()
+      const results = moveSequence(subject, [["a8", "a7", PieceType.Knight]])
+      results.should.eql(["error"])
+    })
   })
 })

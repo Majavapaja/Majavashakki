@@ -321,4 +321,24 @@ export default class BoardFactory {
     ]
     return new BoardBase(pieces)
   }
+
+  /*  Board Description
+    ♚♝⚊⚊⚊⚊⚊♖
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊♔⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+  */
+  public static setupCheckWithTwoKings() {
+    const pieces = [
+      createPiece("a8", PieceType.King,   PieceColor.Black, true, null),
+      createPiece("b8", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("b6", PieceType.King,   PieceColor.White, true, null),
+      createPiece("h8", PieceType.Rook,   PieceColor.White, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
 }
