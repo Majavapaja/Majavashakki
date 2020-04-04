@@ -2,6 +2,7 @@ import BoardBase from "../../../src/common/BoardBase";
 import { PieceColor, PieceType } from "../../../src/common/GamePieces"
 import { createPiece } from "./BoardHelper"
 
+// Pieces Ascii ♔♕♖♗♘♙♚♛♜♝♞♟
 export default class BoardFactory {
   public static setupBasic = () => new BoardBase()
 
@@ -247,6 +248,29 @@ export default class BoardFactory {
       createPiece("a7", PieceType.Pawn, PieceColor.White, true, null),
       createPiece("a2", PieceType.Pawn, PieceColor.Black, true, null),
       createPiece("b1", PieceType.Pawn, PieceColor.White, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  // It's all crazy specific scenarios from this point downwards o_o
+
+  /*  Board Description
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊♚⚊⚊⚊⚊⚊
+    ⚊⚊♜⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊♖♜♔⚊⚊⚊⚊
+  */
+  public static setupCheck() {
+    const pieces = [
+      createPiece("c1", PieceType.Rook, PieceColor.Black, true, null),
+      createPiece("c6", PieceType.Rook, PieceColor.Black, true, null),
+      createPiece("c7", PieceType.King, PieceColor.Black, true, null),
+      createPiece("d1", PieceType.King, PieceColor.White, true, null),
+      createPiece("b1", PieceType.Rook, PieceColor.White, true, null),
     ]
     return new BoardBase(pieces)
   }

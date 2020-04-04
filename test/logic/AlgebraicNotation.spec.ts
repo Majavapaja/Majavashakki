@@ -96,14 +96,10 @@ describe("AlgebraicNotation", () => {
       subject.moveHistory[1].algebraicNotation.should.equal("dxc3e.p.")
     })
 
-    it("should have correct notation for check", done => {
-        checkFactory.build("board-check").then(board => {
-            moveSequence(board, [[ "b3", "b1" ]])
-
-            board.moveHistory[0].algebraicNotation.should.equal("Rb1+")
-
-            done()
-        })
+    it("should have correct notation for check", () => {
+      const subject = boardFactory.setupCheck()
+      moveSequence(subject, [["d1", "d2"], ["c1", "d1"]])
+      subject.moveHistory[1].algebraicNotation.should.equal("Rd1+")
     })
 
     it("should have correct notation for checkmate", done => {
