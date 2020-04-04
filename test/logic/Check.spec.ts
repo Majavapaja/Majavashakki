@@ -64,27 +64,25 @@ describe("Check", () => {
   })
 
   describe("Enpassant", () => {
-      it("should be able to check with enpassant", done => {
-          const promise = factory.build("board-check-enpassant")
-              .then(board => moveSequence(board, [["a7", "a5"], ["b5", "a6"]]))
-          promise.should.eventually.have.same.members(["move", "enpassant|check"]).notify(done)
-      })
 
-      it("should not allow enpassant if it causes check to current player", done => {
-          factory.build("board-check-enpassant-suicide").then(board => {
-              const result = moveSequence(board, [["c7", "c5"], ["b5", "c6"]])
-              result.should.have.same.members(["move", "error"])
-              done()
-          })
-      })
+    beforeEach(() => {
+      subject = boardFactory.setupCheckEnpassant()
+    })
 
-      it("should allow enpassant to save king from check", done => {
-          factory.build("board-check-enpassant-save").then(board => {
-              const result = moveSequence(board, [["c7", "c5"], ["b5", "c6"]])
-              result.should.have.same.members(["move|check", "enpassant"])
-              done()
-          })
-      })
+    it("should be able to check with enpassant", () => {
+      const results = moveSequence(subject, [["a7", "a5"], ["b5", "a6"]])
+      results.should.eql(["move", "enpassant|check"])
+    })
+
+    it("should allow enpassant to save king from check", () => {
+      const results = moveSequence(subject, [["e7", "e5"], ["d5", "e6"]])
+      results.should.eql(["move|check", "enpassant"])
+    })
+
+    it("should not allow enpassant if it causes check to current player", () => {
+      const results = moveSequence(subject, [["e7", "e5"], ["f5", "e6"]])
+      results.should.eql(["move|check", "error"])
+    })
   })
 
   describe("Castling causes check", () => {

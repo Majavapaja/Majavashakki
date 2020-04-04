@@ -275,4 +275,27 @@ export default class BoardFactory {
     return new BoardBase(pieces)
   }
 
+  /*  Board Description
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ♟♚⚊⚊♟♜⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊♙⚊♙⚊♙⚊⚊
+    ⚊⚊⚊⚊⚊♔⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+  */
+  public static setupCheckEnpassant() {
+    const pieces = [
+      createPiece("b5", PieceType.Pawn, PieceColor.White, true, null),
+      createPiece("d5", PieceType.Pawn, PieceColor.White, true, null),
+      createPiece("f5", PieceType.Pawn, PieceColor.White, true, null),
+      createPiece("f4", PieceType.King, PieceColor.White, true, null),
+      createPiece("a7", PieceType.Pawn, PieceColor.Black, false, null),
+      createPiece("e7", PieceType.Pawn, PieceColor.Black, false, null),
+      createPiece("f7", PieceType.Rook, PieceColor.Black, true, null),
+      createPiece("b7", PieceType.King, PieceColor.Black, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
 }
