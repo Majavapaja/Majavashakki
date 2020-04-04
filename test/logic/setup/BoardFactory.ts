@@ -150,6 +150,28 @@ export default class BoardFactory {
     return new BoardBase(pieces)
   }
 
+  /*  Board Description
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ♕⚊⚊⚊⚊⚊⚊⚊
+    ⚊♕⚊⚊♕⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊♛♛⚊⚊
+    ⚊⚊⚊⚊♛⚊⚊⚊
+*/
+  public static setupQueen() {
+    const pieces = [
+      createPiece("f2", PieceType.Queen, PieceColor.White, true, null),
+      createPiece("e2", PieceType.Queen, PieceColor.White, true, null),
+      createPiece("e1", PieceType.Queen, PieceColor.White, true, null),
+      createPiece("e5", PieceType.Queen, PieceColor.Black, true, null),
+      createPiece("a6", PieceType.Queen, PieceColor.Black, true, null),
+      createPiece("b5", PieceType.Queen, PieceColor.Black, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
   /*  Board Description Enpassant
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ♙⚊⚊⚊⚊⚊⚊⚊
