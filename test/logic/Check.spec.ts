@@ -107,18 +107,21 @@ describe("Check", () => {
     });
   })
 
-  describe("Promotion causes check", () => {
-      it("should cause check after promoting to Queen", done => {
-          const promise = factory.build("board-check-promotion")
-              .then(board => moveSequence(board, [["a7", "a8", PieceType.Queen]]))
-          promise.should.eventually.have.same.members(["promotion|check"]).notify(done)
-      })
+  describe("Promotion", () => {
 
-      it("should not cause check after promoting to Knight", done => {
-          const promise = factory.build("board-check-promotion")
-              .then(board => moveSequence(board, [["a7", "a8", PieceType.Knight]]))
-          promise.should.eventually.have.same.members(["promotion"]).notify(done)
-      })
+    beforeEach(() => {
+      subject = boardFactory.setupCheckPromotion()
+    })
+
+    it("should cause check after promoting to Queen", () => {
+      const results = moveSequence(subject, [["a7", "a8", PieceType.Queen]])
+      results.should.eql(["promotion|check"])
+    });
+
+    it("should not cause check after promoting to Knight", () => {
+      const results = moveSequence(subject, [["a7", "a8", PieceType.Knight]])
+      results.should.eql(["promotion"])
+    });
   })
 
   describe("Two kings", () => {

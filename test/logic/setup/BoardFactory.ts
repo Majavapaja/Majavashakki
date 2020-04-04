@@ -301,4 +301,24 @@ export default class BoardFactory {
     ]
     return new BoardBase(pieces)
   }
+
+  /*  Board Description
+    ⚊⚊⚊♚⚊⚊⚊⚊
+    ♙⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ♔⚊⚊⚊⚊⚊⚊⚊
+  */
+  public static setupCheckPromotion() {
+    const pieces = [
+      createPiece("a7", PieceType.Pawn, PieceColor.White, true, null),
+      createPiece("a1", PieceType.King, PieceColor.White, true, null),
+      createPiece("d8", PieceType.King, PieceColor.Black, true, null),
+      createPiece("h2", PieceType.Pawn, PieceColor.Black, false, null),
+    ]
+    return new BoardBase(pieces)
+  }
 }
