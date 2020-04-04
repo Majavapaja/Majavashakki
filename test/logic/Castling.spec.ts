@@ -1,6 +1,7 @@
 import boardFactory from "./setup/BoardFactory";
 import { moveSequence } from "./setup/BoardHelper";
 import BoardBase from "common/BoardBase";
+import * as Majavashakki from "../../src/common/GamePieces"
 
 describe("Castling", () => {
   let subject: BoardBase;
@@ -14,11 +15,13 @@ describe("Castling", () => {
     it("should allow castling with left rook", () => {
       const results = moveSequence(subject, [["e1", "c1"]])
       results.should.eql(["castling"])
+      subject.getPiece({ col: "d", row: "1" }).type.should.eql(Majavashakki.PieceType.Rook)
     });
 
     it("should allow castling with right rook", () => {
       const results = moveSequence(subject, [["e1", "g1"]])
       results.should.eql(["castling"])
+      subject.getPiece({ col: "f", row: "1" }).type.should.eql(Majavashakki.PieceType.Rook)
     });
 
     it("should not allow castling if king has moved", () => {
