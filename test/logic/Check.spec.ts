@@ -85,12 +85,26 @@ describe("Check", () => {
     })
   })
 
-  describe("Castling causes check", () => {
-      it("should be able to check with castling", done => {
-          const promise = factory.build("board-check-castling")
-              .then(board => moveSequence(board, [["e1", "c1"]]))
-          promise.should.eventually.have.same.members(["castling|check"]).notify(done)
-      })
+  describe("Castling", () => {
+
+    beforeEach(() => {
+      subject = boardFactory.setupCheckCastling()
+    })
+
+    it("should be able to check with castling", () => {
+      const results = moveSequence(subject, [["e1", "c1"]])
+      results.should.eql(["castling|check"])
+    })
+
+    it("should not allow castling if it would cause check to self", () => {
+      const results = moveSequence(subject, [["e1", "g1"]])
+      results.should.eql(["error"])
+    })
+
+    it("should not allow castling if king is in check", () => {
+      const results = moveSequence(subject, [["g8", "e8"], ["e1", "c1"]])
+      results.should.eql(["move|check", "error"])
+    });
   })
 
   describe("Promotion causes check", () => {

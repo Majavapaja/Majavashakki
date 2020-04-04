@@ -193,41 +193,23 @@ export default class BoardFactory {
   }
 
   /*  Board Description Castling
+    ⚊⚊⚊⚊♜⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
     ⚊⚊⚊⚊⚊⚊⚊⚊
-    ⚊⚊⚊⚊⚊⚊⚊⚊
-    ⚊⚊⚊⚊⚊⚊⚊⚊
-    ⚊⚊⚊♕♗⚊⚊⚊
+    ⚊⚊⚊⚊♕⚊⚊⚊
+    ⚊⚊⚊⚊♗⚊⚊⚊
     ♖⚊⚊⚊♔⚊⚊♖
   */
   public static setupCastling() {
     const pieces = [
-      createPiece("a1", PieceType.Rook, PieceColor.White, false, null),
-      createPiece("d2", PieceType.Queen, PieceColor.White, false, null),
-      createPiece("e1", PieceType.King, PieceColor.White, false, null),
+      createPiece("e8", PieceType.Rook,   PieceColor.Black, false, null),
+      createPiece("a1", PieceType.Rook,   PieceColor.White, false, null),
+      createPiece("e1", PieceType.King,   PieceColor.White, false, null),
       createPiece("e2", PieceType.Bishop, PieceColor.White, false, null),
-      createPiece("h1", PieceType.Rook, PieceColor.White, false, null),
-    ]
-    return new BoardBase(pieces)
-  }
-
-  /*  Board Description Castling under attack
-    ⚊⚊⚊⚊⚊⚊⚊⚊
-    ⚊⚊⚊⚊⚊⚊⚊⚊
-    ⚊⚊⚊⚊⚊⚊⚊⚊
-    ⚊⚊⚊⚊⚊⚊⚊⚊
-    ⚊⚊⚊⚊⚊⚊⚊⚊
-    ⚊⚊⚊⚊⚊⚊⚊⚊
-    ♜⚊⚊⚊⚊⚊⚊⚊
-    ♖⚊⚊⚊♔⚊⚊♖
-  */
-  public static setupCastlingUnderAttack() {
-    const pieces = [
-      createPiece("a1", PieceType.Rook, PieceColor.White, false, null),
-      createPiece("a2", PieceType.Rook, PieceColor.Black, false, null),
-      createPiece("e1", PieceType.King, PieceColor.White, false, null),
+      createPiece("e3", PieceType.Queen,  PieceColor.White, false, null),
+      createPiece("h1", PieceType.Rook,   PieceColor.White, false, null),
     ]
     return new BoardBase(pieces)
   }
@@ -295,6 +277,27 @@ export default class BoardFactory {
       createPiece("e7", PieceType.Pawn, PieceColor.Black, false, null),
       createPiece("f7", PieceType.Rook, PieceColor.Black, true, null),
       createPiece("b7", PieceType.King, PieceColor.Black, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  /*  Board Description
+    ⚊⚊⚊♚⚊⚊♜⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊⚊⚊⚊
+    ♖⚊⚊⚊♔⚊⚊♖
+  */
+  public static setupCheckCastling() {
+    const pieces = [
+      createPiece("a1", PieceType.Rook, PieceColor.White, false, null),
+      createPiece("h1", PieceType.Rook, PieceColor.White, false, null),
+      createPiece("e1", PieceType.King, PieceColor.White, false, null),
+      createPiece("g8", PieceType.Rook, PieceColor.Black, false, null),
+      createPiece("d8", PieceType.King, PieceColor.Black, true, null),
     ]
     return new BoardBase(pieces)
   }
