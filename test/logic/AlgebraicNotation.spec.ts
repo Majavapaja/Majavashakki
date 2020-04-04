@@ -1,7 +1,6 @@
 import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
 import factory from "./AlgebraicNotationFactory"
-import promotionFactory from "./PromotionFactory"
 import boardFactory from "./setup/BoardFactory"
 import checkFactory from "./CheckFactory"
 import checkmateFactory from "./CheckmateFactory"
@@ -68,18 +67,14 @@ describe("AlgebraicNotation", () => {
         })
     })
 
-    it("should have correct notation when promoting a pawn", done => {
-        promotionFactory.build("board-promotion").then(board => {
-            moveSequence(board, [
-                ["a7", "a8", PieceType.Knight],
-                ["a2", "b1", PieceType.Queen],
-            ])
-
-            board.moveHistory[0].algebraicNotation.should.equal("a8N")
-            board.moveHistory[1].algebraicNotation.should.equal("xb1Q")
-
-            done()
-        })
+    it("should have correct notation when promoting a pawn", () => {
+      const subject = boardFactory.setupPromotion()
+      moveSequence(subject, [
+        ["a7", "a8", PieceType.Knight],
+        ["a2", "b1", PieceType.Queen],
+      ])
+      subject.moveHistory[0].algebraicNotation.should.equal("a8N")
+      subject.moveHistory[1].algebraicNotation.should.equal("xb1Q")
     })
 
     it("should have correct notation when castling to queenside", () => {
