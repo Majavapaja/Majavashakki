@@ -24,7 +24,6 @@ class Message extends React.Component<IMessageProps, any> {
 
     private buildMessage() {
       let message = this.props.content.body;
-      console.log(message)
       const iconRegex = /:(.*?):/
       const components = []
 

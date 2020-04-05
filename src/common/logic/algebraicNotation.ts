@@ -120,8 +120,6 @@ export enum MoveMetadata {
 }
 
 export const getMoveMetadata = (algebraicNotation: Majavashakki.AlgebraicNotation): MoveMetadata => {
-  console.log(algebraicNotation)
-
   let metadata: MoveMetadata;
 
   if (algebraicNotation === "0-0") metadata |= MoveMetadata.KingCastling;
