@@ -1,11 +1,6 @@
 import boardFactory from "./setup/BoardFactory";
 import BoardBase from "common/BoardBase";
-import chai from "chai"
-import chaiAsPromised from "chai-as-promised"
-import factory from "./CheckmateFactory"
 import {moveSequence} from "./setup/BoardHelper"
-chai.should()
-chai.use(chaiAsPromised)
 
 describe("Checkmate", () => {
   let subject: BoardBase
@@ -37,7 +32,7 @@ describe("Checkmate", () => {
     })
   })
 
-  describe.only("Real scenarios", () => {
+  describe("Real scenarios", () => {
 
     it("should checkmate (fool's mate)", () => {
       subject = boardFactory.setupBasic()
@@ -53,26 +48,24 @@ describe("Checkmate", () => {
   })
 
   describe("Enpassant", () => {
-      it("should be able to checkmate with enpassant", done => {
-          const promise = factory.build("board-checkmate-enpassant")
-              .then(board => moveSequence(board, [["a7", "a5"], ["b5", "a6"]]))
-          promise.should.eventually.have.same.members(["move", "enpassant|checkmate"]).notify(done)
-      })
+    it("should be able to checkmate with enpassant", () => {
+      subject = boardFactory.setupCheckmateEnpassant()
+      const results = moveSequence(subject, [["a7", "a5"], ["b5", "a6"]])
+      results.should.eql(["move", "enpassant|checkmate"])
+    })
 
-      it("should not cause checkmate if it can be prevented with enpassant", done => {
-          factory.build("board-checkmate-enpassant-save").then(board => {
-              const result = moveSequence(board, [["a7", "a5"]])
-              result.should.have.same.members(["move|check"])
-              done()
-          })
-      })
+    it("should not cause checkmate if it can be prevented with enpassant", () => {
+      subject = boardFactory.setupCheckmateEnpassantEscape()
+      const results = moveSequence(subject, [["a7", "a5"]])
+      results.should.eql(["move|check"])
+    })
   })
 
   describe("Castling causes checkmate", () => {
-      it("should be able to checkmate with castling", done => {
-          const promise = factory.build("board-checkmate-castling")
-              .then(board => moveSequence(board, [["e1", "c1"]]))
-          promise.should.eventually.have.same.members(["castling|checkmate"]).notify(done)
+      it("should be able to checkmate with castling", () => {
+        subject = boardFactory.setupCheckmateCastling()
+        const results = moveSequence(subject, [["e1", "c1"]])
+        results.should.eql(["castling|checkmate"])
       })
   })
 })

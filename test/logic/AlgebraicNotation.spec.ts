@@ -2,7 +2,6 @@ import chai from "chai"
 import chaiAsPromised from "chai-as-promised"
 import factory from "./AlgebraicNotationFactory"
 import boardFactory from "./setup/BoardFactory"
-import checkmateFactory from "./CheckmateFactory"
 import {moveSequence} from "./setup/BoardHelper"
 import { PieceType } from "../../src/common/GamePieces"
 chai.should()
@@ -101,13 +100,9 @@ describe("AlgebraicNotation", () => {
       subject.moveHistory[1].algebraicNotation.should.equal("Rd1+")
     })
 
-    it("should have correct notation for checkmate", done => {
-        checkmateFactory.build("board-foolsmate").then(board => {
-            moveSequence(board, [[ "d8", "h4" ]])
-
-            board.moveHistory[0].algebraicNotation.should.equal("Qh4#")
-
-            done()
-        })
+    it("should have correct notation for checkmate", () => {
+      const subject = boardFactory.setupGameOfCentury()
+      moveSequence(subject, [["a2", "c2"]])
+      subject.moveHistory[0].algebraicNotation.should.equal("Rc2#")
     })
 })
