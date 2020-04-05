@@ -341,4 +341,27 @@ export default class BoardFactory {
     ]
     return new BoardBase(pieces)
   }
+
+  /*  Board Description
+  ⚊⚊⚊⚊⚊⚊⚊⚊
+  ⚊⚊⚊⚊⚊⚊⚊⚊
+  ⚊⚊⚊⚊⚊⚊⚊⚊
+  ⚊⚊⚊⚊⚊⚊♝⚊
+  ⚊⚊⚊⚊⚊⚊♝⚊
+  ⚊⚊⚊⚊⚊♜⚊⚊
+  ♜⚊⚊⚊⚊♕⚊♛
+  ⚊⚊⚊♔⚊⚊⚊⚊
+  */
+  public static setupCheckmate() {
+    const pieces = [
+      createPiece("d1", PieceType.King,   PieceColor.White, true, null),
+      createPiece("f2", PieceType.Queen,  PieceColor.White, true, null),
+      createPiece("a2", PieceType.Rook,   PieceColor.Black, true, null),
+      createPiece("f3", PieceType.Rook,   PieceColor.Black, true, null),
+      createPiece("g4", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("g5", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("h2", PieceType.Queen,   PieceColor.Black, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
 }
