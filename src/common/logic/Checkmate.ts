@@ -68,6 +68,9 @@ export function isCheckMate(board: BoardBase, color: Majavashakki.PieceColor): b
     }
 
     // If king is in double check, it is checkmate as king can only escape double check by moving himself
+    // TODO This is unnecessary check as the proceeding validations will do the same.
+    // TODO Could we rely on iteration of king colored pieces and available moves with "isvalidmove" check instead?
+    // TODO Something like stalemate has already.
     if (isDoubleCheck(board, king)) return true;
 
     const checkingPiece = getCheckingPiece(board, king);
