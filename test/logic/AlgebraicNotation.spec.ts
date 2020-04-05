@@ -1,71 +1,63 @@
-import chai from "chai"
-import chaiAsPromised from "chai-as-promised"
-import factory from "./AlgebraicNotationFactory"
 import boardFactory from "./setup/BoardFactory"
-import {moveSequence} from "./setup/BoardHelper"
+import { moveSequence } from "./setup/BoardHelper"
 import { PieceType } from "../../src/common/GamePieces"
-chai.should()
-chai.use(chaiAsPromised)
 
-describe("AlgebraicNotation", () => {
-    it("should return correct notation for basic movement", done => {
-        factory.build("board-an-movement")
-            .then(board => {
-                moveSequence(board, [
-                    ["a1", "a2"],
-                    ["b1", "a3"],
-                    ["c1", "b2"],
-                    ["d1", "d2"],
-                    ["e1", "e2"],
-                    ["f2", "f3"],
-                ])
+describe("Algebraic Notation", () => {
+  describe("Movement notation", () => {
+    it("should return correct notation for basic movement", () => {
+      const subject = boardFactory.setupAlgebraicNotationMovement()
+      moveSequence(subject, [
+        ["a1", "a2"],
+        ["b1", "a3"],
+        ["c1", "b2"],
+        ["d1", "d2"],
+        ["e1", "e2"],
+        ["f2", "f3"],
+      ])
 
-                board.moveHistory[0].algebraicNotation.should.equal("Ra2")
-                board.moveHistory[1].algebraicNotation.should.equal("Na3")
-                board.moveHistory[2].algebraicNotation.should.equal("Bb2")
-                board.moveHistory[3].algebraicNotation.should.equal("Qd2")
-                board.moveHistory[4].algebraicNotation.should.equal("Ke2")
-                board.moveHistory[5].algebraicNotation.should.equal("f3")
-
-                done()
-            })
+      subject.moveHistory[0].algebraicNotation.should.equal("Ra2")
+      subject.moveHistory[1].algebraicNotation.should.equal("Na3")
+      subject.moveHistory[2].algebraicNotation.should.equal("Bb2")
+      subject.moveHistory[3].algebraicNotation.should.equal("Qd2")
+      subject.moveHistory[4].algebraicNotation.should.equal("Ke2")
+      subject.moveHistory[5].algebraicNotation.should.equal("f3")
     })
+  })
 
-    it("should have correct notation for captures", done => {
-        factory.build("board-an-captures").then(board => {
-            moveSequence(board, [
-                ["a1", "a2"],
-                ["b1", "a3"],
-                ["b4", "a3"],
-            ])
+  describe("Capture notation", () => {
+    it("should have correct notation for captures", () => {
+      const subject = boardFactory.setupAlgebraicNotationCaptures()
+      moveSequence(subject, [
+        ["a1", "a2"],
+        ["b1", "a3"],
+        ["b4", "a3"],
+      ])
 
-            board.moveHistory[0].algebraicNotation.should.equal("Rxa2")
-            board.moveHistory[1].algebraicNotation.should.equal("Nxa3")
-            board.moveHistory[2].algebraicNotation.should.equal("bxa3")
-
-            done()
-        })
+      subject.moveHistory[0].algebraicNotation.should.equal("Rxa2")
+      subject.moveHistory[1].algebraicNotation.should.equal("Nxa3")
+      subject.moveHistory[2].algebraicNotation.should.equal("bxa3")
     })
+  })
 
-    it("should have correct disambiguate if rank/file conflicts", done => {
-        factory.build("board-an-disambiguation").then(board => {
-            moveSequence(board, [
-                ["d6", "b8"],
-                ["d8", "f8"],
-                ["a1", "a3"],
-                ["h4", "e1"],
-            ])
+  describe("Disambiguation", () => {
+    it("should have correct disambiguation with rank/file conflicts", () => {
+      const subject = boardFactory.setupAlgebraicNotationDisambiguation()
+      moveSequence(subject, [
+        ["d6", "b8"],
+        ["d8", "f8"],
+        ["a1", "a3"],
+        ["h4", "e1"],
+      ])
 
-            board.moveHistory[0].algebraicNotation.should.equal("Bdb8")
-            board.moveHistory[1].algebraicNotation.should.equal("Rdf8")
-            board.moveHistory[2].algebraicNotation.should.equal("R1a3")
-            board.moveHistory[3].algebraicNotation.should.equal("Qh4e1")
-
-            done()
-        })
+      subject.moveHistory[0].algebraicNotation.should.equal("Bdb8")
+      subject.moveHistory[1].algebraicNotation.should.equal("Rdf8")
+      subject.moveHistory[2].algebraicNotation.should.equal("R1a3")
+      subject.moveHistory[3].algebraicNotation.should.equal("Qh4e1")
     })
+  })
 
-    it("should have correct notation when promoting a pawn", () => {
+  describe("Special movements", () => {
+    it("should have correct notation for promoting a pawn", () => {
       const subject = boardFactory.setupPromotion()
       moveSequence(subject, [
         ["a7", "a8", PieceType.Knight],
@@ -75,28 +67,34 @@ describe("AlgebraicNotation", () => {
       subject.moveHistory[1].algebraicNotation.should.equal("xb1Q")
     })
 
-    it("should have correct notation when castling to queenside", () => {
+    it("should have correct notation for castling to queenside", () => {
       const subject = boardFactory.setupCastling()
       moveSequence(subject, [["e1", "c1"]])
       subject.moveHistory[0].algebraicNotation.should.equal("0-0-0")
     })
 
-    it("should have correct notation when castling to kingside", () => {
+    it("should have correct notation for castling to kingside", () => {
       const subject = boardFactory.setupCastling()
       moveSequence(subject, [["e1", "g1"]])
       subject.moveHistory[0].algebraicNotation.should.equal("0-0")
     })
 
-    it("should have correct notation when enpassant", () => {
+    it("should have correct notation for enpassant", () => {
       const subject = boardFactory.setupEnpassant()
-      moveSequence(subject, [["c2", "c4"], ["d4", "c3"]])
+      moveSequence(subject, [
+        ["c2", "c4"],
+        ["d4", "c3"],
+      ])
       subject.moveHistory[0].algebraicNotation.should.equal("c4")
       subject.moveHistory[1].algebraicNotation.should.equal("dxc3e.p.")
     })
 
     it("should have correct notation for check", () => {
       const subject = boardFactory.setupCheck()
-      moveSequence(subject, [["d1", "d2"], ["c1", "d1"]])
+      moveSequence(subject, [
+        ["d1", "d2"],
+        ["c1", "d1"],
+      ])
       subject.moveHistory[1].algebraicNotation.should.equal("Rd1+")
     })
 
@@ -105,4 +103,5 @@ describe("AlgebraicNotation", () => {
       moveSequence(subject, [["a2", "c2"]])
       subject.moveHistory[0].algebraicNotation.should.equal("Rc2#")
     })
+  })
 })

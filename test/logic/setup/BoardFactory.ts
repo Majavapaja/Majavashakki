@@ -477,4 +477,72 @@ export default class BoardFactory {
     ]
     return new BoardBase(pieces)
   }
+
+  /*  a b c d e f g h
+    8 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 8
+    7 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 7
+    6 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 6
+    5 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 5
+    4 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 4
+    3 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 3
+    2 ⚊ ⚊ ⚊ ⚊ ⚊ ♙ ⚊ ⚊ 2
+    1 ♖ ♘ ♗ ♕ ♔ ⚊ ⚊ ⚊ 1
+      a b c d e f g h */
+  public static setupAlgebraicNotationMovement() {
+    const pieces = [
+      createPiece("a1", PieceType.Rook, PieceColor.White, false, null),
+      createPiece("b1", PieceType.Knight, PieceColor.White, false, null),
+      createPiece("c1", PieceType.Bishop, PieceColor.White, false, null),
+      createPiece("d1", PieceType.Queen, PieceColor.White, false, null),
+      createPiece("e1", PieceType.King, PieceColor.White, false, null),
+      createPiece("f2", PieceType.Pawn, PieceColor.White, false, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  /*  a b c d e f g h
+    8 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 8
+    7 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 7
+    6 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 6
+    5 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 5
+    4 ⚊ ♟ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 4
+    3 ♟ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 3
+    2 ♟ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 2
+    1 ♖ ♘ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
+      a b c d e f g h */
+  public static setupAlgebraicNotationCaptures() {
+    const pieces = [
+      createPiece("a1", PieceType.Rook,   PieceColor.White, false, null),
+      createPiece("b1", PieceType.Knight, PieceColor.White, false, null),
+      createPiece("a2", PieceType.Pawn,   PieceColor.Black, true, null),
+      createPiece("a3", PieceType.Pawn,   PieceColor.Black, true, null),
+      createPiece("b4", PieceType.Pawn,   PieceColor.Black, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  /*  a b c d e f g h
+    8 ⚊ ⚊ ⚊ ♜ ⚊ ⚊ ⚊ ♜ 8
+    7 ♝ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 7
+    6 ⚊ ⚊ ⚊ ♝ ⚊ ⚊ ⚊ ⚊ 6
+    5 ♖ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 5
+    4 ⚊ ⚊ ⚊ ⚊ ♕ ⚊ ⚊ ♕ 4
+    3 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 3
+    2 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 2
+    1 ♖ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ♕ 1
+      a b c d e f g h */
+  public static setupAlgebraicNotationDisambiguation() {
+    const pieces = [
+      createPiece("a1", PieceType.Rook,   PieceColor.White, true, null),
+      createPiece("a5", PieceType.Rook,   PieceColor.White, true, null),
+      createPiece("e4", PieceType.Queen,  PieceColor.White, true, null),
+      createPiece("h1", PieceType.Queen,  PieceColor.White, true, null),
+      createPiece("h4", PieceType.Queen,  PieceColor.White, true, null),
+      createPiece("a7", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("d6", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("d8", PieceType.Rook,   PieceColor.Black, true, null),
+      createPiece("h8", PieceType.Rook,   PieceColor.Black, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
 }
