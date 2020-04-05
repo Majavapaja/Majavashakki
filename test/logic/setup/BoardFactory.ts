@@ -343,7 +343,7 @@ export default class BoardFactory {
   }
 
   /*  Board Description
-  ⚊⚊⚊⚊⚊⚊⚊⚊
+  ⚊⚊⚊⚊♜⚊⚊⚊
   ⚊⚊⚊⚊⚊⚊⚊⚊
   ⚊⚊⚊⚊⚊⚊⚊⚊
   ⚊⚊⚊⚊⚊⚊♝⚊
@@ -358,6 +358,7 @@ export default class BoardFactory {
       createPiece("f2", PieceType.Queen,  PieceColor.White, true, null),
       createPiece("a2", PieceType.Rook,   PieceColor.Black, true, null),
       createPiece("f3", PieceType.Rook,   PieceColor.Black, true, null),
+      createPiece("e8", PieceType.Rook,   PieceColor.Black, true, null),
       createPiece("g4", PieceType.Bishop, PieceColor.Black, true, null),
       createPiece("g5", PieceType.Bishop, PieceColor.Black, true, null),
       createPiece("h2", PieceType.Queen,   PieceColor.Black, true, null),

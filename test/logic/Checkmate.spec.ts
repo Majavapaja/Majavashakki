@@ -33,7 +33,7 @@ describe("Checkmate", () => {
 
     it("should checkmate when king can't move and is in double check", () => {
       const results = moveSequence(subject, [["f3", "d3"]])
-      results.should.eql(["move|check"])
+      results.should.eql(["move|checkmate"])
     })
   })
 
