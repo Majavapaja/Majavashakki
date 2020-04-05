@@ -1,98 +1,88 @@
-import chai from "chai"
-import chaiAsPromised from "chai-as-promised"
-import factory from "./DrawFactory"
+import BoardBase from "common/BoardBase"
+import boardFactory from "./setup/BoardFactory"
 import { moveSequence, stringToPosition } from "./setup/BoardHelper"
-chai.should()
-chai.use(chaiAsPromised)
 
 describe("Draw", () => {
-    describe("Small boards", () => {
-        it("should be draw if only two kings left", done => {
-            const promise = factory.build("board-draw-notenoughpieces-1")
-                .then(board => moveSequence(board, [["e2", "e3"]]))
-            promise.should.eventually.have.same.members(["capture|draw"]).notify(done)
-        })
-
-        it("should be draw if only king and bishop vs king + bishop left (and bishop on the same colors)", done => {
-            const promise = factory.build("board-draw-notenoughpieces-2")
-                .then(board => moveSequence(board, [["e2", "e3"]]))
-            promise.should.eventually.have.same.members(["capture|draw"]).notify(done)
-        })
-
-        it("should not be a draw if king and bishop vs king + bishop left (and bishops on different colors)", done => {
-            const promise = factory.build("board-draw-notenoughpieces-3")
-                .then(board => moveSequence(board, [["e2", "e3"]]))
-            promise.should.eventually.have.same.members(["capture"]).notify(done)
-        })
-
-        it("should be a draw if king and bishop vs king", done => {
-            const promise = factory.build("board-draw-notenoughpieces-4")
-                .then(board => moveSequence(board, [["e2", "e3"]]))
-            promise.should.eventually.have.same.members(["capture|draw"]).notify(done)
-        })
-
-        it("should be a draw if king vs king and bishop", done => {
-            const promise = factory.build("board-draw-notenoughpieces-5")
-                .then(board => moveSequence(board, [["e2", "e3"]]))
-            promise.should.eventually.have.same.members(["capture|draw"]).notify(done)
-        })
-
-        it("should be a draw if king vs king and knight", done => {
-            const promise = factory.build("board-draw-notenoughpieces-6")
-                .then(board => moveSequence(board, [["e2", "e3"]]))
-            promise.should.eventually.have.same.members(["capture|draw"]).notify(done)
-        })
-
-        it("should be a draw if king and knight vs king", done => {
-            const promise = factory.build("board-draw-notenoughpieces-7")
-                .then(board => moveSequence(board, [["e2", "e3"]]))
-            promise.should.eventually.have.same.members(["capture|draw"]).notify(done)
-        })
+  describe("Not enough pieces for checkmate", () => {
+    it("should be draw if there are only two kings", () => {
+      const subject = boardFactory.setupDrawKingVsKing()
+      const results = moveSequence(subject, [["e2", "e3"]])
+      results.should.eql(["capture|draw"])
     })
 
-    describe("Fifty move rule", () => {
-        it ("should be a draw if there has been 50 moves without action", done => {
-            factory.build("board-draw-49moves").then(board => {
-                moveSequence(board, [["g2", "g1"], ["c3", "b3"]]).should.have.same.members(["move", "move|draw"])
-                done()
-            })
-        })
-
-        it ("should not be a draw if there are only 49 moves", done => {
-            factory.build("board-draw-49moves").then(board => {
-                moveSequence(board, [["g2", "g1"]]).should.have.same.members(["move"])
-                done()
-            })
-        })
-
-        it ("should be a draw if last pawn movement was 51 moves ago", done => {
-            factory.build("board-draw-49moves").then(board => {
-                board.moveHistory = [
-                    {
-                        start: stringToPosition("b4"),
-                        destination: stringToPosition('b5'),
-                        algebraicNotation: 'b5'
-                    },
-                    ...board.moveHistory
-                ]
-
-                moveSequence(board, [["g2", "g1"], ["c3", "b3"]]).should.have.same.members(["move", "move|draw"])
-                done()
-            })
-        })
-
-        it ("should not be a draw if last move was pawn movement", done => {
-            factory.build("board-draw-49moves").then(board => {
-                moveSequence(board, [["g2", "g1"], ["b5", "b6"]]).should.have.same.members(["move", "move"])
-                done()
-            })
-        })
-
-        it ("should not be a draw if last move was capture", done => {
-            factory.build("board-draw-49moves").then(board => {
-                moveSequence(board, [["g2", "g1"], ["b8", "b5"]]).should.have.same.members(["move", "capture"])
-                done()
-            })
-        })
+    it("should be a draw if there are only two bishops on the same color", () => {
+      const subject = boardFactory.setupDrawSameColorBishop()
+      const results = moveSequence(subject, [["e2", "e3"]])
+      results.should.eql(["capture|draw"])
     })
+
+    it("should not be a draw if there are only two bishops on different colors", () => {
+      const subject = boardFactory.setupDrawDifferentColorBishop()
+      const results = moveSequence(subject, [["e2", "e3"]])
+      results.should.eql(["capture"])
+    })
+
+    it("should be a draw if there is only a black bishop", () => {
+      const subject = boardFactory.setupDrawOneWhiteBishop()
+      const results =  moveSequence(subject, [["e2", "e3"]])
+      results.should.eql(["capture|draw"])
+    })
+
+    it("should be a draw if there is only a white bishop", () => {
+      const subject = boardFactory.setupDrawOneBlackBishop()
+      const results = moveSequence(subject, [["e2", "e3"]])
+      results.should.eql(["capture|draw"])
+    })
+
+    it("should be a draw if there is only a white knight", () => {
+      const subject = boardFactory.setupDrawOneWhiteKnight()
+      const results = moveSequence(subject, [["e2", "e3"]])
+      results.should.eql(["capture|draw"])
+    })
+
+    it("should be a draw if there is only a black knight", () => {
+      const subject = boardFactory.setupDrawOneBlackKnight()
+      const results = moveSequence(subject, [["e2", "e3"]])
+      results.should.eql(["capture|draw"])
+    })
+  })
+
+  describe("Fifty move rule", () => {
+    let subject: BoardBase
+
+    beforeEach(() => {
+      subject = boardFactory.setupDraw48Moves()
+    })
+
+    it("should be a draw if there has been 50 moves without action", () => {
+      const results = moveSequence(subject, [["g2", "g1"], ["c3", "b3"]])
+      results.should.eql(["move", "move|draw"])
+    })
+
+    it("should not be a draw if there are only 49 moves", () => {
+      const results = moveSequence(subject, [["g2", "g1"]])
+      results.should.eql(["move"])
+    })
+
+    it("should be a draw if last pawn movement was 51 moves ago", () => {
+      const pawnMove = {
+        start: stringToPosition("b4"),
+        destination: stringToPosition("b5"),
+        algebraicNotation: "b5",
+      }
+      subject.moveHistory = [ pawnMove, ...subject.moveHistory ]
+      const results = moveSequence(subject, [["g2", "g1"], ["c3", "b3"]])
+      results.should.eql(["move", "move|draw"])
+    })
+
+    it("should not be a draw if last move was pawn movement", () => {
+      const results = moveSequence(subject, [["g2", "g1"], ["b5", "b6"]])
+      results.should.eql(["move", "move"])
+    })
+
+    it("should not be a draw if last move was capture", () => {
+      const results = moveSequence(subject, [["g2", "g1"], ["b8", "b5"]])
+      results.should.eql(["move", "capture"])
+    })
+  })
 })
