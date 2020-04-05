@@ -122,7 +122,7 @@ describe("Check", () => {
   describe("Two kings", () => {
     it("should not be able to move in range of another king", () => {
       subject = boardFactory.setupCheckWithTwoKings()
-      const results = moveSequence(subject, [["a8", "a7", PieceType.Knight]])
+      const results = moveSequence(subject, [["a8", "a7"]])
       results.should.eql(["error"])
     })
   })
