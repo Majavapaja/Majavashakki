@@ -365,4 +365,36 @@ export default class BoardFactory {
     ]
     return new BoardBase(pieces)
   }
+
+  /*  Board Description
+    ⚊♕⚊⚊⚊⚊⚊⚊
+    ⚊⚊⚊⚊⚊♟♚⚊
+    ⚊⚊♟⚊⚊⚊♟⚊
+    ⚊♟⚊⚊♘⚊⚊♟
+    ⚊♝⚊⚊⚊⚊⚊♙
+    ⚊♝♞⚊⚊⚊⚊⚊
+    ♜⚊⚊⚊⚊⚊♙⚊
+    ⚊⚊♔⚊⚊⚊⚊⚊
+  */
+  public static setupGameOfCentury() {
+    const pieces = [
+      createPiece("b8", PieceType.Queen, PieceColor.White, true, null),
+      createPiece("e5", PieceType.Knight, PieceColor.White, true, null),
+      createPiece("h4", PieceType.Pawn, PieceColor.White, true, null),
+      createPiece("g2", PieceType.Pawn, PieceColor.White, true, null),
+      createPiece("c1", PieceType.King, PieceColor.White, true, null),
+
+      createPiece("f7", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("g7", PieceType.King, PieceColor.Black, true, null),
+      createPiece("c6", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("g6", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("b5", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("h5", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("b4", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("b3", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("c3", PieceType.Knight, PieceColor.Black, true, null),
+      createPiece("a2", PieceType.Rook, PieceColor.Black, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
 }

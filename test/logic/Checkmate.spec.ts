@@ -37,18 +37,19 @@ describe("Checkmate", () => {
     })
   })
 
-  describe("Real scenarios", () => {
-      it("should checkmate (foolsmate)", done => {
-          const promise = factory.build("board-foolsmate")
-              .then(board => moveSequence(board, [["d8", "h4"]]))
-          promise.should.eventually.have.same.members(["move|checkmate"]).notify(done)
-      })
+  describe.only("Real scenarios", () => {
 
-      it("should checkmate (game of century)", done => {
-          const promise = factory.build("board-gameofcentury")
-              .then(board => moveSequence(board, [["a2", "c2"]]))
-          promise.should.eventually.have.same.members(["move|checkmate"]).notify(done)
-      })
+    it("should checkmate (fool's mate)", () => {
+      subject = boardFactory.setupBasic()
+      const results = moveSequence(subject, [["f2", "f3"], ["e7", "e6"], ["g2", "g4"], ["d8", "h4"]])
+      results.should.eql(["move", "move", "move", "move|checkmate"])
+    })
+
+    it("should checkmate (game of century)", () => {
+      subject = boardFactory.setupGameOfCentury()
+      const results = moveSequence(subject, [["a2", "c2"]])
+      results.should.eql(["move|checkmate"])
+    })
   })
 
   describe("Enpassant", () => {
