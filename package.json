@@ -46,7 +46,7 @@
     "jss": "^10.1.1",
     "jss-global": "^3.0.0",
     "mobx": "^5.15.4",
-    "mobx-react": "^6.2.0",
+    "mobx-react": "^6.2.1",
     "mongodb": "^3.5.5",
     "mongoose": "^5.9.7",
     "passport": "^0.4.1",
