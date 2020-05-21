@@ -1,2 +1,2 @@
 azure==5.0.0
-azure-cosmos==3.1.2
+azure-cosmos==4.0.0
