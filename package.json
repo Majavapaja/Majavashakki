@@ -33,7 +33,7 @@
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
     "@types/request-promise": "^4.1.46",
-    "@types/socket.io": "^2.1.7",
+    "@types/socket.io": "^2.1.8",
     "@types/socket.io-client": "^1.4.33",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
