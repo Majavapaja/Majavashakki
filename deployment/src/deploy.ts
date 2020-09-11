@@ -2,6 +2,7 @@ import * as path from "path"
 import { spawnSync } from "child_process"
 
 import {login, Context, env} from "./context"
+import {CosmosClient} from "@azure/cosmos"
 
 const resourceGroup = "Majavashakki"
 const location = "North Europe"
@@ -16,6 +17,32 @@ async function main() {
   const tag = containerTag(gitSha)
 
   const ctx = await login()
+  console.log('Creating CosmosDB')
+  const dbAccount = await ctx.cosmosdb.databaseAccounts.createOrUpdate(
+    resourceGroup,
+    `${resourceGroup}mongo`.toLowerCase(),
+    {
+      location,
+      locations: [{ locationName: location }],
+      kind: "MongoDB",
+    },
+  )
+
+  console.log("Getting Cosmos DB connection details")
+  const [password, connectionString] = await getCosmosConnectionDetails(ctx)
+
+  console.log(dbAccount)
+  const cosmosClient = new CosmosClient({
+    endpoint: dbAccount.documentEndpoint!,
+    key: password,
+  })
+  const db = await cosmosClient.databases.createIfNotExists({
+    id: "Majavashakki"
+  })
+
+  for (const id of ["games", "sessions", "users", "undefined"]) {
+    await db.database.containers.createIfNotExists({ id }, { offerThroughput: 400 })
+  }
 
   console.log("Ensuring container registry exists")
   const registry = await createRegistry(ctx, "majavashakki")
@@ -26,9 +53,6 @@ async function main() {
   shellSync(["docker", "build", "--tag", fullContainerTag, "."], resolve("."))
   shellSync(["docker", "push", fullContainerTag], resolve("."))
   console.log(await ctx.webapps.get(resourceGroup, appName))
-
-  console.log("Getting Cosmos DB connection details")
-  const [password, connectionString] = await getCosmosConnectionDetails(ctx)
 
   console.log("Ensuring App Service Plan exists")
   const plan = await ctx.websites.appServicePlans.createOrUpdate(resourceGroup, "majavashakki-linux", {

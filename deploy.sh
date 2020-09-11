@@ -4,23 +4,47 @@ set -o errexit -o nounset -o pipefail
 
 repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-npm --prefer-offline ci
-npm run lint
-npm run build
-TS_NODE_FILES=true npm run test
-TS_NODE_FILES=true npm run test:browser
+function main {
+  cd "$repo"
 
-if [ ! -d "$repo/deployment/.venv" ]; then
-  python3 -m venv "$repo/deployment/.venv"
-fi
+  use_nodejs_version "10.17.0"
 
-set +o nounset
-source "$repo/deployment/.venv/bin/activate"
-set -o nounset
-pip install -r "$repo/deployment/requirements.txt" &> /dev/null
-python "$repo/deployment/deploy.py"
+  build
+  run_tests
+  deploy
+}
 
-pushd "$repo/deployment"
-npm --prefer-offline ci
-npm run deploy
-popd
+function deploy {
+  pushd "$repo/deployment"
+  npm --prefer-offline ci
+  npm run deploy
+  popd
+}
+
+function build {
+  pushd "$repo"
+  npm --prefer-offline ci
+  npm run lint
+  npm run build
+  popd
+}
+
+function run_tests {
+  pushd "$repo"
+  TS_NODE_FILES=true npm run test
+  TS_NODE_FILES=true npm run test:browser
+  popd
+}
+
+function use_nodejs_version {
+  local node_version="$1"
+
+  set +o nounset
+  export NVM_DIR="${NVM_DIR:-$HOME/.cache/nvm}"
+  source "$repo/nvm.sh"
+  nvm install "$node_version"
+  nvm use "$node_version"
+  set -o nounset
+}
+
+main "$@"
