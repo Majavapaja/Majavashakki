@@ -1,54 +1,51 @@
-import chai from "chai";
-import chaiAsPromised from "chai-as-promised";
-import factory from "./KingFactory";
-import {moveSequence} from "./BoardHelper";
-chai.should();
-chai.use(chaiAsPromised);
+import boardFactory from "./setup/BoardFactory";
+import { moveSequence } from "./setup/BoardHelper";
+import BoardBase from "common/BoardBase";
 
 describe("King", () => {
-    describe("Basic movement", () => {
-        it("should allow king to move up [c2, c3]", done => {
-            const promise = factory.build("board-king-movement")
-                .then(board => moveSequence(board, [["c2", "c3"]]));
-            promise.should.eventually.have.same.members(["move"]).notify(done);
-        });
+  let subject: BoardBase
 
-        it("should allow king to move down right [c2, d1]", done => {
-            const promise = factory.build("board-king-movement")
-                .then(board => moveSequence(board, [["c2", "d1"]]));
-            promise.should.eventually.have.same.members(["move"]).notify(done);
-        });
+  beforeEach(() => {
+    subject = boardFactory.setupKing()
+  })
 
-        it("should not allow king to move three up [c2, c5]", done => {
-            const promise = factory.build("board-king-movement")
-                .then(board => moveSequence(board, [["c2", "c5"]]));
-            promise.should.eventually.have.same.members(["error"]).notify(done);
-        });
+  describe("Basic movement", () => {
 
-        it("should not allow king to move three diagonally [c2, f5]", done => {
-            const promise = factory.build("board-king-movement")
-                .then(board => moveSequence(board, [["c2", "f5"]]));
-            promise.should.eventually.have.same.members(["error"]).notify(done);
-        });
+    it("should allow king to move down [c7, c6]", () => {
+      const results = moveSequence(subject, [["c7", "c6"]])
+      results.should.eql(["move"])
     });
 
-    describe("Capturing", () => {
-        it("should allow king to capture sideways [c2, b2]", done => {
-            const promise = factory.build("board-king-capture")
-                .then(board => moveSequence(board, [["c2", "b2"]]));
-            promise.should.eventually.have.same.members(["capture"]).notify(done);
-        });
-
-        it("should allow king to capture diagonally [c2, b3]", done => {
-            const promise = factory.build("board-king-capture")
-                .then(board => moveSequence(board, [["c2", "b3"]]));
-            promise.should.eventually.have.same.members(["capture"]).notify(done);
-        });
-
-        it("should not allow king to capture allies [c2, c1]", done => {
-            const promise = factory.build("board-king-capture")
-                .then(board => moveSequence(board, [["c2", "c1"]]));
-            promise.should.eventually.have.same.members(["error"]).notify(done);
-        });
+    it("should not allow king to move two down [c7, c5]", () => {
+      const results = moveSequence(subject, [["c7", "c5"]])
+      results.should.eql(["error"])
     });
+
+    it("should allow king to move down right [c7, d6]", () => {
+      const results = moveSequence(subject, [["c7", "d6"]])
+      results.should.eql(["move"])
+    });
+
+    it("should not allow king to move two down right [c7, e5]", () => {
+      const results = moveSequence(subject, [["c7", "e5"]])
+      results.should.eql(["error"])
+    });
+  });
+
+  describe("Capturing", () => {
+    it("should allow king to capture sideways [c3, b3]", () => {
+      const results = moveSequence(subject, [["c3", "b3"]])
+      results.should.eql(["capture"])
+    });
+
+    it("should allow king to capture diagonally [c3, b2]", () => {
+      const results = moveSequence(subject, [["c3", "b2"]])
+      results.should.eql(["capture"])
+    });
+
+    it("should not allow king to capture allies [c3, c2]", () => {
+      const results = moveSequence(subject, [["c3", "c2"]])
+      results.should.eql(["error"])
+    });
+  });
 });
