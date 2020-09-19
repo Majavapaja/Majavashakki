@@ -47,7 +47,7 @@ export function stringToPosition(str): IPosition {
     };
 }
 
-export function createPiece(pos: string, type: PieceType, color: PieceColor, hasMoved: boolean, board: BoardBase): Piece {
+export function createPiece(pos: string, type: PieceType, color: PieceColor, hasMoved: boolean): Piece {
     let piece: Piece
 
     if (type === PieceType.Pawn) piece = new Pawn(color, stringToPosition(pos))

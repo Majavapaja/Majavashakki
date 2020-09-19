@@ -30,12 +30,12 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupPawnCapture() {
     const pieces = [
-      createPiece("c5", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("e4", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("d4", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("d5", PieceType.Pawn, PieceColor.Black, true, null),
-      createPiece("e5", PieceType.Pawn, PieceColor.Black, true, null),
-      createPiece("f4", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("c5", PieceType.Pawn, PieceColor.White, true),
+      createPiece("e4", PieceType.Pawn, PieceColor.White, true),
+      createPiece("d4", PieceType.Pawn, PieceColor.White, true),
+      createPiece("d5", PieceType.Pawn, PieceColor.Black, true),
+      createPiece("e5", PieceType.Pawn, PieceColor.Black, true),
+      createPiece("f4", PieceType.Pawn, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -52,16 +52,16 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupPawnDoubleMove() {
     const pieces = [
-      createPiece("a2", PieceType.Pawn, PieceColor.White, false, null),
-      createPiece("a3", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("b2", PieceType.Pawn, PieceColor.White, false, null),
-      createPiece("c2", PieceType.Pawn, PieceColor.White, false, null),
-      createPiece("d5", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("a6", PieceType.Pawn, PieceColor.Black, true, null),
-      createPiece("a7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("b7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("c7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("d4", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("a2", PieceType.Pawn, PieceColor.White, false),
+      createPiece("a3", PieceType.Pawn, PieceColor.White, true),
+      createPiece("b2", PieceType.Pawn, PieceColor.White, false),
+      createPiece("c2", PieceType.Pawn, PieceColor.White, false),
+      createPiece("d5", PieceType.Pawn, PieceColor.White, true),
+      createPiece("a6", PieceType.Pawn, PieceColor.Black, true),
+      createPiece("a7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("b7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("c7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("d4", PieceType.Pawn, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -78,8 +78,8 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupRookMovement() {
     const pieces = [
-      createPiece("e2", PieceType.Rook, PieceColor.White, true, null),
-      createPiece("c1", PieceType.Rook, PieceColor.White, true, null),
+      createPiece("e2", PieceType.Rook, PieceColor.White, true),
+      createPiece("c1", PieceType.Rook, PieceColor.White, true),
     ]
     return new BoardBase(pieces)
   }
@@ -96,10 +96,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupRookCapture() {
     const pieces = [
-      createPiece("e1", PieceType.Rook, PieceColor.White, true, null),
-      createPiece("e2", PieceType.Rook, PieceColor.White, true, null),
-      createPiece("e5", PieceType.Rook, PieceColor.Black, true, null),
-      createPiece("e6", PieceType.Rook, PieceColor.Black, true, null),
+      createPiece("e1", PieceType.Rook, PieceColor.White, true),
+      createPiece("e2", PieceType.Rook, PieceColor.White, true),
+      createPiece("e5", PieceType.Rook, PieceColor.Black, true),
+      createPiece("e6", PieceType.Rook, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -116,8 +116,8 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupBishopMovement() {
     const pieces = [
-      createPiece("c2", PieceType.Bishop, PieceColor.White, true, null),
-      createPiece("e2", PieceType.Bishop, PieceColor.White, true, null),
+      createPiece("c2", PieceType.Bishop, PieceColor.White, true),
+      createPiece("e2", PieceType.Bishop, PieceColor.White, true),
     ]
     return new BoardBase(pieces)
   }
@@ -134,10 +134,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupBishopCapture() {
     const pieces = [
-      createPiece("d1", PieceType.Bishop, PieceColor.White, true, null),
-      createPiece("e2", PieceType.Bishop, PieceColor.White, true, null),
-      createPiece("a6", PieceType.Bishop, PieceColor.Black, true, null),
-      createPiece("b5", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("d1", PieceType.Bishop, PieceColor.White, true),
+      createPiece("e2", PieceType.Bishop, PieceColor.White, true),
+      createPiece("a6", PieceType.Bishop, PieceColor.Black, true),
+      createPiece("b5", PieceType.Bishop, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -154,11 +154,11 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupKing() {
     const pieces = [
-      createPiece("c2", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("c3", PieceType.King, PieceColor.White, true, null),
-      createPiece("b2", PieceType.Pawn, PieceColor.Black, true, null),
-      createPiece("b3", PieceType.Pawn, PieceColor.Black, true, null),
-      createPiece("c7", PieceType.King, PieceColor.Black, true, null),
+      createPiece("c2", PieceType.Pawn, PieceColor.White, true),
+      createPiece("c3", PieceType.King, PieceColor.White, true),
+      createPiece("b2", PieceType.Pawn, PieceColor.Black, true),
+      createPiece("b3", PieceType.Pawn, PieceColor.Black, true),
+      createPiece("c7", PieceType.King, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -175,12 +175,12 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupQueen() {
     const pieces = [
-      createPiece("e1", PieceType.Queen, PieceColor.White, true, null),
-      createPiece("e2", PieceType.Queen, PieceColor.White, true, null),
-      createPiece("f2", PieceType.Queen, PieceColor.White, true, null),
-      createPiece("a6", PieceType.Queen, PieceColor.Black, true, null),
-      createPiece("b5", PieceType.Queen, PieceColor.Black, true, null),
-      createPiece("e5", PieceType.Queen, PieceColor.Black, true, null),
+      createPiece("e1", PieceType.Queen, PieceColor.White, true),
+      createPiece("e2", PieceType.Queen, PieceColor.White, true),
+      createPiece("f2", PieceType.Queen, PieceColor.White, true),
+      createPiece("a6", PieceType.Queen, PieceColor.Black, true),
+      createPiece("b5", PieceType.Queen, PieceColor.Black, true),
+      createPiece("e5", PieceType.Queen, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -197,9 +197,9 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupEnpassant() {
     const pieces = [
-      createPiece("c2", PieceType.Pawn, PieceColor.White, false, null),
-      createPiece("a7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("d4", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("c2", PieceType.Pawn, PieceColor.White, false),
+      createPiece("a7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("d4", PieceType.Pawn, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -216,12 +216,12 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupCastling() {
     const pieces = [
-      createPiece("a1", PieceType.Rook,   PieceColor.White, false, null),
-      createPiece("e1", PieceType.King,   PieceColor.White, false, null),
-      createPiece("e2", PieceType.Bishop, PieceColor.White, false, null),
-      createPiece("e3", PieceType.Queen,  PieceColor.White, false, null),
-      createPiece("h1", PieceType.Rook,   PieceColor.White, false, null),
-      createPiece("e8", PieceType.Rook,   PieceColor.Black, false, null),
+      createPiece("a1", PieceType.Rook,   PieceColor.White, false),
+      createPiece("e1", PieceType.King,   PieceColor.White, false),
+      createPiece("e2", PieceType.Bishop, PieceColor.White, false),
+      createPiece("e3", PieceType.Queen,  PieceColor.White, false),
+      createPiece("h1", PieceType.Rook,   PieceColor.White, false),
+      createPiece("e8", PieceType.Rook,   PieceColor.Black, false),
     ]
     return new BoardBase(pieces)
   }
@@ -238,10 +238,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupPromotion() {
     const pieces = [
-      createPiece("a7", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("b1", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("a2", PieceType.Pawn, PieceColor.Black, true, null),
-      createPiece("b8", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("a7", PieceType.Pawn, PieceColor.White, true),
+      createPiece("b1", PieceType.Pawn, PieceColor.White, true),
+      createPiece("a2", PieceType.Pawn, PieceColor.Black, true),
+      createPiece("b8", PieceType.Pawn, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -260,11 +260,11 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupCheck() {
     const pieces = [
-      createPiece("b1", PieceType.Rook, PieceColor.White, true, null),
-      createPiece("d1", PieceType.King, PieceColor.White, true, null),
-      createPiece("c1", PieceType.Rook, PieceColor.Black, true, null),
-      createPiece("c6", PieceType.Rook, PieceColor.Black, true, null),
-      createPiece("c7", PieceType.King, PieceColor.Black, true, null),
+      createPiece("b1", PieceType.Rook, PieceColor.White, true),
+      createPiece("d1", PieceType.King, PieceColor.White, true),
+      createPiece("c1", PieceType.Rook, PieceColor.Black, true),
+      createPiece("c6", PieceType.Rook, PieceColor.Black, true),
+      createPiece("c7", PieceType.King, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -281,14 +281,14 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupCheckEnpassant() {
     const pieces = [
-      createPiece("b5", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("d5", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("f5", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("f4", PieceType.King, PieceColor.White, true, null),
-      createPiece("a7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("e7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("f7", PieceType.Rook, PieceColor.Black, true, null),
-      createPiece("b7", PieceType.King, PieceColor.Black, true, null),
+      createPiece("b5", PieceType.Pawn, PieceColor.White, true),
+      createPiece("d5", PieceType.Pawn, PieceColor.White, true),
+      createPiece("f5", PieceType.Pawn, PieceColor.White, true),
+      createPiece("f4", PieceType.King, PieceColor.White, true),
+      createPiece("a7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("e7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("f7", PieceType.Rook, PieceColor.Black, true),
+      createPiece("b7", PieceType.King, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -305,11 +305,11 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupCheckCastling() {
     const pieces = [
-      createPiece("a1", PieceType.Rook, PieceColor.White, false, null),
-      createPiece("e1", PieceType.King, PieceColor.White, false, null),
-      createPiece("h1", PieceType.Rook, PieceColor.White, false, null),
-      createPiece("d8", PieceType.King, PieceColor.Black, true, null),
-      createPiece("g8", PieceType.Rook, PieceColor.Black, false, null),
+      createPiece("a1", PieceType.Rook, PieceColor.White, false),
+      createPiece("e1", PieceType.King, PieceColor.White, false),
+      createPiece("h1", PieceType.Rook, PieceColor.White, false),
+      createPiece("d8", PieceType.King, PieceColor.Black, true),
+      createPiece("g8", PieceType.Rook, PieceColor.Black, false),
     ]
     return new BoardBase(pieces)
   }
@@ -326,10 +326,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupCheckPromotion() {
     const pieces = [
-      createPiece("a1", PieceType.King, PieceColor.White, true, null),
-      createPiece("a7", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("d8", PieceType.King, PieceColor.Black, true, null),
-      createPiece("h2", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("a1", PieceType.King, PieceColor.White, true),
+      createPiece("a7", PieceType.Pawn, PieceColor.White, true),
+      createPiece("d8", PieceType.King, PieceColor.Black, true),
+      createPiece("h2", PieceType.Pawn, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -346,10 +346,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupCheckWithTwoKings() {
     const pieces = [
-      createPiece("b6", PieceType.King,   PieceColor.White, true, null),
-      createPiece("h8", PieceType.Rook,   PieceColor.White, true, null),
-      createPiece("a8", PieceType.King,   PieceColor.Black, true, null),
-      createPiece("b8", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("b6", PieceType.King,   PieceColor.White, true),
+      createPiece("h8", PieceType.Rook,   PieceColor.White, true),
+      createPiece("a8", PieceType.King,   PieceColor.Black, true),
+      createPiece("b8", PieceType.Bishop, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -366,14 +366,14 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupCheckmate() {
     const pieces = [
-      createPiece("d1", PieceType.King,   PieceColor.White, true, null),
-      createPiece("f2", PieceType.Queen,  PieceColor.White, true, null),
-      createPiece("a2", PieceType.Rook,   PieceColor.Black, true, null),
-      createPiece("e8", PieceType.Rook,   PieceColor.Black, true, null),
-      createPiece("f3", PieceType.Rook,   PieceColor.Black, true, null),
-      createPiece("g4", PieceType.Bishop, PieceColor.Black, true, null),
-      createPiece("g5", PieceType.Bishop, PieceColor.Black, true, null),
-      createPiece("h2", PieceType.Queen,  PieceColor.Black, true, null),
+      createPiece("d1", PieceType.King,   PieceColor.White, true),
+      createPiece("f2", PieceType.Queen,  PieceColor.White, true),
+      createPiece("a2", PieceType.Rook,   PieceColor.Black, true),
+      createPiece("e8", PieceType.Rook,   PieceColor.Black, true),
+      createPiece("f3", PieceType.Rook,   PieceColor.Black, true),
+      createPiece("g4", PieceType.Bishop, PieceColor.Black, true),
+      createPiece("g5", PieceType.Bishop, PieceColor.Black, true),
+      createPiece("h2", PieceType.Queen,  PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -390,22 +390,22 @@ export default class BoardFactory {
     a b c d e f g h */
   public static setupGameOfCentury() {
     const pieces = [
-      createPiece("b8", PieceType.Queen,  PieceColor.White, true, null),
-      createPiece("c1", PieceType.King,   PieceColor.White, true, null),
-      createPiece("e5", PieceType.Knight, PieceColor.White, true, null),
-      createPiece("g2", PieceType.Pawn,   PieceColor.White, true, null),
-      createPiece("h4", PieceType.Pawn,   PieceColor.White, true, null),
+      createPiece("b8", PieceType.Queen,  PieceColor.White, true),
+      createPiece("c1", PieceType.King,   PieceColor.White, true),
+      createPiece("e5", PieceType.Knight, PieceColor.White, true),
+      createPiece("g2", PieceType.Pawn,   PieceColor.White, true),
+      createPiece("h4", PieceType.Pawn,   PieceColor.White, true),
 
-      createPiece("a2", PieceType.Rook,   PieceColor.Black, true, null),
-      createPiece("b3", PieceType.Bishop, PieceColor.Black, true, null),
-      createPiece("b4", PieceType.Bishop, PieceColor.Black, true, null),
-      createPiece("b5", PieceType.Pawn,   PieceColor.Black, true, null),
-      createPiece("c3", PieceType.Knight, PieceColor.Black, true, null),
-      createPiece("c6", PieceType.Pawn,   PieceColor.Black, true, null),
-      createPiece("f7", PieceType.Pawn,   PieceColor.Black, true, null),
-      createPiece("g6", PieceType.Pawn,   PieceColor.Black, true, null),
-      createPiece("g7", PieceType.King,   PieceColor.Black, true, null),
-      createPiece("h5", PieceType.Pawn,   PieceColor.Black, true, null),
+      createPiece("a2", PieceType.Rook,   PieceColor.Black, true),
+      createPiece("b3", PieceType.Bishop, PieceColor.Black, true),
+      createPiece("b4", PieceType.Bishop, PieceColor.Black, true),
+      createPiece("b5", PieceType.Pawn,   PieceColor.Black, true),
+      createPiece("c3", PieceType.Knight, PieceColor.Black, true),
+      createPiece("c6", PieceType.Pawn,   PieceColor.Black, true),
+      createPiece("f7", PieceType.Pawn,   PieceColor.Black, true),
+      createPiece("g6", PieceType.Pawn,   PieceColor.Black, true),
+      createPiece("g7", PieceType.King,   PieceColor.Black, true),
+      createPiece("h5", PieceType.Pawn,   PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -422,12 +422,12 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupCheckmateEnpassant() {
     const pieces = [
-      createPiece("b5", PieceType.Pawn,  PieceColor.White, true, null),
-      createPiece("c5", PieceType.Queen, PieceColor.White, true, null),
-      createPiece("h6", PieceType.Rook,  PieceColor.White, true, null),
-      createPiece("h8", PieceType.Rook,  PieceColor.White, true, null),
-      createPiece("a7", PieceType.Pawn,  PieceColor.Black, false, null),
-      createPiece("b7", PieceType.King,  PieceColor.Black, true, null),
+      createPiece("b5", PieceType.Pawn,  PieceColor.White, true),
+      createPiece("c5", PieceType.Queen, PieceColor.White, true),
+      createPiece("h6", PieceType.Rook,  PieceColor.White, true),
+      createPiece("h8", PieceType.Rook,  PieceColor.White, true),
+      createPiece("a7", PieceType.Pawn,  PieceColor.Black, false),
+      createPiece("b7", PieceType.King,  PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -444,13 +444,13 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupCheckmateEnpassantEscape() {
     const pieces = [
-      createPiece("b4", PieceType.King, PieceColor.White, true, null),
-      createPiece("b5", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("a7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("a8", PieceType.Rook, PieceColor.Black, true, null),
-      createPiece("c8", PieceType.Rook, PieceColor.Black, true, null),
-      createPiece("h3", PieceType.Rook, PieceColor.Black, true, null),
-      createPiece("h5", PieceType.Rook, PieceColor.Black, true, null),
+      createPiece("b4", PieceType.King, PieceColor.White, true),
+      createPiece("b5", PieceType.Pawn, PieceColor.White, true),
+      createPiece("a7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("a8", PieceType.Rook, PieceColor.Black, true),
+      createPiece("c8", PieceType.Rook, PieceColor.Black, true),
+      createPiece("h3", PieceType.Rook, PieceColor.Black, true),
+      createPiece("h5", PieceType.Rook, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -467,13 +467,13 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupCheckmateCastling() {
     const pieces = [
-      createPiece("a1", PieceType.Rook, PieceColor.White, false, null),
-      createPiece("e1", PieceType.King, PieceColor.White, false, null),
-      createPiece("c7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("c8", PieceType.Rook, PieceColor.Black, true, null),
-      createPiece("d8", PieceType.King, PieceColor.Black, true, null),
-      createPiece("e7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("e8", PieceType.Rook, PieceColor.Black, true, null),
+      createPiece("a1", PieceType.Rook, PieceColor.White, false),
+      createPiece("e1", PieceType.King, PieceColor.White, false),
+      createPiece("c7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("c8", PieceType.Rook, PieceColor.Black, true),
+      createPiece("d8", PieceType.King, PieceColor.Black, true),
+      createPiece("e7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("e8", PieceType.Rook, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -490,12 +490,12 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupAlgebraicNotationMovement() {
     const pieces = [
-      createPiece("a1", PieceType.Rook, PieceColor.White, false, null),
-      createPiece("b1", PieceType.Knight, PieceColor.White, false, null),
-      createPiece("c1", PieceType.Bishop, PieceColor.White, false, null),
-      createPiece("d1", PieceType.Queen, PieceColor.White, false, null),
-      createPiece("e1", PieceType.King, PieceColor.White, false, null),
-      createPiece("f2", PieceType.Pawn, PieceColor.White, false, null),
+      createPiece("a1", PieceType.Rook, PieceColor.White, false),
+      createPiece("b1", PieceType.Knight, PieceColor.White, false),
+      createPiece("c1", PieceType.Bishop, PieceColor.White, false),
+      createPiece("d1", PieceType.Queen, PieceColor.White, false),
+      createPiece("e1", PieceType.King, PieceColor.White, false),
+      createPiece("f2", PieceType.Pawn, PieceColor.White, false),
     ]
     return new BoardBase(pieces)
   }
@@ -512,11 +512,11 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupAlgebraicNotationCaptures() {
     const pieces = [
-      createPiece("a1", PieceType.Rook,   PieceColor.White, false, null),
-      createPiece("b1", PieceType.Knight, PieceColor.White, false, null),
-      createPiece("a2", PieceType.Pawn,   PieceColor.Black, true, null),
-      createPiece("a3", PieceType.Pawn,   PieceColor.Black, true, null),
-      createPiece("b4", PieceType.Pawn,   PieceColor.Black, true, null),
+      createPiece("a1", PieceType.Rook,   PieceColor.White, false),
+      createPiece("b1", PieceType.Knight, PieceColor.White, false),
+      createPiece("a2", PieceType.Pawn,   PieceColor.Black, true),
+      createPiece("a3", PieceType.Pawn,   PieceColor.Black, true),
+      createPiece("b4", PieceType.Pawn,   PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -533,15 +533,15 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupAlgebraicNotationDisambiguation() {
     const pieces = [
-      createPiece("a1", PieceType.Rook,   PieceColor.White, true, null),
-      createPiece("a5", PieceType.Rook,   PieceColor.White, true, null),
-      createPiece("e4", PieceType.Queen,  PieceColor.White, true, null),
-      createPiece("h1", PieceType.Queen,  PieceColor.White, true, null),
-      createPiece("h4", PieceType.Queen,  PieceColor.White, true, null),
-      createPiece("a7", PieceType.Bishop, PieceColor.Black, true, null),
-      createPiece("d6", PieceType.Bishop, PieceColor.Black, true, null),
-      createPiece("d8", PieceType.Rook,   PieceColor.Black, true, null),
-      createPiece("h8", PieceType.Rook,   PieceColor.Black, true, null),
+      createPiece("a1", PieceType.Rook,   PieceColor.White, true),
+      createPiece("a5", PieceType.Rook,   PieceColor.White, true),
+      createPiece("e4", PieceType.Queen,  PieceColor.White, true),
+      createPiece("h1", PieceType.Queen,  PieceColor.White, true),
+      createPiece("h4", PieceType.Queen,  PieceColor.White, true),
+      createPiece("a7", PieceType.Bishop, PieceColor.Black, true),
+      createPiece("d6", PieceType.Bishop, PieceColor.Black, true),
+      createPiece("d8", PieceType.Rook,   PieceColor.Black, true),
+      createPiece("h8", PieceType.Rook,   PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -558,9 +558,9 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupDrawKingVsKing() {
     const pieces = [
-        createPiece("e2", PieceType.King, PieceColor.White, true, null),
-        createPiece("e3", PieceType.Pawn, PieceColor.Black, true, null),
-        createPiece("e7", PieceType.King, PieceColor.Black, true, null),
+        createPiece("e2", PieceType.King, PieceColor.White, true),
+        createPiece("e3", PieceType.Pawn, PieceColor.Black, true),
+        createPiece("e7", PieceType.King, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -577,11 +577,11 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupDrawSameColorBishop() {
     const pieces = [
-        createPiece("c2", PieceType.Bishop, PieceColor.White, true, null),
-        createPiece("e2", PieceType.King,   PieceColor.White, true, null),
-        createPiece("e3", PieceType.Pawn,   PieceColor.Black, true, null),
-        createPiece("e7", PieceType.King,   PieceColor.Black, true, null),
-        createPiece("f7", PieceType.Bishop, PieceColor.Black, true, null),
+        createPiece("c2", PieceType.Bishop, PieceColor.White, true),
+        createPiece("e2", PieceType.King,   PieceColor.White, true),
+        createPiece("e3", PieceType.Pawn,   PieceColor.Black, true),
+        createPiece("e7", PieceType.King,   PieceColor.Black, true),
+        createPiece("f7", PieceType.Bishop, PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -598,11 +598,11 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupDrawDifferentColorBishop() {
     const pieces = [
-      createPiece("c2", PieceType.Bishop, PieceColor.White, true, null),
-      createPiece("e2", PieceType.King,   PieceColor.White, true, null),
-      createPiece("c7", PieceType.Bishop, PieceColor.Black, true, null),
-      createPiece("e3", PieceType.Pawn,   PieceColor.Black, true, null),
-      createPiece("e7", PieceType.King,   PieceColor.Black, true, null),
+      createPiece("c2", PieceType.Bishop, PieceColor.White, true),
+      createPiece("e2", PieceType.King,   PieceColor.White, true),
+      createPiece("c7", PieceType.Bishop, PieceColor.Black, true),
+      createPiece("e3", PieceType.Pawn,   PieceColor.Black, true),
+      createPiece("e7", PieceType.King,   PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -619,10 +619,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupDrawOneWhiteBishop() {
     const pieces = [
-        createPiece("c2", PieceType.Bishop, PieceColor.White, true, null),
-        createPiece("e2", PieceType.King,   PieceColor.White, true, null),
-        createPiece("e3", PieceType.Pawn,   PieceColor.Black, true, null),
-        createPiece("e8", PieceType.King,   PieceColor.Black, true, null),
+        createPiece("c2", PieceType.Bishop, PieceColor.White, true),
+        createPiece("e2", PieceType.King,   PieceColor.White, true),
+        createPiece("e3", PieceType.Pawn,   PieceColor.Black, true),
+        createPiece("e8", PieceType.King,   PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -639,10 +639,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupDrawOneBlackBishop() {
     const pieces = [
-        createPiece("e2", PieceType.King,   PieceColor.White, true, null),
-        createPiece("c7", PieceType.Bishop, PieceColor.Black, true, null),
-        createPiece("e3", PieceType.Pawn,   PieceColor.Black, true, null),
-        createPiece("e8", PieceType.King,   PieceColor.Black, true, null),
+        createPiece("e2", PieceType.King,   PieceColor.White, true),
+        createPiece("c7", PieceType.Bishop, PieceColor.Black, true),
+        createPiece("e3", PieceType.Pawn,   PieceColor.Black, true),
+        createPiece("e8", PieceType.King,   PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -659,10 +659,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupDrawOneWhiteKnight() {
     const pieces = [
-        createPiece("e2", PieceType.King,   PieceColor.White, true, null),
-        createPiece("b2", PieceType.Knight, PieceColor.White, true, null),
-        createPiece("e3", PieceType.Pawn,   PieceColor.Black, true, null),
-        createPiece("e8", PieceType.King,   PieceColor.Black, true, null),
+        createPiece("e2", PieceType.King,   PieceColor.White, true),
+        createPiece("b2", PieceType.Knight, PieceColor.White, true),
+        createPiece("e3", PieceType.Pawn,   PieceColor.Black, true),
+        createPiece("e8", PieceType.King,   PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -679,10 +679,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupDrawOneBlackKnight() {
     const pieces = [
-        createPiece("e2", PieceType.King,   PieceColor.White, true, null),
-        createPiece("b7", PieceType.Knight, PieceColor.Black, true, null),
-        createPiece("e3", PieceType.Pawn,   PieceColor.Black, true, null),
-        createPiece("e8", PieceType.King,   PieceColor.Black, true, null),
+        createPiece("e2", PieceType.King,   PieceColor.White, true),
+        createPiece("b7", PieceType.Knight, PieceColor.Black, true),
+        createPiece("e3", PieceType.Pawn,   PieceColor.Black, true),
+        createPiece("e8", PieceType.King,   PieceColor.Black, true),
     ]
     return new BoardBase(pieces)
   }
@@ -699,12 +699,12 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupDraw48Moves() {
     const pieces = [
-      createPiece("a8", PieceType.Rook, PieceColor.White, true, null),
-      createPiece("b5", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("g2", PieceType.King, PieceColor.White, true, null),
-      createPiece("a7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("b8", PieceType.Rook, PieceColor.Black, true, null),
-      createPiece("c3", PieceType.King, PieceColor.Black, true, null),
+      createPiece("a8", PieceType.Rook, PieceColor.White, true),
+      createPiece("b5", PieceType.Pawn, PieceColor.White, true),
+      createPiece("g2", PieceType.King, PieceColor.White, true),
+      createPiece("a7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("b8", PieceType.Rook, PieceColor.Black, true),
+      createPiece("c3", PieceType.King, PieceColor.Black, true),
     ]
     const moveHistory = [
       { start: stringToPosition("h8"), destination: stringToPosition("g8"), algebraicNotation: "Rg8" },
@@ -772,10 +772,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupStalemate1() {
     const pieces = [
-      createPiece("f8", PieceType.King, PieceColor.Black, true, null),
-      createPiece("f7", PieceType.Pawn, PieceColor.Black, false, null),
-      createPiece("e6", PieceType.Pawn, PieceColor.White, true, null),
-      createPiece("f6", PieceType.King, PieceColor.White, true, null),
+      createPiece("f8", PieceType.King, PieceColor.Black, true),
+      createPiece("f7", PieceType.Pawn, PieceColor.Black, false),
+      createPiece("e6", PieceType.Pawn, PieceColor.White, true),
+      createPiece("f6", PieceType.King, PieceColor.White, true),
     ]
     return new BoardBase(pieces)
   }
@@ -793,10 +793,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupStalemate2() {
     const pieces = [
-      createPiece("a8", PieceType.King,   PieceColor.Black, true, null),
-      createPiece("b8", PieceType.Bishop, PieceColor.Black, true, null),
-      createPiece("b6", PieceType.King,   PieceColor.White, true, null),
-      createPiece("h8", PieceType.Rook,   PieceColor.White, true, null),
+      createPiece("a8", PieceType.King,   PieceColor.Black, true),
+      createPiece("b8", PieceType.Bishop, PieceColor.Black, true),
+      createPiece("b6", PieceType.King,   PieceColor.White, true),
+      createPiece("h8", PieceType.Rook,   PieceColor.White, true),
     ]
     return new BoardBase(pieces)
   }
@@ -814,9 +814,9 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupStalemate3() {
     const pieces = [
-      createPiece("a1", PieceType.King, PieceColor.Black, true, null),
-      createPiece("b2", PieceType.Rook, PieceColor.White, true, null),
-      createPiece("d4", PieceType.King, PieceColor.White, true, null),
+      createPiece("a1", PieceType.King, PieceColor.Black, true),
+      createPiece("b2", PieceType.Rook, PieceColor.White, true),
+      createPiece("d4", PieceType.King, PieceColor.White, true),
     ]
     return new BoardBase(pieces)
   }
@@ -834,11 +834,11 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupStalemate4() {
     const pieces = [
-      createPiece("a1", PieceType.King,  PieceColor.Black, true, null),
-      createPiece("a2", PieceType.Pawn,  PieceColor.Black, true, null),
-      createPiece("b3", PieceType.Pawn,  PieceColor.Black, true, null),
-      createPiece("g5", PieceType.King,  PieceColor.White, true, null),
-      createPiece("b8", PieceType.Queen, PieceColor.White, true, null),
+      createPiece("a1", PieceType.King,  PieceColor.Black, true),
+      createPiece("a2", PieceType.Pawn,  PieceColor.Black, true),
+      createPiece("b3", PieceType.Pawn,  PieceColor.Black, true),
+      createPiece("g5", PieceType.King,  PieceColor.White, true),
+      createPiece("b8", PieceType.Queen, PieceColor.White, true),
     ]
     return new BoardBase(pieces)
   }
@@ -856,10 +856,10 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupStalemate5() {
     const pieces = [
-      createPiece("a8", PieceType.King,   PieceColor.Black, true, null),
-      createPiece("f4", PieceType.Bishop, PieceColor.White, true, null),
-      createPiece("a5", PieceType.King,   PieceColor.White, true, null),
-      createPiece("a7", PieceType.Pawn,   PieceColor.White, true, null),
+      createPiece("a8", PieceType.King,   PieceColor.Black, true),
+      createPiece("f4", PieceType.Bishop, PieceColor.White, true),
+      createPiece("a5", PieceType.King,   PieceColor.White, true),
+      createPiece("a7", PieceType.Pawn,   PieceColor.White, true),
     ]
     return new BoardBase(pieces)
   }
@@ -877,9 +877,9 @@ export default class BoardFactory {
       a b c d e f g h */
   public static setupStalemateFromPromotion() {
     const pieces = [
-      createPiece("h6", PieceType.King, PieceColor.Black, true, null),
-      createPiece("g4", PieceType.King, PieceColor.White, true, null),
-      createPiece("g7", PieceType.Pawn, PieceColor.White, true, null),
+      createPiece("h6", PieceType.King, PieceColor.Black, true),
+      createPiece("g4", PieceType.King, PieceColor.White, true),
+      createPiece("g7", PieceType.Pawn, PieceColor.White, true),
     ]
     return new BoardBase(pieces)
   }
