@@ -14,8 +14,8 @@ describe("Stalemate", () => {
 
   it("should be draw in stalemate scenario 2", () => {
     subject = boardFactory.setupStalemate2()
-    const results = moveSequence(subject, [["a7", "a8"], ["b6", "a6"]])
-    results.should.eql(["move", "move|draw"])
+    const results = moveSequence(subject, [["b6", "a6"]])
+    results.should.eql(["move|draw"])
   })
 
   it("should be draw in stalemate scenario 3", () => {
