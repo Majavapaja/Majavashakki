@@ -52,6 +52,7 @@ describe("Queen", () => {
 
     it("should allow queen to capture like a rook [e2, e5]", () => {
       const results = moveSequence(subject, [["e2", "e5"]])
+      results.should.eql(["capture"])
     });
 
     it("should not allow queen to capture over other pieces [e2, a6]", () => {

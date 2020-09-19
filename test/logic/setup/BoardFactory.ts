@@ -758,4 +758,74 @@ export default class BoardFactory {
     ]
     return new BoardBase(pieces, moveHistory)
   }
+
+    /*  a b c d e f g h
+    8 ⚊ ⚊ ⚊ ⚊ ♚ ⚊ ⚊ ⚊ 8
+    7 ⚊ ♞ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 7
+    6 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 6
+    5 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 5
+    4 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 4
+    3 ⚊ ⚊ ⚊ ⚊ ♟ ⚊ ⚊ ⚊ 3
+    2 ⚊ ⚊ ⚊ ⚊ ♔ ⚊ ⚊ ⚊ 2
+    1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
+      a b c d e f g h */
+  public static setupStalemate1() {
+    const pieces = [
+      createPiece("f8", PieceType.King, PieceColor.Black, true, null),
+      createPiece("f7", PieceType.Pawn, PieceColor.Black, false, null),
+      createPiece("e6", PieceType.Pawn, PieceColor.White, true, null),
+      createPiece("f6", PieceType.King, PieceColor.White, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  public static setupStalemate2() {
+    const pieces = [
+      createPiece("a7", PieceType.King, PieceColor.Black, true, null),
+      createPiece("b8", PieceType.Bishop, PieceColor.Black, true, null),
+      createPiece("b6", PieceType.King, PieceColor.White, true, null),
+      createPiece("h8", PieceType.Rook, PieceColor.White, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  public static setupStalemate3() {
+    const pieces = [
+      createPiece("a1", PieceType.King, PieceColor.Black, true, null),
+      createPiece("b2", PieceType.Rook, PieceColor.White, true, null),
+      createPiece("d4", PieceType.King, PieceColor.White, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  public static setupStalemate4() {
+    const pieces = [
+      createPiece("a1", PieceType.King, PieceColor.Black, true, null),
+      createPiece("a2", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("b3", PieceType.Pawn, PieceColor.Black, true, null),
+      createPiece("g5", PieceType.King, PieceColor.White, true, null),
+      createPiece("b8", PieceType.Queen, PieceColor.White, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  public static setupStalemate5() {
+    const pieces = [
+      createPiece("a8", PieceType.King, PieceColor.Black, true, null),
+      createPiece("f4", PieceType.Bishop, PieceColor.White, true, null),
+      createPiece("a5", PieceType.King, PieceColor.White, true, null),
+      createPiece("a7", PieceType.Pawn, PieceColor.White, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
+  public static setupStalemateFromPromotion() {
+    const pieces = [
+      createPiece("h6", PieceType.King, PieceColor.Black, true, null),
+      createPiece("g4", PieceType.King, PieceColor.White, true, null),
+      createPiece("g7", PieceType.Pawn, PieceColor.White, true, null),
+    ]
+    return new BoardBase(pieces)
+  }
+
 }

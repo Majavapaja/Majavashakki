@@ -1,58 +1,51 @@
-import chai from "chai"
-import chaiAsPromised from "chai-as-promised"
-import factory from "./StalemateFactory"
-import {moveSequence} from "./setup/BoardHelper"
-import { PieceType } from "../../src/common/GamePieces"
-chai.should()
-chai.use(chaiAsPromised)
+import boardFactory from "./setup/BoardFactory";
+import { moveSequence } from "./setup/BoardHelper";
+import BoardBase from "common/BoardBase";
+import * as Majavashakki from "../../src/common/GamePieces"
 
 describe("Stalemate", () => {
-    it("should be stalemate in scenario 1", done => {
-        const promise = factory.build("board-stalemate-1")
-            .then(board => moveSequence(board, [["e6", "f7"]]))
+  let subject: BoardBase;
 
-        promise.should.eventually.have.same.members(["capture|draw"]).notify(done)
-    })
+  it("should be draw in stalemate scenario 1", () => {
+    subject = boardFactory.setupStalemate1()
+    const results = moveSequence(subject, [["e6", "f7"]])
+    results.should.eql(["capture|draw"])
+  })
 
-    it("should be a stalemate in scenario 2 after two moves", done => {
-        const promise = factory.build("board-stalemate-2")
-            .then(board => moveSequence(board, [["a7", "a8"], ["b6", "a6"]]))
+  it("should be draw in stalemate scenario 2", () => {
+    subject = boardFactory.setupStalemate2()
+    const results = moveSequence(subject, [["a7", "a8"], ["b6", "a6"]])
+    results.should.eql(["move", "move|draw"])
+  })
 
-        promise.should.eventually.have.same.members(["move", "move|draw"]).notify(done)
-    })
+  it("should be draw in stalemate scenario 3", () => {
+    subject = boardFactory.setupStalemate3()
+    const results = moveSequence(subject, [["d4", "c3"]])
+    results.should.eql(["move|draw"])
+  })
 
-    it("should be a stalemate in scenario 3", done => {
-        const promise = factory.build("board-stalemate-3")
-            .then(board => moveSequence(board, [["d4", "c3"]]))
+  it("should be draw in stalemate scenario 4", () => {
+    subject = boardFactory.setupStalemate4()
+    const results = moveSequence(subject, [["b8", "b3"]])
+    results.should.eql(["capture|draw"])
+  })
 
-        promise.should.eventually.have.same.members(["move|draw"]).notify(done)
-    })
+  it("should be draw in stalemate scenario 5", () => {
+    subject = boardFactory.setupStalemate5()
+    const results = moveSequence(subject, [["a5", "a6"]])
+    results.should.eql(["move|draw"])
+  })
 
-    it("should be a stalemate in scenario 4", done => {
-        const promise = factory.build("board-stalemate-4")
-            .then(board => moveSequence(board, [["b8", "b3"]]))
+  it("should be draw in stalemate with queen promotion", () => {
+    subject = boardFactory.setupStalemateFromPromotion()
+    const results = moveSequence(subject, [["g7", "g8", Majavashakki.PieceType.Queen]])
+    results.should.eql(["promotion|draw"])
+  })
 
-        promise.should.eventually.have.same.members(["capture|draw"]).notify(done)
-    })
+  it("should not stalemate with rook promotion", () => {
+    subject = boardFactory.setupStalemateFromPromotion()
+    const results = moveSequence(subject, [["g7", "g8", Majavashakki.PieceType.Rook]])
+    results.should.eql(["promotion"])
+  })
 
-    it("should be a stalemate in scenario 5", done => {
-        const promise = factory.build("board-stalemate-5")
-            .then(board => moveSequence(board, [["a5", "a6"]]))
-
-        promise.should.eventually.have.same.members(["move|draw"]).notify(done)
-    })
-
-    it("should be a stalemate when promoted to queen", done => {
-        const promise = factory.build("board-stalemate-promotion")
-            .then(board => moveSequence(board, [["g7", "g8", PieceType.Queen]]))
-
-        promise.should.eventually.have.same.members(["promotion|draw"]).notify(done)
-    })
-
-    it("should not be a stalemate when promoted to rook", done => {
-        const promise = factory.build("board-stalemate-promotion")
-            .then(board => moveSequence(board, [["g7", "g8", PieceType.Rook]]))
-
-        promise.should.eventually.have.same.members(["promotion"]).notify(done)
-    })
 })
