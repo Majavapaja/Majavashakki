@@ -1,4 +1,4 @@
-![Deploy to production](https://github.com/Majavapaja/Majavashakki/workflows/Deploy%20to%20production/badge.svg) ![Dependencies](https://david-dm.org/majavapaja/Majavashakki/status.svg)
+![Deploy to production](https://github.com/Majavapaja/Majavashakki/workflows/Deploy%20to%20production/badge.svg)
 ![Code style](https://img.shields.io/badge/code%20style-none-brightgreen)
 
 # Majavashakki
