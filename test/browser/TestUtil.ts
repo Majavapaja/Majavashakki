@@ -4,7 +4,7 @@ import {start} from "../../src/server/app"
 import {clearDatabase, initTestData} from "./MongoUtil"
 
 const PORT = process.env.TEST_PORT || "3001"
-const runHeadless = !!process.env.CI
+export const runHeadless = !!process.env.CI
 
 export function browserSpec(name, {numBrowsers}, func) {
   describe(name, function() {
