@@ -48,7 +48,7 @@ const styles = (theme: Theme) => createStyles({
   },
   timangi: {
     position: "absolute",
-    animation: "timangi 1.5s linear infinite",
+    animation: "$timangi 1.5s linear infinite",
   },
 })
 
