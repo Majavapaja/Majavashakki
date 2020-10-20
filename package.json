@@ -104,7 +104,7 @@
     "better-npm-run": "^0.1.1",
     "chai": "^4.2.0",
     "mocha": "^8.2.0",
-    "nodemon": "^2.0.5",
+    "nodemon": "^2.0.6",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.12.4",
     "puppeteer": "^2.1.1",
