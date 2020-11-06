@@ -107,7 +107,7 @@
     "nodemon": "^2.0.6",
     "npm-run-all": "^4.1.5",
     "parcel-bundler": "^1.12.4",
-    "puppeteer": "^2.1.1",
+    "puppeteer": "^5.4.1",
     "tslint": "^5.20.1",
     "tslint-react": "^4.2.0"
   }
