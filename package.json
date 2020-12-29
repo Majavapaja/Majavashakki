@@ -24,7 +24,7 @@
     "@types/mocha": "^8.0.4",
     "@types/mongodb": "^3.5.33",
     "@types/mongoose": "^5.10.0",
-    "@types/passport": "^1.0.4",
+    "@types/passport": "^1.0.5",
     "@types/passport-facebook": "^2.1.10",
     "@types/passport-local": "^1.0.33",
     "@types/puppeteer": "^5.4.0",
