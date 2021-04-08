@@ -27,7 +27,7 @@ export const start = async (port: string) => {
 
   app.use(router);
 
-  await new Promise(resolve => {
+  await new Promise<void>(resolve => {
     server.listen(port, () => {
       console.log(`Server listening at port ${port}`);
       resolve()
