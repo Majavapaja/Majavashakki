@@ -2,6 +2,7 @@ import expressSession from "express-session";
 import ConnectMongo from "connect-mongo";
 import socketIoSession from "express-socket.io-session";
 import {MongooseClient} from "./data/MongooseClient";
+import { Server } from 'socket.io'
 
 const MajavashakkiSessionSecret = process.env.MajavashakkiSessionSecret;
 if (!MajavashakkiSessionSecret) {
@@ -11,7 +12,7 @@ if (!MajavashakkiSessionSecret) {
 export const getSession = (x: any): any =>
   x.session ? x.session : x.handshake.session;
 
-export const enableSessions = (app: any, io: SocketIO.Server) => {
+export const enableSessions = (app: any, io: Server) => {
   const MongoStore = ConnectMongo(expressSession);
   const s = expressSession({
     store: new MongoStore({ mongooseConnection: MongooseClient.getConnection() }),

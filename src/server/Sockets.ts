@@ -1,24 +1,24 @@
-import sio from "socket.io";
+import { Server, Socket } from "socket.io";
 import { IGameDocument } from "./models/Game";
-import {getSession} from "./session";
+import { getSession } from "./session";
 import { removeFalsy } from "./util";
+import { DefaultEventsMap } from 'socket.io/dist/typed-events'
 
-export const SocketServer: SocketIO.Server = sio({transports: ["websocket"]});
-export const SessionSocketMap = {};
+export const SocketServer: Server<DefaultEventsMap, DefaultEventsMap> = new Server();
+export const SessionSocketMap = {}
 const MainRoom: string = "Lobby";
 
 // TODO middleware or some other solution to handle connection setup for authed users vs non-auth user
-export function initSockets() {
-  SocketServer.on("connection", async (socket: SocketIO.Socket) => {
+export function initSockets(): void {
+  SocketServer.addListener("connection", async (socket: Socket<DefaultEventsMap, DefaultEventsMap>) => {
     const session = getSession(socket.handshake)
     SessionSocketMap[session.id] = socket
 
     // Join user to Socket.io rooms for their own games
     // TODO: Fail if not logged in?
     const userId = session.passport.user
-    socket.join(`user:${userId}`)
-    socket.join(MainRoom)
-  });
+    await socket.join([MainRoom, `user:${userId}`])
+  })
 }
 
 export function notifyGame(doc: IGameDocument, message: string, data: any) {
