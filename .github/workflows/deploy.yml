@@ -19,6 +19,8 @@ jobs:
       run: docker run --name mongo -d -p 27017:27017 mongo:latest
     - name: Install packages
       run: npm ci
+      env:
+        PUPPETEER_SKIP_DOWNLOAD: true
     - name: Run lint
       run: npm run lint
     - name: Build
@@ -31,7 +33,6 @@ jobs:
       env:
         TS_NODE_FILES: true
         CI: true
-        PUPPETEER_SKIP_DOWNLOAD: true
       run: npm run test:browser
 
   docker-hub-publish:
