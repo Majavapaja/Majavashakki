@@ -33,7 +33,7 @@ export default class ApiService {
     try {
       return await request({method: "POST", url: `${base}/${api}`, body, json: true})
     } catch (ex) {
-      if (isValidationError(ex)) {
+      if (isValidationError(ex) || isUnauthorizedError(ex)) {
         const response = ex.response as any;
         const errors = response.body.errors
         this.error.notify(errors.join("\n"))
@@ -52,6 +52,10 @@ export default class ApiService {
 
 function isValidationError(ex: Error): ex is StatusCodeError {
   return isStatusCodeError(ex) && ex.statusCode === 400
+}
+
+function isUnauthorizedError(ex: Error): ex is StatusCodeError {
+  return isStatusCodeError(ex) && ex.statusCode === 401
 }
 
 function isStatusCodeError(ex: Error): ex is StatusCodeError {

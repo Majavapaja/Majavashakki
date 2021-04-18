@@ -2,6 +2,7 @@ import passport from "passport"
 import { Strategy as FbStrategy } from "passport-facebook"
 import { Strategy as LocalStrategy } from "passport-local"
 import { User, LoginType } from "./models/User"
+import { ValidationError } from "./json"
 
 export function requireAuth(onFailure) {
   return (req, res, next) => {
@@ -57,14 +58,14 @@ export function initPassport(appUrl: string) {
 
       if (!user) {
         console.log(`User '${email}' tried to log in with invalid email`)
-        return done(null, false, { message: "There is no account with this email. :O" });
+        return done(new ValidationError(["There is no account with this email. :O"]));
       }
 
       const isValidPassword = await user.isCorrectPassword(password)
 
       if (!isValidPassword) {
         console.log(`User '${email}' tried to log in with invalid password`)
-        return done(null, false, { message: "Invalid password, did you try 'salasana1'?" });
+        return done(new ValidationError(["Invalid password, did you try 'salasana1'?"]));
       }
 
       console.log(`User '${email}' logged in successfully`)

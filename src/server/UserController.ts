@@ -1,11 +1,12 @@
 import { IUserDocument, User, LoginType } from "./models/User"
 import passport from "passport";
-import { jsonAPI, validate, ValidationError } from "./json"
+import { jsonAPI, validate, ValidationError, writeJSON } from "./json"
 import {
   ApiUser,
   RegisterRequestType, RegisterRequest,
   UserUpdateRequestType, UserUpdateRequest,
 } from "../common/types"
+import { isProd } from './util'
 
 export default {
   getUser: jsonAPI<ApiUser | undefined>(async req => {
@@ -65,10 +66,16 @@ export default {
 
   loginUser: async (req, res, next) => {
     passport.authenticate("local", (err, user, info) => {
+      console.log(err, user, info)
       if (err) {
-        return res.status(500).send("Authentication error")
-      } else if (!user) {
-        return res.status(401).send(info.message)
+        if (err instanceof ValidationError) {
+          return writeJSON(res, 401, {error: "Unauthorized", ...err})
+        } else {
+          return writeJSON(res, 500, isProd()
+            ? {error: "Internal Server Error"}
+            : {error: "Internal Server Error", message: err.message}
+          )
+        }
       } else {
         req.login(user, loginError => {
           if (loginError) return next(loginError)
