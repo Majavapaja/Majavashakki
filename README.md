@@ -17,7 +17,7 @@ Sun Closed
 
 ### Install Node
 
-The officially supported version is 10.6 (64-bit).
+The officially supported version is 14.16.1
 
 ### Install MongoDB using Vagrant ###
 
