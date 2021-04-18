@@ -6,7 +6,7 @@ import {
   RegisterRequestType, RegisterRequest,
   UserUpdateRequestType, UserUpdateRequest,
 } from "../common/types"
-import { isProd } from './util'
+import { isProd } from "./util"
 
 export default {
   getUser: jsonAPI<ApiUser | undefined>(async req => {
@@ -73,7 +73,7 @@ export default {
         } else {
           return writeJSON(res, 500, isProd()
             ? {error: "Internal Server Error"}
-            : {error: "Internal Server Error", message: err.message}
+            : {error: "Internal Server Error", message: err.message},
           )
         }
       } else {

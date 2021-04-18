@@ -2,7 +2,7 @@ import { Server, Socket } from "socket.io";
 import { IGameDocument } from "./models/Game";
 import { getSession } from "./session";
 import { removeFalsy } from "./util";
-import { DefaultEventsMap } from 'socket.io/dist/typed-events'
+import { DefaultEventsMap } from "socket.io/dist/typed-events"
 
 export const SocketServer: Server<DefaultEventsMap, DefaultEventsMap> = new Server();
 export const SessionSocketMap = {}

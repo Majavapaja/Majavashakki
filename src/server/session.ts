@@ -2,7 +2,7 @@ import expressSession from "express-session";
 import ConnectMongo from "connect-mongo";
 import socketIoSession from "express-socket.io-session";
 import {MongooseClient} from "./data/MongooseClient";
-import { Server } from 'socket.io'
+import { Server } from "socket.io"
 
 const MajavashakkiSessionSecret = process.env.MajavashakkiSessionSecret;
 if (!MajavashakkiSessionSecret) {
