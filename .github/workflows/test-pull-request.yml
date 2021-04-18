@@ -28,4 +28,5 @@ jobs:
       env:
         TS_NODE_FILES: true
         CI: true
+        PUPPETEER_SKIP_DOWNLOAD: true
       run: npm run test:browser
