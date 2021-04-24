@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import {isProd} from "../../src/server/util"
-import { IUser, User, LoginType } from "../../src/server/models/User"
+import { isProd } from "../../src/server/util"
+import { LoginType, User } from "../../src/server/models/User"
 import bcrypt from "bcryptjs"
 
 export async function clearDatabase() {
@@ -21,8 +21,8 @@ export async function initTestData() {
     throw new Error("How about you stop calling initTestData in production!")
   }
 
-  const users: IUser[] = [
-    {
+  const users = [
+    new User({
       name: "John Smith",
       email: "john.smith@example.com",
       logins: [{
@@ -30,8 +30,8 @@ export async function initTestData() {
         type: LoginType.Local,
         password: await bcrypt.hash("johnsmith123", 10),
       }],
-    },
-    {
+    }),
+    new User({
       name: "John Doe",
       email: "john.doe@example.com",
       logins: [{
@@ -39,7 +39,7 @@ export async function initTestData() {
         type: LoginType.Local,
         password: await bcrypt.hash("johndoe123", 10),
       }],
-    },
+    }),
   ]
   await User.insertMany(users)
 }
