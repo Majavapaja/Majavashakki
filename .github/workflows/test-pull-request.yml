@@ -30,4 +30,4 @@ jobs:
       env:
         TS_NODE_FILES: true
         CI: true
-      run: npm run test:browser
+      run: PUPPETEER_EXECUTABLE_PATH="$( which chromium-browser )" npm run test:browser
