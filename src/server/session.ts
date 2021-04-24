@@ -1,5 +1,5 @@
 import expressSession from "express-session";
-import ConnectMongo from "connect-mongo";
+import MongoStore from "connect-mongo";
 import socketIoSession from "express-socket.io-session";
 import {MongooseClient} from "./data/MongooseClient";
 import { Server } from "socket.io"
@@ -13,9 +13,10 @@ export const getSession = (x: any): any =>
   x.session ? x.session : x.handshake.session;
 
 export const enableSessions = (app: any, io: Server) => {
-  const MongoStore = ConnectMongo(expressSession);
   const s = expressSession({
-    store: new MongoStore({ mongooseConnection: MongooseClient.getConnection() }),
+    store: MongoStore.create({
+      clientPromise: Promise.resolve(MongooseClient.getConnection().getClient())
+    }),
     secret: MajavashakkiSessionSecret,
     resave: false,
     saveUninitialized: true,
