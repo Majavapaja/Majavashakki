@@ -14,9 +14,14 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-            - npm-package-cache-{{ checksum "package-lock.json" }}
+            - server-node_modules-cache-{{ checksum "package-lock.json" }}
+            - deployment-node_modules-cache-{{ checksum "deployment/package-lock.json" }}
       - run: ./.circleci/circleci.sh
       - save_cache:
-          key: npm-package-cache-{{ checksum "package-lock.json" }}
+          key: server-node_modules-cache-{{ checksum "package-lock.json" }}
           paths:
-            - ~/.npm
+            - ./node_modules
+      - save_cache:
+          key: deployment-node_modules-cache-{{ checksum "deployment/package-lock.json" }}
+          paths:
+            - ./deployment/node_modules

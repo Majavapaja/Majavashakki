@@ -16,14 +16,14 @@ function main {
 
 function deploy {
   pushd "$repo/deployment"
-  npm --prefer-offline ci
+  npm_ci_if_package_lock_has_changed
   npm run deploy
   popd
 }
 
 function build {
   pushd "$repo"
-  npm --prefer-offline ci
+  npm_ci_if_package_lock_has_changed
   npm run lint
   npm run build
   popd
@@ -45,6 +45,26 @@ function use_nodejs_version {
   nvm install "$node_version"
   nvm use "$node_version"
   set -o nounset
+}
+
+function npm_ci_if_package_lock_has_changed {
+  echo "Checking if npm ci needs to be run"
+  local -r checksum_file="./node_modules/.package-lock.json.checksum"
+
+  function run_npm_ci {
+    npm ci
+    shasum package-lock.json > "$checksum_file"
+  }
+
+  if [ ! -f "$checksum_file" ]; then
+    echo "no existing package-lock.json checksum found, running npm ci"
+    run_npm_ci
+  elif ! shasum --check "$checksum_file"; then
+    echo "package-lock.json seems to have changed, running npm ci"
+    run_npm_ci
+  else
+    echo "package-lock.json doesn't seem to have changed, skipping npm ci"
+  fi
 }
 
 main "$@"
