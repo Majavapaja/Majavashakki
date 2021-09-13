@@ -7,7 +7,7 @@ repo="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 function main {
   cd "$repo"
 
-  use_nodejs_version "10.17.0"
+  use_nodejs_version "14"
 
   build
   run_tests
