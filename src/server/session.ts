@@ -15,8 +15,6 @@ export const getSession = (x: any): any =>
 export const enableSessions = (app: any, io: Server) => {
   const s = expressSession({
     store: MongoStore.create({
-      // Fixed in https://github.com/jdesboeufs/connect-mongo/pull/435
-      // @ts-ignore TS2322
       client: MongooseClient.getConnection().getClient(),
     }),
     secret: MajavashakkiSessionSecret,
