@@ -24,7 +24,7 @@
     "@types/passport": "^1.0.7",
     "@types/passport-facebook": "^2.1.11",
     "@types/passport-local": "^1.0.34",
-    "@types/react": "^17.0.22",
+    "@types/react": "^17.0.27",
     "@types/react-dom": "^17.0.9",
     "@types/react-router-dom": "^5.1.9",
     "@types/request-promise": "^4.1.48",
