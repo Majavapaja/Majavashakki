@@ -29,12 +29,12 @@ const Cell = (props: ICellProps) => {
 }
 
 interface ICellProps extends WithStyles<typeof styles> {
-  position: Majavashakki.IPosition,
-  cellColor: Majavashakki.PieceColor,
-  piece: Majavashakki.IPiece,
-  isSelected: boolean,
-  isError: boolean,
-  boardStore?: BoardStore,
+  position: Majavashakki.IPosition
+  cellColor: Majavashakki.PieceColor
+  piece: Majavashakki.IPiece
+  isSelected: boolean
+  isError: boolean
+  boardStore?: BoardStore
 }
 
 const styles = createStyles({

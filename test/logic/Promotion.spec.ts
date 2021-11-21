@@ -1,6 +1,6 @@
-import boardFactory from "./setup/BoardFactory";
-import { moveSequence } from "./setup/BoardHelper";
-import BoardBase from "common/BoardBase";
+import boardFactory from "./setup/BoardFactory"
+import { moveSequence } from "./setup/BoardHelper"
+import BoardBase from "common/BoardBase"
 import { PieceType } from "../../src/common/GamePieces"
 
 describe("Promotion", () => {
@@ -11,7 +11,6 @@ describe("Promotion", () => {
   })
 
   describe("Black pawn", () => {
-
     it("should allow black pawn to promote into Queen [a2, a1]", () => {
       const results = moveSequence(subject, [["a2", "a1", PieceType.Queen]])
       results.should.eql(["promotion"])
@@ -54,17 +53,16 @@ describe("Promotion", () => {
   })
 
   describe("White pawn", () => {
+    it("should allow white pawn to promote into Queen [a7, a8]", () => {
+      const results = moveSequence(subject, [["a7", "a8", PieceType.Queen]])
+      results.should.eql(["promotion"])
+      subject.getPiece({ col: "a", row: "8" }).type.should.eql(PieceType.Queen)
+    })
 
-      it("should allow white pawn to promote into Queen [a7, a8]", () => {
-        const results = moveSequence(subject, [["a7", "a8", PieceType.Queen]])
-        results.should.eql(["promotion"])
-        subject.getPiece({ col: "a", row: "8" }).type.should.eql(PieceType.Queen)
-      })
-
-      it("should allow white pawn to promote on capture [a7, b8]", () => {
-        const results = moveSequence(subject, [["a7", "b8", PieceType.Queen]])
-        results.should.eql(["promotion"])
-        subject.getPiece({ col: "b", row: "8" }).type.should.eql(PieceType.Queen)
-      })
+    it("should allow white pawn to promote on capture [a7, b8]", () => {
+      const results = moveSequence(subject, [["a7", "b8", PieceType.Queen]])
+      results.should.eql(["promotion"])
+      subject.getPiece({ col: "b", row: "8" }).type.should.eql(PieceType.Queen)
+    })
   })
 })

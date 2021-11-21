@@ -25,7 +25,7 @@ import { ApiGameInfo } from "../../../common/types"
 
 import Player1Avatar from "../../assets/player1.jpg"
 import Player2Avatar from "../../assets/player2.jpg"
-import { inject } from "mobx-react";
+import { inject } from "mobx-react"
 import { IRootStore } from "client/store/AppStore"
 
 @inject((stores: IRootStore) => ({ api: stores.app.api }))
@@ -38,7 +38,7 @@ class GameList extends React.Component<IGameListProps, any> {
     }
   }
 
-  private handleFilterChange = (event) => {
+  private handleFilterChange = event => {
     this.setState({
       filter: event.target.value.toLowerCase(),
     })
@@ -51,7 +51,9 @@ class GameList extends React.Component<IGameListProps, any> {
     return (
       <Paper id={id} className={classes.root}>
         <AppBar position="static" className={classes.header}>
-          <Typography className={classes.contrastText} variant="h6">{this.props.title}</Typography>
+          <Typography className={classes.contrastText} variant="h6">
+            {this.props.title}
+          </Typography>
           <Button id="createGame" onClick={this.props.openDialog} className={classes.contrastText}>
             <AddIcon /> Game
           </Button>
@@ -64,48 +66,41 @@ class GameList extends React.Component<IGameListProps, any> {
               type="text"
               value={this.state.filter}
               onChange={this.handleFilterChange}
-              endAdornment={(
+              endAdornment={
                 <InputAdornment position="end">
                   <FilterIcon />
                 </InputAdornment>
-              )}
+              }
             />
           </FormControl>
           <List>
-            {
-              games
+            {games
               .filter(game => game.title.toLowerCase().includes(this.state.filter))
               .map(game => {
                 const whiteName = game.playerWhite ? game.playerWhite.name : undefined
                 const blackName = game.playerBlack ? game.playerBlack.name : undefined
-                const msg = !game.inProgress ? "Game is finished"
-                  : !whiteName ? "Waiting for players..."
-                  : !blackName ? `${whiteName} waiting for opponent...`
+                const msg = !game.inProgress
+                  ? "Game is finished"
+                  : !whiteName
+                  ? "Waiting for players..."
+                  : !blackName
+                  ? `${whiteName} waiting for opponent...`
                   : `${whiteName} vs ${blackName}`
                 return (
-                  <ListItem
-                    key={game.title}
-                    button
-                    onClick={() => this.onRoomClick(game)}
-                  >
+                  <ListItem key={game.title} button onClick={() => this.onRoomClick(game)}>
                     <div className={classes.playerAvatarsContainer}>
                       <Avatar alt="Player 1" src={Player1Avatar} title={whiteName} />
                       <Avatar alt="Player 2" src={Player2Avatar} title={blackName} />
                     </div>
-                    <ListItemText
-                      className="game-title"
-                      primary={game.title}
-                      secondary={msg}
-                    />
+                    <ListItemText className="game-title" primary={game.title} secondary={msg} />
                   </ListItem>
                 )
-              })
-            }
+              })}
           </List>
           {noGames && <Typography>No games available</Typography>}
         </div>
       </Paper>
-    );
+    )
   }
 
   private onRoomClick = async (game: ApiGameInfo) => {
@@ -115,34 +110,35 @@ class GameList extends React.Component<IGameListProps, any> {
 }
 
 interface IGameListProps extends RouteComponentProps<any>, WithStyles<typeof styles> {
-  id: string,
-  title: string,
-  games: ApiGameInfo[],
-  api?: ApiService,
-  openDialog: () => void,
+  id: string
+  title: string
+  games: ApiGameInfo[]
+  api?: ApiService
+  openDialog: () => void
 }
 
-const styles = (theme: Theme) => createStyles({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    width: 500,
-    margin: "20px auto",
-  },
-  header: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "space-between",
-    padding: theme.spacing(1),
-  },
-  content: {
-    padding: theme.spacing(1),
-  },
-  contrastText: {
-    color: theme.palette.primary.contrastText,
-  },
-  playerAvatarsContainer: {
-    display: "flex",
-  },
-})
+const styles = (theme: Theme) =>
+  createStyles({
+    root: {
+      backgroundColor: theme.palette.background.paper,
+      width: 500,
+      margin: "20px auto",
+    },
+    header: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+      padding: theme.spacing(1),
+    },
+    content: {
+      padding: theme.spacing(1),
+    },
+    contrastText: {
+      color: theme.palette.primary.contrastText,
+    },
+    playerAvatarsContainer: {
+      display: "flex",
+    },
+  })
 
-export default withStyles(styles)(withRouter(GameList));
+export default withStyles(styles)(withRouter(GameList))

@@ -20,7 +20,11 @@ export default class BoardStore extends BoardBase {
   }
 
   @action
-  public move(start: Majavashakki.IPosition, destination: Majavashakki.IPosition, promotionPiece: Majavashakki.PieceType): Majavashakki.IMoveResponse {
+  public move(
+    start: Majavashakki.IPosition,
+    destination: Majavashakki.IPosition,
+    promotionPiece: Majavashakki.PieceType
+  ): Majavashakki.IMoveResponse {
     return super.move(start, destination, promotionPiece)
   }
 

@@ -10,54 +10,54 @@ import Knight from "../../../src/common/pieces/Knight"
 import * as Majavashakki from "../../../src/common/GamePieces"
 
 export function moveSequence(board: BoardBase, moves: string[][]): string[] {
-    const results: string [] = [];
+  const results: string[] = []
 
-    for (const move of moves) {
-        let pieceType
-        if (move[2]) pieceType =  move[2] as Majavashakki.PieceType
+  for (const move of moves) {
+    let pieceType
+    if (move[2]) pieceType = move[2] as Majavashakki.PieceType
 
-        const action = board.move(stringToPosition(move[0]), stringToPosition(move[1]), pieceType);
-        if (action.status === MoveStatus.Success) {
-            let result: string = action.result
-            if (action.isCheckmate) result += "|checkmate"
-            else if (action.isCheck) result += "|check"
+    const action = board.move(stringToPosition(move[0]), stringToPosition(move[1]), pieceType)
+    if (action.status === MoveStatus.Success) {
+      let result: string = action.result
+      if (action.isCheckmate) result += "|checkmate"
+      else if (action.isCheck) result += "|check"
 
-            if (action.isDraw && !action.isCheckmate) result += "|draw"
+      if (action.isDraw && !action.isCheckmate) result += "|draw"
 
-            results.push(result);
-        } else {
-            results.push(action.status);
-        }
+      results.push(result)
+    } else {
+      results.push(action.status)
     }
+  }
 
-    return results;
+  return results
 }
 
 export function stringToPosition(str): IPosition {
-    if (!str || str.length !== 2) return null;
+  if (!str || str.length !== 2) return null
 
-    const colIndex = BoardBase.cols.indexOf(str.charAt(0));
-    const rowIndex = BoardBase.rows.indexOf(str.charAt(1));
+  const colIndex = BoardBase.cols.indexOf(str.charAt(0))
+  const rowIndex = BoardBase.rows.indexOf(str.charAt(1))
 
-    if ( colIndex === -1 || rowIndex === -1 ) return null;
+  if (colIndex === -1 || rowIndex === -1) return null
 
-    return {
-        col: BoardBase.cols[colIndex],
-        row: BoardBase.rows[rowIndex],
-    };
+  return {
+    col: BoardBase.cols[colIndex],
+    row: BoardBase.rows[rowIndex],
+  }
 }
 
 export function createPiece(pos: string, type: PieceType, color: PieceColor, hasMoved: boolean): Piece {
-    let piece: Piece
+  let piece: Piece
 
-    if (type === PieceType.Pawn) piece = new Pawn(color, stringToPosition(pos))
-    else if (type === PieceType.Rook) piece = new Rook(color, stringToPosition(pos))
-    else if (type === PieceType.Bishop) piece = new Bishop(color, stringToPosition(pos))
-    else if (type === PieceType.Knight) piece = new Knight(color, stringToPosition(pos))
-    else if (type === PieceType.Queen) piece = new Queen(color, stringToPosition(pos))
-    else if (type === PieceType.King) piece = new King(color, stringToPosition(pos))
+  if (type === PieceType.Pawn) piece = new Pawn(color, stringToPosition(pos))
+  else if (type === PieceType.Rook) piece = new Rook(color, stringToPosition(pos))
+  else if (type === PieceType.Bishop) piece = new Bishop(color, stringToPosition(pos))
+  else if (type === PieceType.Knight) piece = new Knight(color, stringToPosition(pos))
+  else if (type === PieceType.Queen) piece = new Queen(color, stringToPosition(pos))
+  else if (type === PieceType.King) piece = new King(color, stringToPosition(pos))
 
-    piece.hasMoved = hasMoved
+  piece.hasMoved = hasMoved
 
-    return piece
+  return piece
 }

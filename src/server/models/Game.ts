@@ -2,29 +2,41 @@ import { Document, Schema, Model, model, Types } from "mongoose"
 import GameEntity from "../entities/Game"
 import * as Majavashakki from "../../common/GamePieces"
 
-const PositionSchema = new Schema({
-  col: String,
-  row: String,
-}, { _id: false })
+const PositionSchema = new Schema(
+  {
+    col: String,
+    row: String,
+  },
+  { _id: false }
+)
 
-const PieceSchema = new Schema({
-  type: { type: String },
-  position: PositionSchema,
-  color: String,
-  hasMoved: Boolean,
-}, { _id: false })
+const PieceSchema = new Schema(
+  {
+    type: { type: String },
+    position: PositionSchema,
+    color: String,
+    hasMoved: Boolean,
+  },
+  { _id: false }
+)
 
-const MoveSchema = new Schema({
-  start: PositionSchema,
-  destination: PositionSchema,
-  algebraicNotation: String,
-  capturedPieceType: String,
-}, { _id: false })
+const MoveSchema = new Schema(
+  {
+    start: PositionSchema,
+    destination: PositionSchema,
+    algebraicNotation: String,
+    capturedPieceType: String,
+  },
+  { _id: false }
+)
 
-const BoardSchema = new Schema({
-  pieces: [ PieceSchema ],
-  moveHistory: [ MoveSchema ],
-}, { _id: false })
+const BoardSchema = new Schema(
+  {
+    pieces: [PieceSchema],
+    moveHistory: [MoveSchema],
+  },
+  { _id: false }
+)
 
 const GameSchema: Schema = new Schema({
   title: { type: String, index: true, unique: true },
@@ -36,30 +48,29 @@ const GameSchema: Schema = new Schema({
   inProgress: { type: Boolean, index: true },
   surrenderer: {
     type: String,
-    validate: function(surrenderer) {
-      return !surrenderer || (surrenderer === this.playerIdWhite || surrenderer === this.playerIdBlack)
+    validate: function (surrenderer) {
+      return !surrenderer || surrenderer === this.playerIdWhite || surrenderer === this.playerIdBlack
     },
   },
 })
 
 GameSchema.statics.findOrCreate = async (title: string): Promise<IGameDocument> => {
-  const result = await Game.findOne({title}).exec();
+  const result = await Game.findOne({ title }).exec()
 
   if (!result) {
-    const game = new GameEntity(title);
+    const game = new GameEntity(title)
     return await Game.updateOrCreate(game, true)
   } else {
-    console.log(`FOUND EXISTING GAME ${result.id} NAME: ${result.title}, ID: ${result._id}`);
+    console.log(`FOUND EXISTING GAME ${result.id} NAME: ${result.title}, ID: ${result._id}`)
     return result
   }
 }
 
 GameSchema.statics.updateOrCreate = async (game: GameEntity, isNew: boolean = false): Promise<IGameDocument> => {
-  return await Game.findOneAndUpdate(
-    {title: game.title},
-    GameEntity.MapForDb(game),
-    {new: true, upsert: isNew},
-  ).exec();
+  return await Game.findOneAndUpdate({ title: game.title }, GameEntity.MapForDb(game), {
+    new: true,
+    upsert: isNew,
+  }).exec()
 }
 
 GameSchema.statics.findGame = async (id: string): Promise<IGameDocument> => {
@@ -73,10 +84,7 @@ GameSchema.statics.getGameList = async (userId: string, inProgress: boolean): Pr
   const inGame = { $or: [{ playerIdWhite: userId }, { playerIdBlack: userId }] }
 
   return await Game.find()
-    .and([
-      { $or: [hasFreeSeat, inGame] },
-      { inProgress },
-    ])
+    .and([{ $or: [hasFreeSeat, inGame] }, { inProgress }])
     .select({ title: true, playerIdBlack: true, playerIdWhite: true, inProgress: true })
     .exec()
 }

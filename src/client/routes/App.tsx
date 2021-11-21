@@ -19,56 +19,38 @@ class App extends React.Component<IAppProps, any> {
         <NavigationBar />
         <PromotionDialog />
 
-        <Route
-          exact
-          path="/login"
-          component={LoginView}
-        />
+        <Route exact path="/login" component={LoginView} />
 
-        <Route
-          exact
-          path="/signup"
-          component={SignUpView}
-        />
+        <Route exact path="/signup" component={SignUpView} />
 
-        <Route
-          exact
-          path="/game/:gameId"
-          component={GameView}
-        />
+        <Route exact path="/game/:gameId" component={GameView} />
 
-        <Route
-          exact
-          path="/"
-          component={LobbyView}
-        />
+        <Route exact path="/" component={LobbyView} />
 
-        <Route
-          exact
-          path="/profile"
-          component={ProfileView}
-        />
+        <Route exact path="/profile" component={ProfileView} />
       </div>
-  )}
+    )
+  }
 }
 
-interface IAppProps extends WithStyles<typeof styles> { }
+interface IAppProps extends WithStyles<typeof styles> {}
 
-const styles = () => createStyles({
-  root: {
-    display: "flex",
-    flexDirection: "column",
-  },
-  "@global": {
-    html: {
-      "-webkit-font-smoothing": "antialiased",
-      "background": `no-repeat fixed url(${background})`,
-      "background-size": "cover",
+const styles = () =>
+  createStyles({
+    root: {
+      display: "flex",
+      flexDirection: "column",
     },
-    body: {
-      margin: 0,
+    "@global": {
+      html: {
+        "-webkit-font-smoothing": "antialiased",
+        background: `no-repeat fixed url(${background})`,
+        "background-size": "cover",
+      },
+      body: {
+        margin: 0,
+      },
     },
-  },
-})
+  })
 
 export default withStyles(styles)(App)

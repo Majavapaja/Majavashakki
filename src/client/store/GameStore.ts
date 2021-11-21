@@ -1,8 +1,8 @@
 import socketIO from "socket.io-client"
-import { observable, action, computed } from "mobx";
+import { observable, action, computed } from "mobx"
 import * as Majavashakki from "../../common/GamePieces"
 import applyMove from "../../common/applyMove"
-import {ApiPlayerDetails, MoveRequest} from "../../common/types"
+import { ApiPlayerDetails, MoveRequest } from "../../common/types"
 import GameEntity from "../../server/entities/Game"
 import BoardStore from "./BoardStore"
 import GameBase from "../../common/GameBase"
@@ -49,7 +49,9 @@ export default class GameStore extends GameBase {
   @computed.struct
   get winner(): Majavashakki.PieceColor | undefined {
     if (this.isCheckmate || this.surrenderer) {
-      return this.currentTurn === Majavashakki.PieceColor.White ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White
+      return this.currentTurn === Majavashakki.PieceColor.White
+        ? Majavashakki.PieceColor.Black
+        : Majavashakki.PieceColor.White
     } else if (this.surrenderer) {
       return this.surrenderer === this.playerIdBlack ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White
     }
@@ -59,7 +61,7 @@ export default class GameStore extends GameBase {
   public loadGame = async (gameId: string, showLoadingIndicator: boolean = true) => {
     this.isLoading = showLoadingIndicator
 
-    this.currentUser = await this.rootStore.api.read.user();
+    this.currentUser = await this.rootStore.api.read.user()
     const gameEntity = await this.rootStore.api.read.game(gameId)
     this.updateGameData(gameEntity)
     this.isLoading = false
@@ -97,7 +99,7 @@ export default class GameStore extends GameBase {
   public async move(
     start: Majavashakki.IPosition,
     destination: Majavashakki.IPosition,
-    promotionPiece?: Majavashakki.PieceType,
+    promotionPiece?: Majavashakki.PieceType
   ): Promise<Majavashakki.IMoveResponse> {
     if (!promotionPiece && this.boardStore.isPromotion(start, destination)) {
       this.rootStore.promotionDialog.openDialog(start, destination)
@@ -117,7 +119,7 @@ export default class GameStore extends GameBase {
       this.error = result.error
     }
 
-    return result;
+    return result
   }
 
   // Surrender UI
@@ -164,8 +166,6 @@ export default class GameStore extends GameBase {
 
   @computed
   get currentUserColor(): Majavashakki.PieceColor {
-    return this.playerIdBlack === this.currentUser.id ?
-      Majavashakki.PieceColor.Black :
-      Majavashakki.PieceColor.White
+    return this.playerIdBlack === this.currentUser.id ? Majavashakki.PieceColor.Black : Majavashakki.PieceColor.White
   }
 }

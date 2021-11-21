@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
 import { isProd } from "../../src/server/util"
 import { LoginType, User } from "../../src/server/models/User"
 import bcrypt from "bcryptjs"
@@ -25,20 +25,24 @@ export async function initTestData() {
     new User({
       name: "John Smith",
       email: "john.smith@example.com",
-      logins: [{
-        loginId: "john.smith@example.com",
-        type: LoginType.Local,
-        password: await bcrypt.hash("johnsmith123", 10),
-      }],
+      logins: [
+        {
+          loginId: "john.smith@example.com",
+          type: LoginType.Local,
+          password: await bcrypt.hash("johnsmith123", 10),
+        },
+      ],
     }),
     new User({
       name: "John Doe",
       email: "john.doe@example.com",
-      logins: [{
-        loginId: "john.doe@example.com",
-        type: LoginType.Local,
-        password: await bcrypt.hash("johndoe123", 10),
-      }],
+      logins: [
+        {
+          loginId: "john.doe@example.com",
+          type: LoginType.Local,
+          password: await bcrypt.hash("johndoe123", 10),
+        },
+      ],
     }),
   ]
   await User.insertMany(users)

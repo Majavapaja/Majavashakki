@@ -1,8 +1,8 @@
 import * as path from "path"
 import { spawnSync } from "child_process"
 
-import {login, Context, env} from "./context"
-import {CosmosClient} from "@azure/cosmos"
+import { login, Context, env } from "./context"
+import { CosmosClient } from "@azure/cosmos"
 
 const resourceGroup = "Majavashakki"
 const location = "North Europe"
@@ -17,7 +17,7 @@ async function main() {
   const tag = containerTag(gitSha)
 
   const ctx = await login()
-  console.log('Creating CosmosDB')
+  console.log("Creating CosmosDB")
   const dbAccount = await ctx.cosmosdb.databaseAccounts.createOrUpdate(
     resourceGroup,
     `${resourceGroup}mongo`.toLowerCase(),
@@ -25,7 +25,7 @@ async function main() {
       location,
       locations: [{ locationName: location }],
       kind: "MongoDB",
-    },
+    }
   )
 
   console.log("Getting Cosmos DB connection details")
@@ -37,7 +37,7 @@ async function main() {
     key: password,
   })
   const db = await cosmosClient.databases.createIfNotExists({
-    id: "Majavashakki"
+    id: "Majavashakki",
   })
 
   for (const id of ["games", "sessions", "users", "undefined"]) {
@@ -72,14 +72,14 @@ async function main() {
       webSocketsEnabled: true,
       alwaysOn: true,
       appSettings: [
-        {name: "DOCKER_REGISTRY_SERVER_PASSWORD", value: registry.password},
-        {name: "DOCKER_REGISTRY_SERVER_URL", value: registry.server},
-        {name: "DOCKER_REGISTRY_SERVER_USERNAME", value: registry.username},
-        {name: "MajavaMongoPassword", value: password},
-        {name: "MajavashakkiFbClientId", value: fbClientId},
-        {name: "MajavashakkiFbSecret", value: fbSecret},
-        {name: "MajavashakkiMongoConnectionString", value: connectionString},
-        {name: "MajavashakkiSessionSecret", value: sessionSecret},
+        { name: "DOCKER_REGISTRY_SERVER_PASSWORD", value: registry.password },
+        { name: "DOCKER_REGISTRY_SERVER_URL", value: registry.server },
+        { name: "DOCKER_REGISTRY_SERVER_USERNAME", value: registry.username },
+        { name: "MajavaMongoPassword", value: password },
+        { name: "MajavashakkiFbClientId", value: fbClientId },
+        { name: "MajavashakkiFbSecret", value: fbSecret },
+        { name: "MajavashakkiMongoConnectionString", value: connectionString },
+        { name: "MajavashakkiSessionSecret", value: sessionSecret },
       ],
       linuxFxVersion: `DOCKER|${fullContainerTag}`,
     },
@@ -105,7 +105,7 @@ async function createRegistry(ctx: Context, registryName: string): Promise<Docke
 }
 
 async function loginRegistry(creds: DockerCredentials): Promise<void> {
-  shellSync([ "docker", "login", "--username", creds.username, "--password", creds.password, creds.server ])
+  shellSync(["docker", "login", "--username", creds.username, "--password", creds.password, creds.server])
 }
 
 function shellSync(command: string[], cwd?: string): void {
@@ -134,8 +134,7 @@ function containerTag(sha: string): string {
   }
 }
 
-const strContains = (needle: string, haystack: string): boolean =>
-  haystack.indexOf(needle) !== -1
+const strContains = (needle: string, haystack: string): boolean => haystack.indexOf(needle) !== -1
 
 function resolve(filepath: string): string {
   return path.resolve(__dirname, "../..", filepath)

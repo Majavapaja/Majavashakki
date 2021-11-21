@@ -64,7 +64,8 @@ const hasEnoughMaterialForCheckmate = (board: BoardBase): boolean => {
     if (
       (isOnWhite(blackBishop.position) && isOnWhite(whiteBishop.position)) ||
       (!isOnWhite(blackBishop.position) && !isOnWhite(whiteBishop.position))
-    ) return false
+    )
+      return false
   }
 
   if (board.pieces.length !== 3) return true

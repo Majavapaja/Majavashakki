@@ -11,11 +11,11 @@ const secret: string = env("AZURE_CLIENT_SECRET")
 const tenant: string = env("AZURE_TENANT_ID")
 
 export interface Context {
-  websites: appservice.WebSiteManagementClient,
-  webapps: appservice.WebApps,
-  secrets: SecretClient,
-  cosmosdb: cosmosdb.CosmosDBManagementClient,
-  containerregistry: ContainerRegistryManagementClient,
+  websites: appservice.WebSiteManagementClient
+  webapps: appservice.WebApps
+  secrets: SecretClient
+  cosmosdb: cosmosdb.CosmosDBManagementClient
+  containerregistry: ContainerRegistryManagementClient
 }
 
 export async function login(): Promise<Context> {
