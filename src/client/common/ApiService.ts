@@ -1,11 +1,13 @@
-import request from "request-promise"
-import { StatusCodeError } from "request-promise/errors"
 import * as Majavashakki from "../../common/GamePieces"
 import { ApiGameInfo, ApiUser, UserUpdateRequest, CreateGameRequest, MoveRequest } from "../../common/types"
 import { action } from "mobx"
 import PopupNotificationStore from "../store/PopupNotificationStore"
 
 const base = window.location.origin
+const headers = {
+  "Content-Type": "application/json",
+  Accept: "application/json",
+}
 
 export default class ApiService {
   constructor(private error: PopupNotificationStore) {}
@@ -30,34 +32,31 @@ export default class ApiService {
 
   @action
   public postIt = async <RequestT, ResponseT>(api: string, body: RequestT = undefined): Promise<ResponseT> => {
-    try {
-      return await request({ method: "POST", url: `${base}/${api}`, body, json: true })
-    } catch (ex) {
-      if (isValidationError(ex) || isUnauthorizedError(ex)) {
-        const response = ex.response as any
-        const errors = response.body.errors
-        this.error.notify(errors.join("\n"))
-      } else {
-        this.error.notify("Unexpected error occurred :(")
-      }
-      throw ex
-    }
+    const result = await fetch(`${base}/${api}`, {
+      method: "POST",
+      body: body && JSON.stringify(body),
+      headers,
+    })
+    return this.handleResponse(result)
   }
 
   @action
   private getIt = async <T>(api: string): Promise<T> => {
-    return await request({ method: "GET", url: `${base}/${api}`, json: true })
+    const result = await fetch(`${base}/${api}`, { method: "GET", headers })
+    return this.handleResponse(result)
   }
-}
 
-function isValidationError(ex: Error): ex is StatusCodeError {
-  return isStatusCodeError(ex) && ex.statusCode === 400
-}
-
-function isUnauthorizedError(ex: Error): ex is StatusCodeError {
-  return isStatusCodeError(ex) && ex.statusCode === 401
-}
-
-function isStatusCodeError(ex: Error): ex is StatusCodeError {
-  return ex.name === "StatusCodeError"
+  private handleResponse = async (result: Response): Promise<any> => {
+    if (result.ok) {
+      if (!result.redirected) {
+        // No JSON is returned if server responds with redirect
+        return result.json()
+      }
+    } else if (result.status === 400 || result.status === 401) {
+      const response = await result.json()
+      this.error.notify(response.errors.join("\n"))
+    } else {
+      this.error.notify("Unexpected error occurred :(")
+    }
+  }
 }
