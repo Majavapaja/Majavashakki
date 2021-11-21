@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import * as ReactDOM from "react-dom"
 import theme from "./mui-theme"
@@ -19,16 +18,14 @@ const jss = create({
 const app = new AppStore()
 
 ReactDOM.render(
-  (
-    <JssProvider jss={jss} generateClassName={generateClassName}>
-      <Provider app={app} game={app.game}>
-        <BrowserRouter>
-          <MuiThemeProvider theme={theme}>
-            <App />
-          </MuiThemeProvider>
-        </BrowserRouter>
-      </Provider>
-    </JssProvider>
-  ),
-  document.querySelector("#app"),
+  <JssProvider jss={jss} generateClassName={generateClassName}>
+    <Provider app={app} game={app.game}>
+      <BrowserRouter>
+        <MuiThemeProvider theme={theme}>
+          <App />
+        </MuiThemeProvider>
+      </BrowserRouter>
+    </Provider>
+  </JssProvider>,
+  document.querySelector("#app")
 )

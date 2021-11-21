@@ -1,4 +1,4 @@
-import BoardBase from "../../../src/common/BoardBase";
+import BoardBase from "../../../src/common/BoardBase"
 import { PieceColor, PieceType } from "../../../src/common/GamePieces"
 import { createPiece, stringToPosition } from "./BoardHelper"
 
@@ -29,6 +29,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupPawnCapture() {
+    // prettier-ignore
     const pieces = [
       createPiece("c5", PieceType.Pawn, PieceColor.White, true),
       createPiece("e4", PieceType.Pawn, PieceColor.White, true),
@@ -51,6 +52,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupPawnDoubleMove() {
+    // prettier-ignore
     const pieces = [
       createPiece("a2", PieceType.Pawn, PieceColor.White, false),
       createPiece("a3", PieceType.Pawn, PieceColor.White, true),
@@ -77,6 +79,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ♜ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupRookMovement() {
+    // prettier-ignore
     const pieces = [
       createPiece("e2", PieceType.Rook, PieceColor.White, true),
       createPiece("c1", PieceType.Rook, PieceColor.White, true),
@@ -95,6 +98,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ♖ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupRookCapture() {
+    // prettier-ignore
     const pieces = [
       createPiece("e1", PieceType.Rook, PieceColor.White, true),
       createPiece("e2", PieceType.Rook, PieceColor.White, true),
@@ -115,6 +119,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupBishopMovement() {
+    // prettier-ignore
     const pieces = [
       createPiece("c2", PieceType.Bishop, PieceColor.White, true),
       createPiece("e2", PieceType.Bishop, PieceColor.White, true),
@@ -133,6 +138,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ♗ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupBishopCapture() {
+    // prettier-ignore
     const pieces = [
       createPiece("d1", PieceType.Bishop, PieceColor.White, true),
       createPiece("e2", PieceType.Bishop, PieceColor.White, true),
@@ -153,6 +159,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupKing() {
+    // prettier-ignore
     const pieces = [
       createPiece("c2", PieceType.Pawn, PieceColor.White, true),
       createPiece("c3", PieceType.King, PieceColor.White, true),
@@ -174,6 +181,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ♕ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupQueen() {
+    // prettier-ignore
     const pieces = [
       createPiece("e1", PieceType.Queen, PieceColor.White, true),
       createPiece("e2", PieceType.Queen, PieceColor.White, true),
@@ -196,6 +204,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupEnpassant() {
+    // prettier-ignore
     const pieces = [
       createPiece("c2", PieceType.Pawn, PieceColor.White, false),
       createPiece("a7", PieceType.Pawn, PieceColor.Black, false),
@@ -215,6 +224,7 @@ export default class BoardFactory {
     1 ♖ ⚊ ⚊ ⚊ ♔ ⚊ ⚊ ♖ 1
       a b c d e f g h */
   public static setupCastling() {
+    // prettier-ignore
     const pieces = [
       createPiece("a1", PieceType.Rook,   PieceColor.White, false),
       createPiece("e1", PieceType.King,   PieceColor.White, false),
@@ -237,6 +247,7 @@ export default class BoardFactory {
     1 ⚊ ♙ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupPromotion() {
+    // prettier-ignore
     const pieces = [
       createPiece("a7", PieceType.Pawn, PieceColor.White, true),
       createPiece("b1", PieceType.Pawn, PieceColor.White, true),
@@ -259,6 +270,7 @@ export default class BoardFactory {
     1 ⚊ ♖ ♜ ♔ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupCheck() {
+    // prettier-ignore
     const pieces = [
       createPiece("b1", PieceType.Rook, PieceColor.White, true),
       createPiece("d1", PieceType.King, PieceColor.White, true),
@@ -280,6 +292,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupCheckEnpassant() {
+    // prettier-ignore
     const pieces = [
       createPiece("b5", PieceType.Pawn, PieceColor.White, true),
       createPiece("d5", PieceType.Pawn, PieceColor.White, true),
@@ -304,6 +317,7 @@ export default class BoardFactory {
     1 ♖ ⚊ ⚊ ⚊ ♔ ⚊ ⚊ ♖ 1
       a b c d e f g h */
   public static setupCheckCastling() {
+    // prettier-ignore
     const pieces = [
       createPiece("a1", PieceType.Rook, PieceColor.White, false),
       createPiece("e1", PieceType.King, PieceColor.White, false),
@@ -325,6 +339,7 @@ export default class BoardFactory {
     1 ♔ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupCheckPromotion() {
+    // prettier-ignore
     const pieces = [
       createPiece("a1", PieceType.King, PieceColor.White, true),
       createPiece("a7", PieceType.Pawn, PieceColor.White, true),
@@ -345,6 +360,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupCheckWithTwoKings() {
+    // prettier-ignore
     const pieces = [
       createPiece("b6", PieceType.King,   PieceColor.White, true),
       createPiece("h8", PieceType.Rook,   PieceColor.White, true),
@@ -365,6 +381,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ♔ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupCheckmate() {
+    // prettier-ignore
     const pieces = [
       createPiece("d1", PieceType.King,   PieceColor.White, true),
       createPiece("f2", PieceType.Queen,  PieceColor.White, true),
@@ -378,7 +395,7 @@ export default class BoardFactory {
     return new BoardBase(pieces)
   }
 
-/*  a b c d e f g h
+  /*  a b c d e f g h
   8 ⚊ ♕ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 8
   7 ⚊ ⚊ ⚊ ⚊ ⚊ ♟ ♚ ⚊ 7
   6 ⚊ ⚊ ♟ ⚊ ⚊ ⚊ ♟ ⚊ 6
@@ -389,6 +406,7 @@ export default class BoardFactory {
   1 ⚊ ⚊ ♔ ⚊ ⚊ ⚊ ⚊ ⚊ 1
     a b c d e f g h */
   public static setupGameOfCentury() {
+    // prettier-ignore
     const pieces = [
       createPiece("b8", PieceType.Queen,  PieceColor.White, true),
       createPiece("c1", PieceType.King,   PieceColor.White, true),
@@ -421,6 +439,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupCheckmateEnpassant() {
+    // prettier-ignore
     const pieces = [
       createPiece("b5", PieceType.Pawn,  PieceColor.White, true),
       createPiece("c5", PieceType.Queen, PieceColor.White, true),
@@ -443,6 +462,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupCheckmateEnpassantEscape() {
+    // prettier-ignore
     const pieces = [
       createPiece("b4", PieceType.King, PieceColor.White, true),
       createPiece("b5", PieceType.Pawn, PieceColor.White, true),
@@ -466,6 +486,7 @@ export default class BoardFactory {
     1 ♖ ⚊ ⚊ ⚊ ♔ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupCheckmateCastling() {
+    // prettier-ignore
     const pieces = [
       createPiece("a1", PieceType.Rook, PieceColor.White, false),
       createPiece("e1", PieceType.King, PieceColor.White, false),
@@ -489,6 +510,7 @@ export default class BoardFactory {
     1 ♖ ♘ ♗ ♕ ♔ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupAlgebraicNotationMovement() {
+    // prettier-ignore
     const pieces = [
       createPiece("a1", PieceType.Rook, PieceColor.White, false),
       createPiece("b1", PieceType.Knight, PieceColor.White, false),
@@ -511,6 +533,7 @@ export default class BoardFactory {
     1 ♖ ♘ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupAlgebraicNotationCaptures() {
+    // prettier-ignore
     const pieces = [
       createPiece("a1", PieceType.Rook,   PieceColor.White, false),
       createPiece("b1", PieceType.Knight, PieceColor.White, false),
@@ -532,6 +555,7 @@ export default class BoardFactory {
     1 ♖ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ♕ 1
       a b c d e f g h */
   public static setupAlgebraicNotationDisambiguation() {
+    // prettier-ignore
     const pieces = [
       createPiece("a1", PieceType.Rook,   PieceColor.White, true),
       createPiece("a5", PieceType.Rook,   PieceColor.White, true),
@@ -557,6 +581,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupDrawKingVsKing() {
+    // prettier-ignore
     const pieces = [
         createPiece("e2", PieceType.King, PieceColor.White, true),
         createPiece("e3", PieceType.Pawn, PieceColor.Black, true),
@@ -576,6 +601,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupDrawSameColorBishop() {
+    // prettier-ignore
     const pieces = [
         createPiece("c2", PieceType.Bishop, PieceColor.White, true),
         createPiece("e2", PieceType.King,   PieceColor.White, true),
@@ -597,6 +623,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupDrawDifferentColorBishop() {
+    // prettier-ignore
     const pieces = [
       createPiece("c2", PieceType.Bishop, PieceColor.White, true),
       createPiece("e2", PieceType.King,   PieceColor.White, true),
@@ -618,6 +645,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupDrawOneWhiteBishop() {
+    // prettier-ignore
     const pieces = [
         createPiece("c2", PieceType.Bishop, PieceColor.White, true),
         createPiece("e2", PieceType.King,   PieceColor.White, true),
@@ -638,6 +666,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupDrawOneBlackBishop() {
+    // prettier-ignore
     const pieces = [
         createPiece("e2", PieceType.King,   PieceColor.White, true),
         createPiece("c7", PieceType.Bishop, PieceColor.Black, true),
@@ -658,6 +687,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupDrawOneWhiteKnight() {
+    // prettier-ignore
     const pieces = [
         createPiece("e2", PieceType.King,   PieceColor.White, true),
         createPiece("b2", PieceType.Knight, PieceColor.White, true),
@@ -678,6 +708,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupDrawOneBlackKnight() {
+    // prettier-ignore
     const pieces = [
         createPiece("e2", PieceType.King,   PieceColor.White, true),
         createPiece("b7", PieceType.Knight, PieceColor.Black, true),
@@ -698,6 +729,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupDraw48Moves() {
+    // prettier-ignore
     const pieces = [
       createPiece("a8", PieceType.Rook, PieceColor.White, true),
       createPiece("b5", PieceType.Pawn, PieceColor.White, true),
@@ -706,6 +738,7 @@ export default class BoardFactory {
       createPiece("b8", PieceType.Rook, PieceColor.Black, true),
       createPiece("c3", PieceType.King, PieceColor.Black, true),
     ]
+    // prettier-ignore
     const moveHistory = [
       { start: stringToPosition("h8"), destination: stringToPosition("g8"), algebraicNotation: "Rg8" },
       { start: stringToPosition("c1"), destination: stringToPosition("c2"), algebraicNotation: "Rc2" },
@@ -760,7 +793,7 @@ export default class BoardFactory {
   }
 
   // Board template:
-    /*  a b c d e f g h
+  /*  a b c d e f g h
     8 ⚊ ⚊ ⚊ ⚊ ⚊ ♚ ⚊ ⚊ 8
     7 ⚊ ⚊ ⚊ ⚊ ⚊ ♟ ⚊ ⚊ 7
     6 ⚊ ⚊ ⚊ ⚊ ♙ ♔ ⚊ ⚊ 6
@@ -771,6 +804,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupStalemate1() {
+    // prettier-ignore
     const pieces = [
       createPiece("f8", PieceType.King, PieceColor.Black, true),
       createPiece("f7", PieceType.Pawn, PieceColor.Black, false),
@@ -792,6 +826,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupStalemate2() {
+    // prettier-ignore
     const pieces = [
       createPiece("a8", PieceType.King,   PieceColor.Black, true),
       createPiece("b8", PieceType.Bishop, PieceColor.Black, true),
@@ -813,6 +848,7 @@ export default class BoardFactory {
     1 ♚ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupStalemate3() {
+    // prettier-ignore
     const pieces = [
       createPiece("a1", PieceType.King, PieceColor.Black, true),
       createPiece("b2", PieceType.Rook, PieceColor.White, true),
@@ -833,6 +869,7 @@ export default class BoardFactory {
     1 ♚ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupStalemate4() {
+    // prettier-ignore
     const pieces = [
       createPiece("a1", PieceType.King,  PieceColor.Black, true),
       createPiece("a2", PieceType.Pawn,  PieceColor.Black, true),
@@ -855,6 +892,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupStalemate5() {
+    // prettier-ignore
     const pieces = [
       createPiece("a8", PieceType.King,   PieceColor.Black, true),
       createPiece("f4", PieceType.Bishop, PieceColor.White, true),
@@ -876,6 +914,7 @@ export default class BoardFactory {
     1 ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ ⚊ 1
       a b c d e f g h */
   public static setupStalemateFromPromotion() {
+    // prettier-ignore
     const pieces = [
       createPiece("h6", PieceType.King, PieceColor.Black, true),
       createPiece("g4", PieceType.King, PieceColor.White, true),

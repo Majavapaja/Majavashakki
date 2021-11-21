@@ -1,12 +1,12 @@
-import { Server, Socket } from "socket.io";
-import { IGameDocument } from "./models/Game";
-import { getSession } from "./session";
-import { removeFalsy } from "./util";
+import { Server, Socket } from "socket.io"
+import { IGameDocument } from "./models/Game"
+import { getSession } from "./session"
+import { removeFalsy } from "./util"
 import { DefaultEventsMap } from "socket.io/dist/typed-events"
 
-export const SocketServer: Server<DefaultEventsMap, DefaultEventsMap> = new Server();
+export const SocketServer: Server<DefaultEventsMap, DefaultEventsMap> = new Server()
 export const SessionSocketMap = {}
-const MainRoom: string = "Lobby";
+const MainRoom: string = "Lobby"
 
 // TODO middleware or some other solution to handle connection setup for authed users vs non-auth user
 export function initSockets(): void {
@@ -35,5 +35,5 @@ export function notifyUser(userId: string, message: string, data: any) {
 
 export function notifyLobby(message: string, data: any) {
   console.log("Sending message to lobby")
-  SocketServer.to(MainRoom).emit(message, data);
+  SocketServer.to(MainRoom).emit(message, data)
 }

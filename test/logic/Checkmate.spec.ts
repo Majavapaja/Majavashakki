@@ -1,12 +1,11 @@
-import boardFactory from "./setup/BoardFactory";
-import BoardBase from "common/BoardBase";
-import {moveSequence} from "./setup/BoardHelper"
+import boardFactory from "./setup/BoardFactory"
+import BoardBase from "common/BoardBase"
+import { moveSequence } from "./setup/BoardHelper"
 
 describe("Checkmate", () => {
   let subject: BoardBase
 
   describe("Basics", () => {
-
     beforeEach(() => {
       subject = boardFactory.setupCheckmate()
     })
@@ -33,10 +32,14 @@ describe("Checkmate", () => {
   })
 
   describe("Real scenarios", () => {
-
     it("should checkmate (fool's mate)", () => {
       subject = boardFactory.setupBasic()
-      const results = moveSequence(subject, [["f2", "f3"], ["e7", "e6"], ["g2", "g4"], ["d8", "h4"]])
+      const results = moveSequence(subject, [
+        ["f2", "f3"],
+        ["e7", "e6"],
+        ["g2", "g4"],
+        ["d8", "h4"],
+      ])
       results.should.eql(["move", "move", "move", "move|checkmate"])
     })
 
@@ -50,7 +53,10 @@ describe("Checkmate", () => {
   describe("Enpassant", () => {
     it("should be able to checkmate with enpassant", () => {
       subject = boardFactory.setupCheckmateEnpassant()
-      const results = moveSequence(subject, [["a7", "a5"], ["b5", "a6"]])
+      const results = moveSequence(subject, [
+        ["a7", "a5"],
+        ["b5", "a6"],
+      ])
       results.should.eql(["move", "enpassant|checkmate"])
     })
 
@@ -62,10 +68,10 @@ describe("Checkmate", () => {
   })
 
   describe("Castling causes checkmate", () => {
-      it("should be able to checkmate with castling", () => {
-        subject = boardFactory.setupCheckmateCastling()
-        const results = moveSequence(subject, [["e1", "c1"]])
-        results.should.eql(["castling|checkmate"])
-      })
+    it("should be able to checkmate with castling", () => {
+      subject = boardFactory.setupCheckmateCastling()
+      const results = moveSequence(subject, [["e1", "c1"]])
+      results.should.eql(["castling|checkmate"])
+    })
   })
 })

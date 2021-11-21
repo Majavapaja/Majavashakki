@@ -1,10 +1,10 @@
-import boardFactory from "./setup/BoardFactory";
-import { moveSequence } from "./setup/BoardHelper";
-import BoardBase from "common/BoardBase";
+import boardFactory from "./setup/BoardFactory"
+import { moveSequence } from "./setup/BoardHelper"
+import BoardBase from "common/BoardBase"
 import * as Majavashakki from "../../src/common/GamePieces"
 
 describe("Stalemate", () => {
-  let subject: BoardBase;
+  let subject: BoardBase
 
   it("should be draw in stalemate scenario 1", () => {
     subject = boardFactory.setupStalemate1()
@@ -47,5 +47,4 @@ describe("Stalemate", () => {
     const results = moveSequence(subject, [["g7", "g8", Majavashakki.PieceType.Rook]])
     results.should.eql(["promotion"])
   })
-
 })

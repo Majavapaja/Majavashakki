@@ -24,7 +24,7 @@ describe("Draw", () => {
 
     it("should be a draw if there is only a black bishop", () => {
       const subject = boardFactory.setupDrawOneWhiteBishop()
-      const results =  moveSequence(subject, [["e2", "e3"]])
+      const results = moveSequence(subject, [["e2", "e3"]])
       results.should.eql(["capture|draw"])
     })
 
@@ -55,7 +55,10 @@ describe("Draw", () => {
     })
 
     it("should be a draw if there has been 50 moves without action", () => {
-      const results = moveSequence(subject, [["g2", "g1"], ["c3", "b3"]])
+      const results = moveSequence(subject, [
+        ["g2", "g1"],
+        ["c3", "b3"],
+      ])
       results.should.eql(["move", "move|draw"])
     })
 
@@ -70,18 +73,27 @@ describe("Draw", () => {
         destination: stringToPosition("b5"),
         algebraicNotation: "b5",
       }
-      subject.moveHistory = [ pawnMove, ...subject.moveHistory ]
-      const results = moveSequence(subject, [["g2", "g1"], ["c3", "b3"]])
+      subject.moveHistory = [pawnMove, ...subject.moveHistory]
+      const results = moveSequence(subject, [
+        ["g2", "g1"],
+        ["c3", "b3"],
+      ])
       results.should.eql(["move", "move|draw"])
     })
 
     it("should not be a draw if last move was pawn movement", () => {
-      const results = moveSequence(subject, [["g2", "g1"], ["b5", "b6"]])
+      const results = moveSequence(subject, [
+        ["g2", "g1"],
+        ["b5", "b6"],
+      ])
       results.should.eql(["move", "move"])
     })
 
     it("should not be a draw if last move was capture", () => {
-      const results = moveSequence(subject, [["g2", "g1"], ["b8", "b5"]])
+      const results = moveSequence(subject, [
+        ["g2", "g1"],
+        ["b8", "b5"],
+      ])
       results.should.eql(["move", "capture"])
     })
   })

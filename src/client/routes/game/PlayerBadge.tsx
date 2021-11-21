@@ -26,50 +26,49 @@ class PlayerBadge extends React.Component<IPlayerBadgeProps, any> {
           avatar={<Avatar className={[classes.playerColor, color].join(" ")} />}
           label={player ? player.name : "N/A"}
         />
-        {this.props.renderSurrender &&
-          <SurrenderButton disabled={!isActive} />
-        }
+        {this.props.renderSurrender && <SurrenderButton disabled={!isActive} />}
       </div>
     )
   }
 }
 
-const styles = (theme: Theme) => createStyles({
-  container: {
-    display: "flex",
-    flexDirection: "column",
-    margin: "0 20px",
-  },
-  badge: {
-    opacity: 0.5,
-    "&.isActive": {
-      backgroundColor: "#EBEBEB",
-      color: "#000",
-      opacity: 1,
+const styles = (theme: Theme) =>
+  createStyles({
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      margin: "0 20px",
     },
-    "&.isWinner": {
-      backgroundColor: "green",
-      color: theme.palette.primary.contrastText,
+    badge: {
+      opacity: 0.5,
+      "&.isActive": {
+        backgroundColor: "#EBEBEB",
+        color: "#000",
+        opacity: 1,
+      },
+      "&.isWinner": {
+        backgroundColor: "green",
+        color: theme.palette.primary.contrastText,
+      },
     },
-  },
-  playerColor: {
-    width: 50,
-    height: 50,
-    border: "1px solid rgba(0,0,0,0.5)",
-    borderRadius: "50%",
-    "&.white": {
-      backgroundColor: "#FFF",
+    playerColor: {
+      width: 50,
+      height: 50,
+      border: "1px solid rgba(0,0,0,0.5)",
+      borderRadius: "50%",
+      "&.white": {
+        backgroundColor: "#FFF",
+      },
+      "&.black": {
+        backgroundColor: "#000",
+      },
     },
-    "&.black": {
-      backgroundColor: "#000",
-    },
-  },
-})
+  })
 
 interface IPlayerBadgeProps extends WithStyles<typeof styles> {
-  game?: GameStore,
-  renderSurrender?: boolean,
-  color: Majavashakki.PieceColor,
+  game?: GameStore
+  renderSurrender?: boolean
+  color: Majavashakki.PieceColor
 }
 
 export default withStyles(styles)(PlayerBadge)
