@@ -11,59 +11,75 @@ import UserStore from "client/store/UserStore"
 @observer
 class LoginView extends React.Component<ILoginViewProps, never> {
   private submitField: any = React.createRef()
-  private loginStore = new LoginStore()
+  private store = new LoginStore()
 
   constructor(props: ILoginViewProps) {
     super(props)
   }
 
+  public async componentDidMount() {
+    await this.props.userStore.refreshFromServer()
+    if (this.props.userStore.id) {
+      this.props.history.push("/")
+    }
+
+    this.store.isLoading = false
+  }
+
   public render() {
     const classes = this.props.classes
+
+    const form = (
+      <React.Fragment>
+        <Typography color="error">{this.store.error}</Typography>
+        <TextField
+          autoFocus
+          id="email"
+          label="Email"
+          type="email"
+          margin="normal"
+          required
+          onChange={this.handleInputChange}
+        />
+        <TextField
+          id="password"
+          label="Password"
+          type="password"
+          margin="normal"
+          required
+          onChange={this.handleInputChange}
+          inputRef={this.submitField}
+        />
+
+        <Button id="loginButton" variant="contained" color="primary" className={classes.button} type="submit">
+          <Typography color="inherit">Sign in</Typography>
+        </Button>
+
+        <Typography variant="subtitle1">or</Typography>
+
+        <Button
+          id="registerButton"
+          variant="contained"
+          color="primary"
+          className={classes.button}
+          onClick={this.navigateToSignup}
+        >
+          <Typography color="inherit">Register</Typography>
+        </Button>
+
+        <hr className={classes.divider} />
+
+        <Button variant="contained" className={classes.facebookButton} href="/authFacebook">
+          Sign in with Facebook
+        </Button>
+      </React.Fragment>
+    )
+
     return (
       <form className={classes.root} onSubmit={this.handleSubmit}>
         <Paper className={classes.loginContainer} onKeyPress={this.handleEnterKey}>
-          <Majava />
-          <Typography color="error">{this.loginStore.error}</Typography>
-          <TextField
-            autoFocus
-            id="email"
-            label="Email"
-            type="email"
-            margin="normal"
-            required
-            onChange={this.handleInputChange}
-          />
-          <TextField
-            id="password"
-            label="Password"
-            type="password"
-            margin="normal"
-            required
-            onChange={this.handleInputChange}
-            inputRef={this.submitField}
-          />
-
-          <Button id="loginButton" variant="contained" color="primary" className={classes.button} type="submit">
-            <Typography color="inherit">Sign in</Typography>
-          </Button>
-
-          <Typography variant="subtitle1">or</Typography>
-
-          <Button
-            id="registerButton"
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={this.navigateToSignup}
-          >
-            <Typography color="inherit">Register</Typography>
-          </Button>
-
-          <hr className={classes.divider} />
-
-          <Button variant="contained" className={classes.facebookButton} href="/authFacebook">
-            Sign in with Facebook
-          </Button>
+          <Majava animation={this.store.isLoading ? "spin" : undefined} />
+          {!this.store.isLoading && form}
         </Paper>
       </form>
     )
@@ -80,12 +96,12 @@ class LoginView extends React.Component<ILoginViewProps, never> {
     const target = event.target
     const value = target.type === "checkbox" ? target.checked : target.value
     const id = target.id
-    this.loginStore[id] = value
+    this.store[id] = value
   }
 
   private handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
-    await this.props.userStore.login(this.loginStore.email, this.loginStore.password)
+    await this.props.userStore.login(this.store.email, this.store.password)
     this.props.history.push("/")
   }
 
@@ -102,6 +118,7 @@ class LoginStore {
   @observable public error?: string
   @observable public email: string = ""
   @observable public password: string = ""
+  @observable public isLoading: boolean = true
 }
 
 const styles = createStyles({

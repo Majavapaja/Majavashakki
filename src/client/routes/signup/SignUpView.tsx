@@ -7,7 +7,7 @@ import { observable } from "mobx"
 import { inject, observer } from "mobx-react"
 import { IRootStore } from "client/store/AppStore"
 
-@inject((stores: IRootStore) => ({ api: stores.app.api }))
+@inject((stores: IRootStore) => ({ api: stores.app.api, user: stores.app.user }))
 @observer
 class SignUpView extends React.Component<any, never> {
   private emailField: any = React.createRef()
@@ -19,6 +19,17 @@ class SignUpView extends React.Component<any, never> {
 
   constructor(props: any) {
     super(props)
+  }
+
+  public async componentDidMount() {
+    this.store.isLoading = true
+
+    await this.props.user.refreshFromServer()
+    if (this.props.user.id) {
+      this.props.history.push("/")
+    }
+
+    this.store.isLoading = false
   }
 
   public render() {
