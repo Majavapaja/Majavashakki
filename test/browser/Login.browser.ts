@@ -98,6 +98,7 @@ async function checkNotification(page, expected) {
 
 async function attemptLogin(page: Page, email: string, password: string, expectSuccess: boolean = true): Promise<void> {
   await Util.navigate(page, "/login")
+  await Util.existsInPage(page, "#loginButton")
   await page.click("#email")
   await page.keyboard.type(email)
   await page.click("#password")
