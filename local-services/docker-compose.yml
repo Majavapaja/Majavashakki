@@ -2,7 +2,6 @@ version: "3"
 services:
   majavashakki-mongo:
     image: mongo
-    restart: always
     volumes:
       - majavashakki-data:/data/db
     ports:
@@ -10,7 +9,6 @@ services:
 
   majavashakki-mongo-express:
     image: mongo-express
-    restart: always
     ports:
       - 8081:8081
     environment:
