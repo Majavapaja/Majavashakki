@@ -92,11 +92,8 @@ class LoginView extends React.Component<ILoginViewProps, never> {
     }
   }
 
-  private handleInputChange = event => {
-    const target = event.target
-    const value = target.type === "checkbox" ? target.checked : target.value
-    const id = target.id
-    this.store[id] = value
+  private handleInputChange = ({ target }) => {
+    this.store[target.id] = target.value
   }
 
   private handleSubmit = async (event: React.FormEvent) => {
