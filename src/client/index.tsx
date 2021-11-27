@@ -10,15 +10,13 @@ import { JssProvider } from "react-jss"
 import { createGenerateClassName, jssPreset, MuiThemeProvider } from "@material-ui/core/styles"
 import jssGlobal from "jss-global"
 
-const generateClassName = createGenerateClassName()
-const jss = create({
-  ...jssPreset(),
-}).use(jssGlobal)
+const generateClassName = createGenerateClassName({ productionPrefix: "Majavashakki" })
+const jss = create({ ...jssPreset() }).use(jssGlobal)
 
 const app = new AppStore()
 
 ReactDOM.render(
-  <JssProvider jss={jss} generateClassName={generateClassName}>
+  <JssProvider jss={jss} generateId={generateClassName}>
     <Provider app={app} game={app.game}>
       <BrowserRouter>
         <MuiThemeProvider theme={theme}>
