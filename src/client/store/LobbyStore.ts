@@ -31,16 +31,18 @@ export default class LobbyStore {
     // Currently this information is refreshed in NavigationBar, so it is not yet available when Lobby renders
     await this._user.refreshFromServer()
 
-    try {
-      const games = await this._api.read.games(true)
-      this.myGames = games.filter(game => this.isMyGame(game))
-      this.availableGames = games.filter(game => !this.isMyGame(game))
-
-      this.finishedGames = await this._api.read.games(false)
-    } catch (error) {
+    const games = await this._api.read.games(true)
+    if (!games) {
       this.error = true
+      this.isLoading = false
+      return
     }
 
+    this.myGames = games.filter(game => this.isMyGame(game))
+    this.availableGames = games.filter(game => !this.isMyGame(game))
+
+    this.finishedGames = await this._api.read.games(false)
+    if (!this.finishedGames) this.error = true
     this.isLoading = false
   }
 

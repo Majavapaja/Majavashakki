@@ -119,16 +119,14 @@ class SignUpView extends React.Component<any, never> {
       this.store.error = "Passwords don't match D:"
     } else {
       this.store.isLoading = true
-      try {
-        await this.props.api.write.register({
-          email: this.store.email,
-          name: this.store.username,
-          password: this.store.password,
-        } as global.IUserContract)
-        this.props.history.push("/")
-      } catch (e) {
-        this.store.isLoading = false
-      }
+      const result = await this.props.api.write.register({
+        email: this.store.email,
+        name: this.store.username,
+        password: this.store.password,
+      } as global.IUserContract)
+
+      if (!result) this.store.isLoading = false
+      else this.props.history.push("/")
     }
   }
 

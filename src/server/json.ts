@@ -49,6 +49,7 @@ export function jsonAPI<ResponseT>(handler: (req: Request) => Promise<ResponseT>
 }
 
 export const writeJSON = (res, statusCode, json) => {
+  if (!json) json = {}
   res.set("Cache-Control", "no-cache")
   res.set("content-type", "application/json")
   res.status(statusCode).send(JSON.stringify(json, null, 2))
