@@ -6,12 +6,7 @@ const contains = x => xs => xs.includes(x)
 type Validator<T> = (val: T) => boolean
 type ErrorFormatter<T> = (val: T) => string
 
-const mkValidator = <T>(
-  name: string,
-  baseType: t.Type<T>,
-  validators: Array<Validator<T>>,
-  mkMessage: ErrorFormatter<T>
-) =>
+const mkValidator = <T>(name: string, baseType: t.Type<T>, validators: Validator<T>[], mkMessage: ErrorFormatter<T>) =>
   new t.Type<T, T, unknown>(
     name,
     baseType.is,
