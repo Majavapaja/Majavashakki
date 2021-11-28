@@ -2,7 +2,7 @@ import * as React from "react"
 import { withRouter, RouteComponentProps } from "react-router-dom"
 import { Button, Dialog, DialogTitle, DialogActions, DialogContent, TextField } from "@material-ui/core"
 import ApiService from "../../common/ApiService"
-import { action, observable } from "mobx"
+import { action, makeObservable, observable } from "mobx"
 import { inject } from "mobx-react"
 import { IRootStore } from "client/store/AppStore"
 import { IGame } from "../../../common/GamePieces"
@@ -61,7 +61,9 @@ class NewGameForm extends React.Component<INewGameProps, never> {
 class NewGameFormStore {
   @observable public name: string = ""
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService) {
+    makeObservable(this)
+  }
 
   @action
   public async createAndJoin(gameName: string): Promise<IGame> {

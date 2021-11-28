@@ -15,6 +15,7 @@
       "server/*": ["./src/server/*"],
       "client/*": ["./src/client/*"]
     },
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "useDefineForClassFields": true
   }
 }

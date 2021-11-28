@@ -3,7 +3,7 @@ import { withRouter } from "react-router-dom"
 import { TextField, Typography, withStyles, createStyles, Paper, Button } from "@material-ui/core"
 
 import Majava from "../../common/Majava"
-import { observable } from "mobx"
+import { makeObservable, observable } from "mobx"
 import { inject, observer } from "mobx-react"
 import { IRootStore } from "client/store/AppStore"
 
@@ -145,6 +145,10 @@ class SignupStore {
   @observable public username: string = ""
   @observable public password: string = ""
   @observable public passwordConfirm: string = ""
+
+  constructor() {
+    makeObservable(this)
+  }
 }
 
 const styles = createStyles({

@@ -1,5 +1,5 @@
-import socketIO from "socket.io-client"
-import { observable, action, computed } from "mobx"
+import socketIO, { Socket } from "socket.io-client"
+import { observable, action, computed, makeObservable } from "mobx"
 import * as Majavashakki from "../../common/GamePieces"
 import applyMove from "../../common/applyMove"
 import { ApiPlayerDetails, MoveRequest } from "../../common/types"
@@ -10,9 +10,9 @@ import AppStore from "./AppStore"
 
 export default class GameStore extends GameBase {
   @observable
-  public title: string
+  public declare title: string
   @observable
-  public currentTurn: Majavashakki.PieceColor
+  public declare currentTurn: Majavashakki.PieceColor
 
   @observable
   public isLoading: boolean
@@ -21,20 +21,20 @@ export default class GameStore extends GameBase {
   @observable
   public error: string
   @observable
-  public isCheck: boolean
+  public declare isCheck: boolean
   @observable
-  public isCheckmate: boolean
+  public declare isCheckmate: boolean
 
   @observable
   public playerBlack?: ApiPlayerDetails
   @observable
   public playerWhite?: ApiPlayerDetails
   @observable
-  public surrenderer?: string
+  public declare surrenderer?: string
 
   @observable
   public boardStore: BoardStore
-  private socket: SocketIOClient.Socket
+  private socket: Socket
   private gameId: string
   private readonly rootStore: AppStore
 
@@ -42,6 +42,7 @@ export default class GameStore extends GameBase {
 
   constructor(rootStore: AppStore) {
     super("")
+    makeObservable(this)
     this.isLoading = true
     this.rootStore = rootStore
   }
