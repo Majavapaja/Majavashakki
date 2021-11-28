@@ -2,7 +2,7 @@ import * as React from "react"
 import { withRouter, RouteComponentProps } from "react-router-dom"
 import { TextField, Typography, withStyles, createStyles, Paper, Button, WithStyles } from "@material-ui/core"
 import Majava from "../../common/Majava"
-import { observable } from "mobx"
+import { makeObservable, observable } from "mobx"
 import { inject, observer } from "mobx-react"
 import { IRootStore } from "client/store/AppStore"
 import UserStore from "client/store/UserStore"
@@ -119,6 +119,10 @@ class LoginStore {
   @observable public email: string = ""
   @observable public password: string = ""
   @observable public isLoading: boolean = true
+
+  constructor() {
+    makeObservable(this)
+  }
 }
 
 const styles = createStyles({

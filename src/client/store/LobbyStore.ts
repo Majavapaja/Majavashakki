@@ -1,4 +1,4 @@
-import { observable, action } from "mobx"
+import { observable, action, makeObservable } from "mobx"
 import { ApiGameInfo } from "../../common/types"
 import AppStore from "./AppStore"
 import ApiService from "client/common/ApiService"
@@ -18,6 +18,7 @@ export default class LobbyStore {
   constructor(rootStore: AppStore) {
     this._api = rootStore.api
     this._user = rootStore.user
+    makeObservable(this)
 
     this.isLoading = true
   }

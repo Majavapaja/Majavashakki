@@ -1,4 +1,4 @@
-import { observable, action } from "mobx"
+import { observable, action, makeObservable } from "mobx"
 import * as Majavashakki from "../../common/GamePieces"
 import AppStore from "./AppStore"
 
@@ -10,6 +10,7 @@ export default class PromotionDialogStore {
 
   constructor(rootStore: AppStore) {
     this.rootStore = rootStore
+    makeObservable(this)
     this.isOpen = false
   }
 

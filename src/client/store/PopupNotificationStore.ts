@@ -1,4 +1,4 @@
-import { observable } from "mobx"
+import { makeObservable, observable } from "mobx"
 
 /** Shows popup notifications using Snackbar */
 export default class PopupNotificationStore {
@@ -6,6 +6,10 @@ export default class PopupNotificationStore {
   public show: boolean = false
   public message?: string
   public close = () => (this.show = false)
+
+  constructor() {
+    makeObservable(this)
+  }
 
   public notify = (message: string): void => {
     this.message = message

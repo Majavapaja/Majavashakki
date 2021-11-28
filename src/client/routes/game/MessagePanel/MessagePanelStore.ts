@@ -1,5 +1,5 @@
 import AppStore from "client/store/AppStore"
-import { computed } from "mobx"
+import { computed, makeObservable } from "mobx"
 import * as Majavashakki from "../../../../common/GamePieces"
 import {
   getPieceType,
@@ -13,6 +13,7 @@ export default class MessagePanelStore {
 
   public constructor(appStore: AppStore) {
     this._appStore = appStore
+    makeObservable(this)
   }
 
   @computed

@@ -1,4 +1,4 @@
-import { observable, action } from "mobx"
+import { observable, action, makeObservable } from "mobx"
 import ApiService from "../common/ApiService"
 import { UserUpdateRequest } from "common/types"
 
@@ -12,6 +12,7 @@ export default class UserStore {
   constructor(api: ApiService) {
     this._api = api
     this.refreshFromServer()
+    makeObservable(this)
   }
 
   @action

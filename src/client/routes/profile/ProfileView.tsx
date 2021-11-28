@@ -4,11 +4,15 @@ import { TextField, WithStyles, withStyles, createStyles, Button, Typography, Pa
 import { inject, observer } from "mobx-react"
 import { IRootStore } from "client/store/AppStore"
 import UserStore from "client/store/UserStore"
-import { observable } from "mobx"
+import { makeObservable, observable } from "mobx"
 
 class ProfileViewForm {
   @observable public email: string = ""
   @observable public name: string = ""
+
+  constructor() {
+    makeObservable(this)
+  }
 }
 
 @inject((stores: IRootStore) => ({ userStore: stores.app.user }))
