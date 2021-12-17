@@ -42,7 +42,7 @@
     "mobx-react": "^6.3.1",
     "mongodb": "^4.2.0",
     "mongoose": "^6.0.13",
-    "passport": "^0.5.0",
+    "passport": "^0.5.2",
     "passport-facebook": "^3.0.0",
     "passport-local": "^1.0.0",
     "react": "^17.0.2",
