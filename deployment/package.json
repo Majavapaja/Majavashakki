@@ -9,7 +9,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@azure/arm-appservice": "^9.0.0",
+    "@azure/arm-appservice": "^13.0.0",
     "@azure/arm-containerregistry": "^9.0.0",
     "@azure/arm-cosmosdb": "^14.1.1",
     "@azure/arm-keyvault": "^1.2.1",
