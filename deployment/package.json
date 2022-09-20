@@ -14,7 +14,7 @@
     "@azure/arm-cosmosdb": "^14.1.1",
     "@azure/arm-keyvault": "^1.2.1",
     "@azure/cosmos": "^3.4.0",
-    "@azure/identity": "^2.0.1",
+    "@azure/identity": "^3.0.0",
     "@azure/keyvault-secrets": "^4.0.0-preview.9",
     "@azure/ms-rest-nodeauth": "^3.0.5",
     "ts-node": "^10.2.1",
